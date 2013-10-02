@@ -2,9 +2,7 @@
 
 
 def import_plugin(plugin_name):
-    def apply(linter):
-        linter.load_plugin_modules([plugin_name])
-    return apply
+    return lambda linter: linter.load_plugin_modules([plugin_name])
 
 
 def no_doc_warnings(linter):

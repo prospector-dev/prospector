@@ -64,8 +64,11 @@ def run():
         print linter.help()
         sys.exit(2)
 
-    # remove the summary reports
-    # linter.disable_reports()
+    # disable the warnings about disabling warnings...
+    linter.disable('I0011')
+    linter.disable('I0012')
+    linter.disable('I0020')
+    linter.disable('I0021')
 
     # insert current working directory to the python path to have a correct behaviour
     linter.prepare_import_path(args)
