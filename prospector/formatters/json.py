@@ -5,6 +5,8 @@ from pylint.reporters import BaseReporter
 
 class JsonFormatter(BaseReporter):
 
+    name = 'json'
+
     def __init__(self, output=None, indent=2):
         BaseReporter.__init__(self, output=output)
         self._messages = []
