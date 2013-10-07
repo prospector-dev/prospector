@@ -13,6 +13,7 @@ _install_requires = [
     'pylint==1.0.0',
     'pylint-celery',
     'pylint-django',
+    'pylint-plugin-utils',
 ]
 
 setup(
