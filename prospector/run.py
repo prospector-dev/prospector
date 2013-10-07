@@ -1,10 +1,11 @@
 import sys
 import argparse
 from logilab.common.textutils import splitstrip
+from prospector.augmentations import apply_augmentations
+from prospector.formatters.text import TextFormatter
 from prospector.profiles import PROFILES
 from prospector.formatters.json import JsonFormatter
 from prospector.linter import ProspectorLinter
-
 
 
 def make_arg_parser():
@@ -12,8 +13,9 @@ def make_arg_parser():
 
     profile_help = 'A list of one or more profiles to use.'
     parser.add_argument('-p', '--profiles', action='append', help=profile_help)
-    parser.add_argument('-o', '--output-format', default='text',
-                        help="The output format. Valid values are 'json', 'text', 'parseable', 'html' (default: text)")
+
+    output_help = "The output format. Valid values are 'json' and 'text'"
+    parser.add_argument('-o', '--output-format', default='text', help=output_help)
 
     parser.add_argument('paths', nargs='+', help="The path(s) to the python packages or modules to inspect")
 
@@ -27,11 +29,15 @@ def run():
     linter = ProspectorLinter()
     linter.load_default_plugins()
     linter.register_reporter(JsonFormatter)
+    linter.register_reporter(TextFormatter)
 
-    pylint_args = ['--max-line-length=160',
-                   '--output-format=%s' % args.output_format]
+    pylint_args = ['--max-line-length=160']
 
-    if args.output_format not in ('json',):
+    if args.output_format.startswith('pylint_'):
+        output_format = args.output_format[7:]
+        pylint_args.append('--output-format=%s' % output_format)
+    else:
+        pylint_args.append('--output-format=%s' % args.output_format)
         # we disable reports for the built-in pylint reporters, but not for
         # the custom ones added by prospector, as it seems that custom reporters
         # get turned off by --reports=no...
@@ -54,11 +60,11 @@ def run():
     if config_parser.has_option('MASTER', 'load-plugins'):
         plugins = splitstrip(config_parser.get('MASTER', 'load-plugins'))
         linter.load_plugin_modules(plugins)
-    # now we can load file config and command line, plugins (which can
-    # provide options) have been registered
-    linter.load_config_file()
 
     args = linter.load_command_line_configuration(pylint_args)
+
+    # add the standard augmentations valid for all pythony code
+    apply_augmentations(linter)
 
     if not args:
         print linter.help()
