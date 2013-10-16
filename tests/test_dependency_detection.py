@@ -2,6 +2,7 @@ import os
 from unittest import TestCase
 from pkg_resources import Requirement
 from prospector import dependency_detection
+from prospector.dependency_detection import CouldNotParseDependencies
 
 
 class DependencyDetectionTest(TestCase):
@@ -59,3 +60,25 @@ class DependencyDetectionTest(TestCase):
         )
 
         self.assertEqual(expected, dependencies)
+
+    def _test_setup_py(self, setup_py_file, *expected):
+        filepath = os.path.join(os.path.dirname(__file__), 'dependency_tests/test4', setup_py_file)
+        dependencies = dependency_detection.from_setup_py(filepath)
+        expected = self._expected(*expected)
+        self.assertEqual(expected, dependencies)
+
+    def _test_setup_py_not_parseable(self, setup_py_file):
+        filepath = os.path.join(os.path.dirname(__file__), 'dependency_tests/test4', setup_py_file)
+        self.assertRaises(CouldNotParseDependencies, dependency_detection.from_setup_py, filepath)
+
+    def test_simple_setup_py_parsing(self):
+        self._test_setup_py('simple.py', 'Django==1.5.0', 'django-gubbins==1.1.2')
+
+    def test_setup_py_reqs_defined_in_file_parsing(self):
+        self._test_setup_py('in_file.py', 'Django==1.5.0', 'django-gubbins==1.1.2')
+
+    def test_setup_py_tuple(self):
+        self._test_setup_py('tuple.py', 'Django==1.5.0', 'django-gubbins==1.1.2')
+
+    def test_callable_install_requires(self):
+        self._test_setup_py_not_parseable('callable.py')

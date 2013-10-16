@@ -1,6 +1,12 @@
+from astroid import MANAGER, CallFunc, Name, Assign, Keyword, List, Tuple, Const
 import re
 import os
 from pkg_resources import Requirement
+
+
+__all__ = ['find_dependencies',
+           'DependenciesNotFoundException',
+           'CouldNotParseDependencies']
 
 
 _PIP_OPTIONS = (
@@ -13,6 +19,10 @@ _PIP_OPTIONS = (
 
 
 class DependenciesNotFoundException(Exception):
+    pass
+
+
+class CouldNotParseDependencies(Exception):
     pass
 
 
@@ -36,8 +46,83 @@ def find_dependencies(path):
     pass
 
 
+class SetupWalker(object):
+
+    def __init__(self, ast):
+        self._ast = ast
+        self._setup_call = None
+        self._top_level_assigns = {}
+        self.walk()
+
+    def walk(self, node=None):
+        top = node is None
+        node = node or self._ast
+
+        # test to see if this is a call to setup()
+        if isinstance(node, CallFunc):
+            for child_node in node.get_children():
+                if isinstance(child_node, Name) and child_node.name == 'setup':
+                    # TODO: what if this isn't actually the distutils setup?
+                    self._setup_call = node
+
+        for child_node in node.get_children():
+            if top and isinstance(child_node, Assign):
+                for target in child_node.targets:
+                    self._top_level_assigns[target.name] = child_node.value
+            self.walk(child_node)
+
+    def _get_list_value(self, list_node):
+        values = []
+        for child_node in list_node.get_children():
+            if not isinstance(child_node, Const):
+                # we can't handle anything fancy, only constant values
+                raise CouldNotParseDependencies
+            values.append(child_node.value)
+        return values
+
+    def get_install_requires(self):
+        # first, if we have a call to setup, then we can see what its "install_requires" argument is
+        if not self._setup_call:
+            raise CouldNotParseDependencies
+
+        for child_node in self._setup_call.get_children():
+            if not isinstance(child_node, Keyword):
+                # do we want to try to handle positional arguments?
+                continue
+
+            if child_node.arg != 'install_requires':
+                continue
+
+            if isinstance(child_node.value, (List, Tuple)):
+                # joy! this is a simple list or tuple of requirements
+                # this is a Keyword -> List or Keyword -> Tuple
+                return self._get_list_value(child_node.value)
+
+            if isinstance(child_node.value, Name):
+                # otherwise, it's referencing a value defined elsewhere
+                # this will be a Keyword -> Name
+                try:
+                    reqs = self._top_level_assigns[child_node.value.name]
+                except KeyError:
+                    raise CouldNotParseDependencies
+                else:
+                    if isinstance(reqs, (List, Tuple)):
+                        return self._get_list_value(reqs)
+
+            # otherwise it's something funky and we can't handle it
+            raise CouldNotParseDependencies
+
+
 def from_setup_py(setup_file):
-    pass
+    ast = MANAGER.ast_from_file(setup_file)
+    walker = SetupWalker(ast)
+
+    requirements = []
+    for req in walker.get_install_requires():
+        requirements.append(Requirement.parse(req))
+
+    requirements.sort(key=lambda r: r.key)
+    return requirements
 
 
 def from_requirements_txt(requirements_file):
