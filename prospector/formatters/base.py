@@ -1,4 +1,4 @@
 
 class FormatterBase(object):
-    def format_messages(self, messages):
+    def format(self, messages):
         raise NotImplementedError

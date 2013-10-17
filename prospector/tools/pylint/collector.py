@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from pylint.reporters import BaseReporter
+from prospector.message import Location, Message
 
 
 class Collector(BaseReporter):
@@ -11,20 +12,8 @@ class Collector(BaseReporter):
         self._messages = []
 
     def add_message(self, msg_id, location, msg):
-        location = {
-            'path': location[0],
-            'module': location[1],
-            'function': location[2],
-            'line': location[3],
-            'character': location[4]
-        }
-
-        message = {
-            'msg_id': msg_id,
-            'location': location,
-            'message': msg
-        }
-
+        loc = Location(*location)
+        message = Message('pylint', msg_id, loc, msg)
         self._messages.append(message)
 
     def _display(self, layout):

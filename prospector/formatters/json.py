@@ -8,5 +8,6 @@ class JsonFormatter(FormatterBase):
     def __init__(self, indent=2):
         self.indent = indent
 
-    def format_messages(self, messages):
-        print json.dumps(messages, indent=self.indent)
+    def format(self, messages):
+        output = {'messages': [m.as_dict() for m in messages]}
+        print json.dumps(output, indent=self.indent)

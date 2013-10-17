@@ -27,7 +27,6 @@ def make_arg_parser():
                  'run: %s' % (', '.join(tools.TOOLS.keys()), ', '.join(tools.DEFAULT_TOOLS))
     parser.add_argument('-t', '--tools', default=None, nargs='+', help=tools_help)
 
-    parser.add_argument('path', nargs='?', help="The path to the python project to inspect (defaults to PWD)")
     parser.add_argument('-p', '--path', help="The path to the python project to inspect (defaults to PWD)")
 
     return parser
@@ -86,7 +85,7 @@ def run():
     for tool in tool_runners:
         messages += tool.run()
 
-    formatter.format_messages(messages)
+    formatter.format(messages)
 
     sys.exit(0)
 

@@ -1,5 +1,5 @@
 import sys
-from logilab.common.textutils import splitstrip
+import os
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.linter import ProspectorLinter
 
@@ -7,29 +7,45 @@ from prospector.tools.pylint.linter import ProspectorLinter
 class PylintTool():
 
     def _find_paths(self, rootpath):
-        return ['prospector']
-        pass
+        # first find all packages in the root directory
+        paths = self._find_packages(rootpath)
+        # then add all python files in the root directory
+        init_file = os.path.join(rootpath, '__init__.py')
+        if os.path.exists(init_file) and os.path.isfile(init_file):
+            paths.append(rootpath)
+        else:
+            for entry in os.listdir(rootpath):
+                if entry.endswith('.py') and os.path.isfile(os.path.join(rootpath, entry)):
+                    paths.append(os.path.join(rootpath, entry))
+        return paths
+
+    def _find_packages(self, rootpath):
+        check_dirs = []
+
+        for subdir in os.listdir(rootpath):
+            subdir_fullpath = os.path.join(rootpath, subdir)
+
+            if not os.path.isdir(subdir_fullpath):
+                continue
+
+            if os.path.exists( os.path.join(subdir_fullpath, '__init__.py') ):
+                # this is a package, add it and move on
+                check_dirs.append( os.path.join(rootpath, subdir) )
+            else:
+                # this is not a package, so check its subdirs
+                check_dirs.extend(self._find_packages(subdir_fullpath))
+        return check_dirs
 
     def prepare(self, rootpath, args, profiles):
         linter = ProspectorLinter()
         linter.load_default_plugins()
-
-        pylint_args = ['--max-line-length=160']  # TODO: move this into the 'common' profile
 
         paths = self._find_paths(rootpath)
 
         for profile in profiles:
             profile.apply_to_pylint(linter)
 
-        pylint_args.append(' '.join(paths))
-
-        # this rather cryptic invocation is lifted from the Pylint Run class
-        linter.read_config_file()
-        # is there some additional plugins in the file configuration, in
-        config_parser = linter.cfgfile_parser
-        if config_parser.has_option('MASTER', 'load-plugins'):
-            plugins = splitstrip(config_parser.get('MASTER', 'load-plugins'))
-            linter.load_plugin_modules(plugins)
+        pylint_args = paths
 
         self._args = linter.load_command_line_configuration(pylint_args)
 
@@ -43,8 +59,12 @@ class PylintTool():
         linter.disable('I0020')
         linter.disable('I0021')
 
-        # insert current working directory to the python path to have a correct behaviour
-        linter.prepare_import_path(self._args)
+        # insert the target path into the system path to get correct behaviour
+        self._extra_sys_path = [rootpath]
+        for path in paths:
+            if os.path.isdir(path):
+                self._extra_sys_path.append(path)
+        sys.path += self._extra_sys_path
 
         # use the collector 'reporter' to simply gather the messages given by PyLint
         self._collector = Collector()
@@ -58,4 +78,7 @@ class PylintTool():
         # interferes with scripts which depend on and expect the exit code of the
         # code checker to match whether the check itself was successful
         self._linter.check(self._args)
+        for path in self._extra_sys_path:
+            sys.path.remove(path)
+
         return self._collector.get_messages()
