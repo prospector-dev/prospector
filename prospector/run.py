@@ -1,90 +1,93 @@
 import sys
 import argparse
-from logilab.common.textutils import splitstrip
-from prospector.augmentations import apply_augmentations
-from prospector.formatters.text import TextFormatter
+import os
+from prospector.formatters import FORMATTERS
 from prospector.profiles import PROFILES
-from prospector.formatters.json import JsonFormatter
-from prospector.linter import ProspectorLinter
+from prospector import tools
+from requirements_detector import find_requirements
+from requirements_detector.detect import RequirementsNotFound
 
 
 def make_arg_parser():
     parser = argparse.ArgumentParser(description="Performs analysis of Python code")
 
     profile_help = 'A list of one or more profiles to use.'
-    parser.add_argument('-p', '--profiles', action='append', help=profile_help)
+    parser.add_argument('-P', '--profiles', help=profile_help, default=[], nargs='+')
 
     output_help = "The output format. Valid values are 'json' and 'text'"
     parser.add_argument('-o', '--output-format', default='text', help=output_help)
 
-    parser.add_argument('paths', nargs='+', help="The path(s) to the python packages or modules to inspect")
+    parser.add_argument('-A', '--no-autodetect', action='store_true', default=False,
+                        help='Turn off auto-detection of frameworks and libraries used. By default, autodetection'
+                             ' will be used.')
+
+    parser.add_argument('--no-common-profile', action='store_true', default=False)
+
+    tools_help = 'A list of tools to run. Possible values are: %s. By default, the following tools will be ' \
+                 'run: %s' % (', '.join(tools.TOOLS.keys()), ', '.join(tools.DEFAULT_TOOLS))
+    parser.add_argument('-t', '--tools', default=None, nargs='+', help=tools_help)
+
+    parser.add_argument('path', nargs='?', help="The path to the python project to inspect (defaults to PWD)")
+    parser.add_argument('-p', '--path', help="The path to the python project to inspect (defaults to PWD)")
 
     return parser
+
+
+def _die(message):
+    sys.stderr.write('%s\n' % message)
+    sys.exit(1)
+
+
+def autodetect_profiles(path):
+    try:
+        reqs = find_requirements(path)
+    except RequirementsNotFound:
+        return
+
+    for requirement in reqs:
+        if requirement.name is not None and requirement.name.lower() in PROFILES:
+            yield requirement.name.lower()
 
 
 def run():
     parser = make_arg_parser()
     args = parser.parse_args()
 
-    linter = ProspectorLinter()
-    linter.load_default_plugins()
-    linter.register_reporter(JsonFormatter)
-    linter.register_reporter(TextFormatter)
+    path = args.path or os.getcwd()
 
-    pylint_args = ['--max-line-length=160']
+    try:
+        formatter = FORMATTERS[args.output_format]()
+    except KeyError:
+        _die("Formatter %s is not valid - possible values are %s" % (args.output_format, ', '.join(FORMATTERS.keys())))
 
-    if args.output_format.startswith('pylint_'):
-        output_format = args.output_format[7:]
-        pylint_args.append('--output-format=%s' % output_format)
-    else:
-        pylint_args.append('--output-format=%s' % args.output_format)
-        # we disable reports for the built-in pylint reporters, but not for
-        # the custom ones added by prospector, as it seems that custom reporters
-        # get turned off by --reports=no...
-        pylint_args.append('--reports=no')
+    profile_names = args.profiles
+    if not args.no_common_profile:
+        profile_names += ['common']
+    if not args.no_autodetect:
+        profile_names += autodetect_profiles(path)
 
-    if args.profiles:
-        for profile in args.profiles:
-            try:
-                PROFILES[profile](linter)
-            except KeyError:
-                sys.stderr.write("No such profile: %s" % profile)
-                sys.exit(2)
+    profiles = []
+    for profile in profile_names:
+        if profile not in PROFILES:
+            _die("Profile %s is not valid - possible values are %s" % (profile, ', '.join(PROFILES.keys())))
+        profiles.append(PROFILES[profile]())
 
-    pylint_args.append(' '.join(args.paths))
+    tool_runners = []
+    tool_names = args.tools or tools.DEFAULT_TOOLS
+    for tool in tool_names:
+        if not tool in tools.TOOLS:
+            _die("Tool %s is not valid - possible values are %s" % (tool, ', '.join(tools.TOOLS.keys())))
+        tool_runners.append(tools.TOOLS[tool]())
 
-    # this rather cryptic invocation is lifted from the Pylint Run class
-    linter.read_config_file()
-    # is there some additional plugins in the file configuration, in
-    config_parser = linter.cfgfile_parser
-    if config_parser.has_option('MASTER', 'load-plugins'):
-        plugins = splitstrip(config_parser.get('MASTER', 'load-plugins'))
-        linter.load_plugin_modules(plugins)
+    for tool in tool_runners:
+        tool.prepare(path, args, profiles)
 
-    args = linter.load_command_line_configuration(pylint_args)
+    messages = []
+    for tool in tool_runners:
+        messages += tool.run()
 
-    # add the standard augmentations valid for all pythony code
-    apply_augmentations(linter)
+    formatter.format_messages(messages)
 
-    if not args:
-        print linter.help()
-        sys.exit(2)
-
-    # disable the warnings about disabling warnings...
-    linter.disable('I0011')
-    linter.disable('I0012')
-    linter.disable('I0020')
-    linter.disable('I0021')
-
-    # insert current working directory to the python path to have a correct behaviour
-    linter.prepare_import_path(args)
-
-    # note: Pylint will exit with a status code indicating the health of the
-    # code it was checking. Prospector will not mimic this behaviour, as it
-    # interferes with scripts which depend on and expect the exit code of the
-    # code checker to match whether the check itself was successful
-    # TODO: add a command line argument to re-enable the exit code behaviour of pylint
-    linter.check(args)
     sys.exit(0)
 
 

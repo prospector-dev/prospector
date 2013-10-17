@@ -14,6 +14,8 @@ _install_requires = [
     'pylint-celery',
     'pylint-django',
     'pylint-plugin-utils',
+    'pylint-common',
+    'requirements-detector',
 ]
 
 setup(
