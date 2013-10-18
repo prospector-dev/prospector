@@ -1,7 +1,6 @@
-from prospector.formatters.json import JsonFormatter
-from prospector.formatters.text import TextFormatter
+from prospector.formatters import json, text
 
 FORMATTERS = {
-    'json': JsonFormatter,
-    'text': TextFormatter
+    'json': json.format_messages,
+    'text': text.format_messages
 }

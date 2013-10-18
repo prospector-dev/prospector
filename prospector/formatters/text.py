@@ -1,4 +1,3 @@
-from prospector.formatters.base import FormatterBase
 import sys
 
 
@@ -8,14 +7,12 @@ TEMPLATE = """%(module)s (%(path)s):
 """
 
 
-class TextFormatter(FormatterBase):
-
-    def format(self, messages):
-        for message in messages:
-            info = {}
-            info.update(message.as_dict())
-            del info['location']
-            info.update(message.location.as_dict())
-            line = TEMPLATE % info
-            sys.stdout.write(line)
-            sys.stdout.write('\n')
+def format_messages(messages):
+    for message in messages:
+        info = {}
+        info.update(message.as_dict())
+        del info['location']
+        info.update(message.location.as_dict())
+        line = TEMPLATE % info
+        sys.stdout.write(line)
+        sys.stdout.write('\n')

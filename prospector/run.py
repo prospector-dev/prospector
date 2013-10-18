@@ -55,7 +55,7 @@ def run():
     path = args.path or os.getcwd()
 
     try:
-        formatter = FORMATTERS[args.output_format]()
+        formatter = FORMATTERS[args.output_format]
     except KeyError:
         _die("Formatter %s is not valid - possible values are %s" % (args.output_format, ', '.join(FORMATTERS.keys())))
 
@@ -85,7 +85,7 @@ def run():
     for tool in tool_runners:
         messages += tool.run()
 
-    formatter.format(messages)
+    formatter(messages)
 
     sys.exit(0)
 

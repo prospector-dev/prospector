@@ -1,10 +1,11 @@
 import sys
 import os
+from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.linter import ProspectorLinter
 
 
-class PylintTool():
+class PylintTool(ToolBase):
 
     def _find_paths(self, rootpath):
         # first find all packages in the root directory
@@ -45,13 +46,7 @@ class PylintTool():
         for profile in profiles:
             profile.apply_to_pylint(linter)
 
-        pylint_args = paths
-
-        self._args = linter.load_command_line_configuration(pylint_args)
-
-        if not self._args:
-            print linter.help()
-            sys.exit(2)
+        self._args = linter.load_command_line_configuration(paths)
 
         # disable the warnings about disabling warnings...
         linter.disable('I0011')

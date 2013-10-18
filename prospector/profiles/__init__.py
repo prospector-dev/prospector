@@ -5,7 +5,7 @@ from prospector.profiles.no_doc_warnings import NoDocWarningsProfile
 
 
 PROFILES = {
-    'no_doc_warnings': NoDocWarningsProfile,
+    'no-doc-warnings': NoDocWarningsProfile,
     'common': CommonProfile,
     # frameworks:
     'celery': CeleryProfile,
