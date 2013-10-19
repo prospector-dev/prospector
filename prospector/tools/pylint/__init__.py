@@ -17,7 +17,8 @@ class PylintTool(ToolBase):
         self._args = self._extra_sys_path = self._collector = self._linter = None
 
     def _ignore_path(self, rootpath, path):
-        print path
+        if path.startswith(rootpath):
+            path = path[len(rootpath):]
         return any([ignore.match(path) for ignore in _IGNORE_PATHS])
 
     def _find_paths(self, rootpath):
@@ -47,21 +48,21 @@ class PylintTool(ToolBase):
 
             if os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
                 # this is a package, add it and move on
-                if not self._ignore_path(subdir_fullpath):
+                if not self._ignore_path(rootpath, subdir_fullpath):
                     check_dirs.append(subdir_fullpath)
             else:
                 # this is not a package, so check its subdirs
                 check_dirs.extend(self._find_packages(subdir_fullpath))
         return check_dirs
 
-    def prepare(self, rootpath, args, profiles):
+    def prepare(self, rootpath, args, adaptors):
         linter = ProspectorLinter()
         linter.load_default_plugins()
 
         paths = self._find_paths(rootpath)
 
-        for profile in profiles:
-            profile.apply_to_pylint(linter)
+        for adaptor in adaptors:
+            adaptor.adapt_pylint(linter)
 
         self._args = linter.load_command_line_configuration(paths)
 

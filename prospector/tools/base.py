@@ -4,7 +4,7 @@
 # more in the future as additional tools are added to Prospector
 class ToolBase(object):  # pylint: disable=R0922
 
-    def prepare(self, rootpath, args, profiles):
+    def prepare(self, rootpath, args, adaptors):
         pass
 
     def run(self):
