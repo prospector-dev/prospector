@@ -1,3 +1,4 @@
+import re
 import sys
 import os
 from prospector.tools.base import ToolBase
@@ -5,7 +6,19 @@ from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.linter import ProspectorLinter
 
 
+_IGNORE_PATHS = map(re.compile, (
+    r'^setup.py$',
+))
+
+
 class PylintTool(ToolBase):
+
+    def __init__(self):
+        self._args = self._extra_sys_path = self._collector = self._linter = None
+
+    def _ignore_path(self, rootpath, path):
+        print path
+        return any([ignore.match(path) for ignore in _IGNORE_PATHS])
 
     def _find_paths(self, rootpath):
         # first find all packages in the root directory
@@ -16,8 +29,11 @@ class PylintTool(ToolBase):
             paths.append(rootpath)
         else:
             for entry in os.listdir(rootpath):
-                if entry.endswith('.py') and os.path.isfile(os.path.join(rootpath, entry)):
-                    paths.append(os.path.join(rootpath, entry))
+                entry_path = os.path.join(rootpath, entry)
+                if self._ignore_path(rootpath, entry_path):
+                    continue
+                if entry.endswith('.py') and os.path.isfile(entry_path):
+                    paths.append(entry_path)
         return paths
 
     def _find_packages(self, rootpath):
@@ -29,9 +45,10 @@ class PylintTool(ToolBase):
             if not os.path.isdir(subdir_fullpath):
                 continue
 
-            if os.path.exists( os.path.join(subdir_fullpath, '__init__.py') ):
+            if os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
                 # this is a package, add it and move on
-                check_dirs.append( os.path.join(rootpath, subdir) )
+                if not self._ignore_path(subdir_fullpath):
+                    check_dirs.append(subdir_fullpath)
             else:
                 # this is not a package, so check its subdirs
                 check_dirs.extend(self._find_packages(subdir_fullpath))
