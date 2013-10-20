@@ -12,39 +12,39 @@ from requirements_detector.detect import RequirementsNotFound
 def make_arg_parser():
     parser = argparse.ArgumentParser(description="Performs analysis of Python code")
 
-    profile_help = 'A list of one or more libraries or frameworks that the project users. Possible' \
-                   ' values are django, celery. This will be autodetected by default, but if autotectection' \
-                   ' doesn\'t work, manually specify them using this flag.'
-    parser.add_argument('-u', '--uses', help=profile_help, default=[], nargs='+')
+    parser.add_argument('-A', '--no-autodetect', action='store_true', default=False,
+                        help='Turn off auto-detection of frameworks and libraries used. By default, autodetection'
+                             ' will be used. To specify manually, see the --uses option.')
+
+    parser.add_argument('-D', '--no-doc-warnings', action='store_true', default=False,
+                        help="Don't include any documentation warnings.")
+
+    parser.add_argument('-M', '--messages-only', default=False, action='store_true',
+                        help="Only output message information (don't output summary information about the checks)")
+
+    output_help = "The output format. Valid values are %s" % ', '.join(FORMATTERS.keys())
+    parser.add_argument('-o', '--output-format', default='text', help=output_help)
+
+    parser.add_argument('-p', '--path', help="The path to the python project to inspect (defaults to PWD)")
 
     strictness_help = 'How strict the checker should be. This affects how harshly the checker will enforce' \
                       ' coding guidelines. The default value is "medium", possible values are "veryhigh", "high",' \
                       ' "medium", "low" and "verylow".'
     parser.add_argument('-s', '--strictness', help=strictness_help, default='medium')
 
-    output_help = "The output format. Valid values are %s" % ', '.join(FORMATTERS.keys())
-    parser.add_argument('-o', '--output-format', default='text', help=output_help)
-
-    parser.add_argument('-A', '--no-autodetect', action='store_true', default=False,
-                        help='Turn off auto-detection of frameworks and libraries used. By default, autodetection'
-                             ' will be used. To specify manually, see the --uses option.')
-
-    parser.add_argument('--no-doc-warnings', action='store_true', default=True,
-                        help="Don't include any documentation warnings.")
-
-    parser.add_argument('--no-common-plugin', action='store_true', default=False)
+    parser.add_argument('-S', '--summary-only', default=False, action='store_true',
+                        help="Only output summary information about the checks (don't output message information)")
 
     tools_help = 'A list of tools to run. Possible values are: %s. By default, the following tools will be ' \
                  'run: %s' % (', '.join(tools.TOOLS.keys()), ', '.join(tools.DEFAULT_TOOLS))
     parser.add_argument('-t', '--tools', default=None, nargs='+', help=tools_help)
 
-    parser.add_argument('-p', '--path', help="The path to the python project to inspect (defaults to PWD)")
+    uses_help = 'A list of one or more libraries or frameworks that the project users. Possible' \
+                ' values are django, celery. This will be autodetected by default, but if autotectection' \
+                ' doesn\'t work, manually specify them using this flag.'
+    parser.add_argument('-u', '--uses', help=uses_help, default=[], nargs='+')
 
-    parser.add_argument('--no-messages', default=False, action='store_true',
-                        help="Only output message information (don't output summary information about the checks)")
-
-    parser.add_argument('--no-summary', default=False, action='store_true',
-                        help="Only output summary information about the checks (don't output message information)")
+    parser.add_argument('--no-common-plugin', action='store_true', default=False)
 
     return parser
 
@@ -125,19 +125,17 @@ def run():
         messages += tool.run()
 
     summary['message_count'] = len(messages)
-
-    if args.no_summary:
-        summary = None
-    if args.no_messages:
-        messages = None
-
     summary['completed'] = datetime.now()
-
     delta = (summary['completed'] - summary['started'])
     summary['time_taken'] = '%0.2f' % delta.total_seconds()
 
     summary['started'] = str(summary['started'])
     summary['completed'] = str(summary['completed'])
+
+    if args.messages_only:
+        summary = None
+    if args.summary_only:
+        messages = None
 
     formatter(summary, messages)
 
