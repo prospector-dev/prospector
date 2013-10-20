@@ -1,6 +1,7 @@
 import sys
 import argparse
 import os
+from datetime import datetime
 from prospector.adaptor import CommonAdaptor, NoDocWarningsAdaptor, LIBRARY_ADAPTORS, STRICTNESS_ADAPTORS
 from prospector.formatters import FORMATTERS
 from prospector import tools
@@ -39,6 +40,12 @@ def make_arg_parser():
 
     parser.add_argument('-p', '--path', help="The path to the python project to inspect (defaults to PWD)")
 
+    parser.add_argument('--no-messages', default=False, action='store_true',
+                        help="Only output message information (don't output summary information about the checks)")
+
+    parser.add_argument('--no-summary', default=False, action='store_true',
+                        help="Only output summary information about the checks (don't output message information)")
+
     return parser
 
 
@@ -62,12 +69,15 @@ def run():
     parser = make_arg_parser()
     args = parser.parse_args()
 
-    meta = {}
+    summary = {
+        'started': datetime.now()
+    }
 
     path = args.path or os.getcwd()
 
     try:
         formatter = FORMATTERS[args.output_format]
+        summary['formatter'] = args.output_format
     except KeyError:
         _die("Formatter %s is not valid - possible values are %s" % (args.output_format, ', '.join(FORMATTERS.keys())))
 
@@ -85,12 +95,18 @@ def run():
         _die("%s is not a valid value for strictness - possible values are %s" % (strictness, possible))
     else:
         adaptors.append(STRICTNESS_ADAPTORS[strictness]())
+        summary['strictness'] = strictness
 
     for library in args.uses:
         if library not in LIBRARY_ADAPTORS:
             possible = ', '.join(LIBRARY_ADAPTORS.keys())
             _die("Library/framework %s is not valid - possible values are %s" % (library, possible))
         adaptors.append(LIBRARY_ADAPTORS[library]())
+
+    summary['adaptors'] = []
+    for adaptor in adaptors:
+        summary['adaptors'].append(adaptor.name)
+    summary['adaptors'] = ', '.join(summary['adaptors'])
 
     tool_runners = []
     tool_names = args.tools or tools.DEFAULT_TOOLS
@@ -99,6 +115,8 @@ def run():
             _die("Tool %s is not valid - possible values are %s" % (tool, ', '.join(tools.TOOLS.keys())))
         tool_runners.append(tools.TOOLS[tool]())
 
+    summary['tools'] = ', '.join(tool_names)
+
     for tool in tool_runners:
         tool.prepare(path, args, adaptors)
 
@@ -106,7 +124,22 @@ def run():
     for tool in tool_runners:
         messages += tool.run()
 
-    formatter(messages)
+    summary['message_count'] = len(messages)
+
+    if args.no_summary:
+        summary = None
+    if args.no_messages:
+        messages = None
+
+    summary['completed'] = datetime.now()
+
+    delta = (summary['completed'] - summary['started'])
+    summary['time_taken'] = '%0.2f' % delta.total_seconds()
+
+    summary['started'] = str(summary['started'])
+    summary['completed'] = str(summary['completed'])
+
+    formatter(summary, messages)
 
     sys.exit(0)
 

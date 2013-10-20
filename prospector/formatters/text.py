@@ -1,18 +1,35 @@
 import sys
 
+_SUMMARY_TEMPLATE = """Started: %(started)s
+Finished: %(completed)s
+Time taken: %(time_taken)s seconds
+Formatter: %(formatter)s
+Strictness: %(strictness)s
+Tools run: %(tools)s
+Adaptors: %(adaptors)s
+Messages Found: %(message_count)d
+"""
 
-TEMPLATE = """%(module)s (%(path)s):
+
+_MESSAGE_TEMPLATE = """%(module)s (%(path)s):
     L%(line)s:%(character)s %(function)s: %(source)s - %(code)s
     %(message)s
 """
 
 
-def format_messages(messages):
-    for message in messages:
-        info = {}
-        info.update(message.as_dict())
-        del info['location']
-        info.update(message.location.as_dict())
-        line = TEMPLATE % info
-        sys.stdout.write(line)
-        sys.stdout.write('\n')
+def format_messages(summary, messages):
+    if summary is not None:
+        sys.stdout.write("Check Information\n=================\n")
+        sys.stdout.write(_SUMMARY_TEMPLATE % summary)
+        sys.stdout.write('\n\n')
+
+    if messages is not None:
+        sys.stdout.write("Messages\n========\n\n")
+        for message in messages:
+            info = {}
+            info.update(message.as_dict())
+            del info['location']
+            info.update(message.location.as_dict())
+            line = _MESSAGE_TEMPLATE % info
+            sys.stdout.write(line)
+            sys.stdout.write('\n')
