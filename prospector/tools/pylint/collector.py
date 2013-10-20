@@ -7,8 +7,8 @@ class Collector(BaseReporter):
 
     name = 'collector'
 
-    def __init__(self, output=None):
-        BaseReporter.__init__(self, output=output)
+    def __init__(self):
+        BaseReporter.__init__(self, output=None)
         self._messages = []
 
     def add_message(self, msg_id, location, msg):

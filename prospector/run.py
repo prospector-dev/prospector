@@ -44,6 +44,9 @@ def make_arg_parser():
                 ' doesn\'t work, manually specify them using this flag.'
     parser.add_argument('-u', '--uses', help=uses_help, default=[], nargs='+')
 
+    parser.add_argument('--absolute-paths', action='store_true', default=False,
+                        help='Whether to output absolute paths when referencing files in messages. By default, '
+                             'paths will be relative to the --path value')
     parser.add_argument('--no-common-plugin', action='store_true', default=False)
 
     return parser
@@ -123,6 +126,12 @@ def run():
     messages = []
     for tool in tool_runners:
         messages += tool.run()
+
+    for message in messages:
+        if args.absolute_paths:
+            message.to_absolute_path(path)
+        else:
+            message.to_relative_path(path)
 
     summary['message_count'] = len(messages)
     summary['completed'] = datetime.now()
