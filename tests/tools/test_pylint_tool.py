@@ -14,5 +14,12 @@ class TestPylintTool(TestCase):
         expected_sys_paths = [os.path.join(os.path.dirname(__file__), p)
                               for p in ('package_test', 'package_test/somedir')]
 
-        self.assertEqual(expected_sys_paths, list(sys_paths))
+        sys_paths = list(sys_paths)
+
+        sys_paths.sort()
+        check_paths.sort()
+        expected_checks.sort()
+        expected_sys_paths.sort()
+
+        self.assertEqual(expected_sys_paths, sys_paths)
         self.assertEqual(expected_checks, check_paths)
