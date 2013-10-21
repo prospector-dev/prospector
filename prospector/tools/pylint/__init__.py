@@ -27,13 +27,20 @@ def _find_package_paths(rootpath):
 
         subdir_fullpath = os.path.join(rootpath, subdir)
 
-        if not os.path.isdir(subdir_fullpath):
-            if not os.path.exists(os.path.join(rootpath, '__init__.py')):
-                # this is a python module but not in a package, so add it
-                check_dirs.append(subdir_fullpath)
+        if os.path.islink(subdir_fullpath):
             continue
 
-        if os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
+        if os.path.isfile(subdir_fullpath):
+            if not subdir.endswith('.py'):         
+                continue
+
+            if os.path.exists(os.path.join(rootpath, '__init__.py')):
+                continue
+
+            # this is a python module but not in a package, so add it
+            check_dirs.append(subdir_fullpath)
+         
+        elif os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
             # this is a package, add it and move on
             if not _ignore_path(rootpath, subdir_fullpath):
                 sys_path.add(rootpath)
