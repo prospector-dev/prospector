@@ -16,6 +16,7 @@ _install_requires = [
     'pylint-plugin-utils',
     'pylint-common',
     'requirements-detector',
+    'argparse',
 ]
 
 setup(
