@@ -5,8 +5,8 @@ prospector
 
 #### Package
 
-[![Latest Version](https://pypip.in/v/prospector/badge.png)](https://crate.io/package/prospector)
-[![Downloads](https://pypip.in/d/prospector/badge.png)](https://crate.io/package/prospector)
+[![Latest Version](https://pypip.in/v/prospector/badge.png)](https://crate.io/packages/prospector)
+[![Downloads](https://pypip.in/d/prospector/badge.png)](https://crate.io/packages/prospector)
 
 #### Stable ([master](https://github.com/landscapeio/prospector/tree/master))
 
