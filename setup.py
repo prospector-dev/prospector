@@ -4,19 +4,19 @@ from setuptools import find_packages
 import time
 
 
-_version = "0.1.dev%s" % int(time.time())
+_version = "0.1"
 _packages = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _short_description = "prospector"
 
 _install_requires = [
-    'pylint==1.0.0',
-    'pylint-celery',
-    'pylint-django',
-    'pylint-plugin-utils',
-    'pylint-common',
-    'requirements-detector',
-    'argparse',
+    'pylint>=1.0.0',
+    'pylint-celery>=0.1',
+    'pylint-django>=0.1',
+    'pylint-plugin-utils>=0.1',
+    'pylint-common>=0.1',
+    'requirements-detector>=0.1',
+    'argparse==1.2.1',
 ]
 
 setup(
@@ -30,5 +30,5 @@ setup(
     version=_version,
     packages=_packages,
     license='GPLv2',
-    keywords=('pylint', 'prospector', 'code analysis')
+    keywords='pylint prospector code analysis'
 )
