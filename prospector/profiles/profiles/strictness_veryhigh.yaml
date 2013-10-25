@@ -1,0 +1,5 @@
+# This will enable almost every single warning
+
+pylint:
+  disable:
+    - W0511

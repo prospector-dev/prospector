@@ -1,0 +1,15 @@
+inherit:
+  - strictness_veryhigh
+
+pylint:
+  disable:
+    - C0303
+    - C0304
+    - R0903
+    - R0904
+    - W0110
+    - W0141
+    - W0142
+    - W0603
+    - W1111
+    - W1301

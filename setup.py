@@ -17,6 +17,7 @@ _install_requires = [
     'pylint-common>=0.1',
     'requirements-detector>=0.1',
     'argparse==1.2.1',
+    'pyyaml',
 ]
 
 setup(
