@@ -4,7 +4,7 @@ from setuptools import find_packages
 import time
 
 
-_version = "0.1"
+_version = "0.2.dev%s" % int(time.time())
 _packages = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _short_description = "prospector"
