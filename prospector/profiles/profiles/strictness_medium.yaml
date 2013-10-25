@@ -24,11 +24,10 @@ pylint:
     - W0403
     - W0601
     - W0621
-    - W0531
     - W0701
     - W0703
     - W0704
     - W1001
     - W1401
   options:
-    - max-line-length: 160
+    max-line-length: 160

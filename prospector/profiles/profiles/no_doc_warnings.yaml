@@ -1,0 +1,5 @@
+
+pylint:
+  disable:
+    - C0112
+    - C0111
