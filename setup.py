@@ -20,6 +20,17 @@ _install_requires = [
     'pyyaml',
 ]
 
+_package_data = {
+    'prospector': [
+        'profiles/profiles/no_doc_warnings.yaml',
+        'profiles/profiles/strictness_high.yaml',
+        'profiles/profiles/strictness_low.yaml',
+        'profiles/profiles/strictness_medium.yaml',
+        'profiles/profiles/strictness_veryhigh.yaml',
+        'profiles/profiles/strictness_verylow.yaml',
+    ]
+}
+
 setup(
     name='prospector',
     url='https://github.com/landscapeio/prospector',
@@ -27,6 +38,7 @@ setup(
     author_email='code@landscape.io',
     description=_short_description,
     install_requires=_install_requires,
+    package_data=_package_data,
     scripts=['bin/prospector'],
     version=_version,
     packages=_packages,
