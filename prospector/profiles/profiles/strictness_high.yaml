@@ -13,3 +13,11 @@ pylint:
     - W0603
     - W1111
     - W1301
+
+  options:
+    max-locals: 15
+    max-returns: 6
+    max-branches: 15
+    max-statements: 60
+    min-public-methods: 1
+    max-public-methods: 20

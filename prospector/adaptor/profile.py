@@ -1,5 +1,5 @@
 from prospector.adaptor.base import AdaptorBase
-from prospector.profiles.profile import load_profiles, merge_profiles
+from prospector.profiles.profile import load_profiles
 from pylint.utils import UnknownMessage
 
 
@@ -15,3 +15,12 @@ class ProfileAdaptor(AdaptorBase):
                 linter.disable(msg_id)
             except UnknownMessage:
                 pass
+
+        options = self.profile.pylint['options']
+
+        for checker in linter.get_checkers():
+            if not hasattr(checker, 'options'):
+                continue
+            for option in checker.options:
+                if option[0] in options:
+                    checker.set_option(option[0], options[option[0]])
