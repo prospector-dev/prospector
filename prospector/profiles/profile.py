@@ -12,7 +12,7 @@ class ProfileNotFound(Exception):
 
 
 _empty_data = {
-    'inherit': [],
+    'inherits': [],
     'pylint': {
         'disable': [],
         'options': {}
@@ -23,10 +23,6 @@ _empty_data = {
 def load_profiles(names, basedir=None):
     if not isinstance(names, (list, tuple)):
         names = (names,)
-    profiles = []
-    for name in names:
-        if name.endswith('.yaml'):
-            filepath = 1
     profiles = [_load_profile(name, basedir=basedir)[0] for name in names]
     return merge_profiles(profiles)
 
@@ -51,22 +47,19 @@ def from_file(name, basedir=None):
     return parse_profile(name, _load_content(name, basedir))
 
 
-def _load_profile(name, basedir=None, inherit_set=None):
-    inherit_set = inherit_set or set()
+def _load_profile(name, basedir=None, inherits_set=None):
+    inherits_set = inherits_set or set()
 
     profile = parse_profile(name, _load_content(name, basedir))
-    inherit_set.add(profile.name)
+    inherits_set.add(profile.name)
 
-    for inherited in profile.inherit:
-        if inherited not in inherit_set:
-            inherited_profile, sub_inherit_set = _load_profile(inherited, basedir, inherit_set)
-            try:
-                profile.merge(inherited_profile)
-            except ValueError:
-                import pdb; pdb.set_trace()
-            inherit_set |= sub_inherit_set
+    for inheritsed in profile.inherits:
+        if inheritsed not in inherits_set:
+            inheritsed_profile, sub_inherits_set = _load_profile(inheritsed, basedir, inherits_set)
+            profile.merge(inheritsed_profile)
+            inherits_set |= sub_inherits_set
 
-    return profile, inherit_set
+    return profile, inherits_set
 
 
 def parse_profile(name, contents):
@@ -110,16 +103,16 @@ class StrictnessProfile(object):
     def __init__(self, name, profile_dict):
         self.name = name
         self.pylint = profile_dict['pylint']
-        self.inherit = profile_dict['inherit']
+        self.inherits = profile_dict['inherits']
 
     def to_profile_dict(self):
         return {
-            'inherit': self.inherit,
+            'inherits': self.inherits,
             'pylint': self.pylint
         }
 
     def merge(self, other_profile):
-        self.inherit = list(set(self.inherit + other_profile.inherit))
+        self.inherits = list(set(self.inherits + other_profile.inherits))
         self.pylint = _merge_dict(self.pylint, other_profile.pylint)
 
 
