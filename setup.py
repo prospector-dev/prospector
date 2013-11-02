@@ -23,6 +23,7 @@ _install_requires = [
 _package_data = {
     'prospector': [
         'profiles/profiles/no_doc_warnings.yaml',
+        'profiles/profiles/no_test_warnings.yaml',
         'profiles/profiles/strictness_high.yaml',
         'profiles/profiles/strictness_low.yaml',
         'profiles/profiles/strictness_medium.yaml',
