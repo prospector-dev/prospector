@@ -5,6 +5,7 @@ from datetime import datetime
 from prospector.adaptor import LIBRARY_ADAPTORS
 from prospector.adaptor.common import CommonAdaptor
 from prospector.adaptor.profile import ProfileAdaptor
+from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector import tools
 from requirements_detector import find_requirements
@@ -63,17 +64,6 @@ def make_arg_parser():
 def _die(message):
     sys.stderr.write('%s\n' % message)
     sys.exit(1)
-
-
-def autodetect_libraries(path):
-    try:
-        reqs = find_requirements(path)
-    except RequirementsNotFound:
-        return
-
-    for requirement in reqs:
-        if requirement.name is not None and requirement.name.lower() in LIBRARY_ADAPTORS:
-            yield requirement.name.lower(), LIBRARY_ADAPTORS[requirement.name.lower()]()
 
 
 def run():
