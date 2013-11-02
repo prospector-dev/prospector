@@ -56,7 +56,7 @@ def find_from_requirements(path):
 def autodetect_libraries(path):
 
     try:
-        adaptor_names = find_requirements(path)
+        adaptor_names = find_from_requirements(path)
     except RequirementsNotFound:
         adaptor_names = find_from_path(path)
 
