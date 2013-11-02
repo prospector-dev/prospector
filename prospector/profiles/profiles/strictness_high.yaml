@@ -1,6 +1,9 @@
 inherits:
   - strictness_veryhigh
 
+ignore:
+  - ^setup.py$
+
 pylint:
   disable:
     - C0303

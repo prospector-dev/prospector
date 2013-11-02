@@ -1,6 +1,7 @@
 import sys
 import argparse
 import os
+import re
 from datetime import datetime
 from prospector.adaptor import LIBRARY_ADAPTORS
 from prospector.adaptor.common import CommonAdaptor
@@ -8,8 +9,6 @@ from prospector.adaptor.profile import ProfileAdaptor
 from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector import tools
-from requirements_detector import find_requirements
-from requirements_detector.detect import RequirementsNotFound
 
 
 def make_arg_parser():
@@ -47,6 +46,9 @@ def make_arg_parser():
     tools_help = 'A list of tools to run. Possible values are: %s. By default, the following tools will be ' \
                  'run: %s' % (', '.join(tools.TOOLS.keys()), ', '.join(tools.DEFAULT_TOOLS))
     parser.add_argument('-t', '--tools', default=None, nargs='+', help=tools_help)
+
+    parser.add_argument('-T', '--no-test-warnings', default=False, action='store_true',
+                        help="Don't include any warnings from unit tests")
 
     uses_help = 'A list of one or more libraries or frameworks that the project users. Possible' \
                 ' values are django, celery. This will be autodetected by default, but if autotectection' \
@@ -114,9 +116,13 @@ def run():
     if args.no_doc_warnings:
         profiles.append('no_doc_warnings')
 
+    if args.no_test_warnings:
+        profiles.append('no_test_warnings')
+
     profiles += args.profiles
 
-    adaptors.append(ProfileAdaptor(profiles))
+    profile_adaptor = ProfileAdaptor(profiles)
+    adaptors.append(profile_adaptor)
 
     summary['adaptors'] = []
     for adaptor in adaptors:
@@ -132,8 +138,9 @@ def run():
 
     summary['tools'] = ', '.join(tool_names)
 
+    ignore = map(re.compile, profile_adaptor.profile.ignore)
     for tool in tool_runners:
-        tool.prepare(path, args, adaptors)
+        tool.prepare(path, ignore, args, adaptors)
 
     messages = []
     for tool in tool_runners:

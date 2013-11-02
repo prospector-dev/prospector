@@ -7,7 +7,7 @@ class TestPylintTool(TestCase):
 
     def test_find_packages(self):
         root = os.path.join(os.path.dirname(__file__), 'package_test')
-        sys_paths, check_paths = _find_package_paths(root)
+        sys_paths, check_paths = _find_package_paths([], root)
 
         expected_checks = [os.path.join(os.path.dirname(__file__), p)
                            for p in ('package_test/package1', 'package_test/somedir/package2')]

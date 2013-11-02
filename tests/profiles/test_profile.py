@@ -48,6 +48,10 @@ class TestProfileParsing(TestCase):
         expected = ['C1000', 'C1001', 'E0504', 'W1010', 'W1012']
         self.assertEqual(expected, merged_disabled_warnings)
 
+    def test_ignores(self):
+        profile = load_profiles('ignores', basedir=self._basedir)
+        self.assertEqual(['^tests/', '/migrations/'].sort(), profile.ignore.sort())
+
     def test_dict_merge(self):
         a = {
             'int': 1,

@@ -16,7 +16,8 @@ _empty_data = {
     'pylint': {
         'disable': [],
         'options': {}
-    }
+    },
+    'ignore': [],
 }
 
 
@@ -104,14 +105,17 @@ class StrictnessProfile(object):
         self.name = name
         self.pylint = profile_dict['pylint']
         self.inherits = profile_dict['inherits']
+        self.ignore = profile_dict['ignore']
 
     def to_profile_dict(self):
         return {
             'inherits': self.inherits,
+            'ignore': self.ignore,
             'pylint': self.pylint
         }
 
     def merge(self, other_profile):
+        self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
         self.pylint = _merge_dict(self.pylint, other_profile.pylint)
 
