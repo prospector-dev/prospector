@@ -72,7 +72,7 @@ Additionally, if Prospector is automatically detecting a library that you do not
 prospector --no-autodetect
 ```
 
-Note that as far as posisble, these adaptors have been written as plugins or augmentations for the underlying tools so that they can be used without requiring Prospector. For example, the Django support is available as a pylint plugin. See the "Supported frameworks and libraries" section for more information.
+Note that as far as possible, these adaptors have been written as plugins or augmentations for the underlying tools so that they can be used without requiring Prospector. For example, the Django support is available as a pylint plugin. See the "Supported frameworks and libraries" section for more information.
 
 ### Strictness
 
