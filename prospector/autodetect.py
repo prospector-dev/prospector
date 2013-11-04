@@ -55,9 +55,14 @@ def find_from_requirements(path):
 
 def autodetect_libraries(path):
 
+    adaptor_names = []
+
     try:
         adaptor_names = find_from_requirements(path)
     except RequirementsNotFound:
+        pass
+
+    if len(adaptor_names) == 0:
         adaptor_names = find_from_path(path)
 
     adaptors = []
