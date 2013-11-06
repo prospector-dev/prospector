@@ -5,6 +5,7 @@ Finished: %(completed)s
 Time taken: %(time_taken)s seconds
 Formatter: %(formatter)s
 Strictness: %(strictness)s
+Libraries Used: %(libraries)s
 Tools run: %(tools)s
 Adaptors: %(adaptors)s
 Messages Found: %(message_count)d

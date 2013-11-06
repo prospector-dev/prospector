@@ -1,12 +1,14 @@
 import sys
 import argparse
 import os
+import re
 from datetime import datetime
-from prospector.adaptor import CommonAdaptor, NoDocWarningsAdaptor, LIBRARY_ADAPTORS, STRICTNESS_ADAPTORS
+from prospector.adaptor import LIBRARY_ADAPTORS
+from prospector.adaptor.common import CommonAdaptor
+from prospector.adaptor.profile import ProfileAdaptor
+from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector import tools
-from requirements_detector import find_requirements
-from requirements_detector.detect import RequirementsNotFound
 
 
 def make_arg_parser():
@@ -25,7 +27,13 @@ def make_arg_parser():
     output_help = "The output format. Valid values are %s" % ', '.join(FORMATTERS.keys())
     parser.add_argument('-o', '--output-format', default='text', help=output_help)
 
-    parser.add_argument('-p', '--path', help="The path to the python project to inspect (defaults to PWD)")
+    parser.add_argument('--path', help="The path to the python project to inspect (defaults to PWD)")
+
+    profiles_help = "The list of profiles to load. A profile is a certain 'type' of behaviour for prospector, " \
+                    "and is represented by a YAML configuration file. A full path to the YAML file describing the " \
+                    "profile must be provided." \
+                    "(see --strictness)."
+    parser.add_argument('-P', '--profiles', default=[], nargs='+', help=profiles_help)
 
     strictness_help = 'How strict the checker should be. This affects how harshly the checker will enforce' \
                       ' coding guidelines. The default value is "medium", possible values are "veryhigh", "high",' \
@@ -38,6 +46,9 @@ def make_arg_parser():
     tools_help = 'A list of tools to run. Possible values are: %s. By default, the following tools will be ' \
                  'run: %s' % (', '.join(tools.TOOLS.keys()), ', '.join(tools.DEFAULT_TOOLS))
     parser.add_argument('-t', '--tools', default=None, nargs='+', help=tools_help)
+
+    parser.add_argument('-T', '--no-test-warnings', default=False, action='store_true',
+                        help="Don't include any warnings from unit tests")
 
     uses_help = 'A list of one or more libraries or frameworks that the project users. Possible' \
                 ' values are django, celery. This will be autodetected by default, but if autotectection' \
@@ -57,17 +68,6 @@ def _die(message):
     sys.exit(1)
 
 
-def autodetect_libraries(path):
-    try:
-        reqs = find_requirements(path)
-    except RequirementsNotFound:
-        return
-
-    for requirement in reqs:
-        if requirement.name is not None and requirement.name.lower() in LIBRARY_ADAPTORS:
-            yield LIBRARY_ADAPTORS[requirement.name.lower()]()
-
-
 def run():
     parser = make_arg_parser()
     args = parser.parse_args()
@@ -84,27 +84,45 @@ def run():
     except KeyError:
         _die("Formatter %s is not valid - possible values are %s" % (args.output_format, ', '.join(FORMATTERS.keys())))
 
+    libraries_used = []
+    profiles = []
     adaptors = []
+
     if not args.no_common_plugin:
         adaptors.append(CommonAdaptor())
-    if args.no_doc_warnings:
-        adaptors.append(NoDocWarningsAdaptor())
     if not args.no_autodetect:
-        adaptors += autodetect_libraries(path)
+        for libname, adaptor in autodetect_libraries(path):
+            libraries_used.append(libname)
+            adaptors.append(adaptor)
 
     strictness = args.strictness
-    if strictness not in STRICTNESS_ADAPTORS:
-        possible = ', '.join(STRICTNESS_ADAPTORS.keys())
+    strictness_options = ('veryhigh', 'high', 'medium', 'low', 'verylow')
+    if strictness not in strictness_options:
+        possible = ', '.join(strictness_options)
         _die("%s is not a valid value for strictness - possible values are %s" % (strictness, possible))
     else:
-        adaptors.append(STRICTNESS_ADAPTORS[strictness]())
+        profiles.append('strictness_%s' % strictness)
         summary['strictness'] = strictness
 
     for library in args.uses:
         if library not in LIBRARY_ADAPTORS:
             possible = ', '.join(LIBRARY_ADAPTORS.keys())
             _die("Library/framework %s is not valid - possible values are %s" % (library, possible))
+        libraries_used.append(library)
         adaptors.append(LIBRARY_ADAPTORS[library]())
+
+    summary['libraries'] = ', '.join(libraries_used)
+
+    if args.no_doc_warnings:
+        profiles.append('no_doc_warnings')
+
+    if args.no_test_warnings:
+        profiles.append('no_test_warnings')
+
+    profiles += args.profiles
+
+    profile_adaptor = ProfileAdaptor(profiles)
+    adaptors.append(profile_adaptor)
 
     summary['adaptors'] = []
     for adaptor in adaptors:
@@ -120,8 +138,9 @@ def run():
 
     summary['tools'] = ', '.join(tool_names)
 
+    ignore = map(re.compile, profile_adaptor.profile.ignore)
     for tool in tool_runners:
-        tool.prepare(path, args, adaptors)
+        tool.prepare(path, ignore, args, adaptors)
 
     messages = []
     for tool in tool_runners:

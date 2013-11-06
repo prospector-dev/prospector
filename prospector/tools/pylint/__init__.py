@@ -1,4 +1,3 @@
-import re
 import sys
 import os
 from prospector.tools.base import ToolBase
@@ -6,18 +5,7 @@ from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.linter import ProspectorLinter
 
 
-_IGNORE_PATHS = map(re.compile, (
-    r'^setup.py$',
-))
-
-
-def _ignore_path(rootpath, path):
-    if path.startswith(rootpath):
-        path = path[len(rootpath):]
-    return any([ignore.match(path) for ignore in _IGNORE_PATHS])
-
-
-def _find_package_paths(rootpath):
+def _find_package_paths(ignore, rootpath):
     sys_path = set()
     check_dirs = []
 
@@ -26,6 +14,7 @@ def _find_package_paths(rootpath):
             continue
 
         subdir_fullpath = os.path.join(rootpath, subdir)
+        rel_path = os.path.relpath(subdir_fullpath, rootpath)
 
         if os.path.islink(subdir_fullpath):
             continue
@@ -38,16 +27,19 @@ def _find_package_paths(rootpath):
                 continue
 
             # this is a python module but not in a package, so add it
+            if any([m.search(rel_path) for m in ignore]):
+                continue
             check_dirs.append(subdir_fullpath)
          
         elif os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
             # this is a package, add it and move on
-            if not _ignore_path(rootpath, subdir_fullpath):
-                sys_path.add(rootpath)
-                check_dirs.append(subdir_fullpath)
+            if any([m.search(rel_path) for m in ignore]):
+                continue
+            sys_path.add(rootpath)
+            check_dirs.append(subdir_fullpath)
         else:
             # this is not a package, so check its subdirs
-            add_sys_path, add_check_dirs = _find_package_paths(subdir_fullpath)
+            add_sys_path, add_check_dirs = _find_package_paths(ignore, subdir_fullpath)
             sys_path |= add_sys_path
             check_dirs += add_check_dirs
     return sys_path, check_dirs
@@ -58,11 +50,11 @@ class PylintTool(ToolBase):
     def __init__(self):
         self._args = self._extra_sys_path = self._collector = self._linter = None
 
-    def prepare(self, rootpath, args, adaptors):
-        linter = ProspectorLinter()
+    def prepare(self, rootpath, ignore, args, adaptors):
+        linter = ProspectorLinter(ignore)
         linter.load_default_plugins()
 
-        extra_sys_path, check_paths = _find_package_paths(rootpath)
+        extra_sys_path, check_paths = _find_package_paths(ignore, rootpath)
 
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path

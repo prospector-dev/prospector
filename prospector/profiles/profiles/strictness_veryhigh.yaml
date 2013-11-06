@@ -1,0 +1,16 @@
+# This will enable almost every single warning
+
+pylint:
+  disable:
+    - W0511
+
+  options:
+    max-locals: 15
+    max-returns: 6
+    max-branches: 12
+    max-statements: 50
+    max-parents: 7
+    max-attributes: 7
+    min-public-methods: 2
+    max-public-methods: 20
+    max-module-lines: 1000

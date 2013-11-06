@@ -1,0 +1,6 @@
+inherits:
+  - inherittest2
+
+pylint:
+  disable:
+    - I0001

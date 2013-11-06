@@ -1,0 +1,6 @@
+
+ignore:
+  - ^tests?/?
+  - /tests?(/|$)
+  - (^|/)test_[_a-zA-Z0-9]+.py$
+  - (^|/)[_a-zA-Z0-9]+_test.py$

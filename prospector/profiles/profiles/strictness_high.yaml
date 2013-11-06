@@ -1,0 +1,26 @@
+inherits:
+  - strictness_veryhigh
+
+ignore:
+  - ^setup.py$
+
+pylint:
+  disable:
+    - C0303
+    - C0304
+    - R0903
+    - R0904
+    - W0110
+    - W0141
+    - W0142
+    - W0603
+    - W1111
+    - W1301
+
+  options:
+    max-locals: 15
+    max-returns: 6
+    max-branches: 15
+    max-statements: 60
+    min-public-methods: 1
+    max-public-methods: 20
