@@ -1,13 +1,12 @@
 # -*- coding: UTF-8 -*-
 from distutils.core import setup
 from setuptools import find_packages
-import time
 
 
-_version = "0.2.dev%s" % int(time.time())
+_version = "0.2"
 _packages = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
-_short_description = "prospector"
+_short_description = "Prospector: python static analysis tool"
 
 _install_requires = [
     'pylint>=1.0.0',
@@ -15,7 +14,7 @@ _install_requires = [
     'pylint-django>=0.1',
     'pylint-plugin-utils>=0.1',
     'pylint-common>=0.1',
-    'requirements-detector>=0.1',
+    'requirements-detector>=0.1.1',
     'argparse==1.2.1',
     'pyyaml',
 ]
@@ -32,6 +31,17 @@ _package_data = {
     ]
 }
 
+_classifiers = (
+    'Development Status :: 4 - Beta',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
+    'Operating System :: Unix',
+    'Topic :: Software Development :: Quality Assurance',
+    'Programming Language :: Python :: 2.6',
+    'Programming Language :: Python :: 2.7',
+)
+
 setup(
     name='prospector',
     url='https://github.com/landscapeio/prospector',
@@ -44,5 +54,6 @@ setup(
     version=_version,
     packages=_packages,
     license='GPLv2',
-    keywords='pylint prospector code analysis'
+    keywords='pylint prospector code analysis',
+    classifiers=_classifiers
 )
