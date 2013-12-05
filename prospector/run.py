@@ -9,10 +9,12 @@ from prospector.adaptor.profile import ProfileAdaptor
 from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector import tools
+from prospector import __pkginfo__
 
 
 def make_arg_parser():
-    parser = argparse.ArgumentParser(description="Performs analysis of Python code")
+    version = __pkginfo__.get_version()
+    parser = argparse.ArgumentParser(description="Version %s. Performs analysis of Python code" % version)
 
     parser.add_argument('-A', '--no-autodetect', action='store_true', default=False,
                         help='Turn off auto-detection of frameworks and libraries used. By default, autodetection'
@@ -75,8 +77,7 @@ def run():
     args = parser.parse_args()
 
     if args.version:
-        from prospector import __pkginfo__
-        print "Prospector version %s" % __pkginfo__.get_version()
+        sys.stdout.write("Prospector version %s\n" % __pkginfo__.get_version())
         sys.exit(0)
 
     summary = {
