@@ -18,8 +18,8 @@ def make_arg_parser():
                         help='Turn off auto-detection of frameworks and libraries used. By default, autodetection'
                              ' will be used. To specify manually, see the --uses option.')
 
-    parser.add_argument('-D', '--no-doc-warnings', action='store_true', default=False,
-                        help="Don't include any documentation warnings.")
+    parser.add_argument('-D', '--doc-warnings', action='store_true', default=False,
+                        help="Include warnings about documentation.")
 
     parser.add_argument('-M', '--messages-only', default=False, action='store_true',
                         help="Only output message information (don't output summary information about the checks)")
@@ -47,13 +47,15 @@ def make_arg_parser():
                  'run: %s' % (', '.join(tools.TOOLS.keys()), ', '.join(tools.DEFAULT_TOOLS))
     parser.add_argument('-t', '--tools', default=None, nargs='+', help=tools_help)
 
-    parser.add_argument('-T', '--no-test-warnings', default=False, action='store_true',
-                        help="Don't include any warnings from unit tests")
+    parser.add_argument('-T', '--test-warnings', default=False, action='store_true',
+                        help="Also check test modules and packages")
 
     uses_help = 'A list of one or more libraries or frameworks that the project users. Possible' \
                 ' values are django, celery. This will be autodetected by default, but if autotectection' \
                 ' doesn\'t work, manually specify them using this flag.'
     parser.add_argument('-u', '--uses', help=uses_help, default=[], nargs='+')
+
+    parser.add_argument('-v', '--version', help="Print version information and exit", action='store_true')
 
     parser.add_argument('--absolute-paths', action='store_true', default=False,
                         help='Whether to output absolute paths when referencing files in messages. By default, '
@@ -71,6 +73,11 @@ def _die(message):
 def run():
     parser = make_arg_parser()
     args = parser.parse_args()
+
+    if args.version:
+        from prospector import __pkginfo__
+        print "Prospector version %s" % __pkginfo__.get_version()
+        sys.exit(0)
 
     summary = {
         'started': datetime.now()
@@ -113,10 +120,10 @@ def run():
 
     summary['libraries'] = ', '.join(libraries_used)
 
-    if args.no_doc_warnings:
+    if not args.doc_warnings:
         profiles.append('no_doc_warnings')
 
-    if args.no_test_warnings:
+    if not args.test_warnings:
         profiles.append('no_test_warnings')
 
     profiles += args.profiles
