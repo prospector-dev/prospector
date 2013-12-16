@@ -77,6 +77,9 @@ class PylintTool(ToolBase):
         linter.disable('I0020')
         linter.disable('I0021')
 
+        # we don't want similarity reports right now
+        linter.disable('similarities')
+
         # use the collector 'reporter' to simply gather the messages given by PyLint
         self._collector = Collector()
         linter.set_reporter(self._collector)
