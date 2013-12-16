@@ -146,7 +146,7 @@ def run():
 
     summary['tools'] = ', '.join(tool_names)
 
-    ignore = map(re.compile, profile_adaptor.profile.ignore)
+    ignore = [re.compile(ignore) for ignore in profile_adaptor.profile.ignore])
     for tool in tool_runners:
         tool.prepare(path, ignore, args, adaptors)
 
