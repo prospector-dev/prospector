@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 from distutils.core import setup
 from setuptools import find_packages
+import time
+from prospector import __pkginfo__
 
-
-_version = "0.2"
 _packages = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _short_description = "Prospector: python static analysis tool"
@@ -51,7 +51,7 @@ setup(
     install_requires=_install_requires,
     package_data=_package_data,
     scripts=['bin/prospector'],
-    version=_version,
+    version=__pkginfo__.get_version(),
     packages=_packages,
     license='GPLv2',
     keywords='pylint prospector code analysis',

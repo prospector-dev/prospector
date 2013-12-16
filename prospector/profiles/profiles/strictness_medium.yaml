@@ -3,6 +3,7 @@ inherits:
 
 pylint:
   disable:
+    - C0103
     - C0202
     - C0203
     - C0204
