@@ -11,13 +11,13 @@ prospector
 #### Stable ([master](https://github.com/landscapeio/prospector/tree/master))
 
 [![Build Status](https://travis-ci.org/landscapeio/prospector.png?branch=master)](https://travis-ci.org/landscapeio/prospector) 
-[![Code Quality](https://landscape.io/github/landscapeio/prospector/master/landscape.png)](https://landscape.io/github/landscapeio/prospector)
+[![Code Quality](https://landscape.io/github/landscapeio/prospector/master/landscape.png)](https://landscape.io/github/landscapeio/prospector/master)
 [![Coverage Status](https://coveralls.io/repos/landscapeio/prospector/badge.png)](https://coveralls.io/r/landscapeio/prospector)
 
 #### Development ([develop](https://github.com/landscapeio/prospector/tree/develop))
 
 [![Build Status](https://travis-ci.org/landscapeio/prospector.png?branch=develop)](https://travis-ci.org/landscapeio/prospector) 
-[![Code Quality](https://landscape.io/github/landscapeio/prospector/develop/landscape.png)](https://landscape.io/github/landscapeio/prospector)
+[![Code Quality](https://landscape.io/github/landscapeio/prospector/develop/landscape.png)](https://landscape.io/github/landscapeio/prospector/develop)
 [![Coverage Status](https://coveralls.io/repos/landscapeio/prospector/badge.png?branch=develop)](https://coveralls.io/r/landscapeio/prospector)
 
 # About
