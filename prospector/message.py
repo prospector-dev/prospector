@@ -32,6 +32,19 @@ class Location(object):
             'character': self.character
         }
 
+    def __hash__(self):
+        return hash((self.path, self.line, self.character))
+
+    def __eq__(self, other):
+        return self.path == other.path and self.line == other.line and self.character == other.character
+
+    def __lt__(self, other):
+        if self.path == other.path:
+            if self.line == other.line:
+                return self.character < other.character
+            return self.line < other.line
+        return self.path < other.path
+
 
 class Message(object):
 
@@ -54,3 +67,14 @@ class Message(object):
             'location': self.location.as_dict(),
             'message': self.message
         }
+
+    def __eq__(self, other):
+        if self.location == other.location:
+            return self.code == other.code
+        else:
+            return False
+
+    def __lt__(self, other):
+        if self.location == other.location:
+            return self.code < other.code
+        return self.location < other.location
