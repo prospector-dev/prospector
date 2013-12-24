@@ -8,8 +8,8 @@ class Location(object):
         self._path_is_absolute = True
         self.module = module
         self.function = function
-        self.line = line
-        self.character = character
+        self.line = None if line == -1 else line
+        self.character = None if line == -1 else character
 
     def to_absolute_path(self, root):
         if self._path_is_absolute:
@@ -42,7 +42,7 @@ class Location(object):
         if self.path == other.path:
             if self.line == other.line:
                 return self.character < other.character
-            return self.line < other.line
+            return (self.line or -1) < (other.line or -1)  # line can be None if it a file-global warning
         return self.path < other.path
 
 

@@ -31,6 +31,9 @@ def format_messages(summary, messages):
             info.update(message.as_dict())
             del info['location']
             info.update(message.location.as_dict())
+            if info['line'] is None:
+                info['line'] = '-'
+                info['character'] = '-'
             line = _MESSAGE_TEMPLATE % info
             sys.stdout.write(line)
             sys.stdout.write('\n')
