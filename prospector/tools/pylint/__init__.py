@@ -1,8 +1,15 @@
+from collections import defaultdict
+import re
 import sys
 import os
+from prospector.message import Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
+from prospector.tools.pylint.indent_checker import IndentChecker
 from prospector.tools.pylint.linter import ProspectorLinter
+
+
+_W0614_RE = re.compile(r'^Unused import (.*) from wildcard import$')
 
 
 def _find_package_paths(ignore, rootpath):
@@ -77,6 +84,13 @@ class PylintTool(ToolBase):
         linter.disable('I0020')
         linter.disable('I0021')
 
+        # disable the 'mixed indentation' warning, since it actually will only allow
+        # the indentation specified in the pylint configuration file; we replace it
+        # instead with our own version which is more lenient and configurable
+        linter.disable('W0312')
+        indent_checker = IndentChecker(linter)
+        linter.register_checker(indent_checker)
+
         # we don't want similarity reports right now
         linter.disable('similarities')
 
@@ -86,6 +100,43 @@ class PylintTool(ToolBase):
 
         self._linter = linter
 
+    def _combine_w0614(self, messages):
+        """
+        For the "unused import from wildcard import" messages, we want to combine all warnings about
+        the same line into a single message
+        """
+        by_loc = defaultdict(list)
+        out = []
+
+        for message in messages:
+            if message.code == 'W0614':
+                by_loc[message.location].append(message)
+            else:
+                out.append(message)
+
+        for location, message_list in by_loc.iteritems():
+            names = []
+            for msg in message_list:
+                names.append(_W0614_RE.match(msg.message).group(1))
+
+            msgtxt = 'Unused imports from wildcard import: %s' % ', '.join(names)
+            combined_message = Message('pylint', 'W0614', location, msgtxt)
+            out.append(combined_message)
+
+        return out
+
+    def _combine_(self, messages):
+        pass
+
+    def combine(self, messages):
+        """
+        Some error messages are repeated, causing many errors where only one is strictly necessary. For
+        example, having a wildcard import will result in one 'Unused Import' warning for every unused import.
+        This method will combine these into a single warning.
+        """
+        combined = self._combine_w0614(messages)
+        return sorted(combined)
+
     def run(self):
         # note: Pylint will exit with a status code indicating the health of the
         # code it was checking. Prospector will not mimic this behaviour, as it
@@ -94,4 +145,5 @@ class PylintTool(ToolBase):
         self._linter.check(self._args)
         sys.path = self._orig_sys_path
 
-        return self._collector.get_messages()
+        messages = self._collector.get_messages()
+        return self.combine(messages)
