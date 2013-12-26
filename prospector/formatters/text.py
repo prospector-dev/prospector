@@ -12,7 +12,7 @@ Messages Found: %(message_count)d
 """
 
 
-_MESSAGE_TEMPLATE = """%(module)s (%(path)s):
+_MESSAGE_TEMPLATE = """%(module)s %(path)s:
     L%(line)s:%(character)s %(function)s: %(source)s - %(code)s
     %(message)s
 """
@@ -31,6 +31,12 @@ def format_messages(summary, messages):
             info.update(message.as_dict())
             del info['location']
             info.update(message.location.as_dict())
+            if info['module'] is None:
+                info['module'] = info['path']
+                info['path'] = ''
+            else:
+                info['path'] = '(%s)' % info['path']
+
             if info['line'] is None:
                 info['line'] = '-'
                 info['character'] = '-'

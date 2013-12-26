@@ -3,9 +3,9 @@ import os
 
 class Location(object):
 
-    def __init__(self, path, module, function, line, character):
+    def __init__(self, path, module, function, line, character, absolute_path=True):
         self.path = path
-        self._path_is_absolute = True
+        self._path_is_absolute = absolute_path
         self.module = module
         self.function = function
         self.line = None if line == -1 else line
