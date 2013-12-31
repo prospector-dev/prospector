@@ -13,7 +13,11 @@ class ProfileAdaptor(AdaptorBase):
         for msg_id in self.profile.pylint['disable']:
             try:
                 linter.disable(msg_id)
+
+            # pylint: disable=W0704
             except UnknownMessage:
+                # If the msg_id doesn't exist in PyLint any more,
+                # don't worry about it.
                 pass
 
         options = self.profile.pylint['options']

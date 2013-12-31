@@ -75,6 +75,10 @@ class ProspectorStyleGuide(StyleGuide):
 
 
 class Pep8Tool(ToolBase):
+    def __init__(self, *args, **kwargs):
+        super(Pep8Tool, self).__init__(*args, **kwargs)
+        self.checker = None
+
     def prepare(self, rootpath, ignore, args, adaptors):
         # Instantiate our custom pep8 checker.
         self.checker = ProspectorStyleGuide(
@@ -83,6 +87,7 @@ class Pep8Tool(ToolBase):
         )
 
         # Make sure pep8's code ignores are fully reset to zero.
+        # pylint: disable=W0201
         self.checker.select = ()
         self.checker.ignore = ()
 

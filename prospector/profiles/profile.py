@@ -4,6 +4,7 @@ import yaml
 
 class ProfileNotFound(Exception):
     def __init__(self, name, filepath):
+        super(ProfileNotFound, self).__init__()
         self.name = name
         self.filepath = filepath
 
@@ -11,7 +12,7 @@ class ProfileNotFound(Exception):
         return "Could not find profile %s at %s" % (self.name, self.filepath)
 
 
-_empty_data = {
+_EMPTY_DATA = {
     'inherits': [],
     'pep8': {
         'disable': [],
@@ -47,8 +48,8 @@ def _load_content(name, basedir=None):
     if not os.path.exists(filename):
         raise ProfileNotFound(name, os.path.abspath(filename))
 
-    with open(filename) as f:
-        return f.read()
+    with open(filename) as fct:
+        return fct.read()
 
 
 def from_file(name, basedir=None):
@@ -82,38 +83,38 @@ def parse_profile(name, contents):
     if data is None:
         # this happens if a completely empty YAML file is passed in to
         # parse_profile, for example
-        data = dict(_empty_data)
+        data = dict(_EMPTY_DATA)
     else:
-        data = _merge_dict(_empty_data, data, d1_priority=False)
+        data = _merge_dict(_EMPTY_DATA, data, dict1_priority=False)
     return StrictnessProfile(name, data)
 
 
-def _merge_dict(d1, d2, dedup_lists=False, d1_priority=True):
+def _merge_dict(dict1, dict2, dedup_lists=False, dict1_priority=True):
     newdict = {}
-    newdict.update(d1)
+    newdict.update(dict1)
 
-    for key, value in d2.iteritems():
-        if key not in d1:
+    for key, value in dict2.iteritems():
+        if key not in dict1:
             newdict[key] = value
-        elif value is None and d1[key] is not None:
-            newdict[key] = d1[key]
-        elif d1[key] is None and value is not None:
+        elif value is None and dict1[key] is not None:
+            newdict[key] = dict1[key]
+        elif dict1[key] is None and value is not None:
             newdict[key] = value
-        elif type(value) != type(d1[key]):
+        elif type(value) != type(dict1[key]):
             raise ValueError("Could not merge conflicting types %s and %s" % (
                 type(value),
-                type(d1[key]),
+                type(dict1[key]),
             ))
         elif isinstance(value, dict):
             newdict[key] = _merge_dict(
-                d1[key],
+                dict1[key],
                 value,
                 dedup_lists,
-                d1_priority,
+                dict1_priority,
             )
         elif isinstance(value, (list, tuple)):
-            newdict[key] = list(set(d1[key]) | set(value))
-        elif not d1_priority:
+            newdict[key] = list(set(dict1[key]) | set(value))
+        elif not dict1_priority:
             newdict[key] = value
 
     return newdict

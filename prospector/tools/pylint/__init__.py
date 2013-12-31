@@ -53,6 +53,7 @@ class PylintTool(ToolBase):
     def __init__(self):
         self._args = self._extra_sys_path = None
         self._collector = self._linter = None
+        self._orig_sys_path = []
 
     def prepare(self, rootpath, ignore, args, adaptors):
         linter = ProspectorLinter(ignore)
