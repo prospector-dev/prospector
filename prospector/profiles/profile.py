@@ -13,6 +13,10 @@ class ProfileNotFound(Exception):
 
 _empty_data = {
     'inherits': [],
+    'mccabe': {
+        'disable': [],
+        'options': {},
+    },
     'pylint': {
         'disable': [],
         'options': {}
@@ -103,6 +107,7 @@ class StrictnessProfile(object):
 
     def __init__(self, name, profile_dict):
         self.name = name
+        self.mccabe = profile_dict['mccabe']
         self.pylint = profile_dict['pylint']
         self.inherits = profile_dict['inherits']
         self.ignore = profile_dict['ignore']
@@ -111,12 +116,14 @@ class StrictnessProfile(object):
         return {
             'inherits': self.inherits,
             'ignore': self.ignore,
+            'mccabe': self.mccabe,
             'pylint': self.pylint
         }
 
     def merge(self, other_profile):
         self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
+        self.mccabe = _merge_dict(self.mccabe, other_profile.mccabe)
         self.pylint = _merge_dict(self.pylint, other_profile.pylint)
 
 

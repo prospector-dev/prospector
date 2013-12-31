@@ -17,6 +17,7 @@ _install_requires = [
     'requirements-detector>=0.1.1',
     'argparse==1.2.1',
     'pyyaml',
+    'mccabe>=0.2.1',
 ]
 
 _package_data = {
