@@ -24,3 +24,13 @@ class ProfileAdaptor(AdaptorBase):
             for option in checker.options:
                 if option[0] in options:
                     checker.set_option(option[0], options[option[0]])
+
+    def adapt_mccabe(self, tool):
+        tool.ignore_codes = tuple(set(
+            tool.ignore_codes
+            + tuple(self.profile.mccabe['disable'])
+        ))
+
+        if 'max-complexity' in self.profile.mccabe['options']:
+            tool.max_complexity = \
+                self.profile.mccabe['options']['max-complexity']

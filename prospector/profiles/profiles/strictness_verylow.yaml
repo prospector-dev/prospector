@@ -28,3 +28,7 @@ pylint:
     - W0632
     - W0710
     - W0712
+
+mccabe:
+  options:
+    max-complexity: 25
