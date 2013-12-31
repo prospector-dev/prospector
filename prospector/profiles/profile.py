@@ -38,7 +38,10 @@ def _load_content(name, basedir=None):
         # assume that this is a full path that we can load
         filename = name
     else:
-        basedir = basedir or os.path.join(os.path.dirname(__file__), 'profiles')
+        basedir = basedir or os.path.join(
+            os.path.dirname(__file__),
+            'profiles',
+        )
         filename = os.path.join(basedir, '%s.yaml' % name)
 
     if not os.path.exists(filename):
@@ -60,7 +63,11 @@ def _load_profile(name, basedir=None, inherits_set=None):
 
     for inheritsed in profile.inherits:
         if inheritsed not in inherits_set:
-            inheritsed_profile, sub_inherits_set = _load_profile(inheritsed, basedir, inherits_set)
+            inheritsed_profile, sub_inherits_set = _load_profile(
+                inheritsed,
+                basedir,
+                inherits_set,
+            )
             profile.merge(inheritsed_profile)
             inherits_set |= sub_inherits_set
 
@@ -73,7 +80,8 @@ def parse_profile(name, contents):
         name = os.path.splitext(os.path.basename(name))[0]
     data = yaml.load(contents)
     if data is None:
-        # this happens if a completely empty YAML file is passed in to parse_profile, for example
+        # this happens if a completely empty YAML file is passed in to
+        # parse_profile, for example
         data = dict(_empty_data)
     else:
         data = _merge_dict(_empty_data, data, d1_priority=False)
@@ -92,9 +100,17 @@ def _merge_dict(d1, d2, dedup_lists=False, d1_priority=True):
         elif d1[key] is None and value is not None:
             newdict[key] = value
         elif type(value) != type(d1[key]):
-            raise ValueError("Could not merge conflicting types %s and %s" % (type(value), type(d1[key])))
+            raise ValueError("Could not merge conflicting types %s and %s" % (
+                type(value),
+                type(d1[key]),
+            ))
         elif isinstance(value, dict):
-            newdict[key] = _merge_dict(d1[key], value, dedup_lists, d1_priority)
+            newdict[key] = _merge_dict(
+                d1[key],
+                value,
+                dedup_lists,
+                d1_priority,
+            )
         elif isinstance(value, (list, tuple)):
             newdict[key] = list(set(d1[key]) | set(value))
         elif not d1_priority:

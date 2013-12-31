@@ -97,4 +97,3 @@ class Pep8Tool(ToolBase):
 
 # Load pep8ext_naming into pep8's configuration.
 register_check(NamingChecker)
-

@@ -19,7 +19,9 @@ def format_messages(summary, messages):
     if not messages:
         return
 
+    # pylint: disable=W0108
     groups = defaultdict(lambda: defaultdict(list))
+
     for message in messages:
         groups[message.location.path][message.location.line].append(message)
 
@@ -35,7 +37,7 @@ def format_messages(summary, messages):
                     '    %(source)s: %(code)s / %(message)s' % msg.as_dict(),
                 )
                 if msg.location.character:
-                    sys.stdout.write(' (col %s)' % msg.location.character) 
+                    sys.stdout.write(' (col %s)' % msg.location.character)
                 sys.stdout.write('\n')
 
         sys.stdout.write('\n')

@@ -48,7 +48,8 @@ def find_from_requirements(path):
     reqs = find_requirements(path)
     names = []
     for requirement in reqs:
-        if requirement.name is not None and requirement.name.lower() in LIBRARY_ADAPTORS:
+        if requirement.name is not None \
+                and requirement.name.lower() in LIBRARY_ADAPTORS:
             names.append(requirement.name.lower())
     return names
 
