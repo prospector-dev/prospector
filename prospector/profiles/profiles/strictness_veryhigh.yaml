@@ -14,3 +14,9 @@ pylint:
     min-public-methods: 2
     max-public-methods: 20
     max-module-lines: 1000
+    max-line-length: 79
+    single-line-if-stmt: n
+
+pep8:
+  options:
+    max-line-length: 79
