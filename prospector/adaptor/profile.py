@@ -24,3 +24,13 @@ class ProfileAdaptor(AdaptorBase):
             for option in checker.options:
                 if option[0] in options:
                     checker.set_option(option[0], options[option[0]])
+
+    def adapt_pep8(self, style_guide):
+        style_guide.options.ignore = tuple(set(
+            style_guide.options.ignore
+            + tuple(self.profile.pep8['disable'])
+        ))
+
+        if 'max-line-length' in self.profile.pep8['options']:
+            style_guide.options.max_line_length = \
+                self.profile.pep8['options']['max-line-length']

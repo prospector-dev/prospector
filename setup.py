@@ -17,6 +17,8 @@ _install_requires = [
     'requirements-detector>=0.1.1',
     'argparse==1.2.1',
     'pyyaml',
+    'pep8>=1.4.2',
+    'pep8-naming>=0.2.1',
 ]
 
 _package_data = {
@@ -54,6 +56,6 @@ setup(
     version=__pkginfo__.get_version(),
     packages=_packages,
     license='GPLv2',
-    keywords='pylint prospector code analysis',
+    keywords='pylint pep8 prospector code analysis',
     classifiers=_classifiers
 )
