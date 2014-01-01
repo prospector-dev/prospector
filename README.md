@@ -99,11 +99,11 @@ Prospector is available under the GPLv2 License.
 Currently, prospector runs the following tools:
 
 * Pylint
+* pyflakes
 
 Future support is planned for:
 
 * pep8
-* pyflakes
 * McCabe complexity
 
 ## Supported frameworks and libraries
