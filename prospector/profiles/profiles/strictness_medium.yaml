@@ -33,3 +33,8 @@ pylint:
     - W0704
     - W1001
     - W1401
+
+pyflakes:
+  disable:
+    - FL0005
+    - FL0011

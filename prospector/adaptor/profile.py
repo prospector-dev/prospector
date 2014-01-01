@@ -24,3 +24,9 @@ class ProfileAdaptor(AdaptorBase):
             for option in checker.options:
                 if option[0] in options:
                     checker.set_option(option[0], options[option[0]])
+
+    def adapt_pyflakes(self, tool):
+        tool.ignore_codes = tuple(set(
+            tool.ignore_codes
+            + tuple(self.profile.pyflakes['disable'])
+        ))

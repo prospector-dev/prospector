@@ -17,6 +17,7 @@ _install_requires = [
     'requirements-detector>=0.1.1',
     'argparse==1.2.1',
     'pyyaml',
+    'pyflakes',
 ]
 
 _package_data = {
@@ -54,6 +55,6 @@ setup(
     version=__pkginfo__.get_version(),
     packages=_packages,
     license='GPLv2',
-    keywords='pylint prospector code analysis',
+    keywords='pylint pyflakes prospector code analysis',
     classifiers=_classifiers
 )
