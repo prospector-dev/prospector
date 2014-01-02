@@ -17,6 +17,7 @@ _install_requires = [
     'argparse==1.2.1',
     'dodgy>=0.1',
     'pyyaml',
+    'mccabe>=0.2.1',
 ]
 
 _package_data = {

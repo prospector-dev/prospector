@@ -33,3 +33,7 @@ pylint:
     - W0704
     - W1001
     - W1401
+
+mccabe:
+  options:
+    max-complexity: 15
