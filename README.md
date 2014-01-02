@@ -82,7 +82,7 @@ Prospector has a configurable 'strictness' level which will determine how harshl
 prospector --strictness high
 ```
 
-Possible values are `low`, `medium` and `high`.
+Possible values are `verylow`, `low`, `medium`, `high`, `veryhigh`.
 
 Additionally, you can turn off all documentation warnings using the `--no-doc-warnings` flag.
 
@@ -99,20 +99,10 @@ Prospector is available under the GPLv2 License.
 Currently, prospector runs the following tools:
 
 * Pylint
-<<<<<<< HEAD
 * McCabe complexity
-=======
 * pyflakes
->>>>>>> remotes/jayclassless/pyflakes
+* pep8 (with pep8-naming)
 
-Future support is planned for:
-
-* pep8
-<<<<<<< HEAD
-* pyflakes
-=======
-* McCabe complexity
->>>>>>> remotes/jayclassless/pyflakes
 
 ## Supported frameworks and libraries
 

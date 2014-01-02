@@ -13,7 +13,11 @@ class ProfileAdaptor(AdaptorBase):
         for msg_id in self.profile.pylint['disable']:
             try:
                 linter.disable(msg_id)
+
+            # pylint: disable=W0704
             except UnknownMessage:
+                # If the msg_id doesn't exist in PyLint any more,
+                # don't worry about it.
                 pass
 
         options = self.profile.pylint['options']
@@ -40,3 +44,13 @@ class ProfileAdaptor(AdaptorBase):
             tool.ignore_codes
             + tuple(self.profile.pyflakes['disable'])
         ))
+
+    def adapt_pep8(self, style_guide):
+        style_guide.options.ignore = tuple(set(
+            style_guide.options.ignore
+            + tuple(self.profile.pep8['disable'])
+        ))
+
+        if 'max-line-length' in self.profile.pep8['options']:
+            style_guide.options.max_line_length = \
+                self.profile.pep8['options']['max-line-length']

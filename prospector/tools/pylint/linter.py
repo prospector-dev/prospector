@@ -14,6 +14,7 @@ class ProspectorLinter(PyLinter):  # pylint: disable=R0901,R0904
 
         # for example, we want to re-initialise the OptionsManagerMixin
         # to supress the config error warning
+        # pylint: disable=W0233
         OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__, quiet=True)
 
     def expand_files(self, modules):

@@ -32,3 +32,10 @@ pylint:
 mccabe:
   options:
     max-complexity: 25
+
+pep8:
+  disable:
+    - W601
+    - W602
+    - W603
+    - W604

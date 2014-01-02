@@ -24,3 +24,10 @@ pylint:
     max-statements: 60
     min-public-methods: 1
     max-public-methods: 20
+
+pep8:
+  disable:
+    - E304
+    - W291
+    - W292
+    - W391

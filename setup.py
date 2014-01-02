@@ -3,11 +3,10 @@ from distutils.core import setup
 from setuptools import find_packages
 from prospector import __pkginfo__
 
-_packages = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
-_short_description = "Prospector: python static analysis tool"
+_PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
-_install_requires = [
+_INSTALL_REQUIRES = [
     'pylint>=1.0.0',
     'pylint-celery>=0.1',
     'pylint-django>=0.1',
@@ -17,14 +16,13 @@ _install_requires = [
     'argparse==1.2.1',
     'dodgy>=0.1',
     'pyyaml',
-<<<<<<< HEAD
     'mccabe>=0.2.1',
-=======
-    'pyflakes',
->>>>>>> remotes/jayclassless/pyflakes
+    'pyflakes>=0.7.3',
+    'pep8>=1.4.2',
+    'pep8-naming>=0.2.1',
 ]
 
-_package_data = {
+_PACKAGE_DATA = {
     'prospector': [
         'profiles/profiles/no_doc_warnings.yaml',
         'profiles/profiles/no_test_warnings.yaml',
@@ -36,29 +34,31 @@ _package_data = {
     ]
 }
 
-_classifiers = (
+_CLASSIFIERS = (
     'Development Status :: 4 - Beta',
     'Environment :: Console',
     'Intended Audience :: Developers',
-    'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
     'Operating System :: Unix',
     'Topic :: Software Development :: Quality Assurance',
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
+    'License :: OSI Approved :: '
+    'GNU General Public License v2 or later (GPLv2+)',
 )
+
 
 setup(
     name='prospector',
     url='https://github.com/landscapeio/prospector',
     author='landscape.io',
     author_email='code@landscape.io',
-    description=_short_description,
-    install_requires=_install_requires,
-    package_data=_package_data,
+    description='Prospector: python static analysis tool',
+    install_requires=_INSTALL_REQUIRES,
+    package_data=_PACKAGE_DATA,
     scripts=['bin/prospector'],
     version=__pkginfo__.get_version(),
-    packages=_packages,
+    packages=_PACKAGES,
     license='GPLv2',
-    keywords='pylint pyflakes prospector code analysis',
-    classifiers=_classifiers
+    keywords='pylint pyflakes pep8 mccabe prospector code analysis',
+    classifiers=_CLASSIFIERS
 )

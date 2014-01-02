@@ -4,6 +4,7 @@ import yaml
 
 class ProfileNotFound(Exception):
     def __init__(self, name, filepath):
+        super(ProfileNotFound, self).__init__()
         self.name = name
         self.filepath = filepath
 
@@ -11,9 +12,13 @@ class ProfileNotFound(Exception):
         return "Could not find profile %s at %s" % (self.name, self.filepath)
 
 
-_empty_data = {
+_EMPTY_DATA = {
     'inherits': [],
     'mccabe': {
+        'disable': [],
+        'options': {},
+    },
+    'pep8': {
         'disable': [],
         'options': {},
     },
@@ -42,14 +47,17 @@ def _load_content(name, basedir=None):
         # assume that this is a full path that we can load
         filename = name
     else:
-        basedir = basedir or os.path.join(os.path.dirname(__file__), 'profiles')
+        basedir = basedir or os.path.join(
+            os.path.dirname(__file__),
+            'profiles',
+        )
         filename = os.path.join(basedir, '%s.yaml' % name)
 
     if not os.path.exists(filename):
         raise ProfileNotFound(name, os.path.abspath(filename))
 
-    with open(filename) as f:
-        return f.read()
+    with open(filename) as fct:
+        return fct.read()
 
 
 def from_file(name, basedir=None):
@@ -64,7 +72,11 @@ def _load_profile(name, basedir=None, inherits_set=None):
 
     for inheritsed in profile.inherits:
         if inheritsed not in inherits_set:
-            inheritsed_profile, sub_inherits_set = _load_profile(inheritsed, basedir, inherits_set)
+            inheritsed_profile, sub_inherits_set = _load_profile(
+                inheritsed,
+                basedir,
+                inherits_set,
+            )
             profile.merge(inheritsed_profile)
             inherits_set |= sub_inherits_set
 
@@ -77,31 +89,40 @@ def parse_profile(name, contents):
         name = os.path.splitext(os.path.basename(name))[0]
     data = yaml.load(contents)
     if data is None:
-        # this happens if a completely empty YAML file is passed in to parse_profile, for example
-        data = dict(_empty_data)
+        # this happens if a completely empty YAML file is passed in to
+        # parse_profile, for example
+        data = dict(_EMPTY_DATA)
     else:
-        data = _merge_dict(_empty_data, data, d1_priority=False)
+        data = _merge_dict(_EMPTY_DATA, data, dict1_priority=False)
     return StrictnessProfile(name, data)
 
 
-def _merge_dict(d1, d2, dedup_lists=False, d1_priority=True):
+def _merge_dict(dict1, dict2, dedup_lists=False, dict1_priority=True):
     newdict = {}
-    newdict.update(d1)
+    newdict.update(dict1)
 
-    for key, value in d2.iteritems():
-        if key not in d1:
+    for key, value in dict2.iteritems():
+        if key not in dict1:
             newdict[key] = value
-        elif value is None and d1[key] is not None:
-            newdict[key] = d1[key]
-        elif d1[key] is None and value is not None:
+        elif value is None and dict1[key] is not None:
+            newdict[key] = dict1[key]
+        elif dict1[key] is None and value is not None:
             newdict[key] = value
-        elif type(value) != type(d1[key]):
-            raise ValueError("Could not merge conflicting types %s and %s" % (type(value), type(d1[key])))
+        elif type(value) != type(dict1[key]):
+            raise ValueError("Could not merge conflicting types %s and %s" % (
+                type(value),
+                type(dict1[key]),
+            ))
         elif isinstance(value, dict):
-            newdict[key] = _merge_dict(d1[key], value, dedup_lists, d1_priority)
+            newdict[key] = _merge_dict(
+                dict1[key],
+                value,
+                dedup_lists,
+                dict1_priority,
+            )
         elif isinstance(value, (list, tuple)):
-            newdict[key] = list(set(d1[key]) | set(value))
-        elif not d1_priority:
+            newdict[key] = list(set(dict1[key]) | set(value))
+        elif not dict1_priority:
             newdict[key] = value
 
     return newdict
@@ -111,9 +132,12 @@ class StrictnessProfile(object):
 
     def __init__(self, name, profile_dict):
         self.name = name
+
         self.mccabe = profile_dict['mccabe']
+        self.pep8 = profile_dict['pep8']
         self.pyflakes = profile_dict['pyflakes']
         self.pylint = profile_dict['pylint']
+
         self.inherits = profile_dict['inherits']
         self.ignore = profile_dict['ignore']
 
@@ -122,6 +146,7 @@ class StrictnessProfile(object):
             'inherits': self.inherits,
             'ignore': self.ignore,
             'mccabe': self.mccabe,
+            'pep8': self.pep8,
             'pyflakes': self.pyflakes,
             'pylint': self.pylint
         }
@@ -130,6 +155,7 @@ class StrictnessProfile(object):
         self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
         self.mccabe = _merge_dict(self.mccabe, other_profile.mccabe)
+        self.pep8 = _merge_dict(self.pep8, other_profile.pep8)
         self.pyflakes = _merge_dict(self.pyflakes, other_profile.pyflakes)
         self.pylint = _merge_dict(self.pylint, other_profile.pylint)
 

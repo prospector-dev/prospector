@@ -9,3 +9,6 @@ class AdaptorBase(object):
 
     def adapt_pyflakes(self, tool):
         pass
+
+    def adapt_pep8(self, style_guide):
+        pass

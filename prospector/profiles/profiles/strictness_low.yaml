@@ -39,3 +39,10 @@ pyflakes:
   disable:
     - FL0001
     - FL0013
+
+pep8:
+  disable:
+    - E501
+    - E711
+    - E712
+    - E721
