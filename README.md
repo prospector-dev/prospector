@@ -98,10 +98,11 @@ Prospector is available under the GPLv2 License.
 
 Currently, prospector runs the following tools:
 
-* Pylint
-* McCabe complexity
-* pyflakes
-* pep8 (with pep8-naming)
+* [Pylint](http://docs.pylint.org/)
+* [McCabe complexity](https://pypi.python.org/pypi/mccabe)
+* [pyflakes](https://launchpad.net/pyflakes)
+* [pep8](http://pep8.readthedocs.org/en/latest/) (with [pep8-naming](https://github.com/flintwork/pep8-naming))
+* [dodgy](https://github.com/landscapeio/dodgy)
 
 
 ## Supported frameworks and libraries
