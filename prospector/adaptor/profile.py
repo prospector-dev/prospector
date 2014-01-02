@@ -34,3 +34,9 @@ class ProfileAdaptor(AdaptorBase):
         if 'max-complexity' in self.profile.mccabe['options']:
             tool.max_complexity = \
                 self.profile.mccabe['options']['max-complexity']
+
+    def adapt_pyflakes(self, tool):
+        tool.ignore_codes = tuple(set(
+            tool.ignore_codes
+            + tuple(self.profile.pyflakes['disable'])
+        ))

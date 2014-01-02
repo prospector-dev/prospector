@@ -99,12 +99,20 @@ Prospector is available under the GPLv2 License.
 Currently, prospector runs the following tools:
 
 * Pylint
+<<<<<<< HEAD
 * McCabe complexity
+=======
+* pyflakes
+>>>>>>> remotes/jayclassless/pyflakes
 
 Future support is planned for:
 
 * pep8
+<<<<<<< HEAD
 * pyflakes
+=======
+* McCabe complexity
+>>>>>>> remotes/jayclassless/pyflakes
 
 ## Supported frameworks and libraries
 

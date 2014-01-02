@@ -17,7 +17,11 @@ _install_requires = [
     'argparse==1.2.1',
     'dodgy>=0.1',
     'pyyaml',
+<<<<<<< HEAD
     'mccabe>=0.2.1',
+=======
+    'pyflakes',
+>>>>>>> remotes/jayclassless/pyflakes
 ]
 
 _package_data = {
@@ -55,6 +59,6 @@ setup(
     version=__pkginfo__.get_version(),
     packages=_packages,
     license='GPLv2',
-    keywords='pylint prospector code analysis',
+    keywords='pylint pyflakes prospector code analysis',
     classifiers=_classifiers
 )

@@ -37,3 +37,8 @@ pylint:
 mccabe:
   options:
     max-complexity: 15
+
+pyflakes:
+  disable:
+    - FL0005
+    - FL0011

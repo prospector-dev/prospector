@@ -6,3 +6,6 @@ class AdaptorBase(object):
 
     def adapt_mccabe(self, tool):
         pass
+
+    def adapt_pyflakes(self, tool):
+        pass

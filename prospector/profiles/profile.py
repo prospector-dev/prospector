@@ -17,6 +17,10 @@ _empty_data = {
         'disable': [],
         'options': {},
     },
+    'pyflakes': {
+        'disable': [],
+        'options': {},
+    },
     'pylint': {
         'disable': [],
         'options': {}
@@ -108,6 +112,7 @@ class StrictnessProfile(object):
     def __init__(self, name, profile_dict):
         self.name = name
         self.mccabe = profile_dict['mccabe']
+        self.pyflakes = profile_dict['pyflakes']
         self.pylint = profile_dict['pylint']
         self.inherits = profile_dict['inherits']
         self.ignore = profile_dict['ignore']
@@ -117,6 +122,7 @@ class StrictnessProfile(object):
             'inherits': self.inherits,
             'ignore': self.ignore,
             'mccabe': self.mccabe,
+            'pyflakes': self.pyflakes,
             'pylint': self.pylint
         }
 
@@ -124,6 +130,7 @@ class StrictnessProfile(object):
         self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
         self.mccabe = _merge_dict(self.mccabe, other_profile.mccabe)
+        self.pyflakes = _merge_dict(self.pyflakes, other_profile.pyflakes)
         self.pylint = _merge_dict(self.pylint, other_profile.pylint)
 
 
