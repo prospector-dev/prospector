@@ -32,6 +32,10 @@ class ProspectorReport(BaseReport):
             # Get a clean copy of the message text without the code embedded.
             text = text[5:]
 
+        # mixed indentation (E101) is a file global message
+        if code == 'E101':
+            line_number = None
+
         # Record the message using prospector's data structures.
         location = Location(
             path=self.filename,
@@ -46,6 +50,7 @@ class ProspectorReport(BaseReport):
             location=location,
             message=text,
         )
+
         self._prospector_messages.append(message)
 
     def get_messages(self):

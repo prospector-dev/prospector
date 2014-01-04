@@ -11,12 +11,24 @@ BLEND = (
         ('pyflakes', 'FL0001')
     ),
     (  # Syntax Error
-        ('dodgy', 'diff'),
         # prefer this error as it will highlight diffs, but not be present for syntax errors not caused by diffs
+        ('dodgy', 'diff'),
         ('pylint', 'E0001'),
         ('pyflakes', 'FL9998'),
         ('pep8', 'E901'),
         ('mccabe', 'MC0000')
+    ),
+    (  # Undefined local variable
+        ('pylint', 'E0602'),
+        ('pyflakes', 'FL0006')
+    ),
+    (  # Unused variable
+        ('pylint', 'W0612'),
+        ('pyflakes', 'FL0013'),
+    ),
+    (  # Mixed tabs and spaces
+        ('pep8', 'E101'),
+        ('pylint', 'W0313')
     )
 )
 """
