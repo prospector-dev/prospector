@@ -30,12 +30,61 @@ BLEND = (
         ('pep8', 'E101'),
         ('pylint', 'W0313')
     ),
-    (
-        # Import from __future__ not first import
+    (  # Import from __future__ not first import
         ('pylint', 'W0410'),
         ('pyflakes', 'FL0012')
+    ),
+    (  # Line too long
+        ('pep8', 'E501'),
+        ('pylint', 'C0301')
+    ),
+    (  # Trailing whitespace
+        ('pep8', 'W291'),
+        ('pylint', 'C0303'),
+    ),
+    (  # No newline at end of file
+        ('pep8', 'W292'),
+        ('pylint', 'C0304')
+    ),
+    (  # line ends with semi-colon
+        ('pep8', 'E703'),
+        ('pylint', 'W0301')
+    ),
+    (  # multiple statements on one line
+        ('pep8', 'E702'),
+        ('pylint', 'C0321')
+    ),
+    (  # incorrect indendation
+        ('pep8', 'E111'),
+        ('pylint', 'W0311')
+    ),
+    (  # comma not followed by a space
+        ('pep8', 'E231'),
+        ('pylint', 'C0324')
+    ),
+    (  # missing whitespace around operator
+        ('pep8', 'E225'),
+        ('pylint', 'C0322')
+    ),
+    (  # missing whitespace around operator
+        ('pep8', 'E225'),
+        ('pylint', 'C0323')
     )
 )
+
+'''
+    'C0322': ('Operator not preceded by a space\n%s',
+              'no-space-before-operator',
+              'Used when one of the following operator (!= | <= | == | >= | < '
+              '| > | = | \\+= | -= | \\*= | /= | %) is not preceded by a space.',
+              {'scope': WarningScope.NODE}),
+    'C0323': ('Operator not followed by a space\n%s',
+              'no-space-after-operator',
+              'Used when one of the following operator (!= | <= | == | >= | < '
+              '| > | = | \\+= | -= | \\*= | /= | %) is not followed by a space.',
+              {'scope': WarningScope.NODE}),
+'''
+
 """
 BLEND is a list of tuples of codes to merge together. The earlier codes will
 take priority, so if all are found, only the first one will be left after blending.
