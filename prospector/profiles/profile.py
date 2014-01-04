@@ -18,13 +18,13 @@ _EMPTY_DATA = {
     'ignore': [],
 }
 
-_EMPTY_DATA.update({
-    name: {
+
+for name in TOOLS.keys():
+    _EMPTY_DATA[name] = {
         'disable': [],
         'enabled': None,
         'options': {}
-    } for name in TOOLS.keys()
-})
+    }
 
 
 def load_profiles(names, basedir=None):
