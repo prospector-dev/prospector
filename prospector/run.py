@@ -10,6 +10,7 @@ from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector import tools, blender
 from prospector import __pkginfo__
+from prospector.message import Location, Message
 
 
 def make_arg_parser():
@@ -44,14 +45,14 @@ def make_arg_parser():
     )
 
     output_help = "The output format. Valid values are %s" % (
-        ', '.join(FORMATTERS.keys()),
+        ', '.join(sorted(FORMATTERS.keys())),
     )
     parser.add_argument(
         '-o', '--output-format', default='text', help=output_help
     )
 
     parser.add_argument(
-        '--path',
+        '-p', '--path',
         help="The path to the python project to inspect (defaults to PWD)",
     )
 
@@ -79,7 +80,8 @@ def make_arg_parser():
 
     tools_help = 'A list of tools to run. Possible values are: %s. By' \
         ' default, the following tools will be run: %s' % (
-            ', '.join(tools.TOOLS.keys()), ', '.join(tools.DEFAULT_TOOLS)
+            ', '.join(sorted(tools.TOOLS.keys())),
+            ', '.join(sorted(tools.DEFAULT_TOOLS))
         )
     parser.add_argument(
         '-t', '--tools', default=None, nargs='+', help=tools_help,
@@ -110,6 +112,13 @@ def make_arg_parser():
     )
 
     parser.add_argument(
+        '--die-on-tool-error', action='store_true', default=False,
+        help='If a tool fails to run, prospector will try to carry on. Use '
+        ' this flag to cause prospector to die and raise the exception the '
+        ' tool generated. Mostly useful for development on prospector.'
+    )
+
+    parser.add_argument(
         '--no-common-plugin', action='store_true', default=False,
     )
 
@@ -133,7 +142,7 @@ def run():
         'started': datetime.now()
     }
 
-    path = args.path or os.getcwd()
+    path = args.path or os.path.abspath(os.getcwd())
 
     try:
         formatter = FORMATTERS[args.output_format]
@@ -214,7 +223,15 @@ def run():
 
     messages = []
     for tool in tool_runners:
-        messages += tool.run()
+        try:
+            messages += tool.run()
+        except Exception:
+            if args.die_on_tool_error:
+                raise
+            loc = Location(path, None, None, None, None)
+            message = "Tool %s failed to run (exception was raised)" % tool.__class__.__name__
+            msg = Message(tool.__class__.__name__, 'failure', loc, message=message)
+            messages.append(msg)
 
     for message in messages:
         if args.absolute_paths:
