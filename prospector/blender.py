@@ -72,19 +72,6 @@ BLEND = (
     )
 )
 
-'''
-    'C0322': ('Operator not preceded by a space\n%s',
-              'no-space-before-operator',
-              'Used when one of the following operator (!= | <= | == | >= | < '
-              '| > | = | \\+= | -= | \\*= | /= | %) is not preceded by a space.',
-              {'scope': WarningScope.NODE}),
-    'C0323': ('Operator not followed by a space\n%s',
-              'no-space-after-operator',
-              'Used when one of the following operator (!= | <= | == | >= | < '
-              '| > | = | \\+= | -= | \\*= | /= | %) is not followed by a space.',
-              {'scope': WarningScope.NODE}),
-'''
-
 """
 BLEND is a list of tuples of codes to merge together. The earlier codes will
 take priority, so if all are found, only the first one will be left after blending.
@@ -107,11 +94,17 @@ def blend_line(messages, blend_combos=BLEND):
     # so that we have a list of lists of messages which can be blended together
     for message in messages:
         key = (message.source, message.code)
+        found = False
         for blend_combo_idx, blend_combo in enumerate(blend_combos):
             if key in blend_combo:
+                found = True
                 blend_lists[blend_combo_idx].append(message)
-                break
-        else:
+
+        # note: we use 'found=True' here rather than a simple break/for-else because
+        # this allows the same message to be put into more than one 'bucket'. This means
+        # that the same message from pep8 can 'subsume' two from pylint, for example.
+
+        if not found:
             # if we get here, then this is not a message which can be blended,
             # so by definition is already blended
             blended.append(message)
