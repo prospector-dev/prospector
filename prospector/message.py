@@ -68,6 +68,9 @@ class Message(object):
             'message': self.message
         }
 
+    def __repr__(self):
+        return "%s-%s" % (self.source, self.code)
+
     def __eq__(self, other):
         if self.location == other.location:
             return self.code == other.code

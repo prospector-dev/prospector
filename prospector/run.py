@@ -8,7 +8,7 @@ from prospector.adaptor.common import CommonAdaptor
 from prospector.adaptor.profile import ProfileAdaptor
 from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
-from prospector import tools
+from prospector import tools, blender
 from prospector import __pkginfo__
 
 
@@ -23,6 +23,13 @@ def make_arg_parser():
         help='Turn off auto-detection of frameworks and libraries used. By'
         ' default, autodetection will be used. To specify manually, see'
         ' the --uses option.',
+    )
+
+    parser.add_argument(
+        '-B', '--no-blending', action='store_true', default=False,
+        help="Turn off blending of messages. Prospector will merge together"
+        " messages from different tools if they represent the same error."
+        " Use this option to see all unmerged messages."
     )
 
     parser.add_argument(
@@ -214,6 +221,9 @@ def run():
             message.to_absolute_path(path)
         else:
             message.to_relative_path(path)
+
+    if not args.no_blending:
+        messages = blender.blend(messages)
 
     summary['message_count'] = len(messages)
     summary['completed'] = datetime.now()
