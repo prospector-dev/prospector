@@ -29,7 +29,7 @@ def format_messages(summary, messages):
     for filename in sorted(groups.keys()):
         sys.stdout.write('%s\n' % filename)
 
-        for line in sorted(groups[filename].keys(), key=lambda x: int(x)):
+        for line in sorted(groups[filename].keys(), key=lambda x: 0 if x is None else int(x)):
             sys.stdout.write('  Line: %s\n' % line)
 
             for msg in groups[filename][line]:
