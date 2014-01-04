@@ -51,7 +51,7 @@ class McCabeTool(ToolBase):
                     path=code_file,
                     module=None,
                     function=None,
-                    line=0,
+                    line=1,
                     character=0,
                 )
                 message = Message(
