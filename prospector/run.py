@@ -78,6 +78,12 @@ def make_arg_parser():
         " message information)",
     )
 
+    parser.add_argument(
+        '-8', '--no-style-warnings', default=False, action='store_true',
+        help="Don't create any warnings about style. This disables the PEP8 tool and"
+        " similar checks for formatting."
+    )
+
     tools_help = 'A list of tools to run. Possible values are: %s. By' \
         ' default, the following tools will be run: %s' % (
             ', '.join(sorted(tools.TOOLS.keys())),
@@ -193,6 +199,9 @@ def run():
 
     if not args.test_warnings:
         profiles.append('no_test_warnings')
+
+    if args.no_style_warnings:
+        profiles.append('no_pep8')
 
     profiles += args.profiles
 
