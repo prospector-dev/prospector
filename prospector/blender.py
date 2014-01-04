@@ -29,6 +29,11 @@ BLEND = (
     (  # Mixed tabs and spaces
         ('pep8', 'E101'),
         ('pylint', 'W0313')
+    ),
+    (
+        # Import from __future__ not first import
+        ('pylint', 'W0410'),
+        ('pyflakes', 'FL0012')
     )
 )
 """
