@@ -99,3 +99,5 @@ pep8:
     - N814      
     - W191
     - W293
+  options:
+    max-line-length: 159

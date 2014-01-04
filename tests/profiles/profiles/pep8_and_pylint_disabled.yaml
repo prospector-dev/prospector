@@ -1,0 +1,5 @@
+inherits:
+  - pylint_disabled
+
+pep8:
+  enabled: false

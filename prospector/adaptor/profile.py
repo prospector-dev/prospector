@@ -9,6 +9,9 @@ class ProfileAdaptor(AdaptorBase):
         self.profile = load_profiles(profile_names)
         self.name = 'profiles:%s' % ','.join(profile_names)
 
+    def is_tool_enabled(self, tool_name):
+        return self.profile.is_tool_enabled(tool_name)
+
     def adapt_pylint(self, linter):
         for msg_id in self.profile.pylint['disable']:
             try:

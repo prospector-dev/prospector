@@ -52,10 +52,21 @@ class TestProfileParsing(TestCase):
         profile = load_profiles('ignores', basedir=self._basedir)
         self.assertEqual(['^tests/', '/migrations/'].sort(), profile.ignore.sort())
 
+    def test_disable_tool(self):
+        profile = load_profiles('pylint_disabled', basedir=self._basedir)
+        self.assertFalse(profile.is_tool_enabled('pylint'))
+        self.assertTrue(profile.is_tool_enabled('pep8'))
+
+    def test_disable_tool_inheritance(self):
+        profile = load_profiles('pep8_and_pylint_disabled', basedir=self._basedir)
+        self.assertFalse(profile.is_tool_enabled('pylint'))
+        self.assertFalse(profile.is_tool_enabled('pep8'))
+
     def test_dict_merge(self):
         a = {
             'int': 1,
             'str': 'fish',
+            'bool': True,
             'list': [1, 2],
             'dict': {
                 'a': 1,
@@ -65,6 +76,7 @@ class TestProfileParsing(TestCase):
         b = {
             'int': 2,
             'list': [2, 3],
+            'bool': False,
             'dict': {
                 'a': 3,
                 'c': 4
@@ -74,6 +86,7 @@ class TestProfileParsing(TestCase):
         expected = {
             'int': 2,
             'str': 'fish',
+            'bool': False,
             'list': [1, 2, 3],
             'dict': {
                 'a': 3,
@@ -86,6 +99,7 @@ class TestProfileParsing(TestCase):
         expected = {
             'int': 1,
             'str': 'fish',
+            'bool': True,
             'list': [1, 2, 3],
             'dict': {
                 'a': 1,

@@ -25,6 +25,7 @@ _INSTALL_REQUIRES = [
 _PACKAGE_DATA = {
     'prospector': [
         'profiles/profiles/no_doc_warnings.yaml',
+        'profiles/profiles/no_pep8.yaml',
         'profiles/profiles/no_test_warnings.yaml',
         'profiles/profiles/strictness_high.yaml',
         'profiles/profiles/strictness_low.yaml',

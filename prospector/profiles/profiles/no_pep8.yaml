@@ -1,0 +1,15 @@
+
+pylint:
+  disable:
+    - C0301
+    - C0302
+    - C0303
+    - C0304
+    - W0301
+    - C0321
+    - C0322
+    - C0323
+    - C0324
+
+pep8:
+  enabled: false

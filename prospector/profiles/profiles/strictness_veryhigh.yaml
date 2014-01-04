@@ -18,9 +18,8 @@ pylint:
 mccabe:
   options:
     max-complexity: 10
-    max-line-length: 79
-    single-line-if-stmt: n
 
 pep8:
   options:
     max-line-length: 79
+    single-line-if-stmt: n

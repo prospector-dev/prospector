@@ -1,5 +1,3 @@
-import ast
-import sys
 
 from pep8 import StyleGuide, BaseReport, register_check
 from pep8ext_naming import NamingChecker

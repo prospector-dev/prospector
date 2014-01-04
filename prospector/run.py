@@ -212,6 +212,8 @@ def run():
                 tool,
                 ', '.join(tools.TOOLS.keys())
             ))
+        if not profile_adaptor.is_tool_enabled(tool):
+            continue
         tool_runners.append(tools.TOOLS[tool]())
 
     summary['tools'] = ', '.join(tool_names)

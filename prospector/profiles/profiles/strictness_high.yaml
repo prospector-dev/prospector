@@ -26,6 +26,8 @@ pylint:
     max-public-methods: 20
 
 pep8:
+  options:
+    max-line-length: 99
   disable:
     - E304
     - W291

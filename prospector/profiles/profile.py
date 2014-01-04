@@ -1,5 +1,6 @@
 import os
 import yaml
+from prospector.tools import TOOLS, DEFAULT_TOOLS
 
 
 class ProfileNotFound(Exception):
@@ -14,24 +15,16 @@ class ProfileNotFound(Exception):
 
 _EMPTY_DATA = {
     'inherits': [],
-    'mccabe': {
-        'disable': [],
-        'options': {},
-    },
-    'pep8': {
-        'disable': [],
-        'options': {},
-    },
-    'pyflakes': {
-        'disable': [],
-        'options': {},
-    },
-    'pylint': {
-        'disable': [],
-        'options': {}
-    },
     'ignore': [],
 }
+
+_EMPTY_DATA.update({
+    name: {
+        'disable': [],
+        'enabled': None,
+        'options': {}
+    } for name in TOOLS.keys()
+})
 
 
 def load_profiles(names, basedir=None):
@@ -70,14 +63,14 @@ def _load_profile(name, basedir=None, inherits_set=None):
     profile = parse_profile(name, _load_content(name, basedir))
     inherits_set.add(profile.name)
 
-    for inheritsed in profile.inherits:
-        if inheritsed not in inherits_set:
-            inheritsed_profile, sub_inherits_set = _load_profile(
-                inheritsed,
+    for inherited in profile.inherits:
+        if inherited not in inherits_set:
+            inherited_profile, sub_inherits_set = _load_profile(
+                inherited,
                 basedir,
                 inherits_set,
             )
-            profile.merge(inheritsed_profile)
+            profile.merge(inherited_profile)
             inherits_set |= sub_inherits_set
 
     return profile, inherits_set
@@ -132,32 +125,34 @@ class StrictnessProfile(object):
 
     def __init__(self, name, profile_dict):
         self.name = name
-
-        self.mccabe = profile_dict['mccabe']
-        self.pep8 = profile_dict['pep8']
-        self.pyflakes = profile_dict['pyflakes']
-        self.pylint = profile_dict['pylint']
-
         self.inherits = profile_dict['inherits']
         self.ignore = profile_dict['ignore']
 
+        for tool in TOOLS.keys():
+            setattr(self, tool, profile_dict[tool])
+
     def to_profile_dict(self):
-        return {
+        thedict = {
             'inherits': self.inherits,
             'ignore': self.ignore,
-            'mccabe': self.mccabe,
-            'pep8': self.pep8,
-            'pyflakes': self.pyflakes,
-            'pylint': self.pylint
         }
+
+        for tool in TOOLS.keys():
+            thedict[tool] = getattr(self, tool)
 
     def merge(self, other_profile):
         self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
-        self.mccabe = _merge_dict(self.mccabe, other_profile.mccabe)
-        self.pep8 = _merge_dict(self.pep8, other_profile.pep8)
-        self.pyflakes = _merge_dict(self.pyflakes, other_profile.pyflakes)
-        self.pylint = _merge_dict(self.pylint, other_profile.pylint)
+
+        for tool in TOOLS.keys():
+            merged = _merge_dict(getattr(self, tool), getattr(other_profile, tool))
+            setattr(self, tool, merged)
+
+    def is_tool_enabled(self, name):
+        enabled = getattr(self, name)['enabled']
+        if enabled is None:
+            enabled = name in DEFAULT_TOOLS
+        return enabled
 
 
 def merge_profiles(profiles):
