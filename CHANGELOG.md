@@ -15,3 +15,4 @@ Version 0.4
 * Tool failure no longer kills the prospector process but adds a message instead.
 * Tools can be enabled or disabled from profiles.
 * All style warnings can be suppressed using the `--no-style-warnings` command line switch.
+* Uses a newer version of [pylint-django](https://github.com/landscapeio/pylint-django) for improved analysis of Django-based code.
