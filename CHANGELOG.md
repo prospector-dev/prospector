@@ -1,6 +1,11 @@
 Prospector Changelog
 =======
 
+Version 0.4.1
+---
+* Additional blending of messages - more messages indicating the same problem from different tools are now merged together
+* Fixed the maximum line length to 160 for medium strictness, 100 for high and 80 for very high. This affects both the pep8 tool and pylint.
+
 Version 0.4
 ---
 
