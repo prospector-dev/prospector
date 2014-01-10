@@ -35,6 +35,8 @@ pylint:
     - W0704
     - W1001
     - W1401
+  options:
+    max-line-length: 159
 
 mccabe:
   options:

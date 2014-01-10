@@ -24,6 +24,7 @@ pylint:
     max-statements: 60
     min-public-methods: 1
     max-public-methods: 20
+    max-line-length: 99
 
 pep8:
   options:
