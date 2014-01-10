@@ -89,7 +89,7 @@ BLEND is a list of tuples of codes to merge together. The earlier codes will
 take priority, so if all are found, only the first one will be left after blending.
 
 Note that since not all tools will necessarily be run, the first message for a line
-as sorted by the code list will be the one remainding after blending.
+as sorted by the code list will be the one remaining after blending.
 """
 
 
