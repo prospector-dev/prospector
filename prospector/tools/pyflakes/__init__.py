@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from pyflakes.api import iterSourceCode, checkPath
 from pyflakes.reporter import Reporter
 

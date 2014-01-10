@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from dodgy.run import run_checks
 import os
 import re
