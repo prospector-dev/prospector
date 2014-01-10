@@ -69,6 +69,18 @@ BLEND = (
     (  # missing whitespace around operator
         ('pep8', 'E225'),
         ('pylint', 'C0323')
+    ),
+    (  # undefined name in __all__
+        ('pylint', 'E0603'),
+        ('pyflakes', 'FL0008')
+    ),
+    (  # duplicate argument in function definition
+        ('pylint', 'E0108'),
+        ('pyflakes', 'FL0010')
+    ),
+    (  # redefinition of unused function
+        ('pyflakes', 'FL0002'),
+        ('pylint', 'E0102'),
     )
 )
 
