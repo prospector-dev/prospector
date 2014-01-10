@@ -19,8 +19,8 @@ _EMPTY_DATA = {
 }
 
 
-for name in TOOLS.keys():
-    _EMPTY_DATA[name] = {
+for toolname in TOOLS.keys():
+    _EMPTY_DATA[toolname] = {
         'disable': [],
         'enabled': None,
         'options': {}
