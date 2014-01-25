@@ -73,7 +73,7 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        fullpath = os.path.join(parent, filename)
+        fullpath = os.path.join(parent, filename) if parent else filename
         if any([ip.search(fullpath) for ip in self._ignore_patterns]):
             return True
 
