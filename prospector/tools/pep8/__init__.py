@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import os
 from pep8 import StyleGuide, BaseReport, register_check
 from pep8ext_naming import NamingChecker
 
@@ -72,7 +73,8 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        if any([ip.search(filename) for ip in self._ignore_patterns]):
+        fullpath = os.path.join(parent, filename)
+        if any([ip.search(fullpath) for ip in self._ignore_patterns]):
             return True
 
         return False

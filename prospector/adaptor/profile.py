@@ -49,7 +49,7 @@ class ProfileAdaptor(AdaptorBase):
         disabled = self.profile.get_disabled_messages('pyflakes')
 
         tool.ignore_codes = tuple(set(
-            tool.ignore_codes + disabled
+            tool.ignore_codes + tuple(disabled)
         ))
 
     def adapt_pep8(self, style_guide):

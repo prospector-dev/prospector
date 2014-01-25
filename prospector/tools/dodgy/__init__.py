@@ -17,9 +17,10 @@ class DodgyTool(ToolBase):
 
     def prepare(self, rootpath, ignore, args, adaptors):
         self.rootpath = rootpath
+        self.ignore = ignore
 
     def run(self):
-        warnings = run_checks(self.rootpath)
+        warnings = run_checks(self.rootpath, self.ignore)
         messages = []
 
         for warning in warnings:

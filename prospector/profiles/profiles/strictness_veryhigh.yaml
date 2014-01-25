@@ -1,5 +1,8 @@
 # This will enable almost every single warning
 
+ignore:
+  - (^|/)\.
+
 pylint:
   disable:
     - W0511

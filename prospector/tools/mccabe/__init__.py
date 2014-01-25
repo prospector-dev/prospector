@@ -19,9 +19,9 @@ def _find_code_files(rootpath, ignores):
 
     for root, _, files in os.walk(rootpath):
         for potential in files:
-            if potential.endswith('.py'):
-                if not any([ip.search(potential) for ip in ignores]):
-                    code_files.append(os.path.join(root, potential))
+            fullpath = os.path.join(root, potential)
+            if potential.endswith('.py') and not any([ip.search(fullpath) for ip in ignores]):
+                code_files.append(fullpath)
 
     return code_files
 

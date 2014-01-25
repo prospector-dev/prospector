@@ -14,7 +14,7 @@ _INSTALL_REQUIRES = [
     'pylint-common>=0.1',
     'requirements-detector>=0.1.1',
     'argparse==1.2.1',
-    'dodgy>=0.1.2',
+    'dodgy>=0.1.4',
     'pyyaml',
     'mccabe>=0.2.1',
     'pyflakes>=0.7.3',
