@@ -84,6 +84,12 @@ def make_arg_parser():
         " similar checks for formatting."
     )
 
+    parser.add_argument(
+        '-F', '--full-pep8', default=False, action='store_true',
+        help="Enables every PEP8 warning, so that all PEP8 style violations will be"
+             " reported."
+    )
+
     tools_help = 'A list of tools to run. Possible values are: %s. By' \
         ' default, the following tools will be run: %s' % (
             ', '.join(sorted(tools.TOOLS.keys())),
@@ -202,6 +208,9 @@ def run():
 
     if args.no_style_warnings:
         profiles.append('no_pep8')
+
+    if args.full_pep8:
+        profiles.append('full_pep8')
 
     profiles += args.profiles
 

@@ -22,7 +22,8 @@ _EMPTY_DATA = {
 for toolname in TOOLS.keys():
     _EMPTY_DATA[toolname] = {
         'disable': [],
-        'enabled': None,
+        'enable': [],
+        'run': None,
         'options': {}
     }
 
@@ -140,6 +141,11 @@ class StrictnessProfile(object):
         for tool in TOOLS.keys():
             thedict[tool] = getattr(self, tool)
 
+    def get_disabled_messages(self, tool_name):
+        disable = getattr(self, tool_name)['disable']
+        enable = getattr(self, tool_name)['enable']
+        return list(set(disable) - set(enable))
+
     def merge(self, other_profile):
         self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
@@ -149,10 +155,10 @@ class StrictnessProfile(object):
             setattr(self, tool, merged)
 
     def is_tool_enabled(self, name):
-        enabled = getattr(self, name)['enabled']
-        if enabled is None:
-            enabled = name in DEFAULT_TOOLS
-        return enabled
+        run = getattr(self, name)['run']
+        if run is None:
+            run = name in DEFAULT_TOOLS
+        return run
 
 
 def merge_profiles(profiles):

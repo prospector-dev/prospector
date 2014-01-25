@@ -13,7 +13,9 @@ class ProfileAdaptor(AdaptorBase):
         return self.profile.is_tool_enabled(tool_name)
 
     def adapt_pylint(self, linter):
-        for msg_id in self.profile.pylint['disable']:
+        disabled = self.profile.get_disabled_messages('pylint')
+        
+        for msg_id in disabled:
             try:
                 linter.disable(msg_id)
 
@@ -33,9 +35,10 @@ class ProfileAdaptor(AdaptorBase):
                     checker.set_option(option[0], options[option[0]])
 
     def adapt_mccabe(self, tool):
+        disabled = self.profile.get_disabled_messages('mccabe')
+
         tool.ignore_codes = tuple(set(
-            tool.ignore_codes
-            + tuple(self.profile.mccabe['disable'])
+            tool.ignore_codes + tuple(disabled)
         ))
 
         if 'max-complexity' in self.profile.mccabe['options']:
@@ -43,15 +46,17 @@ class ProfileAdaptor(AdaptorBase):
                 self.profile.mccabe['options']['max-complexity']
 
     def adapt_pyflakes(self, tool):
+        disabled = self.profile.get_disabled_messages('pyflakes')
+
         tool.ignore_codes = tuple(set(
-            tool.ignore_codes
-            + tuple(self.profile.pyflakes['disable'])
+            tool.ignore_codes + disabled
         ))
 
     def adapt_pep8(self, style_guide):
+        disabled = self.profile.get_disabled_messages('pep8')
+
         style_guide.options.ignore = tuple(set(
-            style_guide.options.ignore
-            + tuple(self.profile.pep8['disable'])
+            style_guide.options.ignore + tuple(disabled)
         ))
 
         if 'max-line-length' in self.profile.pep8['options']:
