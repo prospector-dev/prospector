@@ -14,7 +14,7 @@ class ProfileAdaptor(AdaptorBase):
 
     def adapt_pylint(self, linter):
         disabled = self.profile.get_disabled_messages('pylint')
-        
+
         for msg_id in disabled:
             try:
                 linter.disable(msg_id)
