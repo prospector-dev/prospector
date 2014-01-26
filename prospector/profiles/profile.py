@@ -95,7 +95,7 @@ def _merge_dict(dict1, dict2, dedup_lists=False, dict1_priority=True):
     newdict = {}
     newdict.update(dict1)
 
-    for key, value in dict2.iteritems():
+    for key, value in dict2.items():
         if key not in dict1:
             newdict[key] = value
         elif value is None and dict1[key] is not None:
