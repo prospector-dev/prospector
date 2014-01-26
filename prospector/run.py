@@ -124,8 +124,14 @@ def run():
             if args.die_on_tool_error:
                 raise
             loc = Location(path, None, None, None, None)
-            message = "Tool %s failed to run (exception was raised)" % tool.__class__.__name__
-            msg = Message(tool.__class__.__name__, 'failure', loc, message=message)
+            for name, cls in tools.TOOLS.iteritems():
+                if cls == tool.__class__:
+                    toolname = name
+                    break
+            else:
+                toolname = 'Unknown'
+            message = "Tool %s failed to run (exception was raised)" % toolname
+            msg = Message(toolname, 'failure', loc, message=message)
             messages.append(msg)
 
     for message in messages:
