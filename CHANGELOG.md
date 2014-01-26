@@ -4,9 +4,10 @@ Prospector Changelog
 Version 0.5
 ---
 * Full PEP8 compliance can be turned on using the `--full-pep8` flag, which overrides the defaults in the strictness profile.
-* The PEP8 tool will now use existing config if any is found in `.pep8`, `tox.ini`, `setup.cfg` in the path to check, or `~/.config/pep8`. These will override any other configuration specified by prospector. If none are present, prospector will fall back on the defaults specified by the strictness.
+* The PEP8 tool will now use existing config if any is found in `.pep8`, `tox.ini`, `setup.cfg` in the path to check, or `~/.config/pep8`. These will override any other configuration specified by Prospector. If none are present, Prospector will fall back on the defaults specified by the strictness.
+* A new flag, `--external-config`, can be used to tweak how PEP8 treats external config. `only`, the default, means that external configuration will be preferred to Prospector configuration. `merge` means that Prospector will combine external configuration and its own values. `none` means that Prospector will ignore external config.
 * Pylint version 1.1 is now used.
-* The `--path` command line argument is no longer required, and prospector can be called with `prospector path_to_check`.
+* The `--path` command line argument is no longer required, and Prospector can be called with `prospector path_to_check`.
 
 Version 0.4.1
 ---
@@ -24,7 +25,7 @@ Version 0.4
 * Replaced Pylint W0312 with a custom checker. This means that warnings are only generated for inconsistent indentation characters, rather than warning if spaces were not used.
 * Some messages will now be combined if Pylint generates multiple warnings per line for what is the same cause. For example, 'unused import from wildcard import' messages are now combined rather than having one message per unused import from that line.
 * Messages from multiple tools will be merged if they represent the same problem.
-* Tool failure no longer kills the prospector process but adds a message instead.
+* Tool failure no longer kills the Prospector process but adds a message instead.
 * Tools can be enabled or disabled from profiles.
 * All style warnings can be suppressed using the `--no-style-warnings` command line switch.
 * Uses a newer version of [pylint-django](https://github.com/landscapeio/pylint-django) for improved analysis of Django-based code.
