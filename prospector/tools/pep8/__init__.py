@@ -1,7 +1,8 @@
 from __future__ import absolute_import
 
 import os
-from pep8 import StyleGuide, BaseReport, register_check
+import re
+from pep8 import StyleGuide, BaseReport, register_check, DEFAULT_CONFIG, PROJECT_CONFIG
 from pep8ext_naming import NamingChecker
 
 from prospector.message import Location, Message
@@ -86,20 +87,32 @@ class Pep8Tool(ToolBase):
         self.checker = None
 
     def prepare(self, rootpath, ignore, args, adaptors):
+        # figure out if we should use a pre-existing config file
+        # such as setup.cfg or tox.ini
+        use_conf = None
+
+        paths = [os.path.join(rootpath, name) for name in PROJECT_CONFIG]
+        paths.append(DEFAULT_CONFIG)
+
+        for conf_path in paths:
+            if os.path.exists(conf_path) and os.path.isfile(conf_path):
+                # this file exists - but does it have pep8 config in it?
+                header = re.compile('\[pep8\]')
+                with open(conf_path) as f:
+                    if any([header.search(line) for line in f.readlines()]):
+                        use_conf = conf_path
+                        break
+
         # Instantiate our custom pep8 checker.
         self.checker = ProspectorStyleGuide(
             paths=[rootpath],
             ignore_patterns=ignore,
+            config_file=use_conf
         )
-
-        # Make sure pep8's code ignores are fully reset to zero.
-        # pylint: disable=W0201
-        self.checker.select = ()
-        self.checker.ignore = ()
 
         # Let the adaptors & profiles do their thing.
         for adaptor in adaptors:
-            adaptor.adapt_pep8(self.checker)
+            adaptor.adapt_pep8(self.checker, existing_config=use_conf is not None)
 
     def run(self):
         report = self.checker.check_files()
