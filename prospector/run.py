@@ -39,20 +39,32 @@ def make_arg_parser():
     )
 
     parser.add_argument(
+        '-e', '--external-config', default='only', choices=('none', 'merge', 'only'),
+        help='Determines how prospector should behave when configuration already'
+             ' exists for a tool. By default, prospector will use existing'
+             ' configuration. A value of "merge" will cause prospector to '
+             ' merge existing config and its own config, and "none" means'
+             ' that prospector will use only its own config.'
+    )
+
+    parser.add_argument(
         '-M', '--messages-only', default=False, action='store_true',
         help="Only output message information (don't output summary"
         " information about the checks)",
     )
 
-    output_help = "The output format. Valid values are %s" % (
-        ', '.join(sorted(FORMATTERS.keys())),
-    )
     parser.add_argument(
-        '-o', '--output-format', default='text', help=output_help
+        '-o', '--output-format', default='text', help="The output format.",
+        choices=sorted(FORMATTERS.keys())
     )
 
     parser.add_argument(
         '-p', '--path',
+        help="The path to the python project to inspect (defaults to PWD)",
+    )
+
+    parser.add_argument(
+        'checkpath', nargs='?', default=None,
         help="The path to the python project to inspect (defaults to PWD)",
     )
 
@@ -66,10 +78,10 @@ def make_arg_parser():
 
     strictness_help = 'How strict the checker should be. This affects how' \
         ' harshly the checker will enforce coding guidelines. The default' \
-        ' value is "medium", possible values are "veryhigh", "high",' \
-        ' "medium", "low" and "verylow".'
+        ' value is "medium".'
     parser.add_argument(
         '-s', '--strictness', help=strictness_help, default='medium',
+        choices=("veryhigh", "high", "medium", "low", "verylow")
     )
 
     parser.add_argument(
@@ -97,6 +109,7 @@ def make_arg_parser():
         )
     parser.add_argument(
         '-t', '--tools', default=None, nargs='+', help=tools_help,
+        choices=sorted(tools.TOOLS.keys())
     )
 
     parser.add_argument(
@@ -154,7 +167,7 @@ def run():
         'started': datetime.now()
     }
 
-    path = args.path or os.path.abspath(os.getcwd())
+    path = args.path or args.checkpath or os.path.abspath(os.getcwd())
 
     try:
         formatter = FORMATTERS[args.output_format]

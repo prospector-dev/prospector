@@ -6,6 +6,7 @@ Version 0.5
 * Full PEP8 compliance can be turned on using the `--full-pep8` flag, which overrides the defaults in the strictness profile.
 * The PEP8 tool will now use existing config if any is found in `.pep8`, `tox.ini`, `setup.cfg` in the path to check, or `~/.config/pep8`. These will override any other configuration specified by prospector. If none are present, prospector will fall back on the defaults specified by the strictness.
 * Pylint version 1.1 is now used.
+* The `--path` command line argument is no longer required, and prospector can be called with `prospector path_to_check`.
 
 Version 0.4.1
 ---
