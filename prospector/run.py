@@ -112,6 +112,11 @@ def run():
     summary['tools'] = ', '.join(tool_names)
 
     ignore = [re.compile(ignore) for ignore in profile_adaptor.profile.ignore]
+    if args.ignore_patterns is not None:
+        ignore += [re.compile(patt) for patt in args.ignore_patterns]
+    if args.ignore_paths is not None:
+        boundary = r"(^|/|\\)%s(/|\\|$)"
+        ignore += [re.compile(boundary % re.escape(ignore_path)) for ignore_path in args.ignore_paths]
 
     for tool in tool_runners:
         tool.prepare(path, ignore, args, adaptors)

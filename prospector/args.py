@@ -40,6 +40,20 @@ def make_arg_parser():
     )
 
     parser.add_argument(
+        '-I', '--ignore-patterns', nargs='+',
+        help='A list of paths to ignore, as a list of regular expressions.'
+             ' Files and folders will be ignored if their full path contains'
+             ' any of these patterns.'
+    )
+
+    parser.add_argument(
+        '-i', '--ignore-paths', nargs='+',
+        help='A list of file or directory names to ignore. If the complete'
+             ' name matches any of the items in this list, the file or '
+             ' directory (and all subdirectories) will be ignored.'
+    )
+
+    parser.add_argument(
         '-M', '--messages-only', default=False, action='store_true',
         help="Only output message information (don't output summary"
              " information about the checks)",
