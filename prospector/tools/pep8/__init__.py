@@ -89,30 +89,53 @@ class Pep8Tool(ToolBase):
     def prepare(self, rootpath, ignore, args, adaptors):
         # figure out if we should use a pre-existing config file
         # such as setup.cfg or tox.ini
-        use_conf = None
+        external_config = None
 
-        paths = [os.path.join(rootpath, name) for name in PROJECT_CONFIG]
-        paths.append(DEFAULT_CONFIG)
+        # 'none' means we ignore any external config, so just carry on
+        if args.external_config != 'none':
+            paths = [os.path.join(rootpath, name) for name in PROJECT_CONFIG]
+            paths.append(DEFAULT_CONFIG)
 
-        for conf_path in paths:
-            if os.path.exists(conf_path) and os.path.isfile(conf_path):
-                # this file exists - but does it have pep8 config in it?
-                header = re.compile('\[pep8\]')
-                with open(conf_path) as f:
-                    if any([header.search(line) for line in f.readlines()]):
-                        use_conf = conf_path
-                        break
+            for conf_path in paths:
+                if os.path.exists(conf_path) and os.path.isfile(conf_path):
+                    # this file exists - but does it have pep8 config in it?
+                    header = re.compile('\[pep8\]')
+                    with open(conf_path) as f:
+                        if any([header.search(line) for line in f.readlines()]):
+                            external_config = conf_path
+                            break
+
+        if args.external_config == 'none':
+            # if we should not use external config, we always want to
+            # use prospector's config
+            use_config = True
+
+        elif args.external_config == 'merge':
+            # if we should merge with any existing config, then we want
+            # to merge prospector's config
+            use_config = True
+
+        elif args.external_config == 'only':
+            # if we should only use external config, then we don't use
+            # prospector's config *unless* there is no external config
+            use_config = external_config is None
 
         # Instantiate our custom pep8 checker.
         self.checker = ProspectorStyleGuide(
             paths=[rootpath],
             ignore_patterns=ignore,
-            config_file=use_conf
+            config_file=external_config
         )
+
+        if args.external_config == 'none' or external_config is None:
+            # Make sure pep8's code ignores are fully reset to zero.
+            # pylint: disable=W0201
+            self.checker.select = ()
+            self.checker.ignore = ()
 
         # Let the adaptors & profiles do their thing.
         for adaptor in adaptors:
-            adaptor.adapt_pep8(self.checker, existing_config=use_conf is not None)
+            adaptor.adapt_pep8(self.checker, use_config=use_config)
 
     def run(self):
         report = self.checker.check_files()

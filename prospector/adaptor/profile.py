@@ -52,14 +52,9 @@ class ProfileAdaptor(AdaptorBase):
             tool.ignore_codes + tuple(disabled)
         ))
 
-    def adapt_pep8(self, style_guide, existing_config=False):
-        if existing_config:
+    def adapt_pep8(self, style_guide, use_config=True):
+        if not use_config:
             return
-
-        # Make sure pep8's code ignores are fully reset to zero.
-        # pylint: disable=W0201
-        style_guide.select = ()
-        style_guide.ignore = ()
 
         disabled = self.profile.get_disabled_messages('pep8')
 
