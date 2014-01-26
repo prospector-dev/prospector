@@ -129,7 +129,7 @@ def run():
             if args.die_on_tool_error:
                 raise
             loc = Location(path, None, None, None, None)
-            for name, cls in tools.TOOLS.iteritems():
+            for name, cls in tools.TOOLS.items():
                 if cls == tool.__class__:
                     toolname = name
                     break

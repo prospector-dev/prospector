@@ -121,7 +121,7 @@ class PylintTool(ToolBase):
             else:
                 out.append(message)
 
-        for location, message_list in by_loc.iteritems():
+        for location, message_list in by_loc.items():
             names = []
             for msg in message_list:
                 names.append(_W0614_RE.match(msg.message).group(1))
