@@ -13,7 +13,7 @@ _INSTALL_REQUIRES = [
     'pylint-plugin-utils>=0.1.1',
     'pylint-common>=0.1',
     'requirements-detector>=0.1.1',
-    'argparse==1.2.1',
+    'argparse',
     'dodgy>=0.1.4',
     'pyyaml',
     'mccabe>=0.2.1',
@@ -24,6 +24,7 @@ _INSTALL_REQUIRES = [
 
 _PACKAGE_DATA = {
     'prospector': [
+        'profiles/profiles/full_pep8.yaml',
         'profiles/profiles/no_doc_warnings.yaml',
         'profiles/profiles/no_pep8.yaml',
         'profiles/profiles/no_test_warnings.yaml',
