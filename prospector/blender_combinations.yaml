@@ -49,7 +49,11 @@ combinations:
         - pep8: E703
         - pylint: W0301
 
-    -   # multiple statements on one line
+    -   # multiple statements on one line (colon)
+        - pep8: E701
+        - pylint: C0321
+
+    -   # multiple statements on one line (semicolon)
         - pep8: E702
         - pylint: C0321
 
@@ -81,3 +85,22 @@ combinations:
         - pyflakes: FL0002
         - pylint: E0102
 
+    -   # first argument of a classmethod should be named 'cls'
+        - pep8: N804
+        - pylint: C0202
+
+    -   # '<>' is deprecated, use '!='
+        - pep8: W603
+        - pylint: W0331
+
+    -   # backticks are deprecated, use 'repr()'
+        - pep8: W604
+        - pylint: W0333
+
+    -   # Redefining name from outer scope
+        - pylint: W0621
+        - pyflakes: FL0011
+
+    -   # Wildcard import
+        - pylint: W0401
+        - pyflakes: FL0005
