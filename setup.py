@@ -13,7 +13,7 @@ _INSTALL_REQUIRES = [
     'pylint-plugin-utils>=0.1.1',
     'pylint-common>=0.1',
     'requirements-detector>=0.1.2',
-    'setoptconfig',
+    'setoptconf',
     'dodgy>=0.1.5',
     'pyyaml',
     'mccabe>=0.2.1',
@@ -52,16 +52,20 @@ _CLASSIFIERS = (
 
 setup(
     name='prospector',
+    version=__pkginfo__.get_version(),
     url='https://github.com/landscapeio/prospector',
     author='landscape.io',
     author_email='code@landscape.io',
-    description='Prospector: python static analysis tool',
-    install_requires=_INSTALL_REQUIRES,
-    package_data=_PACKAGE_DATA,
-    scripts=['bin/prospector'],
-    version=__pkginfo__.get_version(),
-    packages=_PACKAGES,
     license='GPLv2',
+    description='Prospector: python static analysis tool',
     keywords='pylint pyflakes pep8 mccabe prospector code analysis',
-    classifiers=_CLASSIFIERS
+    classifiers=_CLASSIFIERS,
+    package_data=_PACKAGE_DATA,
+    packages=_PACKAGES,
+    entry_points={
+        'console_scripts': [
+            'prospector = prospector.run:main',
+        ],
+    },
+    install_requires=_INSTALL_REQUIRES,
 )

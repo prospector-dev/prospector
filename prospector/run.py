@@ -190,8 +190,5 @@ def main():
     sys.exit(len(messages))
 
 
-def run():
-    main()
-
 if __name__ == '__main__':
     main()
