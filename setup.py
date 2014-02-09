@@ -13,7 +13,7 @@ _INSTALL_REQUIRES = [
     'pylint-plugin-utils>=0.1.1',
     'pylint-common>=0.1',
     'requirements-detector>=0.1.2',
-    'argparse',
+    'setoptconfig',
     'dodgy>=0.1.5',
     'pyyaml',
     'mccabe>=0.2.1',
