@@ -52,6 +52,13 @@ class ProfileAdaptor(AdaptorBase):
             tool.ignore_codes + tuple(disabled)
         ))
 
+    def adapt_frosted(self, tool):
+        disabled = self.profile.get_disabled_messages('frosted')
+
+        tool.ignore_codes = tuple(set(
+            tool.ignore_codes + tuple(disabled)
+        ))
+
     def adapt_pep8(self, style_guide, use_config=True):
         if not use_config:
             return

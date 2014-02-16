@@ -1,37 +1,18 @@
 from __future__ import absolute_import
 
-from pyflakes.api import iterSourceCode, checkPath
-from pyflakes.reporter import Reporter
+from frosted.api import iter_source_code, check_path
 
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
 
 __all__ = (
-    'PyFlakesTool',
+    'FrostedTool',
 )
 
 
-_MESSAGE_CODES = {
-    'UnusedImport': 'FL0001',
-    'RedefinedWhileUnused': 'FL0002',
-    'RedefinedInListComp': 'FL0003',
-    'ImportShadowedByLoopVar': 'FL0004',
-    'ImportStarUsed': 'FL0005',
-    'UndefinedName': 'FL0006',
-    'DoctestSyntaxError': 'FL0007',
-    'UndefinedExport': 'FL0008',
-    'UndefinedLocal': 'FL0009',
-    'DuplicateArgument': 'FL0010',
-    'Redefined': 'FL0011',
-    'LateFutureImport': 'FL0012',
-    'UnusedVariable': 'FL0013',
-}
-
-
-class ProspectorReporter(Reporter):
+class ProspectorReporter(object):
     def __init__(self, ignore=None):
-        super(ProspectorReporter, self).__init__(None, None)
         self._messages = []
         self.ignore = ignore or ()
 
@@ -44,7 +25,6 @@ class ProspectorReporter(Reporter):
             code=None,
             message=None):
 
-        code = code or 'FL0000'
         if code in self.ignore:
             return
 
@@ -56,48 +36,38 @@ class ProspectorReporter(Reporter):
             character=character,
         )
         message = Message(
-            source='pyflakes',
+            source='frosted',
             code=code,
             location=location,
             message=message,
         )
         self._messages.append(message)
 
-    def unexpectedError(self, filename, msg):
+    def unexpected_error(self, filename, msg):
         self.record_message(
             filename=filename,
-            code='FL9997',
-            message=msg,
-        )
-
-    # pylint: disable=R0913
-    def syntaxError(self, filename, msg, lineno, offset, text):
-        self.record_message(
-            filename=filename,
-            line=lineno,
-            character=offset,
-            code='FL9998',
+            code='U999',
             message=msg,
         )
 
     def flake(self, message):
-        code = _MESSAGE_CODES.get(message.__class__.__name__, 'FL9999')
+        filename, _, msg = message.message.split(':', 2)
 
         self.record_message(
-            filename=message.filename,
+            filename=filename,
             line=message.lineno,
             character=(message.col + 1),
-            code=code,
-            message=message.message % message.message_args,
+            code=message.type.error_code,
+            message=msg,
         )
 
     def get_messages(self):
         return self._messages
 
 
-class PyFlakesTool(ToolBase):
+class FrostedTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(PyFlakesTool, self).__init__(*args, **kwargs)
+        super(FrostedTool, self).__init__(*args, **kwargs)
         self.ignore_codes = ()
         self._paths = []
         self._ignores = []
@@ -107,16 +77,15 @@ class PyFlakesTool(ToolBase):
         self._ignores = ignore
 
         for adaptor in adaptors:
-            adaptor.adapt_pyflakes(self)
+            adaptor.adapt_frosted(self)
 
     def run(self):
         reporter = ProspectorReporter(ignore=self.ignore_codes)
 
-        for filepath in iterSourceCode(self._paths):
+        for filepath in iter_source_code(self._paths):
             if any([ip.search(filepath) for ip in self._ignores]):
                 continue
 
-            print filepath
-            checkPath(filepath, reporter)
+            check_path(filepath, reporter)
 
         return reporter.get_messages()

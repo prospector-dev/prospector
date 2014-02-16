@@ -17,9 +17,10 @@ _INSTALL_REQUIRES = [
     'dodgy>=0.1.5',
     'pyyaml',
     'mccabe>=0.2.1',
-    'pyflakes>=0.7.3',
+    'pyflakes>0.7.3',
     'pep8>=1.4.2',
     'pep8-naming>=0.2.1',
+    'frosted',
 ]
 
 _PACKAGE_DATA = {
@@ -62,6 +63,6 @@ setup(
     version=__pkginfo__.get_version(),
     packages=_PACKAGES,
     license='GPLv2',
-    keywords='pylint pyflakes pep8 mccabe prospector code analysis',
+    keywords='pylint pyflakes pep8 mccabe frosted prospector code analysis',
     classifiers=_CLASSIFIERS
 )
