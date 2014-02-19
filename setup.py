@@ -63,7 +63,6 @@ setup(
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,
     include_package_data=True,
-    scripts=['bin/prospector'],
     packages=_PACKAGES,
     entry_points={
         'console_scripts': [
