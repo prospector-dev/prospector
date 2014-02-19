@@ -1,0 +1,106 @@
+# 'combinations' is a list of lists of codes to merge together. The earlier
+# codes will take priority, so if all are found, only the first one will be
+# left after blending.
+#
+# Note that since not all tools will necessarily be run, the first message for
+# a line as sorted by the code list will be the one remaining after blending.
+
+combinations:
+    -   # Unused Import
+        - pylint: W0611
+        - pyflakes: FL0001
+
+    -   # Syntax Error
+        - dodgy: diff
+        - pylint: E0001
+        - pyflakes: FL9998
+        - pep8: E901
+        - mccabe: MC0000
+
+    -   # Undefined local variable
+        - pylint: E0602
+        - pyflakes: FL0006
+
+    -   # Unused variable
+        - pylint: W0612
+        - pyflakes: FL0013
+
+    -   # Mixed tabs and spaces
+        - pep8: E101
+        - pylint: W0313
+
+    -   # Import from __future__ not first import
+        - pylint: W0410
+        - pyflakes: FL0012
+
+    -   # Line too long
+        - pep8: E501
+        - pylint: C0301
+
+    -   # Trailing whitespace
+        - pep8: W291
+        - pylint: C0303
+
+    -   # No newline at end of file
+        - pep8: W292
+        - pylint: C0304
+
+    -   # line ends with semi-colon
+        - pep8: E703
+        - pylint: W0301
+
+    -   # multiple statements on one line (colon)
+        - pep8: E701
+        - pylint: C0321
+
+    -   # multiple statements on one line (semicolon)
+        - pep8: E702
+        - pylint: C0321
+
+    -   # incorrect indendation
+        - pep8: E111
+        - pylint: W0311
+
+    -   # comma not followed by a space
+        - pep8: E231
+        - pylint: C0324
+
+    -   # missing whitespace around operator
+        - pep8: E225
+        - pylint: C0322
+
+    -   # missing whitespace around operator
+        - pep8: E225
+        - pylint: C0323
+
+    -   # undefined name in __all__
+        - pylint: E0603
+        - pyflakes: FL0008
+
+    -   # duplicate argument in function definition
+        - pylint: E0108
+        - pyflakes: FL0010
+
+    -   # redefinition of unused function
+        - pyflakes: FL0002
+        - pylint: E0102
+
+    -   # first argument of a classmethod should be named 'cls'
+        - pep8: N804
+        - pylint: C0202
+
+    -   # '<>' is deprecated, use '!='
+        - pep8: W603
+        - pylint: W0331
+
+    -   # backticks are deprecated, use 'repr()'
+        - pep8: W604
+        - pylint: W0333
+
+    -   # Redefining name from outer scope
+        - pylint: W0621
+        - pyflakes: FL0011
+
+    -   # Wildcard import
+        - pylint: W0401
+        - pyflakes: FL0005

@@ -24,6 +24,7 @@ _INSTALL_REQUIRES = [
 
 _PACKAGE_DATA = {
     'prospector': [
+        'blender_combinations.yaml',
         'profiles/profiles/full_pep8.yaml',
         'profiles/profiles/no_doc_warnings.yaml',
         'profiles/profiles/no_pep8.yaml',
@@ -61,6 +62,8 @@ setup(
     keywords='pylint pyflakes pep8 mccabe prospector code analysis',
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,
+    include_package_data=True,
+    scripts=['bin/prospector'],
     packages=_PACKAGES,
     entry_points={
         'console_scripts': [
