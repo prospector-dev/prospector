@@ -1,170 +1,194 @@
-import sys
-import os
+import os.path
 import re
+import sys
+
 from datetime import datetime
+
+from prospector import config as cfg, tools, blender
 from prospector.adaptor import LIBRARY_ADAPTORS
 from prospector.adaptor.common import CommonAdaptor
 from prospector.adaptor.profile import ProfileAdaptor
-from prospector.args import make_arg_parser
 from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
-from prospector import tools, blender, __pkginfo__
 from prospector.message import Location, Message
 
 
-def _die(message):
-    sys.stderr.write('%s\n' % message)
-    sys.exit(1)
+__all__ = (
+    'Prospector',
+    'main',
+)
 
 
-def run():
-    parser = make_arg_parser()
-    args = parser.parse_args()
+class Prospector(object):
+    def __init__(self, config, path):
+        self.config = config
+        self.path = path
+        self.adaptors = []
+        self.libraries = []
+        self.profiles = []
+        self.profile_adaptor = None
+        self.tool_runners = []
+        self.ignores = []
 
-    if args.version:
-        sys.stdout.write("Prospector version %s\n" % __pkginfo__.get_version())
-        sys.exit(0)
+        self._determine_adapters()
+        self._determine_profiles()
+        self._determine_tool_runners()
+        self._determine_ignores()
 
-    summary = {
-        'started': datetime.now()
-    }
+    def _determine_adapters(self):
+        # Bring in the common adaptor
+        if self.config.common_plugin:
+            self.adaptors.append(CommonAdaptor())
 
-    path = args.path or args.checkpath or os.path.abspath(os.getcwd())
+        # Bring in adaptors that we automatically detect are needed
+        if self.config.autodetect:
+            for name, adaptor in autodetect_libraries(self.path):
+                self.libraries.append(name)
+                self.adaptors.append(adaptor)
 
-    try:
-        formatter = FORMATTERS[args.output_format]
-        summary['formatter'] = args.output_format
-    except KeyError:
-        _die("Formatter %s is not valid - possible values are %s" % (
-            args.output_format,
-            ', '.join(FORMATTERS.keys()),
-        ))
+        # Bring in adaptors for the specified libraries
+        for name in self.config.uses:
+            if name not in self.libraries:
+                self.libraries.append(name)
+                self.adaptors.append(LIBRARY_ADAPTORS[name]())
 
-    libraries_used = []
-    profiles = []
-    adaptors = []
+    def _determine_profiles(self):
+        # Use the strictness profile
+        if self.config.strictness:
+            self.profiles.append('strictness_%s' % self.config.strictness)
 
-    if not args.no_common_plugin:
-        adaptors.append(CommonAdaptor())
-    if not args.no_autodetect:
-        for libname, adaptor in autodetect_libraries(path):
-            libraries_used.append(libname)
-            adaptors.append(adaptor)
+        # Use other specialty profiles based on options
+        if not self.config.doc_warnings:
+            self.profiles.append('no_doc_warnings')
+        if not self.config.test_warnings:
+            self.profiles.append('no_test_warnings')
+        if not self.config.style_warnings:
+            self.profiles.append('no_pep8')
+        if self.config.full_pep8:
+            self.profiles.append('full_pep8')
 
-    strictness = args.strictness
-    strictness_options = ('veryhigh', 'high', 'medium', 'low', 'verylow')
-    if strictness not in strictness_options:
-        possible = ', '.join(strictness_options)
-        _die(
-            "%s is not a valid value for strictness - possible values are %s" %
-            (strictness, possible)
-        )
-    else:
-        profiles.append('strictness_%s' % strictness)
-        summary['strictness'] = strictness
+        # Use the specified profiles
+        self.profiles += self.config.profiles
 
-    for library in args.uses:
-        if library not in LIBRARY_ADAPTORS:
-            possible = ', '.join(LIBRARY_ADAPTORS.keys())
-            _die(
-                "Library/framework %s is not valid - possible values are %s" %
-                (library, possible)
-            )
-        libraries_used.append(library)
-        adaptors.append(LIBRARY_ADAPTORS[library]())
+        self.profile_adaptor = ProfileAdaptor(self.profiles)
+        self.adaptors.append(self.profile_adaptor)
 
-    summary['libraries'] = ', '.join(libraries_used)
+    def _determine_tool_runners(self):
+        for tool in self.config.tools:
+            if self.profile_adaptor.is_tool_enabled(tool):
+                self.tool_runners.append(tools.TOOLS[tool]())
 
-    if not args.doc_warnings:
-        profiles.append('no_doc_warnings')
+    def _determine_ignores(self):
+        # Grab ignore patterns from the profile adapter
+        ignores = [
+            re.compile(ignore)
+            for ignore in self.profile_adaptor.profile.ignore
+        ]
 
-    if not args.test_warnings:
-        profiles.append('no_test_warnings')
+        # Grab ignore patterns from the options
+        ignores += [
+            re.compile(patt)
+            for patt in self.config.ignore_patterns
+        ]
 
-    if args.no_style_warnings:
-        profiles.append('no_pep8')
-
-    if args.full_pep8:
-        profiles.append('full_pep8')
-
-    profiles += args.profiles
-
-    profile_adaptor = ProfileAdaptor(profiles)
-    adaptors.append(profile_adaptor)
-
-    summary['adaptors'] = []
-    for adaptor in adaptors:
-        summary['adaptors'].append(adaptor.name)
-    summary['adaptors'] = ', '.join(summary['adaptors'])
-
-    tool_runners = []
-    tool_names = args.tools or tools.DEFAULT_TOOLS
-    for tool in tool_names:
-        if not tool in tools.TOOLS:
-            _die("Tool %s is not valid - possible values are %s" % (
-                tool,
-                ', '.join(tools.TOOLS.keys())
-            ))
-        if not profile_adaptor.is_tool_enabled(tool):
-            continue
-        tool_runners.append(tools.TOOLS[tool]())
-
-    summary['tools'] = ', '.join(tool_names)
-
-    ignore = [re.compile(ignore) for ignore in profile_adaptor.profile.ignore]
-    if args.ignore_patterns is not None:
-        ignore += [re.compile(patt) for patt in args.ignore_patterns]
-    if args.ignore_paths is not None:
+        # Grab ignore paths from the options
         boundary = r"(^|/|\\)%s(/|\\|$)"
-        ignore += [re.compile(boundary % re.escape(ignore_path)) for ignore_path in args.ignore_paths]
+        ignores += [
+            re.compile(boundary % re.escape(ignore_path))
+            for ignore_path in self.config.ignore_paths
+        ]
 
-    for tool in tool_runners:
-        tool.prepare(path, ignore, args, adaptors)
+        self.ignores = ignores
 
-    messages = []
-    for tool in tool_runners:
-        try:
-            messages += tool.run()
-        except Exception:
-            if args.die_on_tool_error:
-                raise
-            loc = Location(path, None, None, None, None)
-            for name, cls in tools.TOOLS.items():
-                if cls == tool.__class__:
-                    toolname = name
-                    break
+    def process_messages(self, messages):
+        for message in messages:
+            if self.config.absolute_paths:
+                message.to_absolute_path(self.path)
             else:
-                toolname = 'Unknown'
-            message = "Tool %s failed to run (exception was raised)" % toolname
-            msg = Message(toolname, 'failure', loc, message=message)
-            messages.append(msg)
+                message.to_relative_path(self.path)
+        if self.config.blending:
+            messages = blender.blend(messages)
 
-    for message in messages:
-        if args.absolute_paths:
-            message.to_absolute_path(path)
-        else:
-            message.to_relative_path(path)
+        return messages
 
-    if not args.no_blending:
-        messages = blender.blend(messages)
+    def execute(self):
+        summary = {
+            'started': datetime.now(),
+            'libraries': self.libraries,
+            'strictness': self.config.strictness,
+            'profiles': self.profiles,
+            'adaptors': [adaptor.name for adaptor in self.adaptors],
+            'tools': self.config.tools,
+        }
 
-    summary['message_count'] = len(messages)
-    summary['completed'] = datetime.now()
-    delta = (summary['completed'] - summary['started'])
-    summary['time_taken'] = '%0.2f' % delta.total_seconds()
+        # Prep the tools.
+        for tool in self.tool_runners:
+            tool.prepare(self.path, self.ignores, self.config, self.adaptors)
 
-    summary['started'] = str(summary['started'])
-    summary['completed'] = str(summary['completed'])
+        # Run the tools
+        messages = []
+        for tool in self.tool_runners:
+            try:
+                messages += tool.run()
+            except Exception:  # pylint: disable=W0703
+                if self.config.die_on_tool_error:
+                    raise
+                else:
+                    for name, cls in tools.TOOLS.items():
+                        if cls == tool.__class__:
+                            toolname = name
+                            break
+                    else:
+                        toolname = 'Unknown'
 
-    if args.messages_only:
-        summary = None
-    if args.summary_only:
-        messages = None
+                    loc = Location(self.path, None, None, None, None)
+                    msg = 'Tool %s failed to run (exception was raised)' % (
+                        toolname,
+                    )
+                    message = Message(
+                        toolname,
+                        'failure',
+                        loc,
+                        message=msg,
+                    )
+                    messages.append(message)
 
-    formatter(summary, messages)
+        messages = self.process_messages(messages)
 
-    sys.exit(0)
+        summary['message_count'] = len(messages)
+        summary['completed'] = datetime.now()
+        delta = (summary['completed'] - summary['started'])
+        summary['time_taken'] = '%0.2f' % delta.total_seconds()
+
+        return summary, messages
+
+
+def main():
+    # Get our confiugration
+    mgr = cfg.build_manager()
+    config = mgr.retrieve(*cfg.build_default_sources())
+
+    # Figure out what paths we're prospecting
+    paths = mgr.arguments['path']
+    if not paths:
+        paths = [os.getcwd()]
+
+    # Make it so
+    prospector = Prospector(config, paths[0])
+    summary, messages = prospector.execute()
+
+    # Get the output formatter
+    summary['formatter'] = config.output_format
+    formatter = FORMATTERS[config.output_format]
+
+    # Produce the output
+    formatter(
+        summary if not config.messages_only else None,
+        messages if not config.summary_only else None,
+    )
+
+    sys.exit(len(messages))
 
 
 if __name__ == '__main__':
-    run()
+    main()
