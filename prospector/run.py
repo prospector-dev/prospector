@@ -169,8 +169,11 @@ def main():
     config = mgr.retrieve(*cfg.build_default_sources())
 
     # Figure out what paths we're prospecting
-    paths = mgr.arguments['path']
-    if not paths:
+    if config['path']:
+        paths = [config['path']]
+    elif mgr.arguments['checkpath']:
+        paths = mgr.arguments['checkpath']
+    else:
         paths = [os.getcwd()]
 
     # Make it so

@@ -51,6 +51,8 @@ def build_manager():
         default='only',
     ))
 
+    manager.add(soc.StringSetting('path', default=None))
+
     manager.add(soc.ListSetting('ignore_patterns', soc.String, default=[]))
     manager.add(soc.ListSetting('ignore_paths', soc.String, default=[]))
 
@@ -192,12 +194,20 @@ def build_command_line_source():
                     ' exception the tool generated. Mostly useful for'
                     ' development on prospector.',
         },
+        'path': {
+            'flags': ['-p', '--path'],
+            'help': 'The path to a Python project to inspect. Defaults to PWD'
+                    ' if not specified. Note: This command line argument is'
+                    ' deprecated and will be removed in a future update. Please'
+                    ' use the positional PATH argument instead.'
+        }
     }
 
     positional = (
-        ('path', {
+        ('checkpath', {
             'help': 'The path to a Python project to inspect. Defaults to PWD'
                     '  if not specified.',
+            'metavar': 'PATH',
             'nargs': '*',
         }),
     )
