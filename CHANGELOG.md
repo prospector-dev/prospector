@@ -1,6 +1,11 @@
 Prospector Changelog
 =======
 
+Version 0.6
+---
+
+* All command line arguments can now be specified in a `tox.ini` and `setup.cfg`
+
 Version 0.5
 ---
 
