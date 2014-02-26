@@ -81,7 +81,7 @@ def parse_profile(name, contents):
     if name.endswith('.yaml'):
         # this was a full path
         name = os.path.splitext(os.path.basename(name))[0]
-    data = yaml.load(contents)
+    data = yaml.safe_load(contents)
     if data is None:
         # this happens if a completely empty YAML file is passed in to
         # parse_profile, for example
