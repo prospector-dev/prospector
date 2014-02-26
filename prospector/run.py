@@ -98,6 +98,11 @@ class Prospector(object):
             for ignore_path in self.config.ignore_paths
         ]
 
+        # Add any specified by the other adaptors
+        for adaptor in self.adaptors:
+            if hasattr(adaptor.__class__, 'ignore_patterns'):
+                ignores += [re.compile(p) for p in adaptor.ignore_patterns]
+
         self.ignores = ignores
 
     def process_messages(self, messages):
@@ -164,7 +169,7 @@ class Prospector(object):
 
 
 def main():
-    # Get our confiugration
+    # Get our configuration
     mgr = cfg.build_manager()
     config = mgr.retrieve(*cfg.build_default_sources())
 
