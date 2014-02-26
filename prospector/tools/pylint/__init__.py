@@ -63,7 +63,7 @@ class PylintTool(ToolBase):
         self._orig_sys_path = []
 
     def prepare(self, rootpath, ignore, args, adaptors):
-        linter = ProspectorLinter(ignore)
+        linter = ProspectorLinter(ignore, rootpath)
         linter.load_default_plugins()
 
         extra_sys_path, check_paths = _find_package_paths(ignore, rootpath)
