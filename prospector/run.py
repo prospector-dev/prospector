@@ -195,8 +195,6 @@ def main():
         messages if not config.summary_only else None,
     )
 
-    sys.exit(len(messages))
-
 
 if __name__ == '__main__':
     main()
