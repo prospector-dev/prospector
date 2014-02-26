@@ -1,1 +1,2 @@
 strictness: veryhigh
+max-line-length: 120
