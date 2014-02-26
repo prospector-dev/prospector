@@ -6,10 +6,12 @@ Prospector Changelog
 ##### New Features
 
 * All command line arguments can now also be specified in a `tox.ini` and `setup.cfg` (thanks to [Jason Simeone](https://github.com/jayclassless))
+* `--max-line-length` option can be used to override the maximum line length specified by the chosen strictness
 
 ##### Bug Fixes
 
 * [#17](https://github.com/landscapeio/prospector/issues/17) Prospector generates messages if in a path containing a directory beginning with a `.` - ignore patterns were previously incorrectly being applied to the absolute path rather than the relative path.
+* [#12](https://github.com/landscapeio/prospector/issues/12) Library support for Django now extends to all tools rather than just pylint
 
 ## Version 0.5
  
