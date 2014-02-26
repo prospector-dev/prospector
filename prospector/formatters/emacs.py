@@ -12,7 +12,7 @@ Messages Found: %(message_count)d
 """
 
 
-_MESSAGE_TEMPLATE = """%(path)s:%(line)s:
+_MESSAGE_TEMPLATE = """%(path)s:%(line)s :
     L%(line)s:%(character)s %(function)s: %(source)s - %(code)s
     %(message)s
 """
