@@ -24,6 +24,7 @@ def build_manager():
     manager.add(soc.BooleanSetting('test_warnings', default=False))
     manager.add(soc.BooleanSetting('style_warnings', default=True))
     manager.add(soc.BooleanSetting('full_pep8', default=False))
+    manager.add(soc.IntegerSetting('max_line_length', default=None))
 
     manager.add(soc.BooleanSetting('messages_only', default=False))
     manager.add(soc.BooleanSetting('summary_only', default=False))
@@ -121,6 +122,12 @@ def build_command_line_source():
             'flags': ['-F', '--full-pep8'],
             'help': 'Enables every PEP8 warning, so that all PEP8 style'
                     ' violations will be reported.',
+        },
+        'max_line_length': {
+            'flags': ['--max-line-length'],
+            'help': 'The maximum line length allowed. This will be set by the strictness if no'
+                    ' value is explicitly specified'
+
         },
         'messages_only': {
             'flags': ['-M', '--messages-only'],

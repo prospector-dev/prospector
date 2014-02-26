@@ -59,8 +59,9 @@ class ProspectorReport(BaseReport):
 
 
 class ProspectorStyleGuide(StyleGuide):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, rootpath, *args, **kwargs):
         # Remember the ignore patterns for later.
+        self._rootpath = rootpath
         self._ignore_patterns = kwargs.pop('ignore_patterns', [])
 
         # Override the default reporter with our custom one.
@@ -75,7 +76,8 @@ class ProspectorStyleGuide(StyleGuide):
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
         fullpath = os.path.join(parent, filename) if parent else filename
-        if any([ip.search(fullpath) for ip in self._ignore_patterns]):
+        relpath = os.path.relpath(fullpath, self._rootpath)
+        if any([ip.search(relpath) for ip in self._ignore_patterns]):
             return True
 
         return False
@@ -122,6 +124,7 @@ class Pep8Tool(ToolBase):
 
         # Instantiate our custom pep8 checker.
         self.checker = ProspectorStyleGuide(
+            rootpath=rootpath,
             paths=[rootpath],
             ignore_patterns=ignore,
             config_file=external_config
@@ -136,6 +139,11 @@ class Pep8Tool(ToolBase):
         # Let the adaptors & profiles do their thing.
         for adaptor in adaptors:
             adaptor.adapt_pep8(self.checker, use_config=use_config)
+
+        # if we have a command line --max-line-length argument, that
+        # overrules everything
+        if args.max_line_length is not None:
+            self.checker.options.max_line_length = args.max_line_length
 
     def run(self):
         report = self.checker.check_files()

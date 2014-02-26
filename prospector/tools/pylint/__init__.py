@@ -105,6 +105,14 @@ class PylintTool(ToolBase):
         self._collector = Collector()
         linter.set_reporter(self._collector)
 
+        for checker in linter.get_checkers():
+            if not hasattr(checker, 'options'):
+                continue
+            for option in checker.options:
+                if args.max_line_length is not None:
+                    if option[0] == 'max-line-length':
+                        checker.set_option('max-line-length', args.max_line_length)
+
         self._linter = linter
 
     def _combine_w0614(self, messages):
