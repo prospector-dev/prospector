@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import os
 
 from pyflakes.api import iterSourceCode, checkPath
 from pyflakes.reporter import Reporter
@@ -104,6 +105,7 @@ class PyFlakesTool(ToolBase):
 
     def prepare(self, rootpath, ignore, args, adaptors):
         self._paths = [rootpath]
+        self._rootpath = rootpath
         self._ignores = ignore
 
         for adaptor in adaptors:
@@ -113,7 +115,8 @@ class PyFlakesTool(ToolBase):
         reporter = ProspectorReporter(ignore=self.ignore_codes)
 
         for filepath in iterSourceCode(self._paths):
-            if any([ip.search(filepath) for ip in self._ignores]):
+            relpath = os.path.relpath(filepath, self._rootpath)
+            if any([ip.search(relpath) for ip in self._ignores]):
                 continue
 
             checkPath(filepath, reporter)
