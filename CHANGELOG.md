@@ -1,7 +1,7 @@
 Prospector Changelog
 =======
 
-## Version 0.6
+## Version 0.5.1
 
 ##### New Features
 
@@ -12,6 +12,7 @@ Prospector Changelog
 
 * [#17](https://github.com/landscapeio/prospector/issues/17) Prospector generates messages if in a path containing a directory beginning with a `.` - ignore patterns were previously incorrectly being applied to the absolute path rather than the relative path.
 * [#12](https://github.com/landscapeio/prospector/issues/12) Library support for Django now extends to all tools rather than just pylint
+* Some additional bugs related to ignore paths were squashed.
 
 ## Version 0.5
  
