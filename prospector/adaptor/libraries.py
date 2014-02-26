@@ -4,7 +4,7 @@ from prospector.adaptor.base import AdaptorBase
 class DjangoAdaptor(AdaptorBase):
     name = 'django'
     ignore_patterns = (
-        '(^|/)migrations(/|$)'
+        '(^|/)migrations(/|$)',
     )
 
     def adapt_pylint(self, linter):
