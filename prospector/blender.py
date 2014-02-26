@@ -91,10 +91,10 @@ def get_default_blend_combinations():
 
     defaults = []
     for combo in combos:
-        blend = []
+        toblend = []
         for msg in combo:
-            blend += msg.items()
-        defaults.append(tuple(blend))
+            toblend += msg.items()
+        defaults.append(tuple(toblend))
 
     return tuple(defaults)
 
