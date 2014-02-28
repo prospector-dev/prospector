@@ -63,7 +63,7 @@ class PylintTool(ToolBase):
         self._orig_sys_path = []
 
     def prepare(self, rootpath, ignore, args, adaptors):
-        linter = ProspectorLinter(ignore)
+        linter = ProspectorLinter(ignore, rootpath)
         linter.load_default_plugins()
 
         extra_sys_path, check_paths = _find_package_paths(ignore, rootpath)
@@ -104,6 +104,14 @@ class PylintTool(ToolBase):
         # given by PyLint
         self._collector = Collector()
         linter.set_reporter(self._collector)
+
+        for checker in linter.get_checkers():
+            if not hasattr(checker, 'options'):
+                continue
+            for option in checker.options:
+                if args.max_line_length is not None:
+                    if option[0] == 'max-line-length':
+                        checker.set_option('max-line-length', args.max_line_length)
 
         self._linter = linter
 
