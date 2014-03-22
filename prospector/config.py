@@ -67,9 +67,15 @@ def build_default_sources():
 
     sources.append(build_command_line_source())
     sources.append(soc.EnvironmentVariableSource())
-    sources.append(soc.ConfigFileSource(
-        ('.prospectorrc', 'setup.cfg', 'tox.ini'),
-    ))
+    sources.append(soc.ConfigFileSource((
+        '.prospectorrc',
+        'setup.cfg',
+        'tox.ini',
+    )))
+    sources.append(soc.ConfigFileSource((
+        soc.ConfigDirectory('.prospectorrc'),
+        soc.HomeDirectory('.prospectorrc'),
+    )))
 
     return sources
 
