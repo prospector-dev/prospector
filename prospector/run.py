@@ -190,10 +190,10 @@ def main():
     formatter = FORMATTERS[config.output_format](summary, messages)
 
     # Produce the output
-    print formatter.render(
+    sys.stdout.write(formatter.render(
         summary=not config.messages_only,
         messages=not config.summary_only,
-    )
+    ))
 
 
 if __name__ == '__main__':
