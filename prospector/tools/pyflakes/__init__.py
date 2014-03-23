@@ -119,7 +119,6 @@ class PyFlakesTool(ToolBase):
             if any([ip.search(relpath) for ip in self._ignores]):
                 continue
 
-            print filepath
             checkPath(filepath, reporter)
 
         return reporter.get_messages()

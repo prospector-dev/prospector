@@ -17,10 +17,10 @@ _INSTALL_REQUIRES = [
     'dodgy>=0.1.5',
     'pyyaml',
     'mccabe>=0.2.1',
-    'pyflakes>0.7.3',
+    'pyflakes>=0.8',
     'pep8>=1.4.2',
     'pep8-naming>=0.2.1',
-    'frosted',
+    'frosted>=1.4.0',
 ]
 
 _PACKAGE_DATA = {
