@@ -1,8 +1,15 @@
-from prospector.formatters import json, text, grouped, emacs
+from prospector.formatters import json, text, grouped, emacs, yaml
+
+
+__all__ = (
+    'FORMATTERS',
+)
+
 
 FORMATTERS = {
-    'json': json.format_messages,
-    'text': text.format_messages,
-    'grouped': grouped.format_messages,
-    'emacs': emacs.format_messages
+    'json': json.JsonFormatter,
+    'text': text.TextFormatter,
+    'grouped': grouped.GroupedFormatter,
+    'emacs': emacs.EmacsFormatter,
+    'yaml': yaml.YamlFormatter,
 }

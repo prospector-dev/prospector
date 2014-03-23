@@ -187,12 +187,12 @@ def main():
 
     # Get the output formatter
     summary['formatter'] = config.output_format
-    formatter = FORMATTERS[config.output_format]
+    formatter = FORMATTERS[config.output_format](summary, messages)
 
     # Produce the output
-    formatter(
-        summary if not config.messages_only else None,
-        messages if not config.summary_only else None,
+    print formatter.render(
+        summary=not config.messages_only,
+        messages=not config.summary_only,
     )
 
 
