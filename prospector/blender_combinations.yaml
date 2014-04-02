@@ -9,6 +9,7 @@ combinations:
     -   # Unused Import
         - pylint: W0611
         - pyflakes: FL0001
+        - frosted: E101
 
     -   # Syntax Error
         - dodgy: diff
@@ -16,10 +17,12 @@ combinations:
         - pyflakes: FL9998
         - pep8: E901
         - mccabe: MC0000
+        - frosted: E402
 
     -   # Undefined local variable
         - pylint: E0602
         - pyflakes: FL0006
+        - frosted: E303
 
     -   # Unused variable
         - pylint: W0612
@@ -32,6 +35,7 @@ combinations:
     -   # Import from __future__ not first import
         - pylint: W0410
         - pyflakes: FL0012
+        - frosted: E207
 
     -   # Line too long
         - pep8: E501
@@ -76,10 +80,12 @@ combinations:
     -   # undefined name in __all__
         - pylint: E0603
         - pyflakes: FL0008
+        - frosted: E304
 
     -   # duplicate argument in function definition
         - pylint: E0108
         - pyflakes: FL0010
+        - frosted: E206
 
     -   # redefinition of unused function
         - pyflakes: FL0002
@@ -100,7 +106,54 @@ combinations:
     -   # Redefining name from outer scope
         - pylint: W0621
         - pyflakes: FL0011
+        - frosted: E306
 
     -   # Wildcard import
         - pylint: W0401
         - pyflakes: FL0005
+        - frosted: E103
+
+    -   # Return with argument inside generator
+        - pylint: E0106
+        - frosted: E208
+
+    -   # Too many positional arguments for function call
+        - pylint: E1121
+        - frosted: E203
+
+    -   # Passing unexpected keyword argument
+        - pylint: E1123
+        - frosted: E204
+
+    -   # Missing mandatory keyword argument
+        - pylint: E1125
+        - frosted: E205
+
+    -   # No exception type(s) specified
+        - pylint: W0702
+        - frosted: W101
+
+    -   # redefinition of unused %r from line %r
+        - pyflakes: FL0002
+        - frosted: E301
+
+    -   # list comprehension redefines %r from line %r
+        - pyflakes: FL0003
+        - frosted: E302
+
+    -   # import %r from line %r shadowed by loop variable
+        - pyflakes: FL0004
+        - frosted: E102
+
+    -   # syntax error in doctest
+        - pyflakes: FL0007
+        - frosted: E401
+
+    -   # local variable %r referenced before assignment
+        - pyflakes: FL0009
+        - frosted: E305
+
+    -   # local variable %r is assigned to but never used
+        - pyflakes: FL0013
+        - frosted: E307
+

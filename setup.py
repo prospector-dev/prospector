@@ -13,13 +13,14 @@ _INSTALL_REQUIRES = [
     'pylint-plugin-utils>=0.1.1',
     'pylint-common>=0.1',
     'requirements-detector>=0.1.2',
-    'setoptconf',
+    'setoptconf>=0.2.0',
     'dodgy>=0.1.5',
     'pyyaml',
     'mccabe>=0.2.1',
-    'pyflakes>=0.7.3',
+    'pyflakes>=0.8',
     'pep8>=1.4.2',
     'pep8-naming>=0.2.1',
+    'frosted>=1.4.0',
 ]
 
 _PACKAGE_DATA = {
@@ -59,7 +60,7 @@ setup(
     author_email='code@landscape.io',
     license='GPLv2',
     description='Prospector: python static analysis tool',
-    keywords='pylint pyflakes pep8 mccabe prospector code analysis',
+    keywords='pylint pyflakes pep8 mccabe frosted prospector code analysis',
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,
     include_package_data=True,

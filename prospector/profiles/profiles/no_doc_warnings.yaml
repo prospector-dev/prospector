@@ -6,3 +6,7 @@ pylint:
 pyflakes:
   disable:
     - FL0007
+
+frosted:
+  disable:
+    - E401

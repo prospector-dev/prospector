@@ -92,6 +92,7 @@ Currently, prospector runs the following tools:
 * [pyflakes](https://launchpad.net/pyflakes)
 * [pep8](http://pep8.readthedocs.org/en/latest/) (with [pep8-naming](https://github.com/flintwork/pep8-naming))
 * [dodgy](https://github.com/landscapeio/dodgy)
+* [frosted](https://github.com/timothycrosley/frosted)
 
 
 ## Supported frameworks and libraries

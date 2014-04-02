@@ -6,8 +6,8 @@ class Location(object):
     def __init__(self, path, module, function, line, character, absolute_path=True):
         self.path = path
         self._path_is_absolute = absolute_path
-        self.module = module
-        self.function = function
+        self.module = module or None
+        self.function = function or None
         self.line = None if line == -1 else line
         self.character = None if line == -1 else character
 
