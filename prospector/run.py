@@ -1,6 +1,5 @@
 import os.path
 import re
-import sys
 
 from datetime import datetime
 
