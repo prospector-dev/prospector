@@ -47,6 +47,11 @@ pyflakes:
     - FL0005
     - FL0011
 
+frosted:
+  disable:
+    - E103
+    - E306
+
 pep8:
   disable:
     - E111

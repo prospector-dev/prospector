@@ -40,6 +40,12 @@ pyflakes:
     - FL0001
     - FL0013
 
+frosted:
+  disable:
+    - E101
+    - E307
+    - W101
+
 pep8:
   disable:
     - E501
