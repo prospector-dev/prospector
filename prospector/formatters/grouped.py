@@ -1,43 +1,43 @@
-import sys
-
 from collections import defaultdict
 
-from .text import _SUMMARY_TEMPLATE
+from prospector.formatters.text import TextFormatter
 
 
 __all__ = (
-    'format_messages',
+    'GroupedFormatter',
 )
 
 
-def format_messages(summary, messages):
-    if summary:
-        sys.stdout.write("Check Information\n=================\n")
-        sys.stdout.write(_SUMMARY_TEMPLATE % summary)
-        sys.stdout.write('\n\n')
+class GroupedFormatter(TextFormatter):
+    def render_messages(self):
+        output = [
+            'Messages',
+            '========',
+            '',
+        ]
 
-    if not messages:
-        return
+        # pylint: disable=W0108
+        groups = defaultdict(lambda: defaultdict(list))
 
-    # pylint: disable=W0108
-    groups = defaultdict(lambda: defaultdict(list))
+        for message in self.messages:
+            groups[message.location.path][message.location.line].append(message)
 
-    for message in messages:
-        groups[message.location.path][message.location.line].append(message)
+        for filename in sorted(groups.keys()):
+            output.append(filename)
 
-    sys.stdout.write("Messages\n========\n\n")
-    for filename in sorted(groups.keys()):
-        sys.stdout.write('%s\n' % filename)
+            for line in sorted(groups[filename].keys(), key=lambda x: 0 if x is None else int(x)):
+                output.append('  Line: %s' % line)
 
-        for line in sorted(groups[filename].keys(), key=lambda x: 0 if x is None else int(x)):
-            sys.stdout.write('  Line: %s\n' % line)
+                for message in groups[filename][line]:
+                    output.append(
+                        '    %s: %s / %s%s' % (
+                            message.source,
+                            message.code,
+                            message.message,
+                            (' (col %s)' % message.location.character) if message.location.character else '',
+                        )
+                    )
 
-            for msg in groups[filename][line]:
-                sys.stdout.write(
-                    '    %(source)s: %(code)s / %(message)s' % msg.as_dict(),
-                )
-                if msg.location.character:
-                    sys.stdout.write(' (col %s)' % msg.location.character)
-                sys.stdout.write('\n')
+            output.append('')
 
-        sys.stdout.write('\n')
+        return '\n'.join(output)

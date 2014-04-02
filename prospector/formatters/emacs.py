@@ -1,40 +1,30 @@
-import sys
-
-_SUMMARY_TEMPLATE = """Started: %(started)s
-Finished: %(completed)s
-Time taken: %(time_taken)s seconds
-Formatter: %(formatter)s
-Strictness: %(strictness)s
-Libraries Used: %(libraries)s
-Tools run: %(tools)s
-Adaptors: %(adaptors)s
-Messages Found: %(message_count)d
-"""
+from prospector.formatters.text import TextFormatter
 
 
-_MESSAGE_TEMPLATE = """%(path)s:%(line)s :
-    L%(line)s:%(character)s %(function)s: %(source)s - %(code)s
-    %(message)s
-"""
+__all__ = (
+    'EmacsFormatter',
+)
 
 
-def format_messages(summary, messages):
-    if summary is not None:
-        sys.stdout.write("Check Information\n=================\n")
-        sys.stdout.write(_SUMMARY_TEMPLATE % summary)
-        sys.stdout.write('\n\n')
+class EmacsFormatter(TextFormatter):
+    def render_message(self, message):
+        output = []
 
-    if messages is not None:
-        sys.stdout.write("Messages\n========\n\n")
-        for message in messages:
-            info = {}
-            info.update(message.as_dict())
-            del info['location']
-            info.update(message.location.as_dict())
+        output.append('%s:%s :' % (
+            message.location.path,
+            message.location.line,
+        ))
 
-            if info['line'] is None:
-                info['line'] = '-'
-                info['character'] = '-'
-            line = _MESSAGE_TEMPLATE % info
-            sys.stdout.write(line)
-            sys.stdout.write('\n')
+        output.append(
+            '    L%s:%s %s: %s - %s' % (
+                message.location.line or '-',
+                message.location.character if message.location.line else '-',
+                message.location.function,
+                message.source,
+                message.code,
+            )
+        )
+
+        output.append('    %s' % message.message)
+
+        return '\n'.join(output)
