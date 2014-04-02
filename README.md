@@ -1,8 +1,6 @@
 prospector
 ==========
 
-# Status
-
 [![Latest Version](https://pypip.in/v/prospector/badge.png)](https://pypi.python.org/pypi/prospector)
 [![Downloads](https://pypip.in/d/prospector/badge.png)](https://pypi.python.org/pypi/prospector)
 [![Build Status](https://travis-ci.org/landscapeio/prospector.png?branch=master)](https://travis-ci.org/landscapeio/prospector) 
