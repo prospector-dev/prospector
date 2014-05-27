@@ -1,6 +1,12 @@
 Prospector Changelog
 =======
 
+## Version 0.5.2
+
+##### New Features
+
+* Support for new error messages introduced in recent versions of `pep8` and `pylint` was included.
+
 ## Version 0.5.1
 
 ##### New Features
