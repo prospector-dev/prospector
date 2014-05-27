@@ -68,14 +68,17 @@ combinations:
     -   # comma not followed by a space
         - pep8: E231
         - pylint: C0324
+        - pylint: C0326
 
     -   # missing whitespace around operator
         - pep8: E225
         - pylint: C0322
+        - pylint: C0326
 
     -   # missing whitespace around operator
         - pep8: E225
         - pylint: C0323
+        - pylint: C0326
 
     -   # undefined name in __all__
         - pylint: E0603
