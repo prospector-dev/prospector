@@ -1,6 +1,7 @@
 import os.path
 import sys
 import re
+import sys
 
 from datetime import datetime
 
@@ -194,6 +195,7 @@ def main():
         summary=not config.messages_only,
         messages=not config.summary_only,
     ))
+    sys.stdout.write('\n')
 
 
 if __name__ == '__main__':
