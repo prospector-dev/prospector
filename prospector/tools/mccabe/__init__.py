@@ -19,8 +19,9 @@ def _find_code_files(rootpath, ignores):
 
     for root, _, files in os.walk(rootpath):
         for potential in files:
-            fullpath = os.path.relpath(os.path.join(root, potential), rootpath)
-            if potential.endswith('.py') and not any([ip.search(fullpath) for ip in ignores]):
+            fullpath = os.path.join(root, potential)
+            relpath = os.path.relpath(fullpath, rootpath)
+            if potential.endswith('.py') and not any([ip.search(relpath) for ip in ignores]):
                 code_files.append(fullpath)
 
     return code_files
@@ -77,6 +78,7 @@ class McCabeTool(ToolBase):
                         function=graph.entity,
                         line=graph.lineno,
                         character=0,
+                        absolute_path=True
                     )
                     message = Message(
                         source='mccabe',
