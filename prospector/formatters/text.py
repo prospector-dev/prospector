@@ -93,4 +93,4 @@ class TextFormatter(Formatter):
         output += '\n\n\n'
         if messages:
             output += self.render_messages()
-        return output.strip()
+        return output.strip() + '\n'
