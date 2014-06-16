@@ -7,20 +7,20 @@ from prospector import __pkginfo__
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.1.0',
+    'pylint>=1.2.1',
     'pylint-celery>=0.1',
-    'pylint-django>=0.3',
-    'pylint-plugin-utils>=0.1.1',
+    'pylint-django>=0.4',
+    'pylint-plugin-utils>=0.2',
     'pylint-common>=0.2',
-    'requirements-detector>=0.1.2',
+    'requirements-detector>=0.2.2',
     'setoptconf>=0.2.0',
     'dodgy>=0.1.5',
     'pyyaml',
     'mccabe>=0.2.1',
-    'pyflakes>=0.8',
-    'pep8>=1.4.2',
-    'pep8-naming>=0.2.1',
-    'frosted>=1.4.0',
+    'pyflakes>=0.8.1',
+    'pep8>=1.5.7',
+    'pep8-naming>=0.2.2',
+    'frosted>=1.4.1',
 ]
 
 _PACKAGE_DATA = {
