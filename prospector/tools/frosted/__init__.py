@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import os.path
+
 from frosted.api import iter_source_code, check_path
 
 from prospector.message import Location, Message
@@ -74,6 +76,7 @@ class FrostedTool(ToolBase):
 
     def prepare(self, rootpath, ignore, args, adaptors):
         self._paths = [rootpath]
+        self._rootpath = rootpath
         self._ignores = ignore
 
         for adaptor in adaptors:
@@ -83,7 +86,8 @@ class FrostedTool(ToolBase):
         reporter = ProspectorReporter(ignore=self.ignore_codes)
 
         for filepath in iter_source_code(self._paths):
-            if any([ip.search(filepath) for ip in self._ignores]):
+            relpath = os.path.relpath(filepath, self._rootpath)
+            if any([ip.search(relpath) for ip in self._ignores]):
                 continue
 
             check_path(filepath, reporter)

@@ -11,7 +11,7 @@ _INSTALL_REQUIRES = [
     'pylint-celery>=0.1',
     'pylint-django>=0.3',
     'pylint-plugin-utils>=0.1.1',
-    'pylint-common>=0.1',
+    'pylint-common>=0.2',
     'requirements-detector>=0.1.2',
     'setoptconf>=0.2.0',
     'dodgy>=0.1.5',
@@ -47,6 +47,7 @@ _CLASSIFIERS = (
     'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
     'License :: OSI Approved :: '
     'GNU General Public License v2 or later (GPLv2+)',
 )
