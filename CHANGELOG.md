@@ -1,6 +1,17 @@
 Prospector Changelog
 =======
 
+## Version 0.5.3
+
+##### New Features
+
+* Python 3.4 is now tested for and supported
+
+##### Bug Fixes
+
+* Module-level attributes can now be documented with a string without triggering a "String statement has no effect" warning
+* [#28](https://github.com/landscapeio/prospector/pull/28) Fixed absolute path bug with Frosted tool
+
 ## Version 0.5.2
 
 ##### New Features
