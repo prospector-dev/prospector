@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.5.4
+
+* Fixing a bug in the handling of relative/absolute paths in the McCabe tool
+
 ## Version 0.5.3
 
 ##### New Features
