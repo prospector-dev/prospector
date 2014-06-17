@@ -12,6 +12,20 @@ from prospector.tools.pylint.linter import ProspectorLinter
 _W0614_RE = re.compile(r'^Unused import (.*) from wildcard import$')
 
 
+class DummyStream(object):
+    def __init__(self):
+        self.contents = ''
+
+    def write(self, text):
+        pass
+
+    def close(self):
+        pass
+
+    def flush(self):
+        pass
+
+
 def _find_package_paths(ignore, rootpath):
     sys_path = set()
     check_dirs = []
@@ -151,14 +165,36 @@ class PylintTool(ToolBase):
         """
         combined = self._combine_w0614(messages)
         return sorted(combined)
-
+    
+    def hide_stdout(self):
+        self._streams = [sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__]
+        sys.stdout, sys.stderr = DummyStream(), DummyStream()
+        sys.__stdout__, sys.__stderr__ = DummyStream(), DummyStream()
+        
+    def restore_stdout(self):
+        sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._streams
+        del self._streams
+        
     def run(self):
         # note: Pylint will exit with a status code indicating the health of
         # the code it was checking. Prospector will not mimic this behaviour,
         # as it interferes with scripts which depend on and expect the exit
         # code of the code checker to match whether the check itself was
-        # successful
-        self._linter.check(self._args)
+        # successful.
+
+        # Additionally, pylint has occasional print statements which can be triggered
+        # in exceptional cases. If this happens, then the output formatting of
+        # prospector will be broken (for example, JSON format). Therefore we will
+        # override stdout to neutralise these errant statements.
+        # For an example, see
+        # https://bitbucket.org/logilab/pylint/src/3f8ededd0b1637396937da8fe136f51f2bafb047/checkers/variables.py?at=default#cl-617
+
+        # TODO: it'd be nice in the future to do something with this data in case it's useful!
+        self.hide_stdout()
+        try:
+            self._linter.check(self._args)
+        finally:
+            self.restore_stdout()
         sys.path = self._orig_sys_path
 
         messages = self._collector.get_messages()
