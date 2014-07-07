@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.5.5
+
+* The pylint path handling was slightly incorrect when multiple python modules were in the same directory and importing from each other, but no `__init__.py` package was present. If modules in such a directory imported from each other, pylint would crash, as the modules would not be in the `sys.path`.
+
 ## Version 0.5.4
 
 * Fixing a bug in the handling of relative/absolute paths in the McCabe tool
