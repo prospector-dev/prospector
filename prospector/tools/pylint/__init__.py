@@ -51,6 +51,9 @@ def _find_package_paths(ignore, rootpath):
             if any([m.search(rel_path) for m in ignore]):
                 continue
             check_dirs.append(subdir_fullpath)
+            # it's also necessary to add this directory to the path, in case
+            # any other files in this directory import from it
+            sys_path.add(rootpath)
 
         elif os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
             # this is a package, add it and move on
