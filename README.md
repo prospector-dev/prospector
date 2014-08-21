@@ -71,7 +71,7 @@ prospector --strictness high
 
 Possible values are `verylow`, `low`, `medium`, `high`, `veryhigh`.
 
-Additionally, you can turn off all documentation warnings using the `--no-doc-warnings` flag.
+Prospector does not include documentation warnings by default, but you can turn this on using the `--doc-warnings` flag.
 
 
 # License
