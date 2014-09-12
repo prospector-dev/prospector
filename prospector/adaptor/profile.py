@@ -72,3 +72,10 @@ class ProfileAdaptor(AdaptorBase):
         if 'max-line-length' in self.profile.pep8['options']:
             style_guide.options.max_line_length = \
                 self.profile.pep8['options']['max-line-length']
+
+    def adapt_pep257(self, tool):
+        disabled = self.profile.get_disabled_messages('pep257')
+
+        tool.ignore_codes = tuple(set(
+            tool.ignore_codes + tuple(disabled)
+        ))

@@ -89,6 +89,7 @@ Currently, prospector runs the following tools:
 * [McCabe complexity](https://pypi.python.org/pypi/mccabe)
 * [pyflakes](https://launchpad.net/pyflakes)
 * [pep8](http://pep8.readthedocs.org/en/latest/) (with [pep8-naming](https://github.com/flintwork/pep8-naming))
+* [pep257](https://github.com/GreenSteam/pep257)
 * [dodgy](https://github.com/landscapeio/dodgy)
 * [frosted](https://github.com/timothycrosley/frosted)
 

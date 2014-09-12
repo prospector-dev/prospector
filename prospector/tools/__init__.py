@@ -1,6 +1,7 @@
 from prospector.tools.dodgy import DodgyTool
 from prospector.tools.frosted import FrostedTool
 from prospector.tools.pep8 import Pep8Tool
+from prospector.tools.pep257 import Pep257Tool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 from prospector.tools.mccabe import McCabeTool
@@ -12,6 +13,7 @@ TOOLS = {
     'mccabe': McCabeTool,
     'pyflakes': PyFlakesTool,
     'pep8': Pep8Tool,
+    'pep257': Pep257Tool,
     'pylint': PylintTool,
 }
 
@@ -22,5 +24,6 @@ DEFAULT_TOOLS = (
     'mccabe',
     'pyflakes',
     'pep8',
+    'pep257',
     'pylint',
 )

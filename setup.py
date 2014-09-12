@@ -21,6 +21,7 @@ _INSTALL_REQUIRES = [
     'pep8>=1.5.7',
     'pep8-naming>=0.2.2',
     'frosted>=1.4.1',
+    'pep257>=0.3.2,<0.4',
 ]
 
 _PACKAGE_DATA = {
@@ -61,7 +62,7 @@ setup(
     author_email='code@landscape.io',
     license='GPLv2',
     description='Prospector: python static analysis tool',
-    keywords='pylint pyflakes pep8 mccabe frosted prospector code analysis',
+    keywords='pylint pyflakes pep8 pep257 mccabe frosted prospector static code analysis',
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,
     include_package_data=True,
