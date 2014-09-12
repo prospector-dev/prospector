@@ -94,17 +94,5 @@ class TestProfileParsing(TestCase):
                 'c': 4
             }
         }
-        self.assertEqual(expected, _merge_dict(a, b, dedup_lists=True, dict1_priority=False))
+        self.assertEqual(expected, _merge_dict(a, b))
 
-        expected = {
-            'int': 1,
-            'str': 'fish',
-            'bool': True,
-            'list': [1, 2, 3],
-            'dict': {
-                'a': 1,
-                'b': 2,
-                'c': 4
-            }
-        }
-        self.assertEqual(expected, _merge_dict(a, b, dedup_lists=True, dict1_priority=True))

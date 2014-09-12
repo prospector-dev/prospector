@@ -87,36 +87,41 @@ def parse_profile(name, contents):
         # parse_profile, for example
         data = dict(_EMPTY_DATA)
     else:
-        data = _merge_dict(_EMPTY_DATA, data, dict1_priority=False)
+        data = _merge_dict(_EMPTY_DATA, data)
     return StrictnessProfile(name, data)
 
 
-def _merge_dict(dict1, dict2, dedup_lists=False, dict1_priority=True):
+def _merge_dict(dict1, dict2):
     newdict = {}
     newdict.update(dict1)
 
     for key, value in dict2.items():
         if key not in dict1:
             newdict[key] = value
-        elif value is None and dict1[key] is not None:
-            newdict[key] = dict1[key]
-        elif dict1[key] is None and value is not None:
+
+        elif dict1[key] is None:
             newdict[key] = value
+
+        elif value is None:
+            # Don't blast away existing values with None
+            pass
+
         elif type(value) != type(dict1[key]):
             raise ValueError("Could not merge conflicting types %s and %s" % (
                 type(value),
                 type(dict1[key]),
             ))
+
         elif isinstance(value, dict):
             newdict[key] = _merge_dict(
                 dict1[key],
                 value,
-                dedup_lists,
-                dict1_priority,
             )
+
         elif isinstance(value, (list, tuple)):
             newdict[key] = list(set(dict1[key]) | set(value))
-        elif not dict1_priority:
+
+        else:
             newdict[key] = value
 
     return newdict
