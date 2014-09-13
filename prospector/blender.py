@@ -60,7 +60,15 @@ def blend_line(messages, blend_combos=None):
         )
         blended.append(blend_list[0])
 
-    return blended
+        # Some messages from a tool point out an error that in another tool is handled by two
+        # different errors or more. For example, pylint emits the same warning (C0321) for "two statements on a line"
+        # separated by a colon and a semi-colon, while pep8 has E701 and E702 for those cases respectively. In
+        # this case, the pylint error will not be 'blended' as it will appear in two blend_lists. Therefore we
+        # mark anything not taken from the blend list as "consumed" and then filter later, to avoid such cases.
+        for now_used in blend_list[1:]:
+            now_used.used = True
+
+    return [m for m in blended if not getattr(m, 'used', False)]
 
 
 def blend(messages, blend_combos=None):
