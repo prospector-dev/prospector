@@ -90,6 +90,16 @@ class FrostedTool(ToolBase):
             if any([ip.search(relpath) for ip in self._ignores]):
                 continue
 
-            check_path(filepath, reporter)
+            # Frosted cannot handle non-utf-8 encoded files at the moment -
+            # see https://github.com/timothycrosley/frosted/issues/53
+            # Therefore (since pyflakes overlaps heavily and does not have the same
+            # problem) we will simply suppress that error. If you do get it working
+            # correctly, you only end up with a "CannotDecodeFile" error anyway which
+            # is not useful to the user of prospector, nor is it actually a problem
+            # of the file but rather of frosted.
+            try:
+                check_path(filepath, reporter)
+            except UnicodeDecodeError:
+                pass
 
         return reporter.get_messages()
