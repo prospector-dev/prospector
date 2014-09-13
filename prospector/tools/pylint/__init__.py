@@ -157,9 +157,6 @@ class PylintTool(ToolBase):
 
         return out
 
-    def _combine_(self, messages):
-        pass
-
     def combine(self, messages):
         """
         Some error messages are repeated, causing many errors where only one is strictly necessary. For
