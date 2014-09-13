@@ -36,8 +36,7 @@ def load_profiles(names, basedir=None):
 
 
 def _load_content(name, basedir=None):
-
-    if name.endswith('.yaml'):
+    if name.endswith('.yaml') or name.endswith('.yml'):
         # assume that this is a full path that we can load
         filename = name
     else:
