@@ -136,6 +136,10 @@ combinations:
         - pylint: W0702
         - frosted: W101
 
+    -   # Spaces around keyword/paramater equals
+        - pep8: E251
+        - pylint: C0326
+
     -   # redefinition of unused %r from line %r
         - pyflakes: FL0002
         - frosted: E301
