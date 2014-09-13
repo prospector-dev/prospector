@@ -6,6 +6,7 @@ ignore:
 pylint:
   disable:
     - W0511
+    - C0330 
 
   options:
     max-locals: 15

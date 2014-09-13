@@ -1,7 +1,6 @@
 import os
 import re
 from prospector.formatters.base import Formatter
-from prospector.formatters.text import TextFormatter
 
 
 class PylintFormatter(Formatter):
