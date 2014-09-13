@@ -140,6 +140,10 @@ combinations:
         - pep8: E251
         - pylint: C0326
 
+    -   # Missing space after a comma
+        - pep8: E231
+        - pylint: C0326
+
     -   # redefinition of unused %r from line %r
         - pyflakes: FL0002
         - frosted: E301
