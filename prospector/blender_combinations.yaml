@@ -160,3 +160,6 @@ combinations:
         - pyflakes: FL0013
         - frosted: E307
 
+    -   # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
+        - pylint: C0204
+        - pep8: N804
