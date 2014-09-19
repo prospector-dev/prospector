@@ -27,6 +27,7 @@ combinations:
     -   # Unused variable
         - pylint: W0612
         - pyflakes: FL0013
+        - frosted: E307
 
     -   # Mixed tabs and spaces
         - pep8: E101
@@ -163,10 +164,6 @@ combinations:
     -   # local variable %r referenced before assignment
         - pyflakes: FL0009
         - frosted: E305
-
-    -   # local variable %r is assigned to but never used
-        - pyflakes: FL0013
-        - frosted: E307
 
     -   # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
         - pylint: C0204
