@@ -79,11 +79,41 @@ class PylintTool(ToolBase):
         self._collector = self._linter = None
         self._orig_sys_path = []
 
-    def prepare(self, rootpath, ignore, args, adaptors):
-        linter = ProspectorLinter(ignore, rootpath)
+    def prepare(self, found_files, args, adaptors):
+
+        linter = ProspectorLinter(found_files)
         linter.load_default_plugins()
 
-        extra_sys_path, check_paths = _find_package_paths(ignore, rootpath)
+        extra_sys_path = set()
+        extra_sys_path |= set(found_files.iter_package_paths())
+        for filepath in found_files.iter_module_paths():
+            extra_sys_path.add(os.path.dirname(filepath))
+
+        # create a list of packages, but don't include packages which are
+        # subpackages of others as checks will be duplicated
+        packages = [p.split(os.path.sep) for p in found_files.packages]
+        packages.sort(key=lambda x: len(x))
+        check_paths = set()
+        for package in packages:
+            package_path = os.path.join(*package)
+            if len(package) == 1:
+                check_paths.add(package_path)
+                continue
+            for i in range(1, len(package)):
+                if os.path.join(*package[:-i]) in check_paths:
+                    break
+            else:
+                check_paths.add(package_path)
+
+        for filepath in found_files.modules:
+            package = os.path.dirname(filepath).split(os.path.sep)
+            for i in range(0, len(package)):
+                if os.path.join(*package[:i+1]) in check_paths:
+                    break
+            else:
+                check_paths.add(filepath)
+
+        check_paths = [os.path.abspath(os.path.join(found_files.rootpath, p)) for p in check_paths]
 
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path

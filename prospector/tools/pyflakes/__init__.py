@@ -103,22 +103,15 @@ class PyFlakesTool(ToolBase):
         self._paths = []
         self._ignores = []
 
-    def prepare(self, rootpath, ignore, args, adaptors):
-        self._paths = [rootpath]
-        self._rootpath = rootpath
-        self._ignores = ignore
+    def prepare(self, found_files, args, adaptors):
+        self._files = found_files
 
         for adaptor in adaptors:
             adaptor.adapt_pyflakes(self)
 
     def run(self):
         reporter = ProspectorReporter(ignore=self.ignore_codes)
-
-        for filepath in iterSourceCode(self._paths):
-            relpath = os.path.relpath(filepath, self._rootpath)
-            if any([ip.search(relpath) for ip in self._ignores]):
-                continue
-
+        for filepath in self._files.iter_module_paths():
             checkPath(filepath, reporter)
 
         return reporter.get_messages()

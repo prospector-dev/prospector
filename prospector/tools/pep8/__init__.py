@@ -59,10 +59,8 @@ class ProspectorReport(BaseReport):
 
 
 class ProspectorStyleGuide(StyleGuide):
-    def __init__(self, rootpath, *args, **kwargs):
-        # Remember the ignore patterns for later.
-        self._rootpath = rootpath
-        self._ignore_patterns = kwargs.pop('ignore_patterns', [])
+    def __init__(self, found_files, *args, **kwargs):
+        self._files = found_files
 
         # Override the default reporter with our custom one.
         kwargs['reporter'] = ProspectorReport
@@ -75,12 +73,11 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        fullpath = os.path.join(parent, filename) if parent else filename
-        relpath = os.path.relpath(fullpath, self._rootpath)
-        if any([ip.search(relpath) for ip in self._ignore_patterns]):
-            return True
+        if os.path.isdir(os.path.join(self._files.rootpath, filename)):
+            return False
 
-        return False
+        fullpath = os.path.join(self._files.rootpath, parent, filename) if parent else filename
+        return fullpath not in self._files.iter_module_paths()
 
 
 class Pep8Tool(ToolBase):
@@ -88,14 +85,14 @@ class Pep8Tool(ToolBase):
         super(Pep8Tool, self).__init__(*args, **kwargs)
         self.checker = None
 
-    def prepare(self, rootpath, ignore, args, adaptors):
+    def prepare(self, found_files, args, adaptors):
         # figure out if we should use a pre-existing config file
         # such as setup.cfg or tox.ini
         external_config = None
 
         # 'none' means we ignore any external config, so just carry on
         if args.external_config != 'none':
-            paths = [os.path.join(rootpath, name) for name in PROJECT_CONFIG]
+            paths = [os.path.join(found_files.rootpath, name) for name in PROJECT_CONFIG]
             paths.append(DEFAULT_CONFIG)
 
             for conf_path in paths:
@@ -124,9 +121,8 @@ class Pep8Tool(ToolBase):
 
         # Instantiate our custom pep8 checker.
         self.checker = ProspectorStyleGuide(
-            rootpath=rootpath,
-            paths=[rootpath],
-            ignore_patterns=ignore,
+            paths=list(found_files.iter_package_paths()),
+            found_files=found_files,
             config_file=external_config
         )
 

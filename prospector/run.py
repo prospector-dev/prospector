@@ -11,6 +11,7 @@ from prospector.adaptor.profile import ProfileAdaptor
 from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
+from prospector.finder import find_python
 
 
 __all__ = (
@@ -126,9 +127,13 @@ class Prospector(object):
             'tools': self.config.tools,
         }
 
+        # Find the files and packages in a common way, so that each tool
+        # gets the same list.
+        found_files = find_python(self.ignores, self.path)
+
         # Prep the tools.
         for tool in self.tool_runners:
-            tool.prepare(self.path, self.ignores, self.config, self.adaptors)
+            tool.prepare(found_files, self.config, self.adaptors)
 
         # Run the tools
         messages = []

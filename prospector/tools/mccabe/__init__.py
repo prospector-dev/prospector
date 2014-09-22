@@ -1,8 +1,6 @@
 from __future__ import absolute_import
 
 import ast
-import os.path
-
 from mccabe import PathGraphingAstVisitor
 
 from prospector.message import Location, Message
@@ -14,19 +12,6 @@ __all__ = (
 )
 
 
-def _find_code_files(rootpath, ignores):
-    code_files = []
-
-    for root, _, files in os.walk(rootpath):
-        for potential in files:
-            fullpath = os.path.join(root, potential)
-            relpath = os.path.relpath(fullpath, rootpath)
-            if potential.endswith('.py') and not any([ip.search(relpath) for ip in ignores]):
-                code_files.append(fullpath)
-
-    return code_files
-
-
 class McCabeTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super(McCabeTool, self).__init__(*args, **kwargs)
@@ -34,8 +19,8 @@ class McCabeTool(ToolBase):
         self.ignore_codes = ()
         self.max_complexity = 10
 
-    def prepare(self, rootpath, ignore, args, adaptors):
-        self._code_files = _find_code_files(rootpath, ignore)
+    def prepare(self, found_files, args, adaptors):
+        self._code_files = list(found_files.iter_module_paths())
 
         for adaptor in adaptors:
             adaptor.adapt_mccabe(self)

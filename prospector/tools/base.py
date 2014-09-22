@@ -2,7 +2,7 @@
 
 class ToolBase(object):
 
-    def prepare(self, rootpath, ignore, args, adaptors):
+    def prepare(self, found_files, args, adaptors):
         pass
 
     def run(self):
