@@ -10,7 +10,6 @@ Prospector Changelog
 * [#37](https://github.com/landscapeio/prospector/issues/37) - profiles can now use the extension `.yml` as well as `.yaml`
 * [#34](https://github.com/landscapeio/prospector/issues/34) - south migrations are ignored if in the new south name of `south_migrations` (ie, this is compatible with the post-Django-1.7 world)
 
-
 ## Version 0.5.6 / 0.5.5
 
 * The pylint path handling was slightly incorrect when multiple python modules were in the same directory and importing from each other, but no `__init__.py` package was present. If modules in such a directory imported from each other, pylint would crash, as the modules would not be in the `sys.path`. Note that 0.5.5 was released but this bugfix was not correctly merged before releasing. 0.5.6 contains this bugfix.
