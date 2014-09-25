@@ -29,6 +29,10 @@ class FoundFiles(object):
         for package in self.packages:
             yield(os.path.abspath(os.path.join(self.rootpath, package)))
 
+    def iter_directory_paths(self):
+        for directory in self.directories:
+            yield(os.path.abspath(os.path.join(self.rootpath, directory)))
+
     def iter_module_paths(self):
         for module in self.modules:
             yield(os.path.abspath(os.path.join(self.rootpath, module)))

@@ -84,10 +84,7 @@ class PylintTool(ToolBase):
         linter = ProspectorLinter(found_files)
         linter.load_default_plugins()
 
-        extra_sys_path = set()
-        extra_sys_path |= set(found_files.iter_package_paths())
-        for filepath in found_files.iter_module_paths():
-            extra_sys_path.add(os.path.dirname(filepath))
+        extra_sys_path = set(found_files.iter_directory_paths()) - set(found_files.iter_package_paths())
 
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
