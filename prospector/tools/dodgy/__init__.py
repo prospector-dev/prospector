@@ -25,12 +25,18 @@ class DodgyTool(ToolBase):
             mimetype = mimetypes.guess_type(filepath)
             if mimetype[0] is None or not mimetype[0].startswith('text/'):
                 continue
-            warnings += check_file(filepath)
+            for line, code, message in check_file(filepath):
+                warnings.append({
+                    'line': line, 'code': code, 'message': message,
+                    'path': filepath
+                })
+                print
 
         messages = []
         for warning in warnings:
             path = warning['path']
-            loc = Location(path, module_from_path(path), '', warning['line'], 0, absolute_path=False)
+            prefix = os.path.commonprefix([self._files.rootpath, path])
+            loc = Location(path, module_from_path(path[len(prefix):]), '', warning['line'], 0, absolute_path=True)
             msg = Message('dodgy', warning['code'], loc, warning['message'])
             messages.append(msg)
 
