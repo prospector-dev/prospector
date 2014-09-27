@@ -14,7 +14,7 @@ class TestSysPath(TestCase):
 
         expected.sort(key=lambda x: len(x))
 
-        self.assertListEqual(actual, expected)
+        self.assertEqual(actual, expected)
 
     def test1(self):
         self._run_test('test1', ['', 'somedir'])

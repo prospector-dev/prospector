@@ -58,7 +58,6 @@ class FoundFiles(object):
 
         full_list = sorted(set(module_list) | package_list, key=lambda x: len(x))
         full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
-        print full_list
         return full_list
 
 

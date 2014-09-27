@@ -30,7 +30,6 @@ class DodgyTool(ToolBase):
                     'line': line, 'code': code, 'message': message,
                     'path': filepath
                 })
-                print
 
         messages = []
         for warning in warnings:
