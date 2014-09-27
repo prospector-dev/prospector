@@ -9,7 +9,7 @@ class Location(object):
         self.module = module or None
         self.function = function or None
         self.line = None if line == -1 else line
-        self.character = None if line == -1 else character
+        self.character = None if character == -1 else character
 
     def to_absolute_path(self, root):
         if self._path_is_absolute:

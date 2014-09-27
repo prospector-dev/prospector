@@ -2,12 +2,13 @@ import os
 
 
 class FoundFiles(object):
-    def __init__(self, rootpath, files, modules, packages, directories):
+    def __init__(self, rootpath, files, modules, packages, directories, ignores):
         self.rootpath = rootpath
         self.files = files
         self.modules = modules
         self.packages = packages
         self.directories = directories
+        self.ignores = ignores
 
     def check_module(self, filepath, abspath=True):
         path = os.path.relpath(filepath, self.rootpath) if abspath else filepath
@@ -37,7 +38,7 @@ class FoundFiles(object):
         for module in self.modules:
             yield(os.path.abspath(os.path.join(self.rootpath, module)))
 
-    def get_minimal_syspath(self):
+    def get_minimal_syspath(self, absolute_paths=True):
         """
         Provide a list of directories that, when added to sys.path, would enable
         any of the discovered python modules to be found
@@ -57,7 +58,8 @@ class FoundFiles(object):
                 module_list.append(dirname)
 
         full_list = sorted(set(module_list) | package_list, key=lambda x: len(x))
-        full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
+        if absolute_paths:
+            full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
         return full_list
 
 
@@ -108,4 +110,4 @@ def find_python(ignores, dirpath):
     All paths are relative to the dirpath argument.
     """
     files, modules, directories, packages = _find_paths(ignores, dirpath, dirpath)
-    return FoundFiles(dirpath, files, modules, directories, packages)
+    return FoundFiles(dirpath, files, modules, directories, packages, ignores)

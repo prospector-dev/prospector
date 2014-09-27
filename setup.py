@@ -21,6 +21,7 @@ _INSTALL_REQUIRES = [
     'pep8>=1.5.7',
     'pep8-naming>=0.2.2',
     'frosted>=1.4.1',
+    'vulture>=0.6',
 ]
 
 _PACKAGE_DATA = {

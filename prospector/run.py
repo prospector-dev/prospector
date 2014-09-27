@@ -12,6 +12,7 @@ from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
 from prospector.finder import find_python
+from prospector.tools import DEFAULT_TOOLS
 
 
 __all__ = (
@@ -75,8 +76,17 @@ class Prospector(object):
         self.adaptors.append(self.profile_adaptor)
 
     def _determine_tool_runners(self):
-        for tool in self.config.tools:
-            if self.profile_adaptor.is_tool_enabled(tool):
+        if len(self.config.tools) == len(DEFAULT_TOOLS) and all([t in DEFAULT_TOOLS for t in self.config.tools]):
+            for tool in self.config.tools:
+                if self.profile_adaptor.is_tool_enabled(tool) and tool not in self.config.without_tools:
+                    self.tool_runners.append(tools.TOOLS[tool]())
+        else:
+            for tool in self.config.tools:
+                if tool not in self.config.without_tools:
+                    self.tool_runners.append(tools.TOOLS[tool]())
+
+        for tool in self.config.with_tools:
+            if tool not in self.config.without_tools:
                 self.tool_runners.append(tools.TOOLS[tool]())
 
     def _determine_ignores(self):
@@ -118,13 +128,14 @@ class Prospector(object):
         return messages
 
     def execute(self):
+        tools_run = (set(self.config.tools) | set(self.config.with_tools)) - set(self.config.without_tools)
         summary = {
             'started': datetime.now(),
             'libraries': self.libraries,
             'strictness': self.config.strictness,
             'profiles': self.profiles,
             'adaptors': [adaptor.name for adaptor in self.adaptors],
-            'tools': self.config.tools,
+            'tools': sorted(tools_run),
         }
 
         # Find the files and packages in a common way, so that each tool

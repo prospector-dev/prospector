@@ -4,6 +4,7 @@ from prospector.tools.pep8 import Pep8Tool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 from prospector.tools.mccabe import McCabeTool
+from prospector.tools.vulture import VultureTool
 
 
 TOOLS = {
@@ -13,6 +14,7 @@ TOOLS = {
     'pyflakes': PyFlakesTool,
     'pep8': Pep8Tool,
     'pylint': PylintTool,
+    'vulture': VultureTool
 }
 
 
@@ -22,5 +24,5 @@ DEFAULT_TOOLS = (
     'mccabe',
     'pyflakes',
     'pep8',
-    'pylint',
+    'pylint'
 )

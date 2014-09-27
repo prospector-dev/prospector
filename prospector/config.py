@@ -40,6 +40,8 @@ def build_manager():
         soc.Choice(sorted(TOOLS.keys())),
         default=sorted(DEFAULT_TOOLS),
     ))
+    manager.add(soc.ListSetting('with_tools', soc.String, default=[]))
+    manager.add(soc.ListSetting('without_tools', soc.String, default=[]))
     manager.add(soc.ListSetting('profiles', soc.String, default=[]))
     manager.add(soc.ChoiceSetting(
         'strictness',
@@ -158,11 +160,32 @@ def build_command_line_source():
         },
         'tools': {
             'flags': ['-t', '--tool'],
-            'help': 'A list of tools to run. Possible values are: %s. By'
-            ' default, the following tools will be run: %s' % (
-                ', '.join(sorted(TOOLS.keys())),
-                ', '.join(sorted(DEFAULT_TOOLS)),
-            ),
+            'help': 'A list of tools to run. This lets you set exactly which '
+                    'tools to run. To add extra tools to the defaults, see '
+                    '--extra-tool. Possible values are: %s. By '
+                    'default, the following tools will be run: %s' % (
+                        ', '.join(sorted(TOOLS.keys())),
+                        ', '.join(sorted(DEFAULT_TOOLS)),
+                    ),
+        },
+        'with_tools': {
+            'flags': ['-w', '--with-tool'],
+            'help': 'A list of tools to run in addition to the default tools. '
+                    'To specify all tools explicitly, use the --tool argument. '
+                    'Possible values are %s.' % (
+                        ', '.join(sorted(TOOLS.keys()))
+                    ),
+
+        },
+        'without_tools': {
+            'flags': ['-W', '--without-tool'],
+            'help': 'A list of tools that should not be run. Useful to turn off '
+                    'only a single tool from the defaults. '
+                    'To specify all tools explicitly, use the --tool argument. '
+                    'Possible values are %s.' % (
+                        ', '.join(sorted(TOOLS.keys()))
+                    ),
+
         },
         'profiles': {
             'flags': ['-P', '--profile'],
@@ -201,7 +224,7 @@ def build_command_line_source():
                     ' ignored.',
         },
         'die_on_tool_error': {
-            'flags': ['--die-on-tool-error'],
+            'flags': ['-X', '--die-on-tool-error'],
             'help': 'If a tool fails to run, prospector will try to carry on.'
                     ' Use this flag to cause prospector to die and raise the'
                     ' exception the tool generated. Mostly useful for'
