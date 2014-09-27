@@ -42,39 +42,24 @@ class FoundFiles(object):
         Provide a list of directories that, when added to sys.path, would enable
         any of the discovered python modules to be found
         """
-        # for each package, we want the first directory which is a package
-        # ie, a/b/c/__init.py will be also found by adding a/ to the syspath if a and a/b are also packages
-        syspath = set()
-        # sorting into order will mean that 'higher' packages are in the set by the time we look at 'lower' packages
-        packages = sorted(self.packages, key=lambda x: len(x))
-        for package in packages:
-            dirs = package.split(os.path.sep)
-            if len(dirs) <= 1:
-                syspath.add(package)
-                continue
-            for i in range(1, len(dirs)):
-                testpath = os.path.join(*dirs[:i])
-                if testpath in syspath:
-                    break
-            else:
-                syspath.add(package)
+        # firstly, gather a list of the minimum path to each package
+        package_list = set()
+        for package in sorted(self.packages, key=lambda x: len(x)):
+            parent = os.path.split(package)[0]
+            if parent not in self.packages and parent not in package_list:
+                package_list.add(parent)
 
-        # we also need to add directories containing any of the python modules discovered that are not
-        # in a package
+        # now add the directory containing any modules who are not in packages
+        module_list = []
         for module in self.modules:
-            module_dir = os.path.dirname(module)
-            dirs = module_dir.split(os.path.sep)
-            if len(dirs) <= 1:
-                syspath.add(module_dir)
-                continue
-            for i in range(1, len(dirs)):
-                testpath = os.path.join(*dirs[:i])
-                if testpath in syspath:
-                    break
-            else:
-                syspath.add(module_dir)
+            dirname = os.path.dirname(module)
+            if dirname not in self.packages:
+                module_list.append(dirname)
 
-        return [os.path.join(self.rootpath, p) for p in syspath]
+        full_list = sorted(set(module_list) | package_list, key=lambda x: len(x))
+        full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
+        print full_list
+        return full_list
 
 
 def _find_paths(ignore, curpath, rootpath):

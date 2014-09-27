@@ -26,52 +26,6 @@ class DummyStream(object):
         pass
 
 
-def _find_package_paths(ignore, rootpath):
-    sys_path = set()
-    check_dirs = []
-
-    for subdir in os.listdir(rootpath):
-        if subdir.startswith('.'):
-            continue
-
-        subdir_fullpath = os.path.join(rootpath, subdir)
-        rel_path = os.path.relpath(subdir_fullpath, rootpath)
-
-        if os.path.islink(subdir_fullpath):
-            continue
-
-        if os.path.isfile(subdir_fullpath):
-            if not subdir.endswith('.py'):
-                continue
-
-            if os.path.exists(os.path.join(rootpath, '__init__.py')):
-                continue
-
-            # this is a python module but not in a package, so add it
-            if any([m.search(rel_path) for m in ignore]):
-                continue
-            check_dirs.append(subdir_fullpath)
-            # it's also necessary to add this directory to the path, in case
-            # any other files in this directory import from it
-            sys_path.add(rootpath)
-
-        elif os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
-            # this is a package, add it and move on
-            if any([m.search(rel_path) for m in ignore]):
-                continue
-            sys_path.add(rootpath)
-            check_dirs.append(subdir_fullpath)
-        else:
-            # this is not a package, so check its subdirs
-            add_sys_path, add_check_dirs = _find_package_paths(
-                ignore,
-                subdir_fullpath,
-            )
-            sys_path |= add_sys_path
-            check_dirs += add_check_dirs
-    return sys_path, check_dirs
-
-
 class PylintTool(ToolBase):
 
     def __init__(self):
