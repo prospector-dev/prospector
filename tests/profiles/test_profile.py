@@ -48,6 +48,25 @@ class TestProfileParsing(TestCase):
         expected = ['C1000', 'C1001', 'E0504', 'W1010', 'W1012']
         self.assertEqual(expected, merged_disabled_warnings)
 
+    def test_options_merge(self):
+        base_profile = from_file('strictness_veryhigh')
+
+        # These are the default settings.
+        self.assertEqual(base_profile.pylint['options']['max-public-methods'], 20)
+        self.assertEqual(base_profile.pylint['options']['max-attributes'], 7)
+
+        custom_profile = from_file('mergeoptions', self._basedir)
+
+        # These are what we're trying to set with a custom profile.
+        self.assertEqual(custom_profile.pylint['options']['max-public-methods'], 30)
+        self.assertEqual(custom_profile.pylint['options']['max-attributes'], 10)
+
+        merged_profile = merge_profiles((base_profile, custom_profile))
+
+        # The final, merged profile should have our custom options.
+        self.assertEqual(merged_profile.pylint['options']['max-public-methods'], 30)
+        self.assertEqual(merged_profile.pylint['options']['max-attributes'], 10)
+
     def test_ignores(self):
         profile = load_profiles('ignores', basedir=self._basedir)
         self.assertEqual(['^tests/', '/migrations/'].sort(), profile.ignore.sort())
@@ -94,17 +113,5 @@ class TestProfileParsing(TestCase):
                 'c': 4
             }
         }
-        self.assertEqual(expected, _merge_dict(a, b, dedup_lists=True, dict1_priority=False))
+        self.assertEqual(expected, _merge_dict(a, b))
 
-        expected = {
-            'int': 1,
-            'str': 'fish',
-            'bool': True,
-            'list': [1, 2, 3],
-            'dict': {
-                'a': 1,
-                'b': 2,
-                'c': 4
-            }
-        }
-        self.assertEqual(expected, _merge_dict(a, b, dedup_lists=True, dict1_priority=True))

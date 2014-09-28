@@ -1,0 +1,5 @@
+pylint:
+  options:
+    max-public-methods: 30
+    max-attributes: 10
+
