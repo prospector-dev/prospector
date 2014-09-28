@@ -29,12 +29,12 @@ The primary aim of Prospector is to be useful 'out of the box'. A common complai
 Usage
 -----
 
-Simply run prospector from the root of your project:
+Simply run prospector from the root of your project::
 
     prospector
 
 
-This will output a list of messages pointing out potential problems or errors, for example:
+This will output a list of messages pointing out potential problems or errors, for example::
 
     prospector.tools.base (prospector/tools/base.py):
         L5:0 ToolBase: pylint - R0922
@@ -60,14 +60,12 @@ Prospector mitigates this by providing an understanding of these frameworks to t
 
 Prospector will try to intuit which libraries your project uses by `detecting dependencies`_ and automatically turning on support for the requisite libraries. You can see which adaptors were run in the metadata section of the report.
 
-If Prospector does not correctly detect your project's dependencies, you can specify them manually from the commandline:
-
+If Prospector does not correctly detect your project's dependencies, you can specify them manually from the commandline::
 
     prospector --uses django celery
 
 
-Additionally, if Prospector is automatically detecting a library that you do not in fact use, you can turn off autodetection completely:
-
+Additionally, if Prospector is automatically detecting a library that you do not in fact use, you can turn off autodetection completely::
 
 	prospector --no-autodetect
 
@@ -77,7 +75,7 @@ Note that as far as possible, these adaptors have been written as plugins or aug
 Strictness
 ''''''''''
 
-Prospector has a configurable 'strictness' level which will determine how harshly it searches for errors.
+Prospector has a configurable 'strictness' level which will determine how harshly it searches for errors::
 
     prospector --strictness high
 
