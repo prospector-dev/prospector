@@ -1,4 +1,3 @@
-import warnings
 import sys
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
