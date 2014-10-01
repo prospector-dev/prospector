@@ -28,3 +28,8 @@ pep8:
   options:
     max-line-length: 79
     single-line-if-stmt: n
+
+pyroma:
+  disable:
+    - PYR19
+    - PYR16

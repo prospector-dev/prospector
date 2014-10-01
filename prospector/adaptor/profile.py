@@ -34,30 +34,24 @@ class ProfileAdaptor(AdaptorBase):
                 if option[0] in options:
                     checker.set_option(option[0], options[option[0]])
 
-    def adapt_mccabe(self, tool):
-        disabled = self.profile.get_disabled_messages('mccabe')
-
+    def _simple_ignore(self, name, tool):
+        disabled = self.profile.get_disabled_messages(name)
         tool.ignore_codes = tuple(set(
             tool.ignore_codes + tuple(disabled)
         ))
+
+    def adapt_mccabe(self, tool):
+        self._simple_ignore('mccabe', tool)
 
         if 'max-complexity' in self.profile.mccabe['options']:
             tool.max_complexity = \
                 self.profile.mccabe['options']['max-complexity']
 
     def adapt_pyflakes(self, tool):
-        disabled = self.profile.get_disabled_messages('pyflakes')
-
-        tool.ignore_codes = tuple(set(
-            tool.ignore_codes + tuple(disabled)
-        ))
+        self._simple_ignore('pyflakes', tool)
 
     def adapt_frosted(self, tool):
-        disabled = self.profile.get_disabled_messages('frosted')
-
-        tool.ignore_codes = tuple(set(
-            tool.ignore_codes + tuple(disabled)
-        ))
+        self._simple_ignore('frosted', tool)
 
     def adapt_pep8(self, style_guide, use_config=True):
         if not use_config:
@@ -72,3 +66,6 @@ class ProfileAdaptor(AdaptorBase):
         if 'max-line-length' in self.profile.pep8['options']:
             style_guide.options.max_line_length = \
                 self.profile.pep8['options']['max-line-length']
+
+    def adapt_pyroma(self, tool):
+        self._simple_ignore('pyroma', tool)

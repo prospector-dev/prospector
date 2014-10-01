@@ -39,3 +39,9 @@ pep8:
     - N812
     - N813
     - N814
+
+pyroma:
+  disable:
+    - PYR15
+    - PYR18
+    - PYR17

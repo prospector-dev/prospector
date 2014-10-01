@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-import os
 
 from logilab.common.configuration import OptionsManagerMixIn
 from pylint.lint import PyLinter

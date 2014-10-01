@@ -107,3 +107,7 @@ pep8:
     - W293
   options:
     max-line-length: 159
+
+pyroma:
+  disable:
+    - PYR04

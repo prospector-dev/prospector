@@ -54,10 +54,10 @@ _CLASSIFIERS = (
 
 _OPTIONAL = {
     'with-vulture': ('vulture>=0.6',),
+    'with-pyroma': ('pyroma>=1.6',),
 }
 _OPTIONAL['with-everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
 
-print _OPTIONAL
 
 setup(
     name='prospector',

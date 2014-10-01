@@ -4,6 +4,7 @@ from prospector.tools.pep8 import Pep8Tool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 from prospector.tools.mccabe import McCabeTool
+from prospector.tools.pyroma import PyromaTool
 from prospector.tools.vulture import VultureTool
 
 
@@ -14,7 +15,8 @@ TOOLS = {
     'pyflakes': PyFlakesTool,
     'pep8': Pep8Tool,
     'pylint': PylintTool,
-    'vulture': VultureTool
+    'vulture': VultureTool,
+    'pyroma': PyromaTool,
 }
 
 
