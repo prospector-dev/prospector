@@ -53,10 +53,10 @@ _CLASSIFIERS = (
 )
 
 _OPTIONAL = {
-    'with-vulture': ('vulture>=0.6',),
-    'with-pyroma': ('pyroma>=1.6',),
+    'with_vulture': ('vulture>=0.6',),
+    'with_pyroma': ('pyroma>=1.6',),
 }
-_OPTIONAL['with-everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
+_OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
 
 
 setup(
