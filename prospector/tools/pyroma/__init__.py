@@ -60,7 +60,7 @@ class PyromaTool(ToolBase):
                     continue
 
                 passed = test.test(data)
-                if not passed:
+                if passed is False:  # passed can be True, False or None...
                     loc = Location(module, 'setup', None, -1, -1)
                     msg = Message('pyroma', code, loc, test.message())
                     messages.append(msg)
