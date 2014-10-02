@@ -53,6 +53,7 @@ This will output a list of messages pointing out potential problems or errors, f
         L5:0 ToolBase: pylint - R0922
         Abstract class is only referenced 1 times
 
+Read about the full list of options in the :doc:`usage <usage>`_ section.
 
 
 License
