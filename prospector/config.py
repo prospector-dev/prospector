@@ -82,10 +82,12 @@ def build_default_sources():
     return sources
 
 
-def build_command_line_source():
-    parser_options = {
-        'description': 'Performs static analysis of Python code',
-    }
+def build_command_line_source(prog=None, description='Performs static analysis of Python code'):
+    parser_options = {}
+    if prog is not None:
+        parser_options['prog'] = prog
+    if description is not None:
+        parser_options['description'] = description
 
     options = {
         'autodetect': {
@@ -97,7 +99,7 @@ def build_command_line_source():
         'uses': {
             'flags': ['-u', '--uses'],
             'help': 'A list of one or more libraries or frameworks that the'
-                    ' project users. Possible values are: %s. This will be'
+                    ' project uses. Possible values are: %s. This will be'
                     ' autodetected by default, but if autodetection doesn\'t'
                     ' work, manually specify them using this flag.' % (
                         ', '.join(sorted(LIBRARY_ADAPTORS.keys())),
