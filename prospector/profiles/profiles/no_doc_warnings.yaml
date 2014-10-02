@@ -10,3 +10,6 @@ pyflakes:
 frosted:
   disable:
     - E401
+
+pep257:
+  run: false
