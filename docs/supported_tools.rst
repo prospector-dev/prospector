@@ -115,5 +115,5 @@ about unused code that is in fact used.
 To install and use::
 
     pip install prospector[with_vulture]
-	prospector --with-tool vulture
+    prospector --with-tool vulture
     

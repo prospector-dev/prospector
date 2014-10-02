@@ -22,7 +22,7 @@ About
 
 Prospector is a tool to analyse Python code and output information about errors, potential problems, convention violations and complexity.
 
-It brings together the functionality of other Python analysis tools such as `Pylint`_, `pep8`_, and `McCabe complexity`_ . See the 'Supported Tools' section below for a complete list.
+It brings together the functionality of other Python analysis tools such as `Pylint`_, `pep8`_, and `McCabe complexity`_ . See the :doc:`Supported Tools<supported_tools>` section for a complete list.
 
 The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other Python analysis tools is that it takes a long time to filter through which errors are relevant or interesting to your own coding style. Prospector provides some default profiles, which hopefully will provide a good starting point and be useful straight away. 
 
@@ -33,7 +33,7 @@ You can install using ``pip``::
 
     pip install prospector
 
-To install optional dependencies such as ``pyroma``:
+To install optional dependencies such as ``pyroma``::
 
     pip install prospector[with_pyroma]
 
@@ -53,7 +53,7 @@ This will output a list of messages pointing out potential problems or errors, f
         L5:0 ToolBase: pylint - R0922
         Abstract class is only referenced 1 times
 
-Read about the full list of options in the :doc:`usage <usage>`_ section.
+Read about the full list of options in the :doc:`usage <usage>` section.
 
 
 License

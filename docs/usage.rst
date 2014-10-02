@@ -21,17 +21,17 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +=============+============================================================================+
 | ``emacs``   | Support for emacs compilation output mode, see `issue_16`_.                |
 +-------------+----------------------------------------------------------------------------+
-| ``grouped`` | Similar to ``text``, but groups all message on the same line together      |
-|             | rather than having a separate entry per message.                           |
+| ``grouped`` | | Similar to ``text``, but groups all message on the same line together    |
+|             | | rather than having a separate entry per message.                         |
 +-------------+----------------------------------------------------------------------------+
-| ``pylint``  | Produces output in the same style as ``pylint --parseable``. This should   |
-|             | allow ``prospector`` to be used as a drop-in replacement for any tools     |
-|             | which parse ``pylint`` output. The one minor difference is that the output |
-|             | includes the name of the tool which generated the error as well as the     |
-|             | error code.                                                                |
+| ``pylint``  | | Produces output in the same style as ``pylint --parseable``. This should |
+|             | | allow ``prospector`` to be used as a drop-in replacement for any tools   |
+|             | | which parse ``pylint`` output. The one minor difference is that the      |
+|             | | output includes the name of the tool which generated the error as well   |
+|             | | as the error code.                                                       |
 +-------------+----------------------------------------------------------------------------+
-| ``json``    | Produces a structured, parseable output of the messages and summary. See   |
-|             | below for more information about the structure.                            |
+| ``json``    | | Produces a structured, parseable output of the messages and summary. See |
+|             | | below for more information about the structure.                          |
 +-------------+----------------------------------------------------------------------------+
 | ``yaml``    | Same as JSON except produces YAML output.                                  |
 +-------------+----------------------------------------------------------------------------+
