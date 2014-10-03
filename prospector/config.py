@@ -14,6 +14,8 @@ __all__ = (
 def build_manager():
     manager = soc.ConfigurationManager('prospector')
 
+    manager.add(soc.BooleanSetting('zero_exit', default=False))
+
     manager.add(soc.BooleanSetting('autodetect', default=True))
     manager.add(soc.ListSetting('uses', soc.String, default=[]))
 
@@ -91,6 +93,15 @@ def build_command_line_source(prog=None, description='Performs static analysis o
         parser_options['description'] = description
 
     options = {
+        'zero_exit': {
+            'flags': ['-0', '--zero-exit'],
+            'help': 'Prospector will exit with a code of 1 (one) if any messages'
+                    ' are found. This makes automation easier; if there are any'
+                    ' problems at all, the exit code is non-zero. However this behaviour'
+                    ' is not always desirable, so if this flag is set, prospector will'
+                    ' exit with a code of 0 if it ran successfully, and non-zero if'
+                    ' it failed to run.'
+        },
         'autodetect': {
             'flags': ['-A', '--no-autodetect'],
             'help': 'Turn off auto-detection of frameworks and libraries used.'

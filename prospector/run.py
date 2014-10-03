@@ -305,8 +305,17 @@ def main():
     prospector.execute()
     prospector.print_messages()
 
-    if messages:
+    if config.zero_exit:
+        # if we ran successfully, and the user wants us to, then we'll
+        # exit cleanly
+        return 0
+
+    # otherwise, finding messages is grounds for exiting with an error
+    # code, to make it easier for bash scripts and similar situations
+    # to know if there any errors have been found.
+    if len(prospector.get_messages()) > 0:
         return 1
+    return 0
 
 
 if __name__ == '__main__':
