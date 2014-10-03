@@ -66,6 +66,7 @@ setup(
     author='landscape.io',
     author_email='code@landscape.io',
     license='GPLv2',
+    zip_safe=False,
     description='Prospector: python static analysis tool',
     keywords='pylint pyflakes pep8 mccabe frosted prospector code analysis',
     classifiers=_CLASSIFIERS,
