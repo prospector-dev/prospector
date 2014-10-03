@@ -201,6 +201,9 @@ def main():
     ))
     sys.stdout.write('\n')
 
+    if messages:
+        return 1
+
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
