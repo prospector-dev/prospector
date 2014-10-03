@@ -305,6 +305,9 @@ def main():
     prospector.execute()
     prospector.print_messages()
 
+    if messages:
+        return 1
+
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
