@@ -47,6 +47,11 @@ Run `prospector --help` for a full list of options and their effects.
 
 The default output format of `prospector` is designed to be human readable. For parsing (for example, for reporting), you can use the `--output-format json` flag to get JSON-formatted output.
 
+### Profiles
+
+Prospector is configurable using "profiles". These are composable YAML files with directives to
+disable or enable tools or messages. For more information, read [the documentation about profiles](http://prospector.readthedocs.org/en/latest/profiles.html)
+
 ### If your code uses frameworks and libraries
 
 Often tools such as pylint find errors in code which is not an error, due to, for example, attributes of classes being created at run time by a library or framework used by your project. For example, by default, pylint will generate an error for Django models when accessing `objects`, as the `objects` attribute is not part of the `Model` class definition. 
