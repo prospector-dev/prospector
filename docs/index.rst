@@ -4,6 +4,9 @@
 Prospector - Python Static Analysis
 ===================================
 
+About
+-----
+
 .. image:: https://pypip.in/v/prospector/badge.png
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
@@ -17,9 +20,6 @@ Prospector - Python Static Analysis
    :target: https://coveralls.io/r/landscapeio/prospector
    :alt: Text Coverage
 
-
-About
------
 
 Prospector is a tool to analyse Python code and output information about errors, potential problems, convention violations and complexity.
 
@@ -131,9 +131,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   features
    usage
-   strictness
    profiles
    supported_tools
    contrib

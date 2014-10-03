@@ -6,10 +6,10 @@ from prospector.profiles.profile import _merge_dict, merge_profiles, from_file, 
 class TestProfileParsing(TestCase):
 
     def setUp(self):
-        self._basedir = os.path.join(os.path.dirname(__file__), 'profiles')
+        self._profile_path = [os.path.join(os.path.dirname(__file__), 'profiles')]
 
     def _file_content(self, name):
-        path = os.path.join(self._basedir, name)
+        path = os.path.join(self._profile_path, name)
         with open(path) as f:
             return f.read()
 
@@ -18,7 +18,7 @@ class TestProfileParsing(TestCase):
         This test verifies that a profile can still be loaded if it contains
         an empty 'pylint.disable' list
         """
-        profile = load_profiles('empty_disable_list', basedir=self._basedir)
+        profile = load_profiles('empty_disable_list', self._profile_path)
         self.assertEqual([], profile.pylint['disable'])
 
     def test_empty_profile(self):
@@ -26,20 +26,20 @@ class TestProfileParsing(TestCase):
         Verifies that a completely empty profile can still be parsed and have
         default values
         """
-        profile = load_profiles('empty_profile', basedir=self._basedir)
+        profile = load_profiles('empty_profile', self._profile_path)
         self.assertEqual([], profile.pylint['disable'])
 
     def test_inheritance(self):
-        profile = load_profiles('inherittest3', basedir=self._basedir)
+        profile = load_profiles('inherittest3', self._profile_path)
         disable = profile.pylint['disable']
         disable.sort()
         self.assertEqual(['I0001', 'I0002', 'I0003'], disable)
 
     def test_profile_merge(self):
 
-        profile1 = from_file('mergetest1', self._basedir)
-        profile2 = from_file('mergetest2', self._basedir)
-        profile3 = from_file('mergetest3', self._basedir)
+        profile1 = from_file('mergetest1', self._profile_path)
+        profile2 = from_file('mergetest2', self._profile_path)
+        profile3 = from_file('mergetest3', self._profile_path)
 
         merged = merge_profiles((profile1, profile2, profile3))
 
@@ -49,16 +49,16 @@ class TestProfileParsing(TestCase):
         self.assertEqual(expected, merged_disabled_warnings)
 
     def test_ignores(self):
-        profile = load_profiles('ignores', basedir=self._basedir)
+        profile = load_profiles('ignores', self._profile_path)
         self.assertEqual(['^tests/', '/migrations/'].sort(), profile.ignore.sort())
 
     def test_disable_tool(self):
-        profile = load_profiles('pylint_disabled', basedir=self._basedir)
+        profile = load_profiles('pylint_disabled', self._profile_path)
         self.assertFalse(profile.is_tool_enabled('pylint'))
         self.assertTrue(profile.is_tool_enabled('pep8'))
 
     def test_disable_tool_inheritance(self):
-        profile = load_profiles('pep8_and_pylint_disabled', basedir=self._basedir)
+        profile = load_profiles('pep8_and_pylint_disabled', self._profile_path)
         self.assertFalse(profile.is_tool_enabled('pylint'))
         self.assertFalse(profile.is_tool_enabled('pep8'))
 

@@ -52,8 +52,8 @@ def _load_content(name, profile_path):
         return fct.read()
 
 
-def from_file(name, basedir=None):
-    return parse_profile(name, _load_content(name, basedir))
+def from_file(name, profile_path):
+    return parse_profile(name, _load_content(name, profile_path))
 
 
 def _load_profile(name, profile_path, inherits_set=None):
