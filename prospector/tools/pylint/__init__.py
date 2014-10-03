@@ -43,7 +43,7 @@ class PylintTool(ToolBase):
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
         packages = [p.split(os.path.sep) for p in found_files.iter_package_paths(abspath=False)]
-        packages.sort(key=lambda x: len(x))
+        packages.sort(key=len)
         check_paths = set()
         for package in packages:
             package_path = os.path.join(*package)
