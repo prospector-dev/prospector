@@ -39,7 +39,7 @@ and is the source of most messages that prospector outputs.
 `PEP8 style guide <http://legacy.python.org/dev/peps/pep-0008/>`_. It produces
 messages for any divergence from the style guide.
 
-Prospector's concept of `:doc:strictness<strictness>`_ turns off various warnings 
+Prospector's concept of :doc:`strictness <profiles>` turns off various warnings 
 depending on the strictness level. By default, several PEP8 errors will be
 supressed. To adjust this without adjusting the strictness of other tools, you have
 some options::
