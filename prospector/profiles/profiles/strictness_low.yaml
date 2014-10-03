@@ -53,3 +53,8 @@ pep8:
     - E711
     - E712
     - E721
+
+pyroma:
+  disable:
+    - PYR06
+    - PYR09

@@ -9,7 +9,7 @@ _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 _INSTALL_REQUIRES = [
     'pylint>=1.3',
     'pylint-celery>=0.3',
-    'pylint-django>=0.5.4',
+    'pylint-django>=0.5.5',
     'pylint-plugin-utils>=0.2.2',
     'pylint-common>=0.2.1',
     'requirements-detector>=0.3',
@@ -21,7 +21,6 @@ _INSTALL_REQUIRES = [
     'pep8>=1.5.7',
     'pep8-naming>=0.2.2',
     'frosted>=1.4.1',
-    'vulture>=0.6',
 ]
 
 _PACKAGE_DATA = {
@@ -53,6 +52,12 @@ _CLASSIFIERS = (
     'GNU General Public License v2 or later (GPLv2+)',
 )
 
+_OPTIONAL = {
+    'with_vulture': ('vulture>=0.6',),
+    'with_pyroma': ('pyroma>=1.6',),
+}
+_OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
+
 
 setup(
     name='prospector',
@@ -73,4 +78,5 @@ setup(
         ],
     },
     install_requires=_INSTALL_REQUIRES,
+    extras_require=_OPTIONAL,
 )

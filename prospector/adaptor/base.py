@@ -15,3 +15,6 @@ class AdaptorBase(object):
 
     def adapt_pep8(self, style_guide, use_config=True):
         pass
+
+    def adapt_pyroma(self, tool):
+        pass

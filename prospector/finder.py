@@ -4,39 +4,52 @@ import os
 class FoundFiles(object):
     def __init__(self, rootpath, files, modules, packages, directories, ignores):
         self.rootpath = rootpath
-        self.files = files
-        self.modules = modules
-        self.packages = packages
-        self.directories = directories
-        self.ignores = ignores
+        self._files = files
+        self._modules = modules
+        self._packages = packages
+        self._directories = directories
+        self._ignores = ignores
 
-    def check_module(self, filepath, abspath=True):
+    def _check(self, filepath, pathlist, abspath=True, even_if_ignored=False):
         path = os.path.relpath(filepath, self.rootpath) if abspath else filepath
-        return path in self.modules
+        for checkpath, ignored in pathlist:
+            if path == checkpath:
+                if ignored and not even_if_ignored:
+                    break
+                return True
+        return False
 
-    def check_package(self, filepath, abspath=True):
-        path = os.path.relpath(filepath, self.rootpath) if abspath else filepath
-        return path in self.packages
+    def check_module(self, filepath, abspath=True, even_if_ignored=False):
+        return self._check(filepath, self._modules, abspath, even_if_ignored)
 
-    def check_file(self, filepath, abspath=True):
-        path = os.path.relpath(filepath, self.rootpath) if abspath else filepath
-        return path in self.files
+    def check_package(self, filepath, abspath=True, even_if_ignored=False):
+        return self._check(filepath, self._packages, abspath, even_if_ignored)
 
-    def iter_file_paths(self):
-        for filepath in self.files:
-            yield(os.path.abspath(os.path.join(self.rootpath, filepath)))
+    def check_file(self, filepath, abspath=True, even_if_ignored=False):
+        return self._check(filepath, self._files, abspath, even_if_ignored)
 
-    def iter_package_paths(self):
-        for package in self.packages:
-            yield(os.path.abspath(os.path.join(self.rootpath, package)))
+    def _iter_paths(self, pathlist, abspath=True, include_ignored=False):
+        for path, ignored in pathlist:
+            if ignored and not include_ignored:
+                continue
+            if abspath:
+                path = self.to_absolute_path(path)
+            yield path
 
-    def iter_directory_paths(self):
-        for directory in self.directories:
-            yield(os.path.abspath(os.path.join(self.rootpath, directory)))
+    def iter_file_paths(self, abspath=True, include_ignored=False):
+        return self._iter_paths(self._files, abspath, include_ignored)
 
-    def iter_module_paths(self):
-        for module in self.modules:
-            yield(os.path.abspath(os.path.join(self.rootpath, module)))
+    def iter_package_paths(self, abspath=True, include_ignored=False):
+        return self._iter_paths(self._packages, abspath, include_ignored)
+
+    def iter_directory_paths(self, abspath=True, include_ignored=False):
+        return self._iter_paths(self._directories, abspath, include_ignored)
+
+    def iter_module_paths(self, abspath=True, include_ignored=False):
+        return self._iter_paths(self._modules, abspath, include_ignored)
+
+    def to_absolute_path(self, path):
+        return os.path.abspath(os.path.join(self.rootpath, path))
 
     def get_minimal_syspath(self, absolute_paths=True):
         """
@@ -45,16 +58,18 @@ class FoundFiles(object):
         """
         # firstly, gather a list of the minimum path to each package
         package_list = set()
-        for package in sorted(self.packages, key=lambda x: len(x)):
+        packages = [p[0] for p in self._packages if not p[1]]
+        for package in sorted(packages, key=lambda x: len(x)):
             parent = os.path.split(package)[0]
-            if parent not in self.packages and parent not in package_list:
+            if parent not in packages and parent not in package_list:
                 package_list.add(parent)
 
         # now add the directory containing any modules who are not in packages
         module_list = []
-        for module in self.modules:
+        modules = [m[0] for m in self._modules if not m[1]]
+        for module in modules:
             dirname = os.path.dirname(module)
-            if dirname not in self.packages:
+            if dirname not in packages:
                 module_list.append(dirname)
 
         full_list = sorted(set(module_list) | package_list, key=lambda x: len(x))
@@ -73,18 +88,18 @@ def _find_paths(ignore, curpath, rootpath):
         fullpath = os.path.join(curpath, filename)
         relpath = os.path.relpath(fullpath, rootpath)
 
-        if any([m.search(relpath) for m in ignore]):
-            continue
-
         if os.path.islink(fullpath):
             continue
 
+        ignored = any([m.search(relpath) for m in ignore])
+
         if os.path.isdir(fullpath):
             # this is a directory, is it also a package?
-            directories.append(relpath)
+            directories.append((relpath, ignored))
+
             initpy = os.path.join(fullpath, '__init__.py')
             if os.path.exists(initpy) and os.path.isfile(initpy):
-                packages.append(relpath)
+                packages.append((relpath, ignored))
 
             # do the same for this directory
             recurse = _find_paths(ignore, os.path.join(curpath, filename), rootpath)
@@ -96,8 +111,8 @@ def _find_paths(ignore, curpath, rootpath):
         else:
             # this is a file, is it a python module?
             if fullpath.endswith('.py'):
-                modules.append(relpath)
-            files.append(relpath)
+                modules.append((relpath, ignored))
+            files.append((relpath, ignored))
 
     return files, modules, packages, directories
 

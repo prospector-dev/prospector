@@ -42,7 +42,7 @@ class PylintTool(ToolBase):
 
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
-        packages = [p.split(os.path.sep) for p in found_files.packages]
+        packages = [p.split(os.path.sep) for p in found_files.iter_package_paths(abspath=False)]
         packages.sort(key=lambda x: len(x))
         check_paths = set()
         for package in packages:
@@ -56,7 +56,7 @@ class PylintTool(ToolBase):
             else:
                 check_paths.add(package_path)
 
-        for filepath in found_files.modules:
+        for filepath in found_files.iter_module_paths(abspath=False):
             package = os.path.dirname(filepath).split(os.path.sep)
             for i in range(0, len(package)):
                 if os.path.join(*package[:i+1]) in check_paths:
@@ -64,7 +64,7 @@ class PylintTool(ToolBase):
             else:
                 check_paths.add(filepath)
 
-        check_paths = [os.path.abspath(os.path.join(found_files.rootpath, p)) for p in check_paths]
+        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
 
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path
