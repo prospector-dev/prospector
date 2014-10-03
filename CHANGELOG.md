@@ -1,5 +1,30 @@
 Prospector Changelog
 =======
+
+## Version 0.7
+
+* Profiles got an update to make them easier to understand and use. They are mostly the same as before, but [the documentation](http://prospector.readthedocs.org/en/latest/profiles.html) and command line arguments have improved so that they can be reliably used.
+* Added optional tools - additional tools which are not enabled by default but can be activated if the user chooses to.
+* Added pyroma, a tool for validating packaging metadata, as an optional tool.
+* Added vulture, a tool for finding dead code, as an optional tool.
+* [#24](https://github.com/landscapeio/prospector/issues/24) Added Sphinx documentation, which is now also [available on ReadTheDocs](http://prospector.readthedocs.org/)
+
+## Version 0.6.4
+
+* Fixed pylint system path munging again again
+
+## Version 0.6.3
+
+* Fixed dodgy tool's use of new file finder
+
+## Version 0.6.2
+
+* Fixed pylint system path munging again
+
+## Version 0.6.1
+
+* Fixed pylint system path munging
+
 ## Version 0.6
 
 * Module and package finding has been centralised into a `finder.py` module, from which all tools take the list of files to be inspected. This helps unify which files get inspected, as previously there were several times when tools were not correctly ignoring files.
