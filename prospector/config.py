@@ -31,18 +31,19 @@ def build_manager():
     manager.add(soc.ChoiceSetting(
         'output_format',
         sorted(FORMATTERS.keys()),
-        default='text',
+        default=None,
     ))
     manager.add(soc.BooleanSetting('absolute_paths', default=False))
 
     manager.add(soc.ListSetting(
         'tools',
         soc.Choice(sorted(TOOLS.keys())),
-        default=sorted(DEFAULT_TOOLS),
+        default=None,
     ))
     manager.add(soc.ListSetting('with_tools', soc.String, default=[]))
     manager.add(soc.ListSetting('without_tools', soc.String, default=[]))
     manager.add(soc.ListSetting('profiles', soc.String, default=[]))
+    manager.add(soc.ListSetting('profile_path', soc.String, default=[]))
     manager.add(soc.ChoiceSetting(
         'strictness',
         ['veryhigh', 'high', 'medium', 'low', 'verylow'],
@@ -191,8 +192,15 @@ def build_command_line_source():
             'flags': ['-P', '--profile'],
             'help': 'The list of profiles to load. A profile is a certain'
                     ' \'type\' of behaviour for prospector, and is represented'
-                    ' by a YAML configuration file. A full path to the YAML'
-                    ' file describing the profile must be provided.',
+                    ' by a YAML configuration file. Either a full path to the YAML'
+                    ' file describing the profile must be provided, or it must be'
+                    ' on the profile path (see --profile-path)',
+        },
+        'profile_path': {
+            'flags': ['--profile-path'],
+            'help': 'Additional paths to search for profile files. By default this'
+                    ' is the path that prospector will check, and a directory '
+                    ' called ".prospector" in the path that prospector will check.',
         },
         'strictness': {
             'flags': ['-s', '--strictness'],

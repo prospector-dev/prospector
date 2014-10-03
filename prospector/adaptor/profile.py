@@ -5,12 +5,15 @@ from pylint.utils import UnknownMessage
 
 class ProfileAdaptor(AdaptorBase):
 
-    def __init__(self, profile_names):
-        self.profile = load_profiles(profile_names)
+    def __init__(self, profile_names, profile_path):
+        self.profile = load_profiles(profile_names, profile_path)
         self.name = 'profiles:%s' % ','.join(profile_names)
 
     def is_tool_enabled(self, tool_name):
         return self.profile.is_tool_enabled(tool_name)
+
+    def get_output_format(self):
+        return self.profile.output_format
 
     def adapt_pylint(self, linter):
         disabled = self.profile.get_disabled_messages('pylint')

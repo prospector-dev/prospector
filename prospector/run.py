@@ -12,6 +12,7 @@ from prospector.autodetect import autodetect_libraries
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
 from prospector.finder import find_python
+from prospector.profiles.profile import ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS
 
 
@@ -31,6 +32,9 @@ class Prospector(object):
         self.profile_adaptor = None
         self.tool_runners = []
         self.ignores = []
+
+        self.summary = None
+        self.messages = None
 
         self._determine_adapters()
         self._determine_profiles()
@@ -55,9 +59,6 @@ class Prospector(object):
                 self.adaptors.append(LIBRARY_ADAPTORS[name]())
 
     def _determine_profiles(self):
-        # Use the strictness profile
-        if self.config.strictness:
-            self.profiles.append('strictness_%s' % self.config.strictness)
 
         # Use other specialty profiles based on options
         if not self.config.doc_warnings:
@@ -70,24 +71,85 @@ class Prospector(object):
             self.profiles.append('full_pep8')
 
         # Use the specified profiles
+        profile_provided = False
+        if len(self.config.profiles) > 0:
+            profile_provided = True
         self.profiles += self.config.profiles
 
-        self.profile_adaptor = ProfileAdaptor(self.profiles)
+        # if there is a '.prospector.yaml' or a '.prospector/prospector.yaml'
+        # file then we'll include that
+        prospector_yaml = os.path.join(self.path, '.prospector.yaml')
+        if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
+            profile_provided = True
+            self.profiles.append(prospector_yaml)
+
+        prospector_yaml = os.path.join(self.path, 'prospector', 'prospector.yaml')
+        if os.path.exists(prospector_yaml) and os.path.isfile('prospector'):
+            profile_provided = True
+            self.profiles.append(prospector_yaml)
+
+        if not profile_provided:
+            # Use the strictness profile only if no profile has been given
+            if self.config.strictness:
+                self.profiles = ['strictness_%s' % self.config.strictness] + self.profiles
+                self.strictness = self.config.strictness
+        else:
+            self.strictness = 'from profile'
+
+        # the profile path is
+        #   * anything provided as an argument
+        #   * a directory called .prospector in the check path
+        #   * the check path
+        #   * prospector provided profiles
+        profile_path = self.config.profile_path
+
+        prospector_dir = os.path.join(self.path, '.prospector')
+        if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
+            profile_path.append(prospector_dir)
+
+        profile_path.append(self.path)
+
+        provided = os.path.join(os.path.dirname(__file__), 'profiles/profiles')
+        profile_path.append(provided)
+
+        try:
+            self.profile_adaptor = ProfileAdaptor(self.profiles, profile_path)
+        except ProfileNotFound as e:
+            sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" %
+                             (e.name, ':'.join(e.profile_path)))
+            sys.exit(1)
+
         self.adaptors.append(self.profile_adaptor)
 
     def _determine_tool_runners(self):
-        if len(self.config.tools) == len(DEFAULT_TOOLS) and all([t in DEFAULT_TOOLS for t in self.config.tools]):
-            for tool in self.config.tools:
-                if self.profile_adaptor.is_tool_enabled(tool) and tool not in self.config.without_tools:
-                    self.tool_runners.append(tools.TOOLS[tool]())
+
+        if self.config.tools is None:
+            # we had no command line settings for an explicit list of
+            # tools, so we use the defaults
+            to_run = set(DEFAULT_TOOLS)
+            # we can also use any that the profiles dictate
+            for tool in tools.TOOLS.keys():
+                if self.profile_adaptor.is_tool_enabled(tool):
+                    to_run.add(tool)
         else:
-            for tool in self.config.tools:
-                if tool not in self.config.without_tools:
-                    self.tool_runners.append(tools.TOOLS[tool]())
+            to_run = set(self.config.tools)
+            # profiles have no say in the list of tools run when
+            # a command line is specified
 
         for tool in self.config.with_tools:
-            if tool not in self.config.without_tools:
-                self.tool_runners.append(tools.TOOLS[tool]())
+            to_run.add(tool)
+
+        for tool in self.config.without_tools:
+            to_run.remove(tool)
+
+        if self.config.tools is None:
+            for tool in tools.TOOLS.keys():
+                if tool in to_run and not self.profile_adaptor.is_tool_enabled(tool):
+                    to_run.remove(tool)
+
+        self.tools_to_run = sorted(list(to_run))
+        for tool in self.tools_to_run:
+            self.tool_runners.append(tools.TOOLS[tool]())
 
     def _determine_ignores(self):
         # Grab ignore patterns from the profile adapter
@@ -128,14 +190,14 @@ class Prospector(object):
         return messages
 
     def execute(self):
-        tools_run = (set(self.config.tools) | set(self.config.with_tools)) - set(self.config.without_tools)
+
         summary = {
             'started': datetime.now(),
             'libraries': self.libraries,
-            'strictness': self.config.strictness,
+            'strictness': self.strictness,
             'profiles': self.profiles,
             'adaptors': [adaptor.name for adaptor in self.adaptors],
-            'tools': sorted(tools_run),
+            'tools': self.tools_to_run,
         }
 
         # Find the files and packages in a common way, so that each tool
@@ -181,7 +243,33 @@ class Prospector(object):
         delta = (summary['completed'] - summary['started'])
         summary['time_taken'] = '%0.2f' % delta.total_seconds()
 
-        return summary, messages
+        self.summary = summary
+        self.messages = messages
+
+    def get_summary(self):
+        return self.summary
+
+    def get_messages(self):
+        return self.messages
+
+    def print_messages(self, write_to=None):
+        write_to = write_to or sys.stdout
+
+        # Get the output formatter
+        if self.config.output_format is not None:
+            format = self.config.output_format
+        else:
+            format = self.profile_adaptor.get_output_format()
+
+        self.summary['formatter'] = format
+        formatter = FORMATTERS[format](self.summary, self.messages)
+
+        # Produce the output
+        write_to.write(formatter.render(
+            summary=not self.config.messages_only,
+            messages=not self.config.summary_only,
+        ))
+        write_to.write('\n')
 
 
 def main():
@@ -199,18 +287,8 @@ def main():
 
     # Make it so
     prospector = Prospector(config, paths[0])
-    summary, messages = prospector.execute()
-
-    # Get the output formatter
-    summary['formatter'] = config.output_format
-    formatter = FORMATTERS[config.output_format](summary, messages)
-
-    # Produce the output
-    sys.stdout.write(formatter.render(
-        summary=not config.messages_only,
-        messages=not config.summary_only,
-    ))
-    sys.stdout.write('\n')
+    prospector.execute()
+    prospector.print_messages()
 
 
 if __name__ == '__main__':

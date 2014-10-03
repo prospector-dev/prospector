@@ -4,18 +4,19 @@ from prospector.tools import TOOLS, DEFAULT_TOOLS
 
 
 class ProfileNotFound(Exception):
-    def __init__(self, name, filepath):
+    def __init__(self, name, profile_path):
         super(ProfileNotFound, self).__init__()
         self.name = name
-        self.filepath = filepath
+        self.profile_path = profile_path
 
     def __repr__(self):
-        return "Could not find profile %s at %s" % (self.name, self.filepath)
+        return "Could not find profile %s; searched in %s" % (self.name, ':'.join(self.filepath))
 
 
 _EMPTY_DATA = {
     'inherits': [],
     'ignore': [],
+    'output-format': 'text'
 }
 
 
@@ -28,26 +29,24 @@ for toolname in TOOLS.keys():
     }
 
 
-def load_profiles(names, basedir=None):
+def load_profiles(names, profile_path):
     if not isinstance(names, (list, tuple)):
         names = (names,)
-    profiles = [_load_profile(name, basedir=basedir)[0] for name in names]
+    profiles = [_load_profile(name, profile_path)[0] for name in names]
     return merge_profiles(profiles)
 
 
-def _load_content(name, basedir=None):
+def _load_content(name, profile_path):
     if name.endswith('.yaml') or name.endswith('.yml'):
         # assume that this is a full path that we can load
         filename = name
     else:
-        basedir = basedir or os.path.join(
-            os.path.dirname(__file__),
-            'profiles',
-        )
-        filename = os.path.join(basedir, '%s.yaml' % name)
-
-    if not os.path.exists(filename):
-        raise ProfileNotFound(name, os.path.abspath(filename))
+        for path in profile_path:
+            filename = os.path.join(path, '%s.yaml' % name)
+            if os.path.exists(filename):
+                break
+        else:
+            raise ProfileNotFound(name, profile_path)
 
     with open(filename) as fct:
         return fct.read()
@@ -57,17 +56,17 @@ def from_file(name, basedir=None):
     return parse_profile(name, _load_content(name, basedir))
 
 
-def _load_profile(name, basedir=None, inherits_set=None):
+def _load_profile(name, profile_path, inherits_set=None):
     inherits_set = inherits_set or set()
 
-    profile = parse_profile(name, _load_content(name, basedir))
+    profile = parse_profile(name, _load_content(name, profile_path))
     inherits_set.add(profile.name)
 
     for inherited in profile.inherits:
         if inherited not in inherits_set:
             inherited_profile, sub_inherits_set = _load_profile(
                 inherited,
-                basedir,
+                profile_path,
                 inherits_set,
             )
             profile.merge(inherited_profile)
@@ -87,7 +86,7 @@ def parse_profile(name, contents):
         data = dict(_EMPTY_DATA)
     else:
         data = _merge_dict(_EMPTY_DATA, data, dict1_priority=False)
-    return StrictnessProfile(name, data)
+    return ProspectorProfile(name, data)
 
 
 def _merge_dict(dict1, dict2, dedup_lists=False, dict1_priority=True):
@@ -121,12 +120,13 @@ def _merge_dict(dict1, dict2, dedup_lists=False, dict1_priority=True):
     return newdict
 
 
-class StrictnessProfile(object):
+class ProspectorProfile(object):
 
     def __init__(self, name, profile_dict):
         self.name = name
         self.inherits = profile_dict['inherits']
         self.ignore = profile_dict['ignore']
+        self.output_format = profile_dict['output-format']
 
         for tool in TOOLS.keys():
             setattr(self, tool, profile_dict[tool])
@@ -148,6 +148,7 @@ class StrictnessProfile(object):
     def merge(self, other_profile):
         self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
+        self.output_format = other_profile.output_format
 
         for tool in TOOLS.keys():
             merged = _merge_dict(getattr(self, tool), getattr(other_profile, tool))
