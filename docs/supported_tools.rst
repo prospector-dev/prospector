@@ -50,6 +50,10 @@ some options::
     # turn on complete pep8 checking:
     prospector --full-pep8
 
+    # change the maximum line length allowed 
+    # (the default varies by strictness):
+    prospector --max-line-length 120
+
 
 `pyflakes <https://launchpad.net/pyflakes>`_
 ````````````````````````````````````````````
