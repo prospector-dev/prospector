@@ -32,6 +32,8 @@ class Prospector(object):
         self.profile_adaptor = None
         self.tool_runners = []
         self.ignores = []
+        self.strictness = None
+        self.tools_to_run = []
 
         self.summary = None
         self.messages = None
@@ -114,9 +116,9 @@ class Prospector(object):
 
         try:
             self.profile_adaptor = ProfileAdaptor(self.profiles, profile_path)
-        except ProfileNotFound as e:
+        except ProfileNotFound as nfe:
             sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" %
-                             (e.name, ':'.join(e.profile_path)))
+                             (nfe.name, ':'.join(nfe.profile_path)))
             sys.exit(1)
 
         self.adaptors.append(self.profile_adaptor)
@@ -257,12 +259,15 @@ class Prospector(object):
 
         # Get the output formatter
         if self.config.output_format is not None:
-            format = self.config.output_format
+            output_format = self.config.output_format
         else:
-            format = self.profile_adaptor.get_output_format()
+            output_format = self.profile_adaptor.get_output_format()
 
-        self.summary['formatter'] = format
-        formatter = FORMATTERS[format](self.summary, self.messages)
+        if output_format is None:
+            output_format = 'text'
+
+        self.summary['formatter'] = output_format
+        formatter = FORMATTERS[output_format](self.summary, self.messages)
 
         # Produce the output
         write_to.write(formatter.render(

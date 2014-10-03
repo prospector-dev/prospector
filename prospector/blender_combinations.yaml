@@ -46,6 +46,10 @@ combinations:
         - pep8: W291
         - pylint: C0303
 
+    -   # Blank line contains whitespace
+        - pep8: W293
+        - pylint: C0303
+
     -   # No newline at end of file
         - pep8: W292
         - pylint: C0304

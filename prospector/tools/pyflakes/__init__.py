@@ -1,7 +1,6 @@
 from __future__ import absolute_import
-import os
 
-from pyflakes.api import iterSourceCode, checkPath
+from pyflakes.api import checkPath
 from pyflakes.reporter import Reporter
 
 from prospector.message import Location, Message

@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Profiles &mdash; Prospector 0.7 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Prospector 0.7 documentation" href="index.html" />
+    <link rel="next" title="Supported Tools" href="supported_tools.html" />
+    <link rel="prev" title="Strictness" href="strictness.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="supported_tools.html" title="Supported Tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="strictness.html" title="Strictness"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Prospector 0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="profiles">
+<h1>Profiles<a class="headerlink" href="#profiles" title="Permalink to this headline">¶</a></h1>
+<p>Here is an example profile:</p>
+<div class="highlight-python"><div class="highlight"><pre>inherits:
+  - strictness_medium
+
+ignores:
+  - ^docs/
+
+pep8:
+  disable:
+    - W602
+  enable:
+    - W601
+  options:
+    max-line-length: 79
+
+mccabe:
+  run: false
+</pre></div>
+</div>
+<div class="section" id="builtin-profiles">
+<h2>Builtin Profiles<a class="headerlink" href="#builtin-profiles" title="Permalink to this headline">¶</a></h2>
+<p>Prospector comes with several built-in profiles, which power some of strictness and style
+options. You can see the <a class="reference external" href="https://github.com/landscapeio/prospector/tree/master/prospector/profiles/profiles">full list on GitHub</a>.</p>
+</div>
+<div class="section" id="inheritance">
+<h2>Inheritance<a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h2>
+<p>Profiles can inherit from other profiles, and can inherit from more than one profile.
+Prospector merges together all of the options in each profile, starting at the top
+of the inheritance tree and overwriting values with those found lower.</p>
+<p>The example profile above inherits from the &#8216;strictness_medium&#8217; profile provided by
+prospector. It will take all options from &#8216;strictness_medium&#8217; except where new settings
+are defined, which will be used in preference.</p>
+<p>For lists, such as the <tt class="docutils literal"><span class="pre">ignores</span></tt> section, they will be merged together rather than
+overwritten - so essentially, the ignores section will accumulate.</p>
+<p>The name of a profile is the filename without the <tt class="docutils literal"><span class="pre">.yaml</span></tt> extension. So if you create
+a profile called &#8216;my_project.yaml&#8217;, the name will be &#8216;my_project&#8217;. Inheritance works
+by searching the <tt class="docutils literal"><span class="pre">profile-path</span></tt> for files matching the name in the inheritance list.</p>
+<p>The <tt class="docutils literal"><span class="pre">profile-path</span></tt> is where Prospector should search when looking for profiles. By
+default, it will look in the directory containing the built-in profiles, as well as
+the directory where prospector is run from, and a <cite>.prospector</cite> directory relative to
+where prospector is run from. To add additional places to search:</p>
+<div class="highlight-python"><div class="highlight"><pre>prospector --profile-path path/to/your/profiles
+</pre></div>
+</div>
+</div>
+<div class="section" id="ignoring-paths">
+<h2>Ignoring Paths<a class="headerlink" href="#ignoring-paths" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">ignores</span></tt> section is a list of regular expressions. The path of each directory and file
+that prospector finds is passed to each regular expression and <cite>searched</cite>
+(ie, <tt class="docutils literal"><span class="pre">re.search</span></tt> not <tt class="docutils literal"><span class="pre">re.match</span></tt>). If any matches are found, the file or directory is not
+included in the checks.</p>
+</div>
+<div class="section" id="tool-configuration">
+<h2>Tool Configuration<a class="headerlink" href="#tool-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Each tool can be individually configured with a section beginning with the tool name
+(in lowercase). Valid values are</p>
+<div class="section" id="enabling-and-disabling-tools">
+<h3>Enabling and Disabling Tools<a class="headerlink" href="#enabling-and-disabling-tools" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="enabling-and-disabling-messages">
+<h3>Enabling and Disabling Messages<a class="headerlink" href="#enabling-and-disabling-messages" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="tool-options">
+<h3>Tool Options<a class="headerlink" href="#tool-options" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Profiles</a><ul>
+<li><a class="reference internal" href="#builtin-profiles">Builtin Profiles</a></li>
+<li><a class="reference internal" href="#inheritance">Inheritance</a></li>
+<li><a class="reference internal" href="#ignoring-paths">Ignoring Paths</a></li>
+<li><a class="reference internal" href="#tool-configuration">Tool Configuration</a><ul>
+<li><a class="reference internal" href="#enabling-and-disabling-tools">Enabling and Disabling Tools</a></li>
+<li><a class="reference internal" href="#enabling-and-disabling-messages">Enabling and Disabling Messages</a></li>
+<li><a class="reference internal" href="#tool-options">Tool Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="strictness.html"
+                        title="previous chapter">Strictness</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="supported_tools.html"
+                        title="next chapter">Supported Tools</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/profiles.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="supported_tools.html" title="Supported Tools"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="strictness.html" title="Strictness"
+             >previous</a> |</li>
+        <li><a href="index.html">Prospector 0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Carl Crowder.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

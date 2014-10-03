@@ -59,7 +59,7 @@ class FoundFiles(object):
         # firstly, gather a list of the minimum path to each package
         package_list = set()
         packages = [p[0] for p in self._packages if not p[1]]
-        for package in sorted(packages, key=lambda x: len(x)):
+        for package in sorted(packages, key=len):
             parent = os.path.split(package)[0]
             if parent not in packages and parent not in package_list:
                 package_list.add(parent)
@@ -72,7 +72,7 @@ class FoundFiles(object):
             if dirname not in packages:
                 module_list.append(dirname)
 
-        full_list = sorted(set(module_list) | package_list, key=lambda x: len(x))
+        full_list = sorted(set(module_list) | package_list, key=len)
         if absolute_paths:
             full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
         return full_list

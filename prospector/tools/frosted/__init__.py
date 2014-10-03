@@ -1,8 +1,6 @@
 from __future__ import absolute_import
 
-import os.path
-
-from frosted.api import iter_source_code, check_path
+from frosted.api import check_path
 
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase

@@ -99,8 +99,8 @@ class Pep8Tool(ToolBase):
                 if os.path.exists(conf_path) and os.path.isfile(conf_path):
                     # this file exists - but does it have pep8 config in it?
                     header = re.compile(r'\[pep8\]')
-                    with open(conf_path) as f:
-                        if any([header.search(line) for line in f.readlines()]):
+                    with open(conf_path) as conf_file:
+                        if any([header.search(line) for line in conf_file.readlines()]):
                             external_config = conf_path
                             break
 

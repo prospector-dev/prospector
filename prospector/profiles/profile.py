@@ -16,7 +16,7 @@ class ProfileNotFound(Exception):
 _EMPTY_DATA = {
     'inherits': [],
     'ignore': [],
-    'output-format': 'text'
+    'output-format': None
 }
 
 
@@ -148,7 +148,8 @@ class ProspectorProfile(object):
     def merge(self, other_profile):
         self.ignore = list(set(self.ignore + other_profile.ignore))
         self.inherits = list(set(self.inherits + other_profile.inherits))
-        self.output_format = other_profile.output_format
+        if other_profile.output_format is not None:
+            self.output_format = other_profile.output_format
 
         for tool in TOOLS.keys():
             merged = _merge_dict(getattr(self, tool), getattr(other_profile, tool))

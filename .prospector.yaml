@@ -1,7 +1,10 @@
-output_format: grouped
+output-format: grouped
 
 inherits:
   - strictness_veryhigh
+
+ignores:
+  - ^docs/
 
 pyroma:
   run: true

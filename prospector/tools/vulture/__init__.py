@@ -9,7 +9,11 @@ class ProspectorVulture(Vulture):
         Vulture.__init__(self, exclude=None, verbose=False)
         self._files = found_files
 
-    def scavenge(self):
+    def scavenge(self, _=None):
+        # The argument is a list of paths, but we don't care
+        # about that as we use the found_files object. The
+        # argument is here to explicitly acknowledge that we
+        # are overriding the Vulture.scavenge method.
         for module in self._files.iter_module_paths():
             module_string = open(module).read()
             self.file = module
@@ -35,6 +39,9 @@ class ProspectorVulture(Vulture):
 
 
 class VultureTool(ToolBase):
+    def __init__(self):
+        ToolBase.__init__(self)
+        self._vulture = None
 
     def prepare(self, found_files, args, adaptors):
         self._vulture = ProspectorVulture(found_files)
