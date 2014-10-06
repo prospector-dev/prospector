@@ -4,6 +4,7 @@ Prospector Changelog
 ## Version 0.7
 
 * Profiles got an update to make them easier to understand and use. They are mostly the same as before, but [the documentation](http://prospector.readthedocs.org/en/latest/profiles.html) and command line arguments have improved so that they can be reliably used.
+* If a directive inline in code disables a pylint message, equivalent messages from other tools will now also be disabled.
 * Added optional tools - additional tools which are not enabled by default but can be activated if the user chooses to.
 * Added pyroma, a tool for validating packaging metadata, as an optional tool.
 * Added vulture, a tool for finding dead code, as an optional tool.

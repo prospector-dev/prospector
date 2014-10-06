@@ -82,11 +82,17 @@ class PylintTool(ToolBase):
 
         self._args = linter.load_command_line_configuration(check_paths)
 
-        # disable the warnings about disabling warnings...
-        linter.disable('I0011')
-        linter.disable('I0012')
-        linter.disable('I0020')
-        linter.disable('I0021')
+        # The warnings about disabling warnings are useful for figuring out
+        # with other tools to suppress messages from. For example, an unused
+        # import which is disabled with 'pylint:disable=W0611' will still
+        # generate an 'FL0001' unused import warning from pyflakes. Using the
+        # information from these messages, we can figure out what was disabled.
+        linter.disable('I0011')   # notification about disabling a message
+        linter.disable('I0012')  # notification about enabling a message
+        linter.enable('I0013')   # notification about disabling an entire file
+        linter.enable('I0020')   # notification about a message being supressed
+        linter.disable('I0021')  # notification about message supressed which was not raised
+        linter.disable('I0022')  # notification about use of deprecated 'pragma' option
 
         # disable the 'mixed indentation' warning, since it actually will only allow
         # the indentation specified in the pylint configuration file; we replace it

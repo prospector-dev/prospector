@@ -4,7 +4,7 @@ import re
 
 from datetime import datetime
 
-from prospector import config as cfg, tools, blender
+from prospector import config as cfg, tools, blender, postfilter
 from prospector.adaptor import LIBRARY_ADAPTORS
 from prospector.adaptor.common import CommonAdaptor
 from prospector.adaptor.profile import ProfileAdaptor
@@ -189,7 +189,7 @@ class Prospector(object):
         if self.config.blending:
             messages = blender.blend(messages)
 
-        return messages
+        return postfilter.filter_messages(messages)
 
     def execute(self):
 
