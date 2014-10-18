@@ -3,6 +3,7 @@ Prospector Changelog
 
 ## Version 0.7
 
+* Prospector now uses an exit code of 1 to indicate that messages were found, to make it easier for bash scripts and so on to fail if any messages are found. A new flag, `-0` or `--zero-exit`, turns off this behaviour so that a non-zero exit code indicates that prospector failed to run.
 * Profiles got an update to make them easier to understand and use. They are mostly the same as before, but [the documentation](http://prospector.readthedocs.org/en/latest/profiles.html) and command line arguments have improved so that they can be reliably used.
 * If a directive inline in code disables a pylint message, equivalent messages from other tools will now also be disabled.
 * Added optional tools - additional tools which are not enabled by default but can be activated if the user chooses to.
