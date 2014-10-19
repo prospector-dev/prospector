@@ -1,3 +1,2 @@
-include bin/prospector
 include prospector/blender_combinations.yaml
 include prospector/profiles/profiles/*.yaml

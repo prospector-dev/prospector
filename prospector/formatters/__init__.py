@@ -1,4 +1,4 @@
-from prospector.formatters import json, text, grouped, emacs, yaml
+from prospector.formatters import json, text, grouped, emacs, yaml, pylint
 
 
 __all__ = (
@@ -12,4 +12,5 @@ FORMATTERS = {
     'grouped': grouped.GroupedFormatter,
     'emacs': emacs.EmacsFormatter,
     'yaml': yaml.YamlFormatter,
+    'pylint': pylint.PylintFormatter,
 }

@@ -32,3 +32,6 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Sphinx
+docs/_build

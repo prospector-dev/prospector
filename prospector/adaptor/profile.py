@@ -5,12 +5,15 @@ from pylint.utils import UnknownMessage
 
 class ProfileAdaptor(AdaptorBase):
 
-    def __init__(self, profile_names):
-        self.profile = load_profiles(profile_names)
+    def __init__(self, profile_names, profile_path):
+        self.profile = load_profiles(profile_names, profile_path)
         self.name = 'profiles:%s' % ','.join(profile_names)
 
     def is_tool_enabled(self, tool_name):
         return self.profile.is_tool_enabled(tool_name)
+
+    def get_output_format(self):
+        return self.profile.output_format
 
     def adapt_pylint(self, linter):
         disabled = self.profile.get_disabled_messages('pylint')
@@ -34,30 +37,24 @@ class ProfileAdaptor(AdaptorBase):
                 if option[0] in options:
                     checker.set_option(option[0], options[option[0]])
 
-    def adapt_mccabe(self, tool):
-        disabled = self.profile.get_disabled_messages('mccabe')
-
+    def _simple_ignore(self, name, tool):
+        disabled = self.profile.get_disabled_messages(name)
         tool.ignore_codes = tuple(set(
             tool.ignore_codes + tuple(disabled)
         ))
+
+    def adapt_mccabe(self, tool):
+        self._simple_ignore('mccabe', tool)
 
         if 'max-complexity' in self.profile.mccabe['options']:
             tool.max_complexity = \
                 self.profile.mccabe['options']['max-complexity']
 
     def adapt_pyflakes(self, tool):
-        disabled = self.profile.get_disabled_messages('pyflakes')
-
-        tool.ignore_codes = tuple(set(
-            tool.ignore_codes + tuple(disabled)
-        ))
+        self._simple_ignore('pyflakes', tool)
 
     def adapt_frosted(self, tool):
-        disabled = self.profile.get_disabled_messages('frosted')
-
-        tool.ignore_codes = tuple(set(
-            tool.ignore_codes + tuple(disabled)
-        ))
+        self._simple_ignore('frosted', tool)
 
     def adapt_pep8(self, style_guide, use_config=True):
         if not use_config:
@@ -74,8 +71,7 @@ class ProfileAdaptor(AdaptorBase):
                 self.profile.pep8['options']['max-line-length']
 
     def adapt_pep257(self, tool):
-        disabled = self.profile.get_disabled_messages('pep257')
+        self._simple_ignore('pep257', tool)
 
-        tool.ignore_codes = tuple(set(
-            tool.ignore_codes + tuple(disabled)
-        ))
+    def adapt_pyroma(self, tool):
+        self._simple_ignore('pyroma', tool)

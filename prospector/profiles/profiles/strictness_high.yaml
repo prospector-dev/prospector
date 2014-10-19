@@ -16,6 +16,7 @@ pylint:
     - W0603
     - W1111
     - W1301
+    - W5103
 
   options:
     max-locals: 15
@@ -38,3 +39,9 @@ pep8:
     - N812
     - N813
     - N814
+
+pyroma:
+  disable:
+    - PYR15
+    - PYR18
+    - PYR17

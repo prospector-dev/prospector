@@ -18,3 +18,6 @@ class AdaptorBase(object):
 
     def adapt_pep257(self, tool):
         pass
+
+    def adapt_pyroma(self, tool):
+        pass

@@ -1,0 +1,18 @@
+output-format: grouped
+
+inherits:
+  - strictness_veryhigh
+
+ignores:
+  - ^docs/
+
+pyroma:
+  run: true
+
+pylint:
+  options:
+    max-line-length: 120
+
+pep8:
+  options:
+    max-line-length: 120

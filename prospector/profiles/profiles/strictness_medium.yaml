@@ -14,6 +14,7 @@ pylint:
     - C0324
     - C0325
     - C0326
+    - C0330
     - E0213
     - I0014
     - R0201
@@ -106,3 +107,7 @@ pep8:
     - W293
   options:
     max-line-length: 159
+
+pyroma:
+  disable:
+    - PYR04

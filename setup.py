@@ -7,12 +7,12 @@ from prospector import __pkginfo__
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.2.1',
-    'pylint-celery>=0.1',
-    'pylint-django>=0.4',
-    'pylint-plugin-utils>=0.2',
-    'pylint-common>=0.2',
-    'requirements-detector>=0.2.2',
+    'pylint>=1.3',
+    'pylint-celery>=0.3',
+    'pylint-django>=0.5.5',
+    'pylint-plugin-utils>=0.2.2',
+    'pylint-common>=0.2.1',
+    'requirements-detector>=0.3',
     'setoptconf>=0.2.0',
     'dodgy>=0.1.5',
     'pyyaml',
@@ -21,7 +21,6 @@ _INSTALL_REQUIRES = [
     'pep8>=1.5.7',
     'pep8-naming>=0.2.2',
     'frosted>=1.4.1',
-    'pep257>=0.3.3,<0.4',
 ]
 
 _PACKAGE_DATA = {
@@ -53,6 +52,13 @@ _CLASSIFIERS = (
     'GNU General Public License v2 or later (GPLv2+)',
 )
 
+_OPTIONAL = {
+    'with_vulture': ('vulture>=0.6',),
+    'with_pyroma': ('pyroma>=1.6',),
+    'with_pep257': ('pep257>=0.3,<0.4',),
+}
+_OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
+
 
 setup(
     name='prospector',
@@ -61,8 +67,9 @@ setup(
     author='landscape.io',
     author_email='code@landscape.io',
     license='GPLv2',
+    zip_safe=False,
     description='Prospector: python static analysis tool',
-    keywords='pylint pyflakes pep8 pep257 mccabe frosted prospector static code analysis',
+    keywords='pylint pyflakes pep8 mccabe frosted prospector static code analysis',
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,
     include_package_data=True,
@@ -73,4 +80,5 @@ setup(
         ],
     },
     install_requires=_INSTALL_REQUIRES,
+    extras_require=_OPTIONAL,
 )

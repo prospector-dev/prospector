@@ -27,6 +27,7 @@ combinations:
     -   # Unused variable
         - pylint: W0612
         - pyflakes: FL0013
+        - frosted: E307
 
     -   # Mixed tabs and spaces
         - pep8: E101
@@ -43,6 +44,10 @@ combinations:
 
     -   # Trailing whitespace
         - pep8: W291
+        - pylint: C0303
+
+    -   # Blank line contains whitespace
+        - pep8: W293
         - pylint: C0303
 
     -   # No newline at end of file
@@ -136,6 +141,14 @@ combinations:
         - pylint: W0702
         - frosted: W101
 
+    -   # Spaces around keyword/paramater equals
+        - pep8: E251
+        - pylint: C0326
+
+    -   # Missing space after a comma
+        - pep8: E231
+        - pylint: C0326
+
     -   # redefinition of unused %r from line %r
         - pyflakes: FL0002
         - frosted: E301
@@ -156,7 +169,6 @@ combinations:
         - pyflakes: FL0009
         - frosted: E305
 
-    -   # local variable %r is assigned to but never used
-        - pyflakes: FL0013
-        - frosted: E307
-
+    -   # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
+        - pylint: C0204
+        - pep8: N804

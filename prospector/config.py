@@ -14,6 +14,8 @@ __all__ = (
 def build_manager():
     manager = soc.ConfigurationManager('prospector')
 
+    manager.add(soc.BooleanSetting('zero_exit', default=False))
+
     manager.add(soc.BooleanSetting('autodetect', default=True))
     manager.add(soc.ListSetting('uses', soc.String, default=[]))
 
@@ -31,16 +33,19 @@ def build_manager():
     manager.add(soc.ChoiceSetting(
         'output_format',
         sorted(FORMATTERS.keys()),
-        default='text',
+        default=None,
     ))
     manager.add(soc.BooleanSetting('absolute_paths', default=False))
 
     manager.add(soc.ListSetting(
         'tools',
         soc.Choice(sorted(TOOLS.keys())),
-        default=sorted(DEFAULT_TOOLS),
+        default=None,
     ))
+    manager.add(soc.ListSetting('with_tools', soc.String, default=[]))
+    manager.add(soc.ListSetting('without_tools', soc.String, default=[]))
     manager.add(soc.ListSetting('profiles', soc.String, default=[]))
+    manager.add(soc.ListSetting('profile_path', soc.String, default=[]))
     manager.add(soc.ChoiceSetting(
         'strictness',
         ['veryhigh', 'high', 'medium', 'low', 'verylow'],
@@ -63,29 +68,40 @@ def build_manager():
 
 
 def build_default_sources():
-    sources = []
-
-    sources.append(build_command_line_source())
-    sources.append(soc.EnvironmentVariableSource())
-    sources.append(soc.ConfigFileSource((
-        '.prospectorrc',
-        'setup.cfg',
-        'tox.ini',
-    )))
-    sources.append(soc.ConfigFileSource((
-        soc.ConfigDirectory('.prospectorrc'),
-        soc.HomeDirectory('.prospectorrc'),
-    )))
+    sources = [
+        build_command_line_source(),
+        soc.EnvironmentVariableSource(),
+        soc.ConfigFileSource((
+            '.prospectorrc',
+            'setup.cfg',
+            'tox.ini',
+        )),
+        soc.ConfigFileSource((
+            soc.ConfigDirectory('.prospectorrc'),
+            soc.HomeDirectory('.prospectorrc'),
+        ))
+    ]
 
     return sources
 
 
-def build_command_line_source():
-    parser_options = {
-        'description': 'Performs static analysis of Python code',
-    }
+def build_command_line_source(prog=None, description='Performs static analysis of Python code'):
+    parser_options = {}
+    if prog is not None:
+        parser_options['prog'] = prog
+    if description is not None:
+        parser_options['description'] = description
 
     options = {
+        'zero_exit': {
+            'flags': ['-0', '--zero-exit'],
+            'help': 'Prospector will exit with a code of 1 (one) if any messages'
+                    ' are found. This makes automation easier; if there are any'
+                    ' problems at all, the exit code is non-zero. However this behaviour'
+                    ' is not always desirable, so if this flag is set, prospector will'
+                    ' exit with a code of 0 if it ran successfully, and non-zero if'
+                    ' it failed to run.'
+        },
         'autodetect': {
             'flags': ['-A', '--no-autodetect'],
             'help': 'Turn off auto-detection of frameworks and libraries used.'
@@ -95,7 +111,7 @@ def build_command_line_source():
         'uses': {
             'flags': ['-u', '--uses'],
             'help': 'A list of one or more libraries or frameworks that the'
-                    ' project users. Possible values are: %s. This will be'
+                    ' project uses. Possible values are: %s. This will be'
                     ' autodetected by default, but if autodetection doesn\'t'
                     ' work, manually specify them using this flag.' % (
                         ', '.join(sorted(LIBRARY_ADAPTORS.keys())),
@@ -158,18 +174,46 @@ def build_command_line_source():
         },
         'tools': {
             'flags': ['-t', '--tool'],
-            'help': 'A list of tools to run. Possible values are: %s. By'
-            ' default, the following tools will be run: %s' % (
-                ', '.join(sorted(TOOLS.keys())),
-                ', '.join(sorted(DEFAULT_TOOLS)),
-            ),
+            'help': 'A list of tools to run. This lets you set exactly which '
+                    'tools to run. To add extra tools to the defaults, see '
+                    '--extra-tool. Possible values are: %s. By '
+                    'default, the following tools will be run: %s' % (
+                        ', '.join(sorted(TOOLS.keys())),
+                        ', '.join(sorted(DEFAULT_TOOLS)),
+                    ),
+        },
+        'with_tools': {
+            'flags': ['-w', '--with-tool'],
+            'help': 'A list of tools to run in addition to the default tools. '
+                    'To specify all tools explicitly, use the --tool argument. '
+                    'Possible values are %s.' % (
+                        ', '.join(sorted(TOOLS.keys()))
+                    ),
+
+        },
+        'without_tools': {
+            'flags': ['-W', '--without-tool'],
+            'help': 'A list of tools that should not be run. Useful to turn off '
+                    'only a single tool from the defaults. '
+                    'To specify all tools explicitly, use the --tool argument. '
+                    'Possible values are %s.' % (
+                        ', '.join(sorted(TOOLS.keys()))
+                    ),
+
         },
         'profiles': {
             'flags': ['-P', '--profile'],
             'help': 'The list of profiles to load. A profile is a certain'
                     ' \'type\' of behaviour for prospector, and is represented'
-                    ' by a YAML configuration file. A full path to the YAML'
-                    ' file describing the profile must be provided.',
+                    ' by a YAML configuration file. Either a full path to the YAML'
+                    ' file describing the profile must be provided, or it must be'
+                    ' on the profile path (see --profile-path)',
+        },
+        'profile_path': {
+            'flags': ['--profile-path'],
+            'help': 'Additional paths to search for profile files. By default this'
+                    ' is the path that prospector will check, and a directory '
+                    ' called ".prospector" in the path that prospector will check.',
         },
         'strictness': {
             'flags': ['-s', '--strictness'],
@@ -201,7 +245,7 @@ def build_command_line_source():
                     ' ignored.',
         },
         'die_on_tool_error': {
-            'flags': ['--die-on-tool-error'],
+            'flags': ['-X', '--die-on-tool-error'],
             'help': 'If a tool fails to run, prospector will try to carry on.'
                     ' Use this flag to cause prospector to die and raise the'
                     ' exception the tool generated. Mostly useful for'

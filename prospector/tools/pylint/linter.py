@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-import os
 
 from logilab.common.configuration import OptionsManagerMixIn
 from pylint.lint import PyLinter
@@ -7,9 +6,8 @@ from pylint.lint import PyLinter
 
 class ProspectorLinter(PyLinter):  # pylint: disable=R0901,R0904
 
-    def __init__(self, ignore, rootpath, *args, **kwargs):
-        self._ignore = ignore
-        self._rootpath = rootpath
+    def __init__(self, found_files, *args, **kwargs):
+        self._files = found_files
 
         # set up the standard PyLint linter
         PyLinter.__init__(self, *args, **kwargs)
@@ -25,8 +23,6 @@ class ProspectorLinter(PyLinter):  # pylint: disable=R0901,R0904
         expanded = PyLinter.expand_files(self, modules)
         filtered = []
         for module in expanded:
-            rel_path = os.path.relpath(module['path'], self._rootpath)
-            if any([m.search(rel_path) for m in self._ignore]):
-                continue
-            filtered.append(module)
+            if self._files.check_module(module['path']):
+                filtered.append(module)
         return filtered

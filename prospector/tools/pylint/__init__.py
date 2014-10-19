@@ -26,52 +26,6 @@ class DummyStream(object):
         pass
 
 
-def _find_package_paths(ignore, rootpath):
-    sys_path = set()
-    check_dirs = []
-
-    for subdir in os.listdir(rootpath):
-        if subdir.startswith('.'):
-            continue
-
-        subdir_fullpath = os.path.join(rootpath, subdir)
-        rel_path = os.path.relpath(subdir_fullpath, rootpath)
-
-        if os.path.islink(subdir_fullpath):
-            continue
-
-        if os.path.isfile(subdir_fullpath):
-            if not subdir.endswith('.py'):
-                continue
-
-            if os.path.exists(os.path.join(rootpath, '__init__.py')):
-                continue
-
-            # this is a python module but not in a package, so add it
-            if any([m.search(rel_path) for m in ignore]):
-                continue
-            check_dirs.append(subdir_fullpath)
-            # it's also necessary to add this directory to the path, in case
-            # any other files in this directory import from it
-            sys_path.add(rootpath)
-
-        elif os.path.exists(os.path.join(subdir_fullpath, '__init__.py')):
-            # this is a package, add it and move on
-            if any([m.search(rel_path) for m in ignore]):
-                continue
-            sys_path.add(rootpath)
-            check_dirs.append(subdir_fullpath)
-        else:
-            # this is not a package, so check its subdirs
-            add_sys_path, add_check_dirs = _find_package_paths(
-                ignore,
-                subdir_fullpath,
-            )
-            sys_path |= add_sys_path
-            check_dirs += add_check_dirs
-    return sys_path, check_dirs
-
-
 class PylintTool(ToolBase):
 
     def __init__(self):
@@ -79,11 +33,38 @@ class PylintTool(ToolBase):
         self._collector = self._linter = None
         self._orig_sys_path = []
 
-    def prepare(self, rootpath, ignore, args, adaptors):
-        linter = ProspectorLinter(ignore, rootpath)
+    def prepare(self, found_files, args, adaptors):
+
+        linter = ProspectorLinter(found_files)
         linter.load_default_plugins()
 
-        extra_sys_path, check_paths = _find_package_paths(ignore, rootpath)
+        extra_sys_path = found_files.get_minimal_syspath()
+
+        # create a list of packages, but don't include packages which are
+        # subpackages of others as checks will be duplicated
+        packages = [p.split(os.path.sep) for p in found_files.iter_package_paths(abspath=False)]
+        packages.sort(key=len)
+        check_paths = set()
+        for package in packages:
+            package_path = os.path.join(*package)
+            if len(package) == 1:
+                check_paths.add(package_path)
+                continue
+            for i in range(1, len(package)):
+                if os.path.join(*package[:-i]) in check_paths:
+                    break
+            else:
+                check_paths.add(package_path)
+
+        for filepath in found_files.iter_module_paths(abspath=False):
+            package = os.path.dirname(filepath).split(os.path.sep)
+            for i in range(0, len(package)):
+                if os.path.join(*package[:i+1]) in check_paths:
+                    break
+            else:
+                check_paths.add(filepath)
+
+        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
 
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path
@@ -101,11 +82,17 @@ class PylintTool(ToolBase):
 
         self._args = linter.load_command_line_configuration(check_paths)
 
-        # disable the warnings about disabling warnings...
-        linter.disable('I0011')
-        linter.disable('I0012')
-        linter.disable('I0020')
-        linter.disable('I0021')
+        # The warnings about disabling warnings are useful for figuring out
+        # with other tools to suppress messages from. For example, an unused
+        # import which is disabled with 'pylint:disable=W0611' will still
+        # generate an 'FL0001' unused import warning from pyflakes. Using the
+        # information from these messages, we can figure out what was disabled.
+        linter.disable('I0011')   # notification about disabling a message
+        linter.disable('I0012')  # notification about enabling a message
+        linter.enable('I0013')   # notification about disabling an entire file
+        linter.enable('I0020')   # notification about a message being supressed
+        linter.disable('I0021')  # notification about message supressed which was not raised
+        linter.disable('I0022')  # notification about use of deprecated 'pragma' option
 
         # disable the 'mixed indentation' warning, since it actually will only allow
         # the indentation specified in the pylint configuration file; we replace it
@@ -156,9 +143,6 @@ class PylintTool(ToolBase):
             out.append(combined_message)
 
         return out
-
-    def _combine_(self, messages):
-        pass
 
     def combine(self, messages):
         """
