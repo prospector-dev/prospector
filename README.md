@@ -85,4 +85,3 @@ Prospector does not include documentation warnings by default, but you can turn 
 # License
 
 Prospector is available under the GPLv2 License.
-
