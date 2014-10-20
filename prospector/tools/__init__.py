@@ -41,7 +41,8 @@ TOOLS = {
     'pep8': Pep8Tool,
     'pylint': PylintTool,
     'vulture': _optional_tool('vulture'),
-    'pyroma': _optional_tool('pyroma')
+    'pyroma': _optional_tool('pyroma'),
+    'pep257': _optional_tool('pep257'),
 }
 
 

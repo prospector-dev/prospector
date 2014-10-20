@@ -70,5 +70,8 @@ class ProfileAdaptor(AdaptorBase):
             style_guide.options.max_line_length = \
                 self.profile.pep8['options']['max-line-length']
 
+    def adapt_pep257(self, tool):
+        self._simple_ignore('pep257', tool)
+
     def adapt_pyroma(self, tool):
         self._simple_ignore('pyroma', tool)

@@ -55,6 +55,7 @@ _CLASSIFIERS = (
 _OPTIONAL = {
     'with_vulture': ('vulture>=0.6',),
     'with_pyroma': ('pyroma>=1.6',),
+    'with_pep257': ('pep257>=0.3,<0.4',),
 }
 _OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
 
@@ -68,7 +69,7 @@ setup(
     license='GPLv2',
     zip_safe=False,
     description='Prospector: python static analysis tool',
-    keywords='pylint pyflakes pep8 mccabe frosted prospector code analysis',
+    keywords='pylint pyflakes pep8 mccabe frosted prospector static code analysis',
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,
     include_package_data=True,
