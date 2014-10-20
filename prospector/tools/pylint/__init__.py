@@ -177,11 +177,12 @@ class PylintTool(ToolBase):
         # https://bitbucket.org/logilab/pylint/src/3f8ededd0b1637396937da8fe136f51f2bafb047/checkers/variables.py?at=default#cl-617
 
         # TODO: it'd be nice in the future to do something with this data in case it's useful!
-        self.hide_stdout()
+        #self.hide_stdout()
         try:
             self._linter.check(self._args)
         finally:
-            self.restore_stdout()
+            #self.restore_stdout()
+            pass
         sys.path = self._orig_sys_path
 
         messages = self._collector.get_messages()

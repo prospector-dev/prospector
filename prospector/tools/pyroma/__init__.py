@@ -44,7 +44,6 @@ class PyromaTool(ToolBase):
 
     def run(self):
         messages = []
-
         for module in self._files.iter_module_paths(include_ignored=True):
             dirname, filename = os.path.split(module)
             if filename != 'setup.py':
