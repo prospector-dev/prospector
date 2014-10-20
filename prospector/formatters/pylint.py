@@ -26,7 +26,7 @@ class PylintFormatter(Formatter):
             #   ={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
             # prospector/config.py:65: [C0111(missing-docstring), build_default_sources] Missing function docstring
 
-            template = '%(path)s:%(line)s: [%(source)s:%(code)s(), %(function)s] %(message)s'
+            template = '%(path)s:%(line)s: [%(code)s(%(source)s), %(function)s] %(message)s'
             output.append(template % {
                 'path': message.location.path,
                 'line': message.location.line,
