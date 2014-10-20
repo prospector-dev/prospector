@@ -3,12 +3,15 @@ Prospector Changelog
 
 ## Version 0.7
 
-* Prospector now uses an exit code of 1 to indicate that messages were found, to make it easier for bash scripts and so on to fail if any messages are found. A new flag, `-0` or `--zero-exit`, turns off this behaviour so that a non-zero exit code indicates that prospector failed to run.
+* [#48](https://github.com/landscapeio/prospector/issues/48) If a folder is detected to be a virtualenvironment, then prospector will not check the files inside.
+* [#31](https://github.com/landscapeio/prospector/issues/31) Prospector can now check single files if passed a module as the path argument.
+* [#50](https://github.com/landscapeio/prospector/issues/50) Prospector now uses an exit code of 1 to indicate that messages were found, to make it easier for bash scripts and so on to fail if any messages are found. A new flag, `-0` or `--zero-exit`, turns off this behaviour so that a non-zero exit code indicates that prospector failed to run.
 * Profiles got an update to make them easier to understand and use. They are mostly the same as before, but [the documentation](http://prospector.readthedocs.org/en/latest/profiles.html) and command line arguments have improved so that they can be reliably used.
 * If a directive inline in code disables a pylint message, equivalent messages from other tools will now also be disabled.
 * Added optional tools - additional tools which are not enabled by default but can be activated if the user chooses to.
 * Added pyroma, a tool for validating packaging metadata, as an optional tool.
-* Added vulture, a tool for finding dead code, as an optional tool.
+* [#29](https://github.com/landscapeio/prospector/issues/29) Added support for pep257, a docstring format checker
+* [#45](https://github.com/landscapeio/prospector/issues/45) Added vulture, a tool for finding dead code, as an optional tool.
 * [#24](https://github.com/landscapeio/prospector/issues/24) Added Sphinx documentation, which is now also [available on ReadTheDocs](http://prospector.readthedocs.org/)
 
 ## Version 0.6.4
