@@ -120,4 +120,22 @@ To install and use::
 
     pip install prospector[with_vulture]
     prospector --with-tool vulture
-    
+
+
+`pep257 <https://github.com/GreenSteam/pep257>`_
+````````````````````````````````````````````````
+
+``pep257`` is a simple tool to warn about violations of the
+`PEP257 Docstring Conventions <http://legacy.python.org/dev/peps/pep-0257/>`_.
+It produces messages for any divergence from the style guide.
+
+To install and use::
+
+    pip install prospector[with_pep257]
+    prospector --with-tool pep257
+
+This tool is currently considered *experimental* due to some bugs in its
+ability to parse code. For example, modules that contain an ``__all__`` could
+end up producing bogus error messages if the ``__all__`` isn't formatted
+exactly as ``pep257`` expects it.
+
