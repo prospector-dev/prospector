@@ -26,6 +26,10 @@ class Prospector(object):
     def __init__(self, config, path):
         self.config = config
         self.path = path
+        if os.path.isdir(path):
+            self.rootpath = path
+        else:
+            self.rootpath = os.getcwd()
         self.adaptors = []
         self.libraries = []
         self.profiles = []
@@ -144,9 +148,12 @@ class Prospector(object):
         for tool in self.config.without_tools:
             to_run.remove(tool)
 
-        if self.config.tools is None:
+        if self.config.tools is None and len(self.config.with_tools) == 0 and len(self.config.without_tools) == 0:
             for tool in tools.TOOLS.keys():
-                if tool in to_run and not self.profile_adaptor.is_tool_enabled(tool):
+                enabled = self.profile_adaptor.is_tool_enabled(tool)
+                if enabled is None:
+                    enabled = tool in DEFAULT_TOOLS
+                if tool in to_run and not enabled:
                     to_run.remove(tool)
 
         self.tools_to_run = sorted(list(to_run))
@@ -183,9 +190,9 @@ class Prospector(object):
     def process_messages(self, messages):
         for message in messages:
             if self.config.absolute_paths:
-                message.to_absolute_path(self.path)
+                message.to_absolute_path(self.rootpath)
             else:
-                message.to_relative_path(self.path)
+                message.to_relative_path(self.rootpath)
         if self.config.blending:
             messages = blender.blend(messages)
 

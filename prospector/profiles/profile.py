@@ -156,11 +156,8 @@ class ProspectorProfile(object):
             setattr(self, tool, merged)
 
     def is_tool_enabled(self, name):
-        run = getattr(self, name)['run']
-        if run is None:
-            run = name in DEFAULT_TOOLS
-        return run
-
+        return getattr(self, name)['run']
+        
 
 def merge_profiles(profiles):
     merged_profile = profiles[0]
