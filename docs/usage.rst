@@ -7,6 +7,13 @@ The simplest way to run prospector is from the project root with no arguments. I
 
     prospector
 
+You can specify a path to check::
+
+    prospector path/to/my/package
+
+And you can specify a single python module::
+
+    prospector module/to/check.py
 
 See below for :ref:`a complete list of options and flags<full_options>`. You can also run ``prospector --help`` for a full list of options and their effects.
 
@@ -19,7 +26,7 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +-------------+----------------------------------------------------------------------------+
 | Format Name | Notes                                                                      |
 +=============+============================================================================+
-| ``emacs``   | Support for emacs compilation output mode, see `issue_16`_.                |
+| ``emacs``   | | Support for emacs compilation output mode, see `issue_16`_.                |
 +-------------+----------------------------------------------------------------------------+
 | ``grouped`` | | Similar to ``text``, but groups all message on the same line together    |
 |             | | rather than having a separate entry per message.                         |
@@ -33,15 +40,10 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 | ``json``    | | Produces a structured, parseable output of the messages and summary. See |
 |             | | below for more information about the structure.                          |
 +-------------+----------------------------------------------------------------------------+
-| ``yaml``    | Same as JSON except produces YAML output.                                  |
+| ``yaml``    | | Same as JSON except produces YAML output.                                  |
 +-------------+----------------------------------------------------------------------------+
-| ``text``    | The default output format, a simple human readable format.                 |
+| ``text``    | | The default output format, a simple human readable format.                 |
 +-------------+----------------------------------------------------------------------------+
-
-JSON Structure
-``````````````
-
-
 
 
 If your code uses frameworks and libraries
