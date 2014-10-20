@@ -55,7 +55,7 @@ class TestProfileParsing(TestCase):
     def test_disable_tool(self):
         profile = load_profiles('pylint_disabled', self._profile_path)
         self.assertFalse(profile.is_tool_enabled('pylint'))
-        self.assertTrue(profile.is_tool_enabled('pep8'))
+        self.assertTrue(profile.is_tool_enabled('pep8') is None)
 
     def test_disable_tool_inheritance(self):
         profile = load_profiles('pep8_and_pylint_disabled', self._profile_path)
