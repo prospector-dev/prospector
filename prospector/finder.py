@@ -78,6 +78,34 @@ class FoundFiles(object):
         return full_list
 
 
+def is_virtualenv(path):
+    if os.name == 'nt':
+        # Windows!
+        clues = ('Scripts', 'lib', 'include')
+    else:
+        clues = ('bin', 'lib', 'include')
+
+    dircontents = os.listdir(path)
+
+    if not all([clue in dircontents for clue in clues]):
+        # we don't have the 3 directories which would imply
+        # this is a virtualenvironment
+        return False
+
+    if not all([os.path.isdir(os.path.join(path, clue)) for clue in clues]):
+        # some of them are not actually directories
+        return False
+
+    # if we do have all three directories, make sure that it's not
+    # just a coincidence by doing some heuristics on the rest of
+    # the directory
+    if len(dircontents) > 7:
+        # if there are more than 7 things it's probably not a virtualenvironment
+        return False
+
+    return True
+
+
 def _find_paths(ignore, curpath, rootpath):
     files, modules, packages, directories = [], [], [], []
 
@@ -94,9 +122,15 @@ def _find_paths(ignore, curpath, rootpath):
         ignored = any([m.search(relpath) for m in ignore])
 
         if os.path.isdir(fullpath):
-            # this is a directory, is it also a package?
+
+            # is it probably a virtualenvironment?
+            if is_virtualenv(fullpath):
+                continue
+
+            # this is a directory
             directories.append((relpath, ignored))
 
+            # is it also a package?
             initpy = os.path.join(fullpath, '__init__.py')
             if os.path.exists(initpy) and os.path.isfile(initpy):
                 packages.append((relpath, ignored))

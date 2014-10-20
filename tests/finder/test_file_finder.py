@@ -1,6 +1,6 @@
 import os
 from unittest import TestCase
-from prospector.finder import FoundFiles, find_python
+from prospector.finder import find_python, is_virtualenv
 
 
 class TestSysPath(TestCase):
@@ -24,3 +24,14 @@ class TestSysPath(TestCase):
 
     def test3(self):
         self._run_test('test3', ['package'])
+
+
+class TestVirtualenvDetection(TestCase):
+
+    def test_is_a_venv(self):
+        path = os.path.join(os.path.dirname(__file__), 'testdata', 'venvs', 'is_a_venv')
+        self.assertTrue(is_virtualenv(path))
+
+    def test_not_a_venv(self):
+        path = os.path.join(os.path.dirname(__file__), 'testdata', 'venvs', 'not_a_venv')
+        self.assertFalse(is_virtualenv(path))
