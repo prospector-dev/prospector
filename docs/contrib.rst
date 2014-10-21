@@ -5,9 +5,9 @@ All contributions are very welcome! You can contribute in many ways:
 
 * Join the `python code quality`_ mailing list and answer questions.
 
-* :doc: Report bugs on the GitHub `issue tracker`_.
+* Report bugs on the GitHub `issue tracker`_.
 
-* :doc: Submit pull requests on the GitHub `repository`_.
+* Submit pull requests on the GitHub `repository`_.
 
 .. _python code quality: https://mail.python.org/mailman/listinfo/code-quality
 .. _issue tracker: https://github.com/landscapeio/prospector/issues
