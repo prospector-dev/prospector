@@ -9,8 +9,6 @@ from requirements_detector.detect import RequirementsNotFound
 _FROM_IMPORT_REGEX = re.compile(r'^\s*from ([\._a-zA-Z0-9]+) import .*$')
 _IMPORT_REGEX = re.compile(r'^\s*import ([\._a-zA-Z0-9]+)$')
 _IMPORT_MULTIPLE_REGEX = re.compile(r'^\s*import ([\._a-zA-Z0-9]+(, ){1})+')
-
-
 def find_from_imports(file_contents):
     names = set()
     for line in file_contents.split('\n'):
@@ -18,15 +16,15 @@ def find_from_imports(file_contents):
         if match:
             import_names = []
             first = match.group(1)
-	    import_names.append(first[:-2])
-	    for name in line.split(first)[1].split(','):
-	        import_names.append(name.strip())
-	else:
-	    match = _IMPORT_REGEX.match(line)
-	    if match is None:
-		match = _FROM_IMPORT_REGEX.match(line)
-	    if match is None:
-        	continue
+            import_names.append(first[:-2])
+            for name in line.split(first)[1].split(','):
+                import_names.append(name.strip())
+        else:
+            match = _IMPORT_REGEX.match(line)
+            if match is None:
+                match = _FROM_IMPORT_REGEX.match(line)
+            if match is None:
+                continue
             import_names = match.group(1).split('.')
         for import_name in import_names:
             if import_name in LIBRARY_ADAPTORS:
