@@ -18,10 +18,10 @@ class FindFromImportsTest(TestCase):
                    '    some, other, stuff)', 'django')
 
     def test_indented_imports(self):
-	self._test('def lala(self):\n    from django.db import models\n    return models.Model', 'django')
+        self._test('def lala(self):\n    from django.db import models\n    return models.Model', 'django')
      
     def test_same_line_two_imports(self):
-	self._test('import django, celery', 'django', 'celery')
+        self._test('import django, celery', 'django', 'celery')
 
 if __name__ == '__main__':
     import unittest
