@@ -13,9 +13,7 @@ _IMPORT_REGEX = re.compile(r'^\s*import ([\._a-zA-Z0-9]+)$')
 def find_from_imports(file_contents):
     names = set()
     for line in file_contents.split('\n'):
-        match = _IMPORT_REGEX.match(line)
-        if match is None:
-            match = _FROM_IMPORT_REGEX.match(line)
+        match = _IMPORT_REGEX.match(line) or _FROM_IMPORT_REGEX.match(line)
         if match is None:
             continue
         import_names = match.group(1).split('.')
