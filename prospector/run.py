@@ -249,8 +249,13 @@ class Prospector(object):
 
         summary['message_count'] = len(messages)
         summary['completed'] = datetime.now()
+
+        # Timedelta.total_seconds() is not available
+        # on Python<=2.6 so we calculate it ourselves
+        # See issue #60 and http://stackoverflow.com/a/3694895
         delta = (summary['completed'] - summary['started'])
-        summary['time_taken'] = '%0.2f' % delta.total_seconds()
+        total_seconds = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 1e6) / 1e6
+        summary['time_taken'] = '%0.2f' % total_seconds
 
         self.summary = summary
         self.messages = messages
