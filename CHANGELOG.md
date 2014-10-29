@@ -1,6 +1,11 @@
 Prospector Changelog
 =======
 
+## Version 0.7.1
+
+* [#60](https://github.com/landscapeio/prospector/issues/60) Prospector did not work with Python2.6 due to timedelta.total_seconds() not being available.
+* Restored the behaviour where std_out/std_err from pylint is supressed
+
 ## Version 0.7
 
 * [#48](https://github.com/landscapeio/prospector/issues/48) If a folder is detected to be a virtualenvironment, then prospector will not check the files inside.
