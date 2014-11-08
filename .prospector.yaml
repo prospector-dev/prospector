@@ -3,7 +3,7 @@ output-format: grouped
 inherits:
   - strictness_veryhigh
 
-ignores:
+ignore:
   - ^docs/
 
 pyroma:
