@@ -44,7 +44,7 @@ Here is an example profile::
       - no_test_warnings
       - strictness_medium
 
-    ignores:
+    ignore:
       - ^docs/
 
     pep8:
@@ -91,8 +91,8 @@ The example profile above inherits from the 'strictness_medium' profile provided
 prospector. It will take all options from 'strictness_medium' except where new settings
 are defined, which will be used in preference.
 
-For lists, such as the ``ignores`` section, they will be merged together rather than 
-overwritten - so essentially, the ignores section will accumulate.
+For lists, such as the ``ignore`` section, they will be merged together rather than 
+overwritten - so essentially, the ``ignore`` section will accumulate.
 
 The profile named in the ``inherits`` section must be on the :ref:`profile path <profile_path>`.
 
@@ -108,8 +108,8 @@ built-in prospector profiles::
 Ignoring Paths
 --------------
 
-The ``ignores`` section is a list of regular expressions. The path of each directory and file
-that prospector finds is passed to each regular expression and `searched` 
+The ``ignore`` section is a list of regular expressions. The path of each directory and file
+that prospector finds is passed to each regular expression and `searched`
 (ie, ``re.search`` not ``re.match``). If any matches are found, the file or directory is not
 included in the checks.
 
