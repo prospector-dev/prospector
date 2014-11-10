@@ -99,6 +99,8 @@ class Prospector(object):
         else:
             self.strictness = 'from profile'
 
+        self.profiles = list(set(self.profiles))
+
         # the profile path is
         #   * anything provided as an argument
         #   * a directory called .prospector in the check path
@@ -205,7 +207,7 @@ class Prospector(object):
             'libraries': self.libraries,
             'strictness': self.strictness,
             'profiles': self.profiles,
-            'adaptors': [adaptor.name for adaptor in self.adaptors],
+            'adaptors': list(set([adaptor.name for adaptor in self.adaptors])),
             'tools': self.tools_to_run,
         }
 
