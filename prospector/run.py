@@ -23,13 +23,9 @@ __all__ = (
 
 
 class Prospector(object):
-    def __init__(self, config, path):
+    def __init__(self, config, paths):
         self.config = config
-        self.path = path
-        if os.path.isdir(path):
-            self.rootpath = path
-        else:
-            self.rootpath = os.getcwd()
+        self.paths = paths
         self.adaptors = []
         self.libraries = []
         self.profiles = []
@@ -42,19 +38,20 @@ class Prospector(object):
         self.summary = None
         self.messages = None
 
-        self._determine_adapters()
-        self._determine_profiles()
+        for path in self.paths:
+            self._determine_adapters(path)
+            self._determine_profiles(path)
         self._determine_tool_runners()
         self._determine_ignores()
 
-    def _determine_adapters(self):
+    def _determine_adapters(self, path):
         # Bring in the common adaptor
         if self.config.common_plugin:
             self.adaptors.append(CommonAdaptor())
 
         # Bring in adaptors that we automatically detect are needed
         if self.config.autodetect:
-            for name, adaptor in autodetect_libraries(self.path):
+            for name, adaptor in autodetect_libraries(path):
                 self.libraries.append(name)
                 self.adaptors.append(adaptor)
 
@@ -64,7 +61,7 @@ class Prospector(object):
                 self.libraries.append(name)
                 self.adaptors.append(LIBRARY_ADAPTORS[name]())
 
-    def _determine_profiles(self):
+    def _determine_profiles(self, path):
 
         # Use other specialty profiles based on options
         if not self.config.doc_warnings:
@@ -84,12 +81,12 @@ class Prospector(object):
 
         # if there is a '.prospector.yaml' or a '.prospector/prospector.yaml'
         # file then we'll include that
-        prospector_yaml = os.path.join(self.path, '.prospector.yaml')
+        prospector_yaml = os.path.join(path, '.prospector.yaml')
         if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
             profile_provided = True
             self.profiles.append(prospector_yaml)
 
-        prospector_yaml = os.path.join(self.path, 'prospector', 'prospector.yaml')
+        prospector_yaml = os.path.join(path, 'prospector', 'prospector.yaml')
         if os.path.exists(prospector_yaml) and os.path.isfile('prospector'):
             profile_provided = True
             self.profiles.append(prospector_yaml)
@@ -109,11 +106,11 @@ class Prospector(object):
         #   * prospector provided profiles
         profile_path = self.config.profile_path
 
-        prospector_dir = os.path.join(self.path, '.prospector')
+        prospector_dir = os.path.join(path, '.prospector')
         if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
             profile_path.append(prospector_dir)
 
-        profile_path.append(self.path)
+        profile_path.append(path)
 
         provided = os.path.join(os.path.dirname(__file__), 'profiles/profiles')
         profile_path.append(provided)
@@ -187,12 +184,15 @@ class Prospector(object):
 
         self.ignores = ignores
 
-    def process_messages(self, messages):
+    def process_messages(self, messages, path):
+        rootpath = os.getcwd()
+        if os.path.isdir(path):
+            rootpath = path
         for message in messages:
             if self.config.absolute_paths:
-                message.to_absolute_path(self.rootpath)
+                message.to_absolute_path(rootpath)
             else:
-                message.to_relative_path(self.rootpath)
+                message.to_relative_path(rootpath)
         if self.config.blending:
             messages = blender.blend(messages)
 
@@ -209,45 +209,48 @@ class Prospector(object):
             'tools': self.tools_to_run,
         }
 
-        # Find the files and packages in a common way, so that each tool
-        # gets the same list.
-        found_files = find_python(self.ignores, self.path)
+        all_messages = []
+        for path in self.paths:
 
-        # Prep the tools.
-        for tool in self.tool_runners:
-            tool.prepare(found_files, self.config, self.adaptors)
+            # Find the files and packages in a common way, so that each tool
+            # gets the same list.
+            found_files = find_python(self.ignores, path)
 
-        # Run the tools
-        messages = []
-        for tool in self.tool_runners:
-            try:
-                messages += tool.run()
-            except Exception:  # pylint: disable=W0703
-                if self.config.die_on_tool_error:
-                    raise
-                else:
-                    for name, cls in tools.TOOLS.items():
-                        if cls == tool.__class__:
-                            toolname = name
-                            break
+            # Prep the tools.
+            for tool in self.tool_runners:
+                tool.prepare(found_files, self.config, self.adaptors)
+
+            # Run the tools
+            messages = []
+            for tool in self.tool_runners:
+                try:
+                    messages += tool.run()
+                except Exception:  # pylint: disable=W0703
+                    if self.config.die_on_tool_error:
+                        raise
                     else:
-                        toolname = 'Unknown'
+                        for name, cls in tools.TOOLS.items():
+                            if cls == tool.__class__:
+                                toolname = name
+                                break
+                        else:
+                            toolname = 'Unknown'
 
-                    loc = Location(self.path, None, None, None, None)
-                    msg = 'Tool %s failed to run (exception was raised)' % (
-                        toolname,
-                    )
-                    message = Message(
-                        toolname,
-                        'failure',
-                        loc,
-                        message=msg,
-                    )
-                    messages.append(message)
+                        loc = Location(path, None, None, None, None)
+                        msg = 'Tool %s failed to run (exception was raised)' % (
+                            toolname,
+                        )
+                        message = Message(
+                            toolname,
+                            'failure',
+                            loc,
+                            message=msg,
+                        )
+                        messages.append(message)
 
-        messages = self.process_messages(messages)
+            all_messages.extend(self.process_messages(messages, path))
 
-        summary['message_count'] = len(messages)
+        summary['message_count'] = len(all_messages)
         summary['completed'] = datetime.now()
 
         # Timedelta.total_seconds() is not available
@@ -258,7 +261,7 @@ class Prospector(object):
         summary['time_taken'] = '%0.2f' % total_seconds
 
         self.summary = summary
-        self.messages = messages
+        self.messages = all_messages
 
     def get_summary(self):
         return self.summary
@@ -313,7 +316,7 @@ def main():
         paths = [os.getcwd()]
 
     # Make it so
-    prospector = Prospector(config, paths[0])
+    prospector = Prospector(config, paths)
     prospector.execute()
     prospector.print_messages()
 
