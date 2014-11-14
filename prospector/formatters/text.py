@@ -88,9 +88,9 @@ class TextFormatter(Formatter):
 
     def render(self, summary=True, messages=True):
         output = ''
-        if summary:
-            output = self.render_summary()
-        output += '\n\n\n'
         if messages:
             output += self.render_messages()
+        output += '\n\n\n'
+        if summary:
+            output += self.render_summary()
         return output.strip() + '\n'
