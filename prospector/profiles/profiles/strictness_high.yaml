@@ -32,6 +32,7 @@ pep8:
     max-line-length: 99
   disable:
     - E304
+    - E265
     - W291
     - W292
     - W391

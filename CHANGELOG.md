@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.7.2
+
+* The E265 error from PEP8 - "Block comment should start with '# '" - has been disabled for anything except veryhigh strictness.
+
 ## Version 0.7.1
 
 * [#60](https://github.com/landscapeio/prospector/issues/60) Prospector did not work with Python2.6 due to timedelta.total_seconds() not being available.
