@@ -1,6 +1,11 @@
 Prospector Changelog
 =======
 
+## Version 0.7.3
+
+* [#70](https://github.com/landscapeio/prospector/issues/70) ProfilesThe E265 error from PEP8 - "Block comment should start with a `.yml` extension can now be autoloaded
+* [#62](https://github.com/landscapeio/prospector/issues/62) For human readable output, the summary of messages will now be printed at the end rather than at the start, so the summary will be what users see when running prospector (without piping into `less` etc)
+
 ## Version 0.7.2
 
 * The E265 error from PEP8 - "Block comment should start with '# '" - has been disabled for anything except veryhigh strictness.
