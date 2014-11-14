@@ -82,17 +82,20 @@ class Prospector(object):
             profile_provided = True
         self.profiles += self.config.profiles
 
-        # if there is a '.prospector.yaml' or a '.prospector/prospector.yaml'
+        # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml'
         # file then we'll include that
-        prospector_yaml = os.path.join(self.path, '.prospector.yaml')
-        if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
-            profile_provided = True
-            self.profiles.append(prospector_yaml)
+        poss_profs = (
+            ('.prospector.yaml',),
+            ('.prospector.yml',),
+            ('prospector', '.prospector.yaml'),
+            ('prospector', '.prospector.yml'),
+        )
 
-        prospector_yaml = os.path.join(self.path, 'prospector', 'prospector.yaml')
-        if os.path.exists(prospector_yaml) and os.path.isfile('prospector'):
-            profile_provided = True
-            self.profiles.append(prospector_yaml)
+        for possible_profile in poss_profs:
+            prospector_yaml = os.path.join(self.path, *possible_profile)
+            if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
+                profile_provided = True
+                self.profiles.append(prospector_yaml)
 
         if not profile_provided:
             # Use the strictness profile only if no profile has been given
