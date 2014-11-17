@@ -1,3 +1,6 @@
+ignore:
+  - ^docs?/
+
 pylint:
   disable:
     - C0112
