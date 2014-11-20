@@ -5,6 +5,7 @@ Prospector Changelog
 
 * [#70](https://github.com/landscapeio/prospector/issues/70) ProfilesThe E265 error from PEP8 - "Block comment should start with a `.yml` extension can now be autoloaded
 * [#62](https://github.com/landscapeio/prospector/issues/62) For human readable output, the summary of messages will now be printed at the end rather than at the start, so the summary will be what users see when running prospector (without piping into `less` etc)
+* [#65](https://github.com/landscapeio/prospector/issues/65) Resolve UnicodeDecodeErrors thrown while attempting to auto-discover modules of interest by discovering target python source file encoding (PEP263), and issuing only a warning if it fails (thanks to [Jeff Quast](https://github.com/jquast)).
 
 ## Version 0.7.2
 
