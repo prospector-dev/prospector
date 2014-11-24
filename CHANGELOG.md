@@ -1,6 +1,13 @@
 Prospector Changelog
 =======
 
+## Version 0.8
+
+* [#74](https://github.com/landscapeio/prospector/issues/74),[#10](https://github.com/landscapeio/prospector/issues/10) Tools will now use any configuration specific to them by default. That is to say, if a `.pylintrc` file exists, then that will be used in preference to prospector's own opinions of how to use pylint.
+* Added centralised configuration management, with an abstraction away from how prospector and each tool is actually configured.
+* Removed the "adaptors" concept. This was a sort of visitor pattern in which each tool's configuration could be updated by an adaptor, which 'visited' the tool to tweak settings based on what the adaptor represented. In practise this was not useful and a confusing way to tweak behaviour - tools now configure themselves based on configuration options directly.
+* Changed the default output format to be 'grouped' rather than 'text'
+
 ## Version 0.7.3
 
 * [#70](https://github.com/landscapeio/prospector/issues/70) ProfilesThe E265 error from PEP8 - "Block comment should start with a `.yml` extension can now be autoloaded

@@ -2,6 +2,7 @@ from collections import defaultdict
 import re
 import sys
 import os
+from pylint.utils import UnknownMessage
 from prospector.message import Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
@@ -32,11 +33,18 @@ class PylintTool(ToolBase):
         self._args = self._extra_sys_path = None
         self._collector = self._linter = None
         self._orig_sys_path = []
+        self._streams = []
 
-    def prepare(self, found_files, args, adaptors):
+    def configure(self, prospector_config, found_files):
 
         linter = ProspectorLinter(found_files)
         linter.load_default_plugins()
+        linter.load_plugin_modules(['pylint_common'])
+
+        if 'django' in prospector_config.libraries:
+            linter.load_plugin_modules(['pylint_django'])
+        if 'celery' in prospector_config.libraries:
+            linter.load_plugin_modules(['pylint_celery'])
 
         extra_sys_path = found_files.get_minimal_syspath()
 
@@ -77,8 +85,23 @@ class PylintTool(ToolBase):
         # does not appear first in the path
         sys.path = list(extra_sys_path) + sys.path
 
-        for adaptor in adaptors:
-            adaptor.adapt_pylint(linter)
+        for msg_id in prospector_config.get_disabled_messages('pylint'):
+            try:
+                linter.disable(msg_id)
+            # pylint: disable=W0704
+            except UnknownMessage:
+                # If the msg_id doesn't exist in PyLint any more,
+                # don't worry about it.
+                pass
+
+        options = prospector_config.tool_options('pylint')
+
+        for checker in linter.get_checkers():
+            if not hasattr(checker, 'options'):
+                continue
+            for option in checker.options:
+                if option[0] in options:
+                    checker.set_option(option[0], options[option[0]])
 
         self._args = linter.load_command_line_configuration(check_paths)
 
@@ -87,7 +110,7 @@ class PylintTool(ToolBase):
         # import which is disabled with 'pylint:disable=W0611' will still
         # generate an 'FL0001' unused import warning from pyflakes. Using the
         # information from these messages, we can figure out what was disabled.
-        linter.disable('I0011')   # notification about disabling a message
+        linter.disable('I0011')  # notification about disabling a message
         linter.disable('I0012')  # notification about enabling a message
         linter.enable('I0013')   # notification about disabling an entire file
         linter.enable('I0020')   # notification about a message being supressed
@@ -109,13 +132,14 @@ class PylintTool(ToolBase):
         self._collector = Collector()
         linter.set_reporter(self._collector)
 
+        max_line_length = prospector_config.max_line_length
         for checker in linter.get_checkers():
             if not hasattr(checker, 'options'):
                 continue
             for option in checker.options:
-                if args.max_line_length is not None:
+                if max_line_length is not None:
                     if option[0] == 'max-line-length':
-                        checker.set_option('max-line-length', args.max_line_length)
+                        checker.set_option('max-line-length', max_line_length)
 
         self._linter = linter
 
@@ -152,17 +176,17 @@ class PylintTool(ToolBase):
         """
         combined = self._combine_w0614(messages)
         return sorted(combined)
-    
+
     def hide_stdout(self):
         self._streams = [sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__]
         sys.stdout, sys.stderr = DummyStream(), DummyStream()
         sys.__stdout__, sys.__stderr__ = DummyStream(), DummyStream()
-        
+
     def restore_stdout(self):
         sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._streams
         del self._streams
-        
-    def run(self):
+
+    def run(self, found_files):
         # note: Pylint will exit with a status code indicating the health of
         # the code it was checking. Prospector will not mimic this behaviour,
         # as it interferes with scripts which depend on and expect the exit
@@ -182,7 +206,7 @@ class PylintTool(ToolBase):
             self._linter.check(self._args)
         finally:
             self.restore_stdout()
-            pass
+
         sys.path = self._orig_sys_path
 
         messages = self._collector.get_messages()

@@ -36,15 +36,13 @@ class PyromaTool(ToolBase):
         super(PyromaTool, self).__init__(*args, **kwargs)
         self.ignore_codes = ()
 
-    def prepare(self, found_files, args, adaptors):
-        self._files = found_files
+    def configure(self, prospector_config, found_files):
+        self.ignore_codes = prospector_config.get_disabled_messages('pyroma')
+        return None
 
-        for adaptor in adaptors:
-            adaptor.adapt_pyroma(self)
-
-    def run(self):
+    def run(self, found_files):
         messages = []
-        for module in self._files.iter_module_paths(include_ignored=True):
+        for module in found_files.iter_module_paths(include_ignored=True):
             dirname, filename = os.path.split(module)
             if filename != 'setup.py':
                 continue
