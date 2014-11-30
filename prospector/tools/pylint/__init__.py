@@ -2,6 +2,7 @@ from collections import defaultdict
 import re
 import sys
 import os
+from pylint.config import find_pylintrc
 from pylint.utils import UnknownMessage
 from prospector.message import Message
 from prospector.tools.base import ToolBase
@@ -35,9 +36,7 @@ class PylintTool(ToolBase):
         self._orig_sys_path = []
         self._streams = []
 
-    def configure(self, prospector_config, found_files):
-
-        linter = ProspectorLinter(found_files)
+    def _prospector_configure(self, prospector_config, linter):
         linter.load_default_plugins()
         linter.load_plugin_modules(['pylint_common'])
 
@@ -45,6 +44,61 @@ class PylintTool(ToolBase):
             linter.load_plugin_modules(['pylint_django'])
         if 'celery' in prospector_config.libraries:
             linter.load_plugin_modules(['pylint_celery'])
+
+        for msg_id in prospector_config.get_disabled_messages('pylint'):
+            try:
+                linter.disable(msg_id)
+            # pylint: disable=W0704
+            except UnknownMessage:
+                # If the msg_id doesn't exist in PyLint any more,
+                # don't worry about it.
+                pass
+
+        options = prospector_config.tool_options('pylint')
+
+        for checker in linter.get_checkers():
+            if not hasattr(checker, 'options'):
+                continue
+            for option in checker.options:
+                if option[0] in options:
+                    checker.set_option(option[0], options[option[0]])
+
+        # The warnings about disabling warnings are useful for figuring out
+        # with other tools to suppress messages from. For example, an unused
+        # import which is disabled with 'pylint:disable=W0611' will still
+        # generate an 'FL0001' unused import warning from pyflakes. Using the
+        # information from these messages, we can figure out what was disabled.
+        linter.disable('I0011')  # notification about disabling a message
+        linter.disable('I0012')  # notification about enabling a message
+        linter.enable('I0013')   # notification about disabling an entire file
+        linter.enable('I0020')   # notification about a message being supressed
+        linter.disable('I0021')  # notification about message supressed which was not raised
+        linter.disable('I0022')  # notification about use of deprecated 'pragma' option
+
+        # disable the 'mixed indentation' warning, since it actually will only allow
+        # the indentation specified in the pylint configuration file; we replace it
+        # instead with our own version which is more lenient and configurable
+        linter.disable('W0312')
+        indent_checker = IndentChecker(linter)
+        linter.register_checker(indent_checker)
+
+        max_line_length = prospector_config.max_line_length
+        for checker in linter.get_checkers():
+            if not hasattr(checker, 'options'):
+                continue
+            for option in checker.options:
+                if max_line_length is not None:
+                    if option[0] == 'max-line-length':
+                        checker.set_option('max-line-length', max_line_length)
+
+    def _pylintrc_configure(self, pylintrc, linter):
+        linter.load_default_plugins()
+        import pdb; pdb.set_trace()
+        linter.load_file_configuration(pylintrc)
+
+    def configure(self, prospector_config, found_files):
+
+        linter = ProspectorLinter(found_files)
 
         extra_sys_path = found_files.get_minimal_syspath()
 
@@ -85,44 +139,29 @@ class PylintTool(ToolBase):
         # does not appear first in the path
         sys.path = list(extra_sys_path) + sys.path
 
-        for msg_id in prospector_config.get_disabled_messages('pylint'):
-            try:
-                linter.disable(msg_id)
-            # pylint: disable=W0704
-            except UnknownMessage:
-                # If the msg_id doesn't exist in PyLint any more,
-                # don't worry about it.
-                pass
-
-        options = prospector_config.tool_options('pylint')
-
-        for checker in linter.get_checkers():
-            if not hasattr(checker, 'options'):
-                continue
-            for option in checker.options:
-                if option[0] in options:
-                    checker.set_option(option[0], options[option[0]])
-
         self._args = linter.load_command_line_configuration(check_paths)
 
-        # The warnings about disabling warnings are useful for figuring out
-        # with other tools to suppress messages from. For example, an unused
-        # import which is disabled with 'pylint:disable=W0611' will still
-        # generate an 'FL0001' unused import warning from pyflakes. Using the
-        # information from these messages, we can figure out what was disabled.
-        linter.disable('I0011')  # notification about disabling a message
-        linter.disable('I0012')  # notification about enabling a message
-        linter.enable('I0013')   # notification about disabling an entire file
-        linter.enable('I0020')   # notification about a message being supressed
-        linter.disable('I0021')  # notification about message supressed which was not raised
-        linter.disable('I0022')  # notification about use of deprecated 'pragma' option
+        ext_found = False
+        configured_by = None
 
-        # disable the 'mixed indentation' warning, since it actually will only allow
-        # the indentation specified in the pylint configuration file; we replace it
-        # instead with our own version which is more lenient and configurable
-        linter.disable('W0312')
-        indent_checker = IndentChecker(linter)
-        linter.register_checker(indent_checker)
+        if prospector_config.use_external_config('pylint'):
+            # try to find a .pylintrc
+            pylintrc = prospector_config.external_config_location('pylint')
+            if pylintrc is None:
+                pylintrc = find_pylintrc()
+            if pylintrc is None:
+                pylintrc_path = os.path.join(prospector_config.path, '.pylintrc')
+                if os.path.exists(pylintrc_path):
+                    pylintrc = pylintrc_path
+
+            if pylintrc is not None:
+                # load it!
+                configured_by = pylintrc
+                ext_found = True
+                self._pylintrc_configure(pylintrc, linter)
+
+        if not ext_found:
+            self._prospector_configure(prospector_config, linter)
 
         # we don't want similarity reports right now
         linter.disable('similarities')
@@ -132,16 +171,8 @@ class PylintTool(ToolBase):
         self._collector = Collector()
         linter.set_reporter(self._collector)
 
-        max_line_length = prospector_config.max_line_length
-        for checker in linter.get_checkers():
-            if not hasattr(checker, 'options'):
-                continue
-            for option in checker.options:
-                if max_line_length is not None:
-                    if option[0] == 'max-line-length':
-                        checker.set_option('max-line-length', max_line_length)
-
         self._linter = linter
+        return configured_by
 
     def _combine_w0614(self, messages):
         """

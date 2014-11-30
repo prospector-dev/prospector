@@ -19,10 +19,11 @@ class ProspectorConfig(object):
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
 
     def get_tools(self, found_files):
+        self.configured_by = {}
         runners = []
         for tool_name in self.tools_to_run:
             tool = tools.TOOLS[tool_name]()
-            tool.configure(self, found_files)
+            self.configured_by[tool] = tool.configure(self, found_files)
             runners.append(tool)
         return runners
 
