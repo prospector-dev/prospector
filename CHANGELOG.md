@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.8
+
+* Support for Python 2.6 has been dropped, following Pylint's lead.
+
 ## Version 0.7.3
 
 * Pylint dependency version restricted to 1.3, as 1.4 drops support for Python 2.6. Prospector will drop support for Python 2.6 in a 0.8 release.
