@@ -7,10 +7,14 @@ Prospector Changelog
 * Added centralised configuration management, with an abstraction away from how prospector and each tool is actually configured.
 * Removed the "adaptors" concept. This was a sort of visitor pattern in which each tool's configuration could be updated by an adaptor, which 'visited' the tool to tweak settings based on what the adaptor represented. In practise this was not useful and a confusing way to tweak behaviour - tools now configure themselves based on configuration options directly.
 * Changed the default output format to be 'grouped' rather than 'text'
+* Support for Python 2.6 has been dropped, following Pylint's lead.
+* [#65](https://github.com/landscapeio/prospector/issues/65) Resolve UnicodeDecodeErrors thrown while attempting to auto-discover modules of interest by discovering target python source file encoding (PEP263), and issuing only a warning if it fails (thanks to [Jeff Quast](https://github.com/jquast)).
 
 ## Version 0.7.3
 
-* [#70](https://github.com/landscapeio/prospector/issues/70) ProfilesThe E265 error from PEP8 - "Block comment should start with a `.yml` extension can now be autoloaded
+* Pylint dependency version restricted to 1.3, as 1.4 drops support for Python 2.6. Prospector will drop support for Python 2.6 in a 0.8 release.
+* File names ending in 'tests.py' will now be ignored if prospector is set to ignore tests (previously, the regular expression only ignored files ending in 'test.py')
+* [#70](https://github.com/landscapeio/prospector/issues/70) Profiles starting with a `.yml` extension can now be autoloaded
 * [#62](https://github.com/landscapeio/prospector/issues/62) For human readable output, the summary of messages will now be printed at the end rather than at the start, so the summary will be what users see when running prospector (without piping into `less` etc)
 
 ## Version 0.7.2

@@ -7,7 +7,7 @@ from prospector import __pkginfo__
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.3',
+    'pylint>=1.4',
     'pylint-celery>=0.3',
     'pylint-django>=0.5.5',
     'pylint-plugin-utils>=0.2.2',
@@ -44,7 +44,6 @@ _CLASSIFIERS = (
     'Intended Audience :: Developers',
     'Operating System :: Unix',
     'Topic :: Software Development :: Quality Assurance',
-    'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
