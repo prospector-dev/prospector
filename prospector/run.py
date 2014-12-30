@@ -204,6 +204,7 @@ class Prospector(object):
     def execute(self):
 
         summary = {
+            'path': self.path,
             'started': datetime.now(),
             'libraries': self.libraries,
             'strictness': self.strictness,
@@ -284,10 +285,12 @@ class Prospector(object):
         self.summary['formatter'] = output_format
         formatter = FORMATTERS[output_format](self.summary, self.messages)
 
+        print_messages = not self.config.summary_only and self.messages
+
         # Produce the output
         write_to.write(formatter.render(
             summary=not self.config.messages_only,
-            messages=not self.config.summary_only,
+            messages=print_messages,
         ))
         write_to.write('\n')
 
@@ -320,10 +323,12 @@ def main():
                          'not directories.')
 
     # Make it so
+    messages = []
     for path in paths:
         prospector = Prospector(config, path)
         prospector.execute()
         prospector.print_messages()
+        messages.extend(prospector.get_messages())
 
     if config.zero_exit:
         # if we ran successfully, and the user wants us to, then we'll
@@ -333,7 +338,7 @@ def main():
     # otherwise, finding messages is grounds for exiting with an error
     # code, to make it easier for bash scripts and similar situations
     # to know if there any errors have been found.
-    if len(prospector.get_messages()) > 0:
+    if len(messages) > 0:
         return 1
     return 0
 
