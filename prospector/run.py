@@ -315,10 +315,15 @@ def main():
     else:
         paths = [os.getcwd()]
 
+    if len(paths) > 1 and not all([os.path.isfile(path) for path in paths]):
+        raise ValueError('In multi-path mode, all inputs must be files, '
+                         'not directories.')
+
     # Make it so
-    prospector = Prospector(config, paths[0])
-    prospector.execute()
-    prospector.print_messages()
+    for path in paths:
+        prospector = Prospector(config, path)
+        prospector.execute()
+        prospector.print_messages()
 
     if config.zero_exit:
         # if we ran successfully, and the user wants us to, then we'll

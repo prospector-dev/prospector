@@ -263,7 +263,8 @@ def build_command_line_source(prog=None, description='Performs static analysis o
     positional = (
         ('checkpath', {
             'help': 'The path to a Python project to inspect. Defaults to PWD'
-                    '  if not specified.',
+                    '  if not specified. If multiple paths are specified,'
+                    '  they must all be files (no directories).',
             'metavar': 'PATH',
             'nargs': '*',
         }),
