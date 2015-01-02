@@ -20,7 +20,6 @@ _INSTALL_REQUIRES = [
     'pyflakes>=0.8.1',
     'pep8>=1.5.7',
     'pep8-naming>=0.2.2',
-    'frosted>=1.4.1',
 ]
 
 _PACKAGE_DATA = {
@@ -52,6 +51,7 @@ _CLASSIFIERS = (
 )
 
 _OPTIONAL = {
+    'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6',),
     'with_pyroma': ('pyroma>=1.6',),
     'with_pep257': ('pep257>=0.3,<0.4',),

@@ -1,7 +1,7 @@
 Supported Tools
 ===============
 
-Prospector currently supports 8 tools, of which 6 are defaults and 2 are optional extras.
+Prospector currently supports 8 tools, of which 5 are defaults and 4 are optional extras.
 
 Enabling or Disabling Tools
 ---------------------------
@@ -62,12 +62,6 @@ Pyflakes analyzes programs and detects various errors. It is simpler and faster
 than pylint, but also not as thorough.
 
 
-`frosted <https://github.com/timothycrosley/frosted>`_
-``````````````````````````````````````````````````````
-Frosted is a fork of pyflakes with more recent activity. It currently does a very
-similar job to pyflakes.
-
-
 `mccabe <https://github.com/flintwork/mccabe>`_
 ```````````````````````````````````````````````
 `McCabe or cyclomatic complexity <http://en.wikipedia.org/wiki/Cyclomatic_complexity>`_ is
@@ -120,6 +114,19 @@ To install and use::
 
     pip install prospector[with_vulture]
     prospector --with-tool vulture
+
+
+`frosted <https://github.com/timothycrosley/frosted>`_
+``````````````````````````````````````````````````````
+Frosted is a fork of pyflakes which was created with the intention of taking over
+from and extending pyflakes as development has slowed. Since Prospector was originally
+created, pyflakes development has started up again and frosted has stagnated, so it has
+been demoted to be an optional extra.
+
+To install and use::
+
+    pip install prospector[with_frosted]
+    prospector --with-tool frosted
 
 
 `pep257 <https://github.com/GreenSteam/pep257>`_

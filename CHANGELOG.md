@@ -2,6 +2,7 @@ Prospector Changelog
 =======
 
 ## Version 0.8
+* Demoted frosted to be an optional tool - this is because development seems to have slowed and pyflakes has picked up again, and frosted how has several issues which are solved by pyflakes and is no longer a useful addition.
 * [#78](https://github.com/landscapeio/prospector/issues/78) Prospector can now take multiple files as a path argument, thus providing errors for several files at a time. This helps when integrating with IDEs, for example.
 * Upgrading to newer versions of Pylint and related dependencies resolves [#73](https://github.com/landscapeio/prospector/issues/73), [#75](https://github.com/landscapeio/prospector/issues/75), [#76](https://github.com/landscapeio/prospector/issues/76) and [#79](https://github.com/landscapeio/prospector/issues/79)
 * [#74](https://github.com/landscapeio/prospector/issues/74), [#10](https://github.com/landscapeio/prospector/issues/10) Tools will now use any configuration specific to them by default. That is to say, if a `.pylintrc` file exists, then that will be used in preference to prospector's own opinions of how to use pylint.

@@ -35,11 +35,11 @@ def _optional_tool(name, package_name=None, tool_class_name=None, install_option
 
 TOOLS = {
     'dodgy': DodgyTool,
-    'frosted': FrostedTool,
     'mccabe': McCabeTool,
     'pyflakes': PyFlakesTool,
     'pep8': Pep8Tool,
     'pylint': PylintTool,
+    'frosted': _optional_tool('frosted'),
     'vulture': _optional_tool('vulture'),
     'pyroma': _optional_tool('pyroma'),
     'pep257': _optional_tool('pep257'),
@@ -48,7 +48,6 @@ TOOLS = {
 
 DEFAULT_TOOLS = (
     'dodgy',
-    'frosted',
     'mccabe',
     'pyflakes',
     'pep8',

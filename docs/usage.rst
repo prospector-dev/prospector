@@ -11,9 +11,10 @@ You can specify a path to check::
 
     prospector path/to/my/package
 
-And you can specify a single python module::
+And you can specify a list of python modules::
 
     prospector module/to/check.py
+    prospector module/to/check.py other/module/to/check.py something/else.py
 
 See below for :ref:`a complete list of options and flags<full_options>`. You can also run ``prospector --help`` for a full list of options and their effects.
 
