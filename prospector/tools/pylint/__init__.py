@@ -93,12 +93,9 @@ class PylintTool(ToolBase):
 
     def _pylintrc_configure(self, pylintrc, linter):
         linter.load_default_plugins()
-        import pdb; pdb.set_trace()
         linter.load_file_configuration(pylintrc)
 
     def configure(self, prospector_config, found_files):
-
-        linter = ProspectorLinter(found_files)
 
         extra_sys_path = found_files.get_minimal_syspath()
 
@@ -139,11 +136,10 @@ class PylintTool(ToolBase):
         # does not appear first in the path
         sys.path = list(extra_sys_path) + sys.path
 
-        self._args = linter.load_command_line_configuration(check_paths)
-
         ext_found = False
         configured_by = None
 
+        linter = ProspectorLinter(found_files)
         if prospector_config.use_external_config('pylint'):
             # try to find a .pylintrc
             pylintrc = prospector_config.external_config_location('pylint')
@@ -158,9 +154,13 @@ class PylintTool(ToolBase):
                 # load it!
                 configured_by = pylintrc
                 ext_found = True
+
+                self._args = linter.load_command_line_configuration(check_paths)
                 self._pylintrc_configure(pylintrc, linter)
 
         if not ext_found:
+            linter.reset_options()
+            self._args = linter.load_command_line_configuration(check_paths)
             self._prospector_configure(prospector_config, linter)
 
         # we don't want similarity reports right now
