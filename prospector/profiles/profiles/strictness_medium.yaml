@@ -112,3 +112,10 @@ pep8:
 pyroma:
   disable:
     - PYR04
+
+pep257:
+  disable:
+    - D100
+    - D101
+    - D102
+    - D103

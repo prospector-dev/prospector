@@ -58,3 +58,6 @@ pyroma:
   disable:
     - PYR06
     - PYR09
+
+pep257:
+  run: false
