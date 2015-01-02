@@ -190,7 +190,7 @@ class PylintTool(ToolBase):
         # the safety gained through this approach seems minimal. Leaving it on means
         # that the inference engine cannot do much inference on modules with C-extensions
         # which is a bit useless.
-        linter.set_option('unsafe-load-any-extension')
+        linter.set_option('unsafe-load-any-extension', True)
 
         # we don't want similarity reports right now
         linter.disable('similarities')
