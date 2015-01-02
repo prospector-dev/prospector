@@ -2,12 +2,13 @@ Prospector Changelog
 =======
 
 ## Version 0.8
-
+* Upgrading to newer versions of Pylint and related dependencies resolves [#73](https://github.com/landscapeio/prospector/issues/73), [#75](https://github.com/landscapeio/prospector/issues/75), [#76](https://github.com/landscapeio/prospector/issues/76) and [#79](https://github.com/landscapeio/prospector/issues/79)
 * [#74](https://github.com/landscapeio/prospector/issues/74),[#10](https://github.com/landscapeio/prospector/issues/10) Tools will now use any configuration specific to them by default. That is to say, if a `.pylintrc` file exists, then that will be used in preference to prospector's own opinions of how to use pylint.
 * Added centralised configuration management, with an abstraction away from how prospector and each tool is actually configured.
 * Removed the "adaptors" concept. This was a sort of visitor pattern in which each tool's configuration could be updated by an adaptor, which 'visited' the tool to tweak settings based on what the adaptor represented. In practise this was not useful and a confusing way to tweak behaviour - tools now configure themselves based on configuration options directly.
 * Changed the default output format to be 'grouped' rather than 'text'
 * Support for Python 2.6 has been dropped, following Pylint's lead.
+* Using pylint 1.4's 'unsafe' mode, which allows it to load any C extentions (this was the behaviour for 1.3 and below). Not loading them causes many many inference errors.
 * [#65](https://github.com/landscapeio/prospector/issues/65) Resolve UnicodeDecodeErrors thrown while attempting to auto-discover modules of interest by discovering target python source file encoding (PEP263), and issuing only a warning if it fails (thanks to [Jeff Quast](https://github.com/jquast)).
 
 ## Version 0.7.3
