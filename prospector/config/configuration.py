@@ -1,7 +1,6 @@
 import setoptconf as soc
 
 from prospector.__pkginfo__ import get_version
-from prospector.adaptor import LIBRARY_ADAPTORS
 from prospector.formatters import FORMATTERS
 from prospector.tools import TOOLS, DEFAULT_TOOLS
 
@@ -51,11 +50,8 @@ def build_manager():
         ['veryhigh', 'high', 'medium', 'low', 'verylow'],
         default='medium',
     ))
-    manager.add(soc.ChoiceSetting(
-        'external_config',
-        ['none', 'merge', 'only'],
-        default='only',
-    ))
+    manager.add(soc.BooleanSetting('no_external_config', default=False))
+    manager.add(soc.StringSetting('pylint_config_file', default=None))
 
     manager.add(soc.StringSetting('path', default=None))
 
@@ -63,6 +59,7 @@ def build_manager():
     manager.add(soc.ListSetting('ignore_paths', soc.String, default=[]))
 
     manager.add(soc.BooleanSetting('die_on_tool_error', default=False))
+    manager.add(soc.BooleanSetting('loquacious_pylint', default=False))
 
     return manager
 
@@ -111,11 +108,9 @@ def build_command_line_source(prog=None, description='Performs static analysis o
         'uses': {
             'flags': ['-u', '--uses'],
             'help': 'A list of one or more libraries or frameworks that the'
-                    ' project uses. Possible values are: %s. This will be'
+                    ' project uses. Possible values are: django, celery. This will be'
                     ' autodetected by default, but if autodetection doesn\'t'
-                    ' work, manually specify them using this flag.' % (
-                        ', '.join(sorted(LIBRARY_ADAPTORS.keys())),
-                    )
+                    ' work, manually specify them using this flag.'
         },
         'blending': {
             'flags': ['-B', '--no-blending'],
@@ -222,14 +217,21 @@ def build_command_line_source(prog=None, description='Performs static analysis o
                     ' default value is "medium", possible values are'
                     ' "veryhigh", "high", "medium", "low" and "verylow".',
         },
-        'external_config': {
-            'flags': ['-e', '--external-config'],
+        'no_external_config': {
+            'flags': ['-E', '--no-external-config'],
             'help': 'Determines how prospector should behave when'
                     ' configuration already exists for a tool. By default,'
-                    ' prospector will use existing configuration. A value of'
-                    ' "merge" will cause prospector to merge existing config'
-                    ' and its own config, and "none" means that prospector'
-                    ' will use only its own config.',
+                    ' prospector will use existing configuration. This flag'
+                    ' will cause prospector to ignore existing configuration'
+                    ' and use its own settings for every tool. Note that'
+                    ' prospector will always use its own config for tools which'
+                    ' do not have custom configuration.',
+        },
+        'pylint_config_file': {
+            'flags': ['--pylint-config-file'],
+            'help': 'The path to a pylintrc file to use to configure pylint. Prospector will find'
+                    ' .pylintrc files in the root of the project, but you can use this option to '
+                    'specify manually where it is.'
         },
         'ignore_patterns': {
             'flags': ['-I', '--ignore-patterns'],
@@ -250,6 +252,13 @@ def build_command_line_source(prog=None, description='Performs static analysis o
                     ' Use this flag to cause prospector to die and raise the'
                     ' exception the tool generated. Mostly useful for'
                     ' development on prospector.',
+        },
+        'loquacious_pylint': {
+            'flags': ['--loquacious-pylint'],
+            'help': 'There are various places where pylint will randomly output warnings to '
+                    'stdout/stderr, which breaks parsing of JSON output. Therefore while pylint '
+                    'is running, this is suppressed. For developing, it is sometimes useful to '
+                    'allow this verbiage to appear, which this flag will do.'
         },
         'path': {
             'flags': ['-p', '--path'],

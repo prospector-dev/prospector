@@ -69,19 +69,15 @@ class FrostedTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super(FrostedTool, self).__init__(*args, **kwargs)
         self.ignore_codes = ()
-        self._paths = []
-        self._ignores = []
 
-    def prepare(self, found_files, args, adaptors):
-        self._files = found_files
+    def configure(self, prospector_config, _):
+        self.ignore_codes = prospector_config.get_disabled_messages('frosted')
+        return None
 
-        for adaptor in adaptors:
-            adaptor.adapt_frosted(self)
-
-    def run(self):
+    def run(self, found_files):
         reporter = ProspectorReporter(ignore=self.ignore_codes)
 
-        for filepath in self._files.iter_module_paths():
+        for filepath in found_files.iter_module_paths():
             # Frosted cannot handle non-utf-8 encoded files at the moment -
             # see https://github.com/timothycrosley/frosted/issues/53
             # Therefore (since pyflakes overlaps heavily and does not have the same
