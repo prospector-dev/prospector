@@ -65,7 +65,7 @@ class PylintTool(ToolBase):
 
         # The warnings about disabling warnings are useful for figuring out
         # with other tools to suppress messages from. For example, an unused
-        # import which is disabled with 'pylint:disable=W0611' will still
+        # import which is disabled with 'pylint disable=W0611' will still
         # generate an 'FL0001' unused import warning from pyflakes. Using the
         # information from these messages, we can figure out what was disabled.
         linter.disable('I0011')  # notification about disabling a message

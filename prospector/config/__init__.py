@@ -230,7 +230,7 @@ class ProspectorConfig(object):
         return tool.get('options', {})
 
     def external_config_location(self, tool_name):
-        return None
+        return getattr(self.config, '%s_config_file' % tool_name, None)
 
     @property
     def die_on_tool_error(self):

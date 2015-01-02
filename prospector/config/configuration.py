@@ -51,6 +51,8 @@ def build_manager():
         default='medium',
     ))
     manager.add(soc.BooleanSetting('no_external_config', default=False))
+    manager.add(soc.StringSetting('pylint_config_file', default=None))
+
     manager.add(soc.StringSetting('path', default=None))
 
     manager.add(soc.ListSetting('ignore_patterns', soc.String, default=[]))
@@ -223,6 +225,12 @@ def build_command_line_source(prog=None, description='Performs static analysis o
                     ' and use its own settings for every tool. Note that'
                     ' prospector will always use its own config for tools which'
                     ' do not have custom configuration.',
+        },
+        'pylint_config_file': {
+            'flags': ['--pylint-config-file'],
+            'help': 'The path to a pylintrc file to use to configure pylint. Prospector will find'
+                    ' .pylintrc files in the root of the project, but you can use this option to '
+                    'specify manually where it is.'
         },
         'ignore_patterns': {
             'flags': ['-I', '--ignore-patterns'],
