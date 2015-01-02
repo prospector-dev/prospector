@@ -11,6 +11,7 @@ __all__ = (
 
 class TextFormatter(Formatter):
     summary_labels = (
+        ('path', 'Path'),
         ('started', 'Started'),
         ('completed', 'Finished'),
         ('time_taken', 'Time Taken', lambda x: '%s seconds' % x),

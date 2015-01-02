@@ -12,8 +12,16 @@ class ProspectorConfig(object):
 
     def __init__(self):
         self.config, self.arguments = self._configure_prospector()
-        self.path = self._get_work_path(self.config, self.arguments)
-        self.profile, self.profile_names, self.strictness = self._get_profile(self.path, self.config)
+
+        self.paths = self._get_work_path(self.config, self.arguments)
+        self.explicit_file_mode = all(map(os.path.isfile, self.paths))
+
+        if os.path.isdir(self.paths[0]):
+            self.workdir = self.paths[0]
+        else:
+            self.workdir = os.getcwd()
+
+        self.profile, self.profile_names, self.strictness = self._get_profile(self.workdir, self.config)
         self.libraries = self._find_used_libraries(self.config)
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
@@ -53,15 +61,7 @@ class ProspectorConfig(object):
             paths = arguments['checkpath']
         else:
             paths = [os.getcwd()]
-            # TODO: Currently prospector can only handle one path at a time. This is
-        # because the automatic loading of configuration files becomes complicated
-        # to explain when multiple paths are to be checked. Should each path allow
-        # its own configuration? Or should one single global configuration be used?
-        # If so, where from?
-        # See the discussion:
-        # https://github.com/landscapeio/prospector/issues/61
-        # https://github.com/landscapeio/prospector/pull/68
-        return paths[0]
+        return paths
 
     def _get_profile(self, path, config):
         # Use other specialty profiles based on options
@@ -137,7 +137,7 @@ class ProspectorConfig(object):
 
         # Bring in adaptors that we automatically detect are needed
         if config.autodetect:
-            for name, adaptor in autodetect_libraries(self.path):
+            for name, adaptor in autodetect_libraries(self.workdir):
                 libraries.append(name)
 
         # Bring in adaptors for the specified libraries

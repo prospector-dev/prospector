@@ -1,22 +1,22 @@
 import os
 
 
-class SingleFile(object):
+class SingleFiles(object):
     """
     When prospector is run in 'single file mode' - that is,
     the argument is a python module rather than a directory -
     then we'll use this object instead of the FoundFiles to
     give all the functionality needed to check a single file.
     """
-    def __init__(self, filepath):
-        self.filepath = filepath
-        self.rootpath = os.getcwd()
+    def __init__(self, files, rootpath):
+        self.files = files
+        self.rootpath = rootpath
 
     def _check(self, checkpath, abspath=True):
         if abspath:
             checkpath = os.path.abspath(checkpath)
-            return checkpath == os.path.abspath(self.filepath)
-        return checkpath == self.filepath
+            return checkpath in map(os.path.abspath, self.files)
+        return checkpath in self.files
 
     def check_module(self, filepath, abspath=True, even_if_ignored=False):
         return self._check(filepath, abspath)
@@ -28,25 +28,30 @@ class SingleFile(object):
         return self._check(filepath, abspath)
 
     def iter_file_paths(self, abspath=True, include_ignored=False):
-        yield os.path.abspath(self.filepath) if abspath else self.filepath
+        for filepath in self.files:
+            yield os.path.abspath(filepath) if abspath else filepath
 
     def iter_package_paths(self, abspath=True, include_ignored=False):
-        yield os.path.abspath(self.filepath) if abspath else self.filepath
+        for filepath in self.files:
+            yield os.path.abspath(filepath) if abspath else filepath
 
     def iter_directory_paths(self, abspath=True, include_ignored=False):
-        yield os.path.abspath(self.filepath) if abspath else self.filepath
+        for filepath in self.files:
+            filepath = os.path.dirname(filepath)
+            yield os.path.abspath(filepath) if abspath else filepath
 
     def iter_module_paths(self, abspath=True, include_ignored=False):
-        yield os.path.abspath(self.filepath) if abspath else self.filepath
+        for filepath in self.files:
+            yield os.path.abspath(filepath) if abspath else filepath
 
     def to_absolute_path(self, path):
         return os.path.abspath(os.path.join(self.rootpath, path))
 
     def get_minimal_syspath(self, absolute_paths=True):
-        path = os.path.dirname(self.filepath)
+        paths = list(set(map(os.path.dirname, self.files)))
         if absolute_paths:
-            path = os.path.abspath(path)
-        return [path]
+            paths = map(os.path.abspath, paths)
+        return [self.rootpath] + paths
 
 
 class FoundFiles(object):
@@ -199,15 +204,16 @@ def _find_paths(ignore, curpath, rootpath):
     return files, modules, packages, directories
 
 
-def find_python(ignores, path_argument):
+def find_python(ignores, paths, explicit_file_mode, workdir=None):
     """
     Returns a FoundFiles class containing a list of files, packages, directories,
     where files are simply all python (.py) files, packages are directories
     containing an `__init__.py` file, and directories is a list of all directories.
     All paths are relative to the dirpath argument.
     """
-    if os.path.isdir(path_argument):
-        files, modules, directories, packages = _find_paths(ignores, path_argument, path_argument)
-        return FoundFiles(path_argument, files, modules, directories, packages, ignores)
+    if explicit_file_mode:
+        return SingleFiles(paths, workdir or os.getcwd())
     else:
-        return SingleFile(path_argument)
+        assert len(paths) == 1
+        files, modules, directories, packages = _find_paths(ignores, paths[0], paths[0])
+        return FoundFiles(paths[0], files, modules, directories, packages, ignores)

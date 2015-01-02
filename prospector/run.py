@@ -20,21 +20,15 @@ __all__ = (
 class Prospector(object):
     def __init__(self, config):
         self.config = config
-
-        if os.path.isdir(config.path):
-            self.rootpath = config.path
-        else:
-            self.rootpath = os.getcwd()
-
         self.summary = None
         self.messages = None
 
     def process_messages(self, messages):
         for message in messages:
             if self.config.absolute_paths:
-                message.to_absolute_path(self.rootpath)
+                message.to_absolute_path(self.config.workdir)
             else:
-                message.to_relative_path(self.rootpath)
+                message.to_relative_path(self.config.workdir)
         if self.config.blending:
             messages = blender.blend(messages)
 
@@ -47,7 +41,8 @@ class Prospector(object):
         }
         summary.update(self.config.get_summary_information())
 
-        found_files = find_python(self.config.ignores, self.config.path)
+        found_files = find_python(self.config.ignores, self.config.paths,
+                                  self.config.explicit_file_mode, self.config.workdir)
 
         # Run the tools
         messages = []
@@ -65,7 +60,7 @@ class Prospector(object):
                     else:
                         toolname = 'Unknown'
 
-                    loc = Location(self.config.path, None, None, None, None)
+                    loc = Location(self.config.workdir, None, None, None, None)
                     msg = 'Tool %s failed to run (exception was raised)' % (
                         toolname,
                     )
@@ -105,10 +100,12 @@ class Prospector(object):
         self.summary['formatter'] = output_format
         formatter = FORMATTERS[output_format](self.summary, self.messages)
 
+        print_messages = not self.config.summary_only and self.messages
+
         # Produce the output
         write_to.write(formatter.render(
             summary=not self.config.messages_only,
-            messages=not self.config.summary_only,
+            messages=print_messages,
         ))
         write_to.write('\n')
 
@@ -126,6 +123,13 @@ def get_parser():
 def main():
     # Get our configuration
     config = ProspectorConfig()
+
+    paths = config.paths
+    if len(paths) > 1 and not all([os.path.isfile(path) for path in paths]):
+        sys.stderr.write('\nIn multi-path mode, all inputs must be files, '
+                         'not directories.\n\n')
+        get_parser().print_usage()
+        sys.exit(2)
 
     # Make it so
     prospector = Prospector(config)
