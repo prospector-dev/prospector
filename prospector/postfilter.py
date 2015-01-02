@@ -14,7 +14,6 @@ _SUPPRESS_IF = {
 }
 
 
-
 def _get_pylint_informational(messages):
     remainder = []
     informational = defaultdict(lambda: defaultdict(list))

@@ -2,9 +2,11 @@ import codecs
 import warnings
 import os
 import re
-from prospector.adaptor import LIBRARY_ADAPTORS
 from requirements_detector import find_requirements
 from requirements_detector.detect import RequirementsNotFound
+
+
+POSSIBLE_LIBRARIES = ('django', 'celery')
 
 
 # see http://docs.python.org/2/reference/lexical_analysis.html#identifiers
@@ -74,7 +76,7 @@ def find_from_imports(file_contents):
             import_names = match.group(1).split('.')
 
         for import_name in import_names:
-            if import_name in LIBRARY_ADAPTORS:
+            if import_name in POSSIBLE_LIBRARIES:
                 names.add(import_name)
 
     return names
@@ -82,7 +84,7 @@ def find_from_imports(file_contents):
 
 def find_from_path(path):
     names = set()
-    max_possible = len(LIBRARY_ADAPTORS.keys())
+    max_possible = len(POSSIBLE_LIBRARIES)
 
     for item in os.listdir(path):
         item_path = os.path.abspath(os.path.join(path, item))
@@ -104,7 +106,6 @@ def find_from_path(path):
                 # an invalid 'coding' statement specified in target source file
                 warnings.warn('{0}: {1}'.format(item_path, err), ImportWarning)
 
-
         if len(names) == max_possible:
             # don't continue on recursing, there's no point!
             break
@@ -117,7 +118,7 @@ def find_from_requirements(path):
     names = []
     for requirement in reqs:
         if requirement.name is not None \
-                and requirement.name.lower() in LIBRARY_ADAPTORS:
+                and requirement.name.lower() in POSSIBLE_LIBRARIES:
             names.append(requirement.name.lower())
     return names
 
@@ -129,20 +130,16 @@ def autodetect_libraries(path):
         if path == '':
             path = '.'
 
-    adaptor_names = []
+    libraries = []
 
     try:
-        adaptor_names = find_from_requirements(path)
+        libraries = find_from_requirements(path)
 
     # pylint: disable=W0704
     except RequirementsNotFound:
         pass
 
-    if len(adaptor_names) == 0:
-        adaptor_names = find_from_path(path)
+    if libraries < len(POSSIBLE_LIBRARIES):
+        libraries = find_from_path(path)
 
-    adaptors = []
-    for adaptor_name in adaptor_names:
-        adaptors.append((adaptor_name, LIBRARY_ADAPTORS[adaptor_name]()))
-
-    return adaptors
+    return libraries

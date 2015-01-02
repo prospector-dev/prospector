@@ -42,10 +42,14 @@ class VultureTool(ToolBase):
     def __init__(self):
         ToolBase.__init__(self)
         self._vulture = None
+        self.ignore_codes = ()
 
-    def prepare(self, found_files, args, adaptors):
-        self._vulture = ProspectorVulture(found_files)
+    def configure(self, prospector_config, found_files):
+        self.ignore_codes = prospector_config.get_disabled_messages('vulture')
 
-    def run(self):
-        self._vulture.scavenge()
-        return self._vulture.get_messages()
+    def run(self, found_files):
+        vulture = ProspectorVulture(found_files)
+        vulture.scavenge()
+        return [message
+                for message in vulture.get_messages()
+                if message.code not in self.ignore_codes]

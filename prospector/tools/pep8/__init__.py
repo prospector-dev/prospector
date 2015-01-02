@@ -61,6 +61,7 @@ class ProspectorReport(BaseReport):
 class ProspectorStyleGuide(StyleGuide):
     def __init__(self, found_files, *args, **kwargs):
         self._files = found_files
+        self._module_paths = set(self._files.iter_module_paths())
 
         # Override the default reporter with our custom one.
         kwargs['reporter'] = ProspectorReport
@@ -77,7 +78,7 @@ class ProspectorStyleGuide(StyleGuide):
             return False
 
         fullpath = os.path.join(self._files.rootpath, parent, filename) if parent else filename
-        return fullpath not in self._files.iter_module_paths()
+        return fullpath not in self._module_paths
 
 
 class Pep8Tool(ToolBase):
@@ -85,15 +86,22 @@ class Pep8Tool(ToolBase):
         super(Pep8Tool, self).__init__(*args, **kwargs)
         self.checker = None
 
-    def prepare(self, found_files, args, adaptors):
+    def configure(self, prospector_config, found_files):
         # figure out if we should use a pre-existing config file
         # such as setup.cfg or tox.ini
         external_config = None
 
         # 'none' means we ignore any external config, so just carry on
-        if args.external_config != 'none':
+        use_config = False
+
+        if prospector_config.use_external_config('pep8'):
+            use_config = True
+
             paths = [os.path.join(found_files.rootpath, name) for name in PROJECT_CONFIG]
             paths.append(DEFAULT_CONFIG)
+            ext_loc = prospector_config.external_config_location('pep8')
+            if ext_loc is not None:
+                paths = [ext_loc] + paths
 
             for conf_path in paths:
                 if os.path.exists(conf_path) and os.path.isfile(conf_path):
@@ -104,21 +112,6 @@ class Pep8Tool(ToolBase):
                             external_config = conf_path
                             break
 
-        if args.external_config == 'none':
-            # if we should not use external config, we always want to
-            # use prospector's config
-            use_config = True
-
-        elif args.external_config == 'merge':
-            # if we should merge with any existing config, then we want
-            # to merge prospector's config
-            use_config = True
-
-        elif args.external_config == 'only':
-            # if we should only use external config, then we don't use
-            # prospector's config *unless* there is no external config
-            use_config = external_config is None
-
         # Instantiate our custom pep8 checker.
         self.checker = ProspectorStyleGuide(
             paths=list(found_files.iter_package_paths()),
@@ -126,22 +119,30 @@ class Pep8Tool(ToolBase):
             config_file=external_config
         )
 
-        if args.external_config == 'none' or external_config is None:
-            # Make sure pep8's code ignores are fully reset to zero.
+        if not use_config or external_config is None:
+            configured_by = None
+            # This means that we don't have existing config to use.
+            # Make sure pep8's code ignores are fully reset to zero before
+            # adding prospector-flavoured configuration.
             # pylint: disable=W0201
             self.checker.select = ()
-            self.checker.ignore = ()
+            self.checker.ignore = prospector_config.get_disabled_messages('pep8')
 
-        # Let the adaptors & profiles do their thing.
-        for adaptor in adaptors:
-            adaptor.adapt_pep8(self.checker, use_config=use_config)
+            if 'max-line-length' in prospector_config.tool_options('pep8'):
+                self.checker.options.max_line_length = \
+                    prospector_config.tool_options('pep8')['max-line-length']
+        else:
+            configured_by = "Configuration found at %s" % external_config
 
         # if we have a command line --max-line-length argument, that
         # overrules everything
-        if args.max_line_length is not None:
-            self.checker.options.max_line_length = args.max_line_length
+        max_line_length = prospector_config.max_line_length
+        if max_line_length is not None:
+            self.checker.options.max_line_length = max_line_length
 
-    def run(self):
+        return configured_by
+
+    def run(self, _):
         report = self.checker.check_files()
         return report.get_messages()
 

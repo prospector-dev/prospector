@@ -3,6 +3,10 @@ Prospector Changelog
 
 ## Version 0.8
 
+* [#74](https://github.com/landscapeio/prospector/issues/74),[#10](https://github.com/landscapeio/prospector/issues/10) Tools will now use any configuration specific to them by default. That is to say, if a `.pylintrc` file exists, then that will be used in preference to prospector's own opinions of how to use pylint.
+* Added centralised configuration management, with an abstraction away from how prospector and each tool is actually configured.
+* Removed the "adaptors" concept. This was a sort of visitor pattern in which each tool's configuration could be updated by an adaptor, which 'visited' the tool to tweak settings based on what the adaptor represented. In practise this was not useful and a confusing way to tweak behaviour - tools now configure themselves based on configuration options directly.
+* Changed the default output format to be 'grouped' rather than 'text'
 * Support for Python 2.6 has been dropped, following Pylint's lead.
 * [#65](https://github.com/landscapeio/prospector/issues/65) Resolve UnicodeDecodeErrors thrown while attempting to auto-discover modules of interest by discovering target python source file encoding (PEP263), and issuing only a warning if it fails (thanks to [Jeff Quast](https://github.com/jquast)).
 

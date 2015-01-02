@@ -1,7 +1,5 @@
 from __future__ import absolute_import
 
-import os.path
-
 from pep257 import PEP257Checker, AllError
 
 from prospector.message import Location, Message
@@ -19,18 +17,16 @@ class Pep257Tool(ToolBase):
         self._code_files = []
         self.ignore_codes = ()
 
-    def prepare(self, found_files, args, adaptors):
-        self._code_files = list(found_files.iter_module_paths())
+    def configure(self, prospector_config, found_files):
+        self.ignore_codes = prospector_config.get_disabled_messages('pep257')
+        return None
 
-        for adaptor in adaptors:
-            adaptor.adapt_pep257(self)
-
-    def run(self):
+    def run(self, found_files):
         messages = []
 
         checker = PEP257Checker()
 
-        for code_file in self._code_files:
+        for code_file in found_files.iter_module_paths():
             try:
                 for error in checker.check_source(
                         open(code_file, 'r').read(),
@@ -39,7 +35,7 @@ class Pep257Tool(ToolBase):
                     location = Location(
                         path=code_file,
                         module=None,
-                        function='dunno',
+                        function='',
                         line=error.line,
                         character=0,
                         absolute_path=True,

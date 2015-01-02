@@ -1,6 +1,6 @@
 import os
 import yaml
-from prospector.tools import TOOLS, DEFAULT_TOOLS
+from prospector.tools import TOOLS
 
 
 class ProfileNotFound(Exception):
@@ -157,7 +157,7 @@ class ProspectorProfile(object):
 
     def is_tool_enabled(self, name):
         return getattr(self, name)['run']
-        
+
 
 def merge_profiles(profiles):
     merged_profile = profiles[0]
