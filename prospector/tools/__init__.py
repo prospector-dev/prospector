@@ -9,10 +9,10 @@ from prospector.tools.mccabe import McCabeTool
 
 def _tool_not_available(name, install_option_name):
     class NotAvailableTool(ToolBase):
-        def run(self):
-            sys.stderr.write("Cannot run tool %s as support was not installed.\n"
-                             "Please install by running 'pip install prospector[%s]\n'" % (name, install_option_name))
-            sys.exit(1)
+        def run(self, _):
+            sys.stderr.write("\nCannot run tool %s as support was not installed.\n"
+                             "Please install by running 'pip install prospector[%s]'\n\n" % (name, install_option_name))
+            sys.exit(2)
 
     return NotAvailableTool
 
