@@ -255,3 +255,7 @@ class ProspectorConfig(object):
     @property
     def max_line_length(self):
         return self.arguments.get('max_line_length', None)
+
+    @property
+    def loquacious_pylint(self):
+        return self.config.loquacious_pylint

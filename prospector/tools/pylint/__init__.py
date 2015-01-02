@@ -28,6 +28,24 @@ class DummyStream(object):
         pass
 
 
+class stdout_wrapper(object):
+
+    def __init__(self, hide_stdout):
+        self.hide_stdout = hide_stdout
+
+    def __enter__(self):
+        if self.hide_stdout:
+            self._streams = [sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__]
+            sys.stdout, sys.stderr = DummyStream(), DummyStream()
+            sys.__stdout__, sys.__stderr__ = DummyStream(), DummyStream()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.hide_stdout:
+            sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._streams
+            del self._streams
+
+
 class PylintTool(ToolBase):
 
     def __init__(self):
@@ -92,12 +110,14 @@ class PylintTool(ToolBase):
                         checker.set_option('max-line-length', max_line_length)
 
     def _pylintrc_configure(self, pylintrc, linter):
-        linter.load_default_plugins()
-        linter.load_file_configuration(pylintrc)
+        with stdout_wrapper(self._hide_stdout):
+            linter.load_default_plugins()
+            linter.load_file_configuration(pylintrc)
 
     def configure(self, prospector_config, found_files):
 
         extra_sys_path = found_files.get_minimal_syspath()
+        self._hide_stdout = not prospector_config.loquacious_pylint
 
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
@@ -208,15 +228,6 @@ class PylintTool(ToolBase):
         combined = self._combine_w0614(messages)
         return sorted(combined)
 
-    def hide_stdout(self):
-        self._streams = [sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__]
-        sys.stdout, sys.stderr = DummyStream(), DummyStream()
-        sys.__stdout__, sys.__stderr__ = DummyStream(), DummyStream()
-
-    def restore_stdout(self):
-        sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._streams
-        del self._streams
-
     def run(self, found_files):
         # note: Pylint will exit with a status code indicating the health of
         # the code it was checking. Prospector will not mimic this behaviour,
@@ -232,12 +243,9 @@ class PylintTool(ToolBase):
         # https://bitbucket.org/logilab/pylint/src/3f8ededd0b1637396937da8fe136f51f2bafb047/checkers/variables.py?at=default#cl-617
 
         # TODO: it'd be nice in the future to do something with this data in case it's useful!
-        self.hide_stdout()
-        try:
-            self._linter.check(self._args)
-        finally:
-            self.restore_stdout()
 
+        with stdout_wrapper(self._hide_stdout):
+            self._linter.check(self._args)
         sys.path = self._orig_sys_path
 
         messages = self._collector.get_messages()

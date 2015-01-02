@@ -12,8 +12,6 @@ class ProspectorLinter(PyLinter):  # pylint: disable=R0901,R0904
         # set up the standard PyLint linter
         PyLinter.__init__(self, *args, **kwargs)
 
-        # do some additional things!
-
     def reset_options(self):
         # for example, we want to re-initialise the OptionsManagerMixin
         # to supress the config error warning

@@ -59,6 +59,7 @@ def build_manager():
     manager.add(soc.ListSetting('ignore_paths', soc.String, default=[]))
 
     manager.add(soc.BooleanSetting('die_on_tool_error', default=False))
+    manager.add(soc.BooleanSetting('loquacious_pylint', default=False))
 
     return manager
 
@@ -251,6 +252,13 @@ def build_command_line_source(prog=None, description='Performs static analysis o
                     ' Use this flag to cause prospector to die and raise the'
                     ' exception the tool generated. Mostly useful for'
                     ' development on prospector.',
+        },
+        'loquacious_pylint': {
+            'flags': ['--loquacious-pylint'],
+            'help': 'There are various places where pylint will randomly output warnings to '
+                    'stdout/stderr, which breaks parsing of JSON output. Therefore while pylint '
+                    'is running, this is suppressed. For developing, it is sometimes useful to '
+                    'allow this verbiage to appear, which this flag will do.'
         },
         'path': {
             'flags': ['-p', '--path'],
