@@ -1,7 +1,6 @@
 import sys
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
-from prospector.tools.frosted import FrostedTool
 from prospector.tools.pep8 import Pep8Tool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
