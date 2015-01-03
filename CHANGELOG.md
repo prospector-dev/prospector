@@ -1,6 +1,11 @@
 Prospector Changelog
 =======
 
+## Version 0.8.1
+* Strictness now also changes which pep257 messages are output
+* pep257 and vulture messages are now combined and 'blended' with other tools
+* [#80](https://github.com/landscapeio/prospector/issues/80) Fix for Python3 issue when detecting libraries, provided by [@smspillaz](https://github.com/smspillaz)
+
 ## Version 0.8
 * Demoted frosted to be an optional tool - this is because development seems to have slowed and pyflakes has picked up again, and frosted how has several issues which are solved by pyflakes and is no longer a useful addition.
 * [#78](https://github.com/landscapeio/prospector/issues/78) Prospector can now take multiple files as a path argument, thus providing errors for several files at a time. This helps when integrating with IDEs, for example.
