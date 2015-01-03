@@ -50,7 +50,7 @@ class SingleFiles(object):
     def get_minimal_syspath(self, absolute_paths=True):
         paths = list(set(map(os.path.dirname, self.files)))
         if absolute_paths:
-            paths = map(os.path.abspath, paths)
+            paths = list(map(os.path.abspath, paths))
         return [self.rootpath] + paths
 
 

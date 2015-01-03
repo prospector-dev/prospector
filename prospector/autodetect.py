@@ -139,7 +139,7 @@ def autodetect_libraries(path):
     except RequirementsNotFound:
         pass
 
-    if libraries < len(POSSIBLE_LIBRARIES):
+    if len(libraries) < len(POSSIBLE_LIBRARIES):
         libraries = find_from_path(path)
 
     return libraries
