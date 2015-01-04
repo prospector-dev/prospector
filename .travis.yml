@@ -14,7 +14,7 @@ install:
 script:
   - "nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/"
   - "mv .coverage .coverage_x"
-  - "coverage run --parallel-mode prospector || true"
+  - "coverage run --parallel-mode `which prospector` || true"
   - "coverage combine"
   - "coverage report"
 after_success:
