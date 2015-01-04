@@ -33,3 +33,7 @@ pyroma:
   disable:
     - PYR19
     - PYR16
+
+pep257:
+  disable:
+    - D000
