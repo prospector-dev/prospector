@@ -12,10 +12,10 @@ install:
   - "pip install git+https://github.com/landscapeio/requirements-detector.git@develop"
   - "pip install --use-mirrors --editable ."
 script:
-  nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/
-  mv .coverage .coverage_x
-  coverage prospector || true
-  coverage combine
-  coverage report
+  - "nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/"
+  - "mv .coverage .coverage_x"
+  - "coverage prospector || true"
+  - "coverage combine"
+  - "coverage report"
 after_success:
   coveralls
