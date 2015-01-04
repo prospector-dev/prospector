@@ -18,6 +18,6 @@ script:
   - "mv .coverage .coverage_x"
   - "coverage run --parallel-mode `which prospector` || true"
   - "coverage combine"
-  - "coverage report"
+  - "coverage report --show-missing"
 after_success:
   coveralls
