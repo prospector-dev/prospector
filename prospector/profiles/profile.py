@@ -29,6 +29,22 @@ for toolname in TOOLS.keys():
     }
 
 
+def _uniq_list(listval):
+    seen = set()
+    out = []
+    for value in listval:
+        if value in seen:
+            continue
+        out.append(value)
+        seen.add(value)
+    return out
+
+
+def _is_valid_extension(filename):
+    ext = os.path.splitext(filename)[1]
+    return ext in ('.yml', '.yaml')
+
+
 def load_profiles(names, profile_path):
     if not isinstance(names, (list, tuple)):
         names = (names,)
@@ -37,15 +53,19 @@ def load_profiles(names, profile_path):
 
 
 def _load_content(name, profile_path):
-    if name.endswith('.yaml') or name.endswith('.yml'):
+    if _is_valid_extension(name):
         # assume that this is a full path that we can load
         filename = name
     else:
+        filename = None
         for path in profile_path:
-            filename = os.path.join(path, '%s.yaml' % name)
-            if os.path.exists(filename):
-                break
-        else:
+            for ext in ('yml', 'yaml'):
+                filepath = os.path.join(path, '%s.%s' % (name, ext))
+                if os.path.exists(filepath):
+                    filename = filepath
+                    break
+
+        if filename is None:
             raise ProfileNotFound(name, profile_path)
 
     with open(filename) as fct:
@@ -76,9 +96,6 @@ def _load_profile(name, profile_path, inherits_set=None):
 
 
 def parse_profile(name, contents):
-    if name.endswith('.yaml'):
-        # this was a full path
-        name = os.path.splitext(os.path.basename(name))[0]
     data = yaml.safe_load(contents)
     if data is None:
         # this happens if a completely empty YAML file is passed in to
@@ -128,8 +145,41 @@ class ProspectorProfile(object):
         self.ignore = profile_dict['ignore']
         self.output_format = profile_dict['output-format']
 
+        # some profile options are shorthand for inheriting
+        # from built-in prospector profiles
+        if _is_valid_extension(name):
+            # with an extension, this is a prospector profile
+            # rather than a user-provided one
+            self._determine_strictness(profile_dict)
+            self._determine_pep8(profile_dict)
+            self._determine_doc_warnings(profile_dict)
+            self._determine_test_warnings(profile_dict)
+
         for tool in TOOLS.keys():
             setattr(self, tool, profile_dict[tool])
+
+    def _determine_strictness(self, profile_dict):
+        for profile in self.inherits:
+            if profile.startswith('strictness_'):
+                return
+
+        strictness = profile_dict.get('strictness', 'medium')
+        self.inherits.append('strictness_%s' % strictness)
+
+    def _determine_pep8(self, profile_dict):
+        pep8 = profile_dict.get('pep8', {})
+        if pep8.get('full', False):
+            self.inherits.append('full_pep8')
+        elif pep8.get('none', False):
+            self.inherits.append('no_pep8')
+
+    def _determine_doc_warnings(self, profile_dict):
+        if not profile_dict.get('doc-warnings', False):
+            self.inherits.append('no_doc_warnings')
+
+    def _determine_test_warnings(self, profile_dict):
+        if not profile_dict.get('test-warnings', False):
+            self.inherits.append('no_test_warnings')
 
     def to_profile_dict(self):
         thedict = {
@@ -146,8 +196,8 @@ class ProspectorProfile(object):
         return list(set(disable) - set(enable))
 
     def merge(self, other_profile):
-        self.ignore = list(set(self.ignore + other_profile.ignore))
-        self.inherits = list(set(self.inherits + other_profile.inherits))
+        self.ignore = _uniq_list(self.ignore + other_profile.ignore)
+        self.inherits = _uniq_list(self.inherits + other_profile.inherits)
         if other_profile.output_format is not None:
             self.output_format = other_profile.output_format
 

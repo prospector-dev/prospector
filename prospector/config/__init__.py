@@ -74,15 +74,6 @@ class ProspectorConfig(object):
         # Use other specialty profiles based on options
         profile_names = []
 
-        if not config.doc_warnings:
-            profile_names.append('no_doc_warnings')
-        if not config.test_warnings:
-            profile_names.append('no_test_warnings')
-        if not config.style_warnings:
-            profile_names.append('no_pep8')
-        if config.full_pep8:
-            profile_names.append('full_pep8')
-
         # Use the specified profiles
         profile_provided = False
         if len(config.profiles) > 0:
@@ -107,6 +98,16 @@ class ProspectorConfig(object):
         strictness = None
 
         if not profile_provided:
+            # Use the preconfigured prospector profiles
+            if not config.doc_warnings:
+                profile_names.append('no_doc_warnings')
+            if not config.test_warnings:
+                profile_names.append('no_test_warnings')
+            if not config.style_warnings:
+                profile_names.append('no_pep8')
+            if config.full_pep8:
+                profile_names.append('full_pep8')
+
             # Use the strictness profile only if no profile has been given
             if config.strictness:
                 profile_names = ['strictness_%s' % config.strictness] + profile_names
@@ -127,7 +128,7 @@ class ProspectorConfig(object):
 
         profile_path.append(path)
 
-        provided = os.path.join(os.path.dirname(__file__), '../profiles/profiles')
+        provided = os.path.abspath(os.path.join(os.path.dirname(__file__), '../profiles/profiles'))
         profile_path.append(provided)
 
         try:
@@ -154,7 +155,6 @@ class ProspectorConfig(object):
         return libraries
 
     def _determine_tool_runners(self, config, profile):
-
         if config.tools is None:
             # we had no command line settings for an explicit list of
             # tools, so we use the defaults
@@ -172,7 +172,8 @@ class ProspectorConfig(object):
             to_run.add(tool)
 
         for tool in config.without_tools:
-            to_run.remove(tool)
+            if tool in to_run:
+                to_run.remove(tool)
 
         if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
             for tool in tools.TOOLS.keys():

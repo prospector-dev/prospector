@@ -188,3 +188,19 @@ combinations:
     -   # too complex
         - mccabe: MC0001
         - pylint: R0912
+
+    -   # pep257 takes preference over pylint documentation warnings
+        - pep257: D100
+        - pylint: C0111
+
+    -
+        - pep257: D101
+        - pylint: C0111
+
+    -
+        - pep257: D102
+        - pylint: C0111
+
+    -
+        - pep257: D103
+        - pylint: C0111
