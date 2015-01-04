@@ -94,7 +94,7 @@ def find_from_path(path):
             try:
                 encoding = determine_pyfile_encoding(item_path, default='utf8')
                 with codecs.open(item_path, encoding=encoding) as fip:
-                        names |= find_from_imports(fip.read())
+                    names |= find_from_imports(fip.read())
             except UnicodeDecodeError as err:
                 # this warning is issued: (1) in determine_pyfile_encoding for
                 # badly authored files (contains non-utf8 in a comment line), or
