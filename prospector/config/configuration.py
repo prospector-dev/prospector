@@ -1,6 +1,6 @@
 import setoptconf as soc
 
-from prospector.__pkginfo__ import get_version
+from prospector.__pkginfo__ import __version__
 from prospector.formatters import FORMATTERS
 from prospector.tools import TOOLS, DEFAULT_TOOLS
 
@@ -281,7 +281,7 @@ def build_command_line_source(prog=None, description='Performs static analysis o
 
     return soc.CommandLineSource(
         options=options,
-        version=get_version(),
+        version=__version__,
         parser_options=parser_options,
         positional=positional,
     )

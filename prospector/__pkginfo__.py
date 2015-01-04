@@ -1,6 +1,2 @@
-
-VERSION = (0, 8, 2)
-
-
-def get_version():
-    return '.'.join([str(v) for v in VERSION])
+__version_info__ = (0, 8, 2)
+__version__ = '.'.join(map(str, __version_info__))

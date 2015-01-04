@@ -2,6 +2,7 @@ Prospector Changelog
 =======
 
 ## Version 0.8.2
+* Version loading in setup.py no longer imports the prospector module (which could lead to various weirdnesses when installing on different platforms)
 * [#82](https://github.com/landscapeio/prospector/issues/82) resolves regression in adapter library detection raising, ``ValueError: too many values to unpack``. provided by [@jquast](https://github.com/jquast)
 * [#83](https://github.com/landscapeio/prospector/issues/83) resolves regression when adapter library detects django, ``TypeError: '_sre.SRE_Pattern' object is not iterable``. provided by [@jquast](https://github.com/jquast)
 

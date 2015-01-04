@@ -1,7 +1,15 @@
 # -*- coding: UTF-8 -*-
+import sys
 from distutils.core import setup
 from setuptools import find_packages
-from prospector import __pkginfo__
+
+
+with open('prospector/__pkginfo__.py') as f:
+    exec(f.read())
+_VERSION = globals()['__version__']
+
+if sys.version_info < (2, 7):
+    raise Exception('Prospector %s requires Python 2.7 or higher.' % _VERSION)
 
 
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
@@ -61,7 +69,7 @@ _OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req i
 
 setup(
     name='prospector',
-    version=__pkginfo__.get_version(),
+    version=_VERSION,
     url='https://github.com/landscapeio/prospector',
     author='landscape.io',
     author_email='code@landscape.io',
