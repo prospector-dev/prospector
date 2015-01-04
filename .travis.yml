@@ -16,7 +16,8 @@ install:
 script:
   - "nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/"
   - "mv .coverage .coverage_x"
-  - "coverage run --parallel-mode `which prospector` || true"
+  - "python setup.py develop"
+  - "coverage run --parallel-mode prospector/run.py || true"
   - "coverage combine"
   - "coverage report --show-missing"
 after_success:
