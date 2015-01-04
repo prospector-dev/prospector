@@ -7,7 +7,7 @@ from prospector import __pkginfo__
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.3',
+    'pylint>=1.4',
     'pylint-celery>=0.3',
     'pylint-django>=0.5.5',
     'pylint-plugin-utils>=0.2.2',
@@ -20,7 +20,6 @@ _INSTALL_REQUIRES = [
     'pyflakes>=0.8.1',
     'pep8>=1.5.7',
     'pep8-naming>=0.2.2',
-    'frosted>=1.4.1',
 ]
 
 _PACKAGE_DATA = {
@@ -44,7 +43,6 @@ _CLASSIFIERS = (
     'Intended Audience :: Developers',
     'Operating System :: Unix',
     'Topic :: Software Development :: Quality Assurance',
-    'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
@@ -53,6 +51,7 @@ _CLASSIFIERS = (
 )
 
 _OPTIONAL = {
+    'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6',),
     'with_pyroma': ('pyroma>=1.6',),
     'with_pep257': ('pep257>=0.3,<0.4',),

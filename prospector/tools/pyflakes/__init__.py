@@ -99,18 +99,14 @@ class PyFlakesTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super(PyFlakesTool, self).__init__(*args, **kwargs)
         self.ignore_codes = ()
-        self._paths = []
-        self._ignores = []
 
-    def prepare(self, found_files, args, adaptors):
-        self._files = found_files
+    def configure(self, prospector_config, _):
+        self.ignore_codes = prospector_config.get_disabled_messages('pyflakes')
+        return None
 
-        for adaptor in adaptors:
-            adaptor.adapt_pyflakes(self)
-
-    def run(self):
+    def run(self, found_files):
         reporter = ProspectorReporter(ignore=self.ignore_codes)
-        for filepath in self._files.iter_module_paths():
+        for filepath in found_files.iter_module_paths():
             checkPath(filepath, reporter)
 
         return reporter.get_messages()

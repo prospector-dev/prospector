@@ -46,3 +46,8 @@ pyroma:
     - PYR15
     - PYR18
     - PYR17
+
+pep257:
+  disable:
+    - D400
+    - D401

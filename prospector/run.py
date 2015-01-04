@@ -1,19 +1,14 @@
+from __future__ import absolute_import
 import os.path
 import sys
-import re
 
 from datetime import datetime
 
-from prospector import config as cfg, tools, blender, postfilter
-from prospector.adaptor import LIBRARY_ADAPTORS
-from prospector.adaptor.common import CommonAdaptor
-from prospector.adaptor.profile import ProfileAdaptor
-from prospector.autodetect import autodetect_libraries
+from prospector import tools, blender, postfilter
+from prospector.config import ProspectorConfig, configuration as cfg
+from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
-from prospector.finder import find_python
-from prospector.profiles.profile import ProfileNotFound
-from prospector.tools import DEFAULT_TOOLS
 
 
 __all__ = (
@@ -23,179 +18,17 @@ __all__ = (
 
 
 class Prospector(object):
-    def __init__(self, config, path):
+    def __init__(self, config):
         self.config = config
-        self.path = path
-        if os.path.isdir(path):
-            self.rootpath = path
-        else:
-            self.rootpath = os.getcwd()
-        self.adaptors = []
-        self.libraries = []
-        self.profiles = []
-        self.profile_adaptor = None
-        self.tool_runners = []
-        self.ignores = []
-        self.strictness = None
-        self.tools_to_run = []
-
         self.summary = None
         self.messages = None
-
-        self._determine_adapters()
-        self._determine_profiles()
-        self._determine_tool_runners()
-        self._determine_ignores()
-
-    def _determine_adapters(self):
-        # Bring in the common adaptor
-        if self.config.common_plugin:
-            self.adaptors.append(CommonAdaptor())
-
-        # Bring in adaptors that we automatically detect are needed
-        if self.config.autodetect:
-            for name, adaptor in autodetect_libraries(self.path):
-                self.libraries.append(name)
-                self.adaptors.append(adaptor)
-
-        # Bring in adaptors for the specified libraries
-        for name in self.config.uses:
-            if name not in self.libraries:
-                self.libraries.append(name)
-                self.adaptors.append(LIBRARY_ADAPTORS[name]())
-
-    def _determine_profiles(self):
-
-        # Use other specialty profiles based on options
-        if not self.config.doc_warnings:
-            self.profiles.append('no_doc_warnings')
-        if not self.config.test_warnings:
-            self.profiles.append('no_test_warnings')
-        if not self.config.style_warnings:
-            self.profiles.append('no_pep8')
-        if self.config.full_pep8:
-            self.profiles.append('full_pep8')
-
-        # Use the specified profiles
-        profile_provided = False
-        if len(self.config.profiles) > 0:
-            profile_provided = True
-        self.profiles += self.config.profiles
-
-        # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml'
-        # file then we'll include that
-        poss_profs = (
-            ('.prospector.yaml',),
-            ('.prospector.yml',),
-            ('prospector', '.prospector.yaml'),
-            ('prospector', '.prospector.yml'),
-        )
-
-        for possible_profile in poss_profs:
-            prospector_yaml = os.path.join(self.path, *possible_profile)
-            if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
-                profile_provided = True
-                self.profiles.append(prospector_yaml)
-
-        if not profile_provided:
-            # Use the strictness profile only if no profile has been given
-            if self.config.strictness:
-                self.profiles = ['strictness_%s' % self.config.strictness] + self.profiles
-                self.strictness = self.config.strictness
-        else:
-            self.strictness = 'from profile'
-
-        # the profile path is
-        #   * anything provided as an argument
-        #   * a directory called .prospector in the check path
-        #   * the check path
-        #   * prospector provided profiles
-        profile_path = self.config.profile_path
-
-        prospector_dir = os.path.join(self.path, '.prospector')
-        if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
-            profile_path.append(prospector_dir)
-
-        profile_path.append(self.path)
-
-        provided = os.path.join(os.path.dirname(__file__), 'profiles/profiles')
-        profile_path.append(provided)
-
-        try:
-            self.profile_adaptor = ProfileAdaptor(self.profiles, profile_path)
-        except ProfileNotFound as nfe:
-            sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" %
-                             (nfe.name, ':'.join(nfe.profile_path)))
-            sys.exit(1)
-
-        self.adaptors.append(self.profile_adaptor)
-
-    def _determine_tool_runners(self):
-
-        if self.config.tools is None:
-            # we had no command line settings for an explicit list of
-            # tools, so we use the defaults
-            to_run = set(DEFAULT_TOOLS)
-            # we can also use any that the profiles dictate
-            for tool in tools.TOOLS.keys():
-                if self.profile_adaptor.is_tool_enabled(tool):
-                    to_run.add(tool)
-        else:
-            to_run = set(self.config.tools)
-            # profiles have no say in the list of tools run when
-            # a command line is specified
-
-        for tool in self.config.with_tools:
-            to_run.add(tool)
-
-        for tool in self.config.without_tools:
-            to_run.remove(tool)
-
-        if self.config.tools is None and len(self.config.with_tools) == 0 and len(self.config.without_tools) == 0:
-            for tool in tools.TOOLS.keys():
-                enabled = self.profile_adaptor.is_tool_enabled(tool)
-                if enabled is None:
-                    enabled = tool in DEFAULT_TOOLS
-                if tool in to_run and not enabled:
-                    to_run.remove(tool)
-
-        self.tools_to_run = sorted(list(to_run))
-        for tool in self.tools_to_run:
-            self.tool_runners.append(tools.TOOLS[tool]())
-
-    def _determine_ignores(self):
-        # Grab ignore patterns from the profile adapter
-        ignores = [
-            re.compile(ignore)
-            for ignore in self.profile_adaptor.profile.ignore
-        ]
-
-        # Grab ignore patterns from the options
-        ignores += [
-            re.compile(patt)
-            for patt in self.config.ignore_patterns
-        ]
-
-        # Grab ignore paths from the options
-        boundary = r"(^|/|\\)%s(/|\\|$)"
-        ignores += [
-            re.compile(boundary % re.escape(ignore_path))
-            for ignore_path in self.config.ignore_paths
-        ]
-
-        # Add any specified by the other adaptors
-        for adaptor in self.adaptors:
-            if hasattr(adaptor.__class__, 'ignore_patterns'):
-                ignores += [re.compile(p) for p in adaptor.ignore_patterns]
-
-        self.ignores = ignores
 
     def process_messages(self, messages):
         for message in messages:
             if self.config.absolute_paths:
-                message.to_absolute_path(self.rootpath)
+                message.to_absolute_path(self.config.workdir)
             else:
-                message.to_relative_path(self.rootpath)
+                message.to_relative_path(self.config.workdir)
         if self.config.blending:
             messages = blender.blend(messages)
 
@@ -205,26 +38,17 @@ class Prospector(object):
 
         summary = {
             'started': datetime.now(),
-            'libraries': self.libraries,
-            'strictness': self.strictness,
-            'profiles': self.profiles,
-            'adaptors': [adaptor.name for adaptor in self.adaptors],
-            'tools': self.tools_to_run,
         }
+        summary.update(self.config.get_summary_information())
 
-        # Find the files and packages in a common way, so that each tool
-        # gets the same list.
-        found_files = find_python(self.ignores, self.path)
-
-        # Prep the tools.
-        for tool in self.tool_runners:
-            tool.prepare(found_files, self.config, self.adaptors)
+        found_files = find_python(self.config.ignores, self.config.paths,
+                                  self.config.explicit_file_mode, self.config.workdir)
 
         # Run the tools
         messages = []
-        for tool in self.tool_runners:
+        for tool in self.config.get_tools(found_files):
             try:
-                messages += tool.run()
+                messages += tool.run(found_files)
             except Exception:  # pylint: disable=W0703
                 if self.config.die_on_tool_error:
                     raise
@@ -236,7 +60,7 @@ class Prospector(object):
                     else:
                         toolname = 'Unknown'
 
-                    loc = Location(self.path, None, None, None, None)
+                    loc = Location(self.config.workdir, None, None, None, None)
                     msg = 'Tool %s failed to run (exception was raised)' % (
                         toolname,
                     )
@@ -272,22 +96,16 @@ class Prospector(object):
     def print_messages(self, write_to=None):
         write_to = write_to or sys.stdout
 
-        # Get the output formatter
-        if self.config.output_format is not None:
-            output_format = self.config.output_format
-        else:
-            output_format = self.profile_adaptor.get_output_format()
-
-        if output_format is None:
-            output_format = 'text'
-
+        output_format = self.config.get_output_format()
         self.summary['formatter'] = output_format
         formatter = FORMATTERS[output_format](self.summary, self.messages)
+
+        print_messages = not self.config.summary_only and self.messages
 
         # Produce the output
         write_to.write(formatter.render(
             summary=not self.config.messages_only,
-            messages=not self.config.summary_only,
+            messages=print_messages,
         ))
         write_to.write('\n')
 
@@ -304,23 +122,21 @@ def get_parser():
 
 def main():
     # Get our configuration
-    mgr = cfg.build_manager()
-    config = mgr.retrieve(*cfg.build_default_sources())
+    config = ProspectorConfig()
 
-    # Figure out what paths we're prospecting
-    if config['path']:
-        paths = [config['path']]
-    elif mgr.arguments['checkpath']:
-        paths = mgr.arguments['checkpath']
-    else:
-        paths = [os.getcwd()]
+    paths = config.paths
+    if len(paths) > 1 and not all([os.path.isfile(path) for path in paths]):
+        sys.stderr.write('\nIn multi-path mode, all inputs must be files, '
+                         'not directories.\n\n')
+        get_parser().print_usage()
+        sys.exit(2)
 
     # Make it so
-    prospector = Prospector(config, paths[0])
+    prospector = Prospector(config)
     prospector.execute()
     prospector.print_messages()
 
-    if config.zero_exit:
+    if config.exit_with_zero_on_success():
         # if we ran successfully, and the user wants us to, then we'll
         # exit cleanly
         return 0

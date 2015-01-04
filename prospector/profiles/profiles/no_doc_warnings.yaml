@@ -1,3 +1,6 @@
+ignore:
+  - ^docs?/
+
 pylint:
   disable:
     - C0112
@@ -10,3 +13,7 @@ pyflakes:
 frosted:
   disable:
     - E401
+
+
+pep257:
+  run: false

@@ -15,20 +15,22 @@ __all__ = (
 class McCabeTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super(McCabeTool, self).__init__(*args, **kwargs)
-        self._code_files = []
         self.ignore_codes = ()
         self.max_complexity = 10
 
-    def prepare(self, found_files, args, adaptors):
-        self._code_files = list(found_files.iter_module_paths())
+    def configure(self, prospector_config, _):
+        self.ignore_codes = prospector_config.get_disabled_messages('mccabe')
 
-        for adaptor in adaptors:
-            adaptor.adapt_mccabe(self)
+        options = prospector_config.tool_options('mccabe')
+        if 'max-complexity' in options:
+            self.max_complexity = options['max-complexity']
 
-    def run(self):
+        return None
+
+    def run(self, found_files):
         messages = []
 
-        for code_file in self._code_files:
+        for code_file in found_files.iter_module_paths():
             try:
                 tree = ast.parse(
                     open(code_file, 'r').read(),

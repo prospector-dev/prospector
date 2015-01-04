@@ -26,10 +26,12 @@ combinations:
 
     -   # Unused variable
         - pylint: W0612
+        - vulture: unused-variable
         - pyflakes: FL0013
         - frosted: E307
 
     -   # Mixed tabs and spaces
+        - pep257: D206
         - pep8: E101
         - pylint: W0313
 
@@ -67,6 +69,12 @@ combinations:
         - pylint: C0321
 
     -   # incorrect indendation
+        - pep257: D207
+        - pep8: E111
+        - pylint: W0311
+
+    -   # incorrect indendation
+        - pep257: D208
         - pep8: E111
         - pylint: W0311
 
