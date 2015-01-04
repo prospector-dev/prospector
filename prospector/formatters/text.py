@@ -62,7 +62,7 @@ class TextFormatter(Formatter):
         output.append(
             '    L%s:%s %s: %s - %s' % (
                 message.location.line or '-',
-                message.location.character if message.location.line else '-',
+                message.location.character if message.location.character else '-',
                 message.location.function,
                 message.source,
                 message.code,
