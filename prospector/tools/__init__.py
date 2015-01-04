@@ -5,6 +5,7 @@ from prospector.tools.pep8 import Pep8Tool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 from prospector.tools.mccabe import McCabeTool
+from prospector.tools.pep257 import Pep257Tool
 
 
 def _tool_not_available(name, install_option_name):
@@ -38,10 +39,10 @@ TOOLS = {
     'pyflakes': PyFlakesTool,
     'pep8': Pep8Tool,
     'pylint': PylintTool,
+    'pep257': Pep257Tool,
     'frosted': _optional_tool('frosted'),
     'vulture': _optional_tool('vulture'),
     'pyroma': _optional_tool('pyroma'),
-    'pep257': _optional_tool('pep257'),
 }
 
 
@@ -50,5 +51,6 @@ DEFAULT_TOOLS = (
     'mccabe',
     'pyflakes',
     'pep8',
-    'pylint'
+    'pylint',
+    'pep257'
 )

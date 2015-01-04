@@ -172,7 +172,8 @@ class ProspectorConfig(object):
             to_run.add(tool)
 
         for tool in config.without_tools:
-            to_run.remove(tool)
+            if tool in to_run:
+                to_run.remove(tool)
 
         if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
             for tool in tools.TOOLS.keys():

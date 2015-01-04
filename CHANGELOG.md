@@ -1,6 +1,11 @@
 Prospector Changelog
 =======
 
+## Version 0.9
+* Profiles can now use options like 'strictness: high' or 'doc-warnings: true' as a shortcut for inheriting the built-in prospector profiles.
+* pep257 is now included by default; however it will not run unless the '--doc-warnings' flag is used.
+* pep257 messages are now properly blended with other tools' documentation warnings
+
 ## Version 0.8.2
 * Version loading in setup.py no longer imports the prospector module (which could lead to various weirdnesses when installing on different platforms)
 * [#82](https://github.com/landscapeio/prospector/issues/82) resolves regression in adapter library detection raising, ``ValueError: too many values to unpack``. provided by [@jquast](https://github.com/jquast)

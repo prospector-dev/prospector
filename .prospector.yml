@@ -1,27 +1,13 @@
 output-format: grouped
 
-inherits:
-  - strictness_veryhigh
+strictness: veryhigh
+doc-warnings: true
+test-warnings: false
 
 ignore:
   - ^docs/
 
-dodgy:
-    run: true
-
-mccabe:
-    run: true
-
-pep257:
-    run: true
-
-pyflakes:
-    run: true
-
 frosted:
-    run: true
-
-vulture:
     run: true
 
 pyroma:
@@ -35,6 +21,7 @@ pylint:
     max-line-length: 120
 
 pep8:
+  full: true
   disable:
     - E126
   options:
