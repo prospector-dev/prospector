@@ -29,6 +29,11 @@ for toolname in TOOLS.keys():
     }
 
 
+def _is_valid_extension(filename):
+    ext = os.path.splitext(filename)[1]
+    return ext in ('.yml', '.yaml')
+
+
 def load_profiles(names, profile_path):
     if not isinstance(names, (list, tuple)):
         names = (names,)
@@ -37,15 +42,19 @@ def load_profiles(names, profile_path):
 
 
 def _load_content(name, profile_path):
-    if name.endswith('.yaml') or name.endswith('.yml'):
+    if _is_valid_extension(name):
         # assume that this is a full path that we can load
         filename = name
     else:
+        filename = None
         for path in profile_path:
-            filename = os.path.join(path, '%s.yaml' % name)
-            if os.path.exists(filename):
-                break
-        else:
+            for ext in ('yml', 'yaml'):
+                filepath = os.path.join(path, '%s.%s' % (name, ext))
+                if os.path.exists(filepath):
+                    filename = filepath
+                    break
+
+        if filename is None:
             raise ProfileNotFound(name, profile_path)
 
     with open(filename) as fct:
@@ -76,7 +85,7 @@ def _load_profile(name, profile_path, inherits_set=None):
 
 
 def parse_profile(name, contents):
-    if name.endswith('.yaml'):
+    if _is_valid_extension(name):
         # this was a full path
         name = os.path.splitext(os.path.basename(name))[0]
     data = yaml.safe_load(contents)
