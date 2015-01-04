@@ -63,7 +63,7 @@ class ProspectorReporter(Reporter):
         )
         self._messages.append(message)
 
-    def unexpectedError(self, filename, msg):
+    def unexpectedError(self, filename, msg):  # noqa
         self.record_message(
             filename=filename,
             code='FL9997',
@@ -71,7 +71,7 @@ class ProspectorReporter(Reporter):
         )
 
     # pylint: disable=R0913
-    def syntaxError(self, filename, msg, lineno, offset, text):
+    def syntaxError(self, filename, msg, lineno, offset, text):  # noqa
         self.record_message(
             filename=filename,
             line=lineno,

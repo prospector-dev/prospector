@@ -8,6 +8,10 @@ class SingleFiles(object):
     then we'll use this object instead of the FoundFiles to
     give all the functionality needed to check a single file.
     """
+    # The 'even if ignored' parameters are kept to show this is meant
+    # to be API compatible with FoundFiles, but pylint will warn, so
+    # let's disable
+    # pylint:disable=unused-argument
     def __init__(self, files, rootpath):
         self.files = files
         self.rootpath = rootpath
