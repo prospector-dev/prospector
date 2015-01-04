@@ -16,7 +16,13 @@ install:
 script:
   - "nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/"
   - "mv .coverage .coverage.x"
+  #  install prospector in develop mode, so that we run coverage against the same
+  #  modules that nose has already previously covered.
   - "python setup.py develop"
+  # tricky: install all _OPTIONAL modules found in setup.py; we can't
+  # import setup.py as a python module because it has a system-side effect,
+  # instead we use awk to find all _OPTIONAL modules
+  -  "pip install $(awk -F'[()]' '/_OPTIONAL/{getline; for(;;){print substr($2, 2, length($2)-3);getline;if($1 == "") break}}' < setup.py)"
   - "coverage run --parallel-mode prospector/run.py || true"
   - "coverage combine"
   - "coverage report --show-missing"

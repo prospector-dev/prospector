@@ -6,6 +6,24 @@ inherits:
 ignore:
   - ^docs/
 
+dodgy:
+    run: true
+
+mccabe:
+    run: true
+
+pep257:
+    run: true
+
+pyflakes:
+    run: true
+
+frosted:
+    run: true
+
+vulture:
+    run: true
+
 pyroma:
   run: true
 
