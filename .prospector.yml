@@ -28,9 +28,14 @@ pyroma:
   run: true
 
 pylint:
+  disable:
+    - W0141
+    - R0903
   options:
     max-line-length: 120
 
 pep8:
+  disable:
+    - E126
   options:
     max-line-length: 120

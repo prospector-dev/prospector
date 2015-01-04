@@ -9,6 +9,10 @@ from prospector.tools import DEFAULT_TOOLS
 
 
 class ProspectorConfig(object):
+    # There are several methods on this class which could technically
+    # be functions (they don't use the 'self' argument) but that would
+    # make this module/class a bit ugly.
+    # pylint:disable=no-self-use
 
     def __init__(self):
         self.config, self.arguments = self._configure_prospector()
@@ -92,7 +96,7 @@ class ProspectorConfig(object):
         )
 
         for possible_profile in poss_profs:
-            prospector_yaml = os.path.join(path, *possible_profile)
+            prospector_yaml = os.path.join(path, *possible_profile)  # pylint:disable=star-args
             if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
                 profile_provided = True
                 profile_names.append(prospector_yaml)

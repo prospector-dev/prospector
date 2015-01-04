@@ -180,3 +180,11 @@ combinations:
     -   # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
         - pylint: C0204
         - pep8: N804
+
+    -   # class names should be camelcase
+        - pep8: N801
+        - pylint: C0103
+
+    -   # too complex
+        - mccabe: MC0001
+        - pylint: R0912
