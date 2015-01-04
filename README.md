@@ -5,7 +5,7 @@ prospector
 [![Build Status](https://travis-ci.org/landscapeio/prospector.png?branch=master)](https://travis-ci.org/landscapeio/prospector) 
 [![Health](https://landscape.io/github/landscapeio/prospector/master/landscape.png)](https://landscape.io/github/landscapeio/prospector/master)
 [![Coverage Status](https://coveralls.io/repos/landscapeio/prospector/badge.png)](https://coveralls.io/r/landscapeio/prospector)
-[![Documentation](https://readthedocs.org/projects/prospector/badge/?version=0.7)](https://readthedocs.org/projects/prospector/?badge=0.7)
+[![Documentation](https://readthedocs.org/projects/prospector/badge/?version=master)](https://readthedocs.org/projects/prospector/)
 
 # About
 
