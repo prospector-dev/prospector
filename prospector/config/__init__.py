@@ -12,7 +12,9 @@ class ProspectorConfig(object):
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
     # make this module/class a bit ugly.
-    # pylint:disable=no-self-use
+    # Also the 'too many instance attributes' warning is ignored, as this
+    # is a config object and its sole purpose is to hold many properties!
+    # pylint:disable=no-self-use,too-many-instance-attributes
 
     def __init__(self):
         self.config, self.arguments = self._configure_prospector()
@@ -29,6 +31,7 @@ class ProspectorConfig(object):
         self.libraries = self._find_used_libraries(self.config)
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
+        self.configured_by = {}
 
     def get_tools(self, found_files):
         self.configured_by = {}

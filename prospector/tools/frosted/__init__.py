@@ -88,6 +88,7 @@ class FrostedTool(ToolBase):
             try:
                 check_path(filepath, reporter)
             except UnicodeDecodeError:
+                # pylint:disable=pointless-except
                 pass
 
         return reporter.get_messages()
