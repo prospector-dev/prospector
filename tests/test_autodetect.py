@@ -168,7 +168,7 @@ class AdaptersTest(TestCase):
     """ Adapters detection requires a true project, we just use only our own. """
 
     def test_autodetect_adapters_of_prospector(self):
-        """ Use prospector's base proj. folder, which discovers django. """
+        """ Use prospector's base proj. folder, discovers nothing. """
         # Given
         tgt_path = os.path.join(os.path.dirname(__file__), os.path.pardir)
 
@@ -176,7 +176,7 @@ class AdaptersTest(TestCase):
         detected = autodetect_libraries(tgt_path)
 
         # Verify
-        self.assertEqual(set(('django',)), detected)
+        self.assertEqual(set(), detected)
 
 
 if __name__ == '__main__':
