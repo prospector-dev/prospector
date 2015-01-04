@@ -6,8 +6,17 @@ import warnings
 import tempfile
 import contextlib
 from unittest import TestCase
+try:
+    from unittest.util import safe_repr
+except ImportError:
+    # python2.6
+    safe_repr = repr
 
-from prospector.autodetect import find_from_imports, find_from_path
+from prospector.autodetect import (
+    autodetect_libraries,
+    find_from_imports,
+    find_from_path,
+)
 
 class FindFromImportsTest(TestCase):
 
@@ -35,11 +44,14 @@ class FindFromImportsTest(TestCase):
 
     def test_indented_imports(self):
         """ django is discovered from function-local import statements. """
-        self._test('def lala(self):\n    from django.db import models\n    return models.Model', 'django')
+        self._test('def lala(self):\n'
+                   'from django.db import models\n'
+                   'return models.Model', 'django')
 
     def test_same_line_two_imports(self):
         """ importing two modules of interest on same line are discovered. """
         self._test('import django, celery', 'django', 'celery')
+
 
 class ImportCodingsTest(TestCase):
 
@@ -51,7 +63,7 @@ class ImportCodingsTest(TestCase):
         warnings.resetwarnings()
         TestCase.tearDown(self)
 
-    if sys.version_info < (2,7):
+    if sys.version_info < (2, 7):
         # backport assertGreaterEqual and assertIn for python2.6.
 
         def assertGreaterEqual(self, a, b, msg=None):
@@ -67,7 +79,6 @@ class ImportCodingsTest(TestCase):
                                                       safe_repr(container))
                 self.fail(self._formatMessage(msg, standardMsg))
 
-
     @contextlib.contextmanager
     def make_pypath(self, bindata):
         tmp_folder = tempfile.mkdtemp(prefix='prospector-')
@@ -80,7 +91,6 @@ class ImportCodingsTest(TestCase):
         finally:
             os.unlink(tmp_file)
             os.rmdir(tmp_folder)
-
 
     def test_latin1_coding_line2(self):
         """
@@ -98,7 +108,6 @@ class ImportCodingsTest(TestCase):
         # verify.
         self.assertEqual(set(expected_names), names)
 
-
     def test_negative_latin1(self):
         """ Negative test: file containing latin1 without 'coding' declaration. """
         # given,
@@ -112,7 +121,6 @@ class ImportCodingsTest(TestCase):
                 self.assertGreaterEqual(len(warned), 1)
                 self.assertIn(ImportWarning, [_w.category for _w in warned])
 
-
     def test_negative_lookuperror(self):
         """ File declares an unknown coding.  """
         # given,
@@ -125,7 +133,6 @@ class ImportCodingsTest(TestCase):
                 # verify.
                 self.assertGreaterEqual(len(warned), 1)
                 self.assertIn(ImportWarning, [_w.category for _w in warned])
-
 
     def test_bom_encoded_filepath(self):
         """ File containing only a UTF32_BE byte order mark still decodes.  """
@@ -141,7 +148,6 @@ class ImportCodingsTest(TestCase):
         # verify.
         self.assertEqual(set(expected_names), names)
 
-
     def test_negative_misleading_bom(self):
         """ Negative test: file containing BOM that is not the correct encoding. """
         # given,
@@ -155,6 +161,22 @@ class ImportCodingsTest(TestCase):
                 # verify.
                 self.assertGreaterEqual(len(warned), 1)
                 self.assertIn(ImportWarning, [_w.category for _w in warned])
+
+
+class AdaptersTest(TestCase):
+
+    """ Adapters detection requires a true project, we just use only our own. """
+
+    def test_autodetect_adapters_of_prospector(self):
+        """ Use prospector's base proj. folder, which discovers django. """
+        # Given
+        tgt_path = os.path.join(os.path.dirname(__file__), os.path.pardir)
+
+        # Exercise
+        detected = autodetect_libraries(tgt_path)
+
+        # Verify
+        self.assertEqual(set(('django',)), detected)
 
 
 if __name__ == '__main__':
