@@ -15,11 +15,10 @@ install:
   - "pip install --use-mirrors --editable ."
 script:
   - "nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/"
-  - "mv .coverage .coverage_x"
+  - "mv .coverage .coverage.x"
   - "python setup.py develop"
   - "coverage run --parallel-mode prospector/run.py || true"
   - "coverage combine"
-  - "ls .coverage*"
   - "coverage report --show-missing"
 after_success:
   coveralls
