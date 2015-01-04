@@ -137,8 +137,7 @@ class ProspectorConfig(object):
 
         # Bring in adaptors that we automatically detect are needed
         if config.autodetect:
-            for name, adaptor in autodetect_libraries(self.workdir):
-                libraries.append(name)
+            map(libraries.append, autodetect_libraries(self.workdir))
 
         # Bring in adaptors for the specified libraries
         for name in config.uses:
@@ -200,7 +199,9 @@ class ProspectorConfig(object):
 
         # some libraries have further automatic ignores
         if 'django' in libraries:
-            ignores += re.compile('(^|/)(south_)?migrations(/|$)')
+            ignores += [
+                re.compile('(^|/)(south_)?migrations(/|$)')
+            ]
 
         return ignores
 

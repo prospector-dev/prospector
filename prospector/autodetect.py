@@ -13,7 +13,7 @@ POSSIBLE_LIBRARIES = ('django', 'celery')
 _FROM_IMPORT_REGEX = re.compile(r'^\s*from ([\._a-zA-Z0-9]+) import .*$')
 _IMPORT_REGEX = re.compile(r'^\s*import ([\._a-zA-Z0-9]+)$')
 _IMPORT_MULTIPLE_REGEX = re.compile(r'^\s*import ([\._a-zA-Z0-9]+(, ){1})+')
-_CODING_REGEX = "coding[:=]\s*([-\w.]+)"
+_CODING_REGEX = re.compile(r'coding[:=]\s*([-\w.]+)')
 
 
 def detect_by_bom(path):
@@ -28,8 +28,8 @@ def detect_by_bom(path):
         raw = fin.read(4)
     for enc, boms in (
             ('utf-8-sig', (codecs.BOM_UTF8,)),
-            ('utf-16', (codecs.BOM_UTF16_LE,codecs.BOM_UTF16_BE)),
-            ('utf-32', (codecs.BOM_UTF32_LE,codecs.BOM_UTF32_BE))):
+            ('utf-16', (codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE)),
+            ('utf-32', (codecs.BOM_UTF32_LE, codecs.BOM_UTF32_BE))):
         if any(raw.startswith(bom) for bom in boms):
             return enc
 
@@ -117,8 +117,8 @@ def find_from_requirements(path):
     reqs = find_requirements(path)
     names = []
     for requirement in reqs:
-        if requirement.name is not None \
-                and requirement.name.lower() in POSSIBLE_LIBRARIES:
+        if (requirement.name is not None
+                and requirement.name.lower() in POSSIBLE_LIBRARIES):
             names.append(requirement.name.lower())
     return names
 

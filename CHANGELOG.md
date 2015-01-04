@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.8.2
+* [#82](https://github.com/landscapeio/prospector/issues/82) resolves regression in adapter library detection raising, ``ValueError: too many values to unpack``. provided by [@jquast](https://github.com/jquast)
+* [#83](https://github.com/landscapeio/prospector/issues/83) resolves regression when adapter library detects django, ``TypeError: '_sre.SRE_Pattern' object is not iterable``. provided by [@jquast](https://github.com/jquast)
+
 ## Version 0.8.1
 * Strictness now also changes which pep257 messages are output
 * pep257 and vulture messages are now combined and 'blended' with other tools
