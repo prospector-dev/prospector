@@ -21,6 +21,7 @@ pylint:
     - C0111
 
 pep8:
+  full: true
   disable:
     - E126
 
