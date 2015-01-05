@@ -90,7 +90,9 @@ If creating your own profile, you can use the ``strictness`` like so:
 
     strictness: medium
 
-Valid values are 'verylow', 'low', 'medium' (the default), 'high' and 'veryhigh'.
+Valid values are 'verylow', 'low', 'medium' (the default), 'high' and 'veryhigh'. If you don't specify a
+strictness value, then the default of 'medium' will be used. To avoid using any of Prospector's default
+strictness profiles, set ``strictness: none``.
 
 
 Tweaking Certain Aspects
