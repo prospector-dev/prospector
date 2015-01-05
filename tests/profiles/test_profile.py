@@ -81,7 +81,7 @@ class TestProfileInheritance(ProfileTestBase):
                                                  # don't implicitly add things
                                                  allow_shorthand=False,
                                                  # but do include the profiles that the start.yaml will
-                                                 forced_inherits=['doc_warnings', 'test_warnings']
+                                                 forced_inherits=['doc_warnings']
         )
         self.assertDictEqual(profile.pylint, high_strictness.pylint)
         self.assertDictEqual(profile.pep8, high_strictness.pep8)
