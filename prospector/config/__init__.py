@@ -80,6 +80,8 @@ class ProspectorConfig(object):
         # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml'
         # file then we'll include that
         poss_profs = (
+            ('.landscape.yml',),
+            ('.landscape.yaml',),
             ('.prospector.yaml',),
             ('.prospector.yml',),
             ('prospector', '.prospector.yaml'),

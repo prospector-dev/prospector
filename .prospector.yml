@@ -9,7 +9,7 @@ ignore:
   - ^docs/
 
 frosted:
-    run: true
+  run: true
 
 pyroma:
   run: true
