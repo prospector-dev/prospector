@@ -14,8 +14,12 @@ You can also use a name instead of the path, if it is on the ``profile-path``::
 
     prospector --profile my_profile
 
+In general, command-line arguments override and take precedence over values found
+in profiles.
+
 
 .. _profile_path:
+
 
 Profile Path
 ------------
@@ -86,7 +90,9 @@ If creating your own profile, you can use the ``strictness`` like so:
 
     strictness: medium
 
-Valid values are 'verylow', 'low', 'medium' (the default), 'high' and 'veryhigh'.
+Valid values are 'verylow', 'low', 'medium' (the default), 'high' and 'veryhigh'. If you don't specify a
+strictness value, then the default of 'medium' will be used. To avoid using any of Prospector's default
+strictness profiles, set ``strictness: none``.
 
 
 Tweaking Certain Aspects
@@ -140,6 +146,28 @@ on all warnings from pep8 but turn off just one or two individually or otherwise
             - E126
         options:
             max-line-length: 120
+
+
+Libraries Used and Autodetect
+.............................
+
+Prospector will adjust the behaviour of the underlying tools based on the libraries that your project
+uses. If you use Django, for example, the `pylint-django <https://github.com/landscapeio/pylint-django>` plugin
+will be loaded. This will happen automatically.
+
+If prospector is not correctly determining which of its supported libraries you use, you can specify
+it manually in the profile:
+
+    uses:
+        - django
+        - celery
+
+Currently, only Django and Celery have plugins.
+
+If prospector is incorrectly deciding that you use one of these, you can turn off autodetection:
+
+    autodetect: false
+
 
 
 Inheritance

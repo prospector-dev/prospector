@@ -28,7 +28,9 @@ class DummyStream(object):
         pass
 
 
-class stdout_wrapper(object):  # noqa
+# The class name here is lowercase as it is a context manager, which
+# typically tend to me lowercase.
+class stdout_wrapper(object):  # noqa pylint:disable=C0103
 
     def __init__(self, hide_stdout):
         self.hide_stdout = hide_stdout
@@ -57,6 +59,7 @@ class PylintTool(ToolBase):
         self._collector = self._linter = None
         self._orig_sys_path = []
         self._streams = []
+        self._hide_stdout = False
 
     def _prospector_configure(self, prospector_config, linter):
         linter.load_default_plugins()
@@ -142,7 +145,7 @@ class PylintTool(ToolBase):
         for filepath in found_files.iter_module_paths(abspath=False):
             package = os.path.dirname(filepath).split(os.path.sep)
             for i in range(0, len(package)):
-                if os.path.join(*package[:i+1]) in check_paths:
+                if os.path.join(*package[:i + 1]) in check_paths:
                     break
             else:
                 check_paths.add(filepath)
@@ -209,8 +212,8 @@ class PylintTool(ToolBase):
 
     def _combine_w0614(self, messages):
         """
-        For the "unused import from wildcard import" messages, we want to combine all warnings about
-        the same line into a single message
+        For the "unused import from wildcard import" messages,
+        we want to combine all warnings about the same line into a single message.
         """
         by_loc = defaultdict(list)
         out = []
@@ -234,8 +237,9 @@ class PylintTool(ToolBase):
 
     def combine(self, messages):
         """
-        Some error messages are repeated, causing many errors where only one is strictly necessary. For
-        example, having a wildcard import will result in one 'Unused Import' warning for every unused import.
+        Some error messages are repeated, causing many errors where only one is strictly necessary.
+
+        For example, having a wildcard import will result in one 'Unused Import' warning for every unused import.
         This method will combine these into a single warning.
         """
         combined = self._combine_w0614(messages)

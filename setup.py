@@ -34,6 +34,8 @@ _INSTALL_REQUIRES = [
 _PACKAGE_DATA = {
     'prospector': [
         'blender_combinations.yaml',
+        'profiles/profiles/default.yaml',
+        'profiles/profiles/doc_warnings.yaml',
         'profiles/profiles/full_pep8.yaml',
         'profiles/profiles/no_doc_warnings.yaml',
         'profiles/profiles/no_pep8.yaml',
@@ -41,6 +43,7 @@ _PACKAGE_DATA = {
         'profiles/profiles/strictness_high.yaml',
         'profiles/profiles/strictness_low.yaml',
         'profiles/profiles/strictness_medium.yaml',
+        'profiles/profiles/strictness_none.yaml',
         'profiles/profiles/strictness_veryhigh.yaml',
         'profiles/profiles/strictness_verylow.yaml',
     ]

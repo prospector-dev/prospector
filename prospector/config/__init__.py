@@ -4,7 +4,7 @@ import sys
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
-from prospector.profiles.profile import load_profiles, ProfileNotFound
+from prospector.profiles.profile import ProspectorProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS
 
 
@@ -27,8 +27,8 @@ class ProspectorConfig(object):
         else:
             self.workdir = os.getcwd()
 
-        self.profile, self.profile_names, self.strictness = self._get_profile(self.workdir, self.config)
-        self.libraries = self._find_used_libraries(self.config)
+        self.profile, self.strictness = self._get_profile(self.workdir, self.config)
+        self.libraries = self._find_used_libraries(self.config, self.profile)
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
         self.configured_by = {}
@@ -71,14 +71,11 @@ class ProspectorConfig(object):
         return paths
 
     def _get_profile(self, path, config):
-        # Use other specialty profiles based on options
-        profile_names = []
-
         # Use the specified profiles
         profile_provided = False
         if len(config.profiles) > 0:
             profile_provided = True
-        profile_names += config.profiles
+        cmdline_implicit = []
 
         # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml'
         # file then we'll include that
@@ -89,31 +86,42 @@ class ProspectorConfig(object):
             ('prospector', '.prospector.yml'),
         )
 
-        for possible_profile in poss_profs:
-            prospector_yaml = os.path.join(path, *possible_profile)  # pylint:disable=star-args
-            if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
-                profile_provided = True
-                profile_names.append(prospector_yaml)
+        profile_name = None
+        if not profile_provided:
+            for possible_profile in poss_profs:
+                prospector_yaml = os.path.join(path, *possible_profile)  # pylint:disable=star-args
+                if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
+                    profile_provided = True
+                    profile_name = prospector_yaml
+                    break
 
         strictness = None
 
-        if not profile_provided:
+        if profile_provided:
+            if profile_name is None:
+                profile_name = config.profiles[0]
+                extra_profiles = config.profiles[1:]
+            else:
+                extra_profiles = config.profiles
+
+            strictness = 'from profile'
+        else:
             # Use the preconfigured prospector profiles
+            profile_name = 'default'
+
             if not config.doc_warnings:
-                profile_names.append('no_doc_warnings')
+                cmdline_implicit.append('no_doc_warnings')
             if not config.test_warnings:
-                profile_names.append('no_test_warnings')
+                cmdline_implicit.append('no_test_warnings')
             if not config.style_warnings:
-                profile_names.append('no_pep8')
+                cmdline_implicit.append('no_pep8')
             if config.full_pep8:
-                profile_names.append('full_pep8')
+                cmdline_implicit.append('full_pep8')
 
             # Use the strictness profile only if no profile has been given
             if config.strictness:
-                profile_names = ['strictness_%s' % config.strictness] + profile_names
+                cmdline_implicit.append('strictness_%s' % config.strictness)
                 strictness = config.strictness
-        else:
-            strictness = 'from profile'
 
         # the profile path is
         #   * anything provided as an argument
@@ -132,23 +140,24 @@ class ProspectorConfig(object):
         profile_path.append(provided)
 
         try:
-            profile = load_profiles(profile_names, profile_path)
+            forced_inherits = cmdline_implicit + extra_profiles
+            profile = ProspectorProfile.load(profile_name, profile_path, forced_inherits=forced_inherits)
         except ProfileNotFound as nfe:
             sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" %
                              (nfe.name, ':'.join(nfe.profile_path)))
             sys.exit(1)
         else:
-            return profile, profile_names, strictness
+            return profile, strictness
 
-    def _find_used_libraries(self, config):
+    def _find_used_libraries(self, config, profile):
         libraries = []
 
         # Bring in adaptors that we automatically detect are needed
-        if config.autodetect:
+        if config.autodetect and profile.autodetect is True:
             map(libraries.append, autodetect_libraries(self.workdir))
 
         # Bring in adaptors for the specified libraries
-        for name in config.uses:
+        for name in set(config.uses + profile.uses):
             if name not in libraries:
                 libraries.append(name)
 
@@ -217,7 +226,7 @@ class ProspectorConfig(object):
         return {
             'libraries': self.libraries,
             'strictness': self.strictness,
-            'profiles': self.profile_names,
+            'profiles': ', '.join(self.profile.list_profiles()),
             'tools': self.tools_to_run,
         }
 

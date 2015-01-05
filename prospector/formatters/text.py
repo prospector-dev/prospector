@@ -15,11 +15,12 @@ class TextFormatter(Formatter):
         ('completed', 'Finished'),
         ('time_taken', 'Time Taken', lambda x: '%s seconds' % x),
         ('formatter', 'Formatter'),
+        ('profiles', 'Profiles'),
         ('strictness', 'Strictness'),
         ('libraries', 'Libraries Used', lambda x: ', '.join(x)),
         ('tools', 'Tools Run', lambda x: ', '.join(x)),
         ('adaptors', 'Adaptors', lambda x: ', '.join(x)),
-        ('message_count', 'Message Found'),
+        ('message_count', 'Messages Found'),
     )
 
     def render_summary(self):
@@ -39,7 +40,7 @@ class TextFormatter(Formatter):
                 else:
                     value = self.summary[key]
                 output.append(
-                    '%s: %s' % (
+                    ' %s: %s' % (
                         label.rjust(label_width),
                         value,
                     )

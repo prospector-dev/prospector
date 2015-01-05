@@ -1,3 +1,4 @@
+allow-shorthand: false
 
 pep8:
   run: true

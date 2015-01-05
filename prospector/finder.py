@@ -2,12 +2,14 @@ import os
 
 
 class SingleFiles(object):
+
     """
     When prospector is run in 'single file mode' - that is,
     the argument is a python module rather than a directory -
     then we'll use this object instead of the FoundFiles to
     give all the functionality needed to check a single file.
     """
+
     # The 'even if ignored' parameters are kept to show this is meant
     # to be API compatible with FoundFiles, but pylint will warn, so
     # let's disable
