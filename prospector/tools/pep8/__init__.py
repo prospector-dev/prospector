@@ -126,7 +126,7 @@ class Pep8Tool(ToolBase):
             # adding prospector-flavoured configuration.
             # pylint: disable=W0201
             self.checker.select = ()
-            self.checker.ignore = prospector_config.get_disabled_messages('pep8')
+            self.checker.options.ignore = tuple(prospector_config.get_disabled_messages('pep8'))
 
             if 'max-line-length' in prospector_config.tool_options('pep8'):
                 self.checker.options.max_line_length = \

@@ -1,6 +1,10 @@
 
 
 class ToolBase(object):
+    # This is an 'abstract' base class, used to provide an indication of
+    # how to create a new tool class. Therefore, the arguments will be unused,
+    # so that is suppressed here.
+    # pylint: disable=W0613
 
     def configure(self, prospector_config, found_files):
         """

@@ -1,3 +1,5 @@
+allow-shorthand: false
+
 ignore:
   - ^tests?/?
   - /tests?(/|$)

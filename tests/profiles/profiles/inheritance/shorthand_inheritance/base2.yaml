@@ -1,0 +1,5 @@
+inherits:
+ - base1
+
+test-warnings: true
+doc-warnings: false

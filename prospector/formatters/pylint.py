@@ -4,6 +4,7 @@ from prospector.formatters.base import Formatter
 
 
 class PylintFormatter(Formatter):
+
     """
     This formatter outputs messages in the same way as pylint -f parseable , which is used by several
     tools to parse pylint output. This formatter is therefore a compatability shim between tools built
