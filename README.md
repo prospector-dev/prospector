@@ -1,10 +1,10 @@
 prospector
 ==========
 
-[![Latest Version](https://pypip.in/v/prospector/badge.png)](https://pypi.python.org/pypi/prospector)
+[![Latest Version](https://pypip.in/v/version/prospector/badge.svg?text=version)](https://pypi.python.org/pypi/prospector)
 [![Build Status](https://travis-ci.org/landscapeio/prospector.png?branch=master)](https://travis-ci.org/landscapeio/prospector) 
-[![Health](https://landscape.io/github/landscapeio/prospector/master/landscape.png)](https://landscape.io/github/landscapeio/prospector/master)
-[![Coverage Status](https://coveralls.io/repos/landscapeio/prospector/badge.png)](https://coveralls.io/r/landscapeio/prospector)
+[![Health](https://landscape.io/github/landscapeio/prospector/master/landscape.svg?style=flat)](https://landscape.io/github/landscapeio/prospector/master)
+[![Coverage Status](https://coveralls.io/repos/landscapeio/prospector/badge.svg?style=flat)](https://coveralls.io/r/landscapeio/prospector)
 [![Documentation](https://readthedocs.org/projects/prospector/badge/?version=master)](https://readthedocs.org/projects/prospector/)
 
 # About
