@@ -77,15 +77,21 @@ class ProspectorConfig(object):
             profile_provided = True
         cmdline_implicit = []
 
-        # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml'
+        # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml' or equivalent landscape config
         # file then we'll include that
         poss_profs = (
             ('.landscape.yml',),
             ('.landscape.yaml',),
+            ('landscape.yml',),
+            ('landscape.yaml',),
             ('.prospector.yaml',),
             ('.prospector.yml',),
+            ('prospector.yaml',),
+            ('prospector.yml',),
             ('prospector', '.prospector.yaml'),
             ('prospector', '.prospector.yml'),
+            ('prospector', 'prospector.yaml'),
+            ('prospector', 'prospector.yml'),
         )
 
         profile_name = None
