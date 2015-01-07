@@ -37,7 +37,7 @@ class TestProfileParsing(ProfileTestBase):
 
     def test_ignores(self):
         profile = ProspectorProfile.load('ignores', self._profile_path)
-        self.assertEqual(['^tests/', '/migrations/'].sort(), profile.ignore.sort())
+        self.assertEqual(['^tests/', '/migrations/'].sort(), profile.ignore_patterns.sort())
 
     def test_disable_tool(self):
         profile = ProspectorProfile.load('pylint_disabled', self._profile_path)
