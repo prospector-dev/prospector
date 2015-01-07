@@ -3,7 +3,7 @@ allow-shorthand: false
 inherits:
   - strictness_veryhigh
 
-ignore:
+ignore-patterns:
   - ^setup.py$
 
 pylint:

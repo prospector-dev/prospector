@@ -5,8 +5,8 @@ doc-warnings: true
 test-warnings: false
 max-line-length: 120
 
-ignore:
-  - ^docs/
+ignore-paths:
+  - docs/
 
 frosted:
   run: true

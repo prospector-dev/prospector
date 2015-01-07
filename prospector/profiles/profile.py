@@ -19,7 +19,11 @@ class ProspectorProfile(object):
     def __init__(self, name, profile_dict, inherit_order):
         self.name = name
         self.inherit_order = inherit_order
-        self.ignore = profile_dict.get('ignore', [])
+
+        self.ignore_paths = profile_dict.get('ignore-paths', [])
+        # The 'ignore' directive is an old one which should be deprecated at some point
+        self.ignore_patterns = profile_dict.get('ignore-patterns', []) + profile_dict.get('ignore', [])
+
         self.output_format = profile_dict.get('output-format')
         self.autodetect = profile_dict.get('autodetect')
         self.uses = _ensure_list(profile_dict.get('uses', []))
@@ -125,7 +129,7 @@ def _merge_profile_dict(priority, base):
         if key in ('strictness', 'doc-warnings', 'test-warnings', 'output-format', 'autodetect', 'max-line-length'):
             # some keys are simple values which are overwritten
             out[key] = value
-        elif key in ('ignore', 'uses'):
+        elif key in ('ignore', 'ignore-patterns', 'ignore-paths', 'uses'):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
         elif key in TOOLS.keys():

@@ -51,8 +51,11 @@ Here is an example profile::
     inherits:
       - my/other/profile.yml
 
-    ignore:
-      - ^docs/
+    ignore-paths:
+      - docs
+
+    ignore-patterns:
+      - (^|/)skip(this)?(/|$)
 
     pep8:
       disable:
@@ -205,10 +208,22 @@ built-in prospector profiles::
 Ignoring Paths
 --------------
 
-The ``ignore`` section is a list of regular expressions. The path of each directory and file
-that prospector finds is passed to each regular expression and `searched`
-(ie, ``re.search`` not ``re.match``). If any matches are found, the file or directory is not
-included in the checks.
+There are two ways to ignore paths or files.
+
+Firstly, with the ``ignore-paths`` section. This is a list of paths to ignore relative to the repository root.
+It can be a directory, in which case the directory contents and all subdirectories are ignored, or it can be a
+specific file. For example, ``docs`` would ignore a directory in the repository root called "docs", while
+``mypackage/vendor`` would ignore anything in the directory at "mypackage/vendor".
+
+Secondly, ``ignore-patterns`` is a list of regular expressions. The relative path of files and directories is *searched*
+for each regular expression, and ignored if any matches are found. If the expression matches a directory, the directory
+contents and all subdirectories are ignored. For example, ``^example/doc_.*\.py$`` would ignore any files in the
+"example" directory beginning with "doc_". Another example: ``(^|/)docs(/|$)`` would ignore all directories called
+"docs" in the entire repository.
+
+Note that a further option called ``ignore`` is available. This is equivalent to ``ignore-patterns``, and is from
+an older version of the configuration. It will continue working, but it is deprecated, and you should update
+your profile if you are using it.
 
 
 Tool Configuration

@@ -1,7 +1,7 @@
 # This will enable almost every single warning
 allow-shorthand: false
 
-ignore:
+ignore-patterns:
   - (^|/)\..+
 
 pylint:

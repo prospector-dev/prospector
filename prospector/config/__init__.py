@@ -203,24 +203,18 @@ class ProspectorConfig(object):
         return sorted(list(to_run))
 
     def _determine_ignores(self, config, profile, libraries):
-        # Grab ignore patterns from the profile adapter
-        ignores = [
-            re.compile(ignore)
-            for ignore in profile.ignore
-        ]
-
         # Grab ignore patterns from the options
-        ignores += [
+        ignores = [
             re.compile(patt)
-            for patt in config.ignore_patterns
+            for patt in (config.ignore_patterns + profile.ignore_patterns)
         ]
 
-        # Grab ignore paths from the options
+        # Convert ignore paths into patterns
         boundary = r"(^|/|\\)%s(/|\\|$)"
-        ignores += [
-            re.compile(boundary % re.escape(ignore_path))
-            for ignore_path in config.ignore_paths
-        ]
+        for ignore_path in (config.ignore_paths + profile.ignore_paths):
+            if ignore_path.endswith('/') or ignore_path.endswith('\\'):
+                ignore_path = ignore_path[:-1]
+            ignores.append(re.compile(boundary % re.escape(ignore_path)))
 
         # some libraries have further automatic ignores
         if 'django' in libraries:
