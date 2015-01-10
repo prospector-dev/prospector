@@ -9,6 +9,7 @@ Prospector Changelog
 * [#89](https://github.com/landscapeio/prospector/issues/89) and [#40](https://github.com/landscapeio/prospector/pull/40) - profile merging was not behaving exactly as intended, with later profiles not overriding earlier profiles. This is now fixed as part of the aforementioned rewrite.
 * pep257 is now included by default; however it will not run unless the '--doc-warnings' flag is used.
 * pep257 messages are now properly blended with other tools' documentation warnings
+* Path and output character encoding is now handled much better (which is to say, it is handled; previously it wasn't at all).
 
 ## Version 0.8.3
 * [#96](https://github.com/landscapeio/prospector/issues/96) and [#97](https://github.com/landscapeio/prospector/issues/97) - disabling messages in profiles now works for pep8
