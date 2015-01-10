@@ -116,6 +116,7 @@ class ProspectorConfig(object):
         else:
             # Use the preconfigured prospector profiles
             profile_name = 'default'
+            extra_profiles = []
 
             if not config.doc_warnings:
                 cmdline_implicit.append('no_doc_warnings')
