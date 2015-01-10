@@ -50,6 +50,8 @@ def build_manager():
         ['veryhigh', 'high', 'medium', 'low', 'verylow'],
         default='medium',
     ))
+    manager.add(soc.BooleanSetting('show_profile', default=False))
+
     manager.add(soc.BooleanSetting('no_external_config', default=False))
     manager.add(soc.StringSetting('pylint_config_file', default=None))
 
@@ -209,6 +211,14 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             'help': 'Additional paths to search for profile files. By default this'
                     ' is the path that prospector will check, and a directory '
                     ' called ".prospector" in the path that prospector will check.',
+        },
+        'show_profile': {
+            'flags': ['--show-profile'],
+            'help': 'Include the computed profile in the summary. This will show what'
+                    ' prospector has decided the overall profile is once all profiles'
+                    ' have been combined and inherited from. This will produce a large'
+                    ' output in most cases so is only useful when trying to debug why'
+                    ' prospector is not behaving like you expect.',
         },
         'strictness': {
             'flags': ['-s', '--strictness'],

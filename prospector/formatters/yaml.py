@@ -12,11 +12,14 @@ __all__ = (
 
 # pylint: disable=R0903
 class YamlFormatter(Formatter):
-    def render(self, summary=True, messages=True):
+    def render(self, summary=True, messages=True, profile=False):
         output = {}
 
         if summary:
             output['summary'] = self.summary
+
+        if profile:
+            output['profile'] = self.profile.as_dict()
 
         if messages:
             output['messages'] = [m.as_dict() for m in self.messages]

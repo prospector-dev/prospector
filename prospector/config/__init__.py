@@ -280,3 +280,7 @@ class ProspectorConfig(object):
     @property
     def loquacious_pylint(self):
         return self.config.loquacious_pylint
+
+    @property
+    def show_profile(self):
+        return self.config.show_profile

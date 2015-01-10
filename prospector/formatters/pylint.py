@@ -11,8 +11,8 @@ class PylintFormatter(Formatter):
     on top of pylint and prospector itself.
     """
 
-    def render(self, summary=True, messages=True):
-        # this formatter will always ignore the summary
+    def render(self, summary=True, messages=True, profile=False):
+        # this formatter will always ignore the summary and profile
         cur_loc = None
         output = []
         for message in sorted(self.messages):

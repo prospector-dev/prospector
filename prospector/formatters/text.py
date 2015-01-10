@@ -87,11 +87,23 @@ class TextFormatter(Formatter):
 
         return '\n'.join(output)
 
-    def render(self, summary=True, messages=True):
-        output = ''
+    def render_profile(self):
+        output = [
+            'Profile',
+            '=======',
+            '',
+            self.profile.as_yaml().strip()
+        ]
+
+        return '\n'.join(output)
+
+    def render(self, summary=True, messages=True, profile=False):
+        output = []
         if messages:
-            output += self.render_messages()
-        output += '\n\n\n'
+            output.append(self.render_messages())
+        if profile:
+            output.append(self.render_profile())
         if summary:
-            output += self.render_summary()
-        return output.strip() + '\n'
+            output.append(self.render_summary())
+
+        return '\n\n\n'.join(output) + '\n'

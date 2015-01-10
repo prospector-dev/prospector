@@ -1,3 +1,4 @@
+import json
 from prospector.tools import TOOLS
 
 import os
@@ -54,6 +55,25 @@ class ProspectorProfile(object):
     def list_profiles(self):
         # this profile is itself included
         return self.inherit_order
+
+    def as_dict(self):
+        out = {
+            'ignore-paths': self.ignore_paths,
+            'ignore-patterns': self.ignore_patterns,
+            'output-format': self.output_format,
+            'autodetect': self.autodetect,
+            'uses': self.uses,
+            'max-line-length': self.max_line_length
+        }
+        for tool in TOOLS.keys():
+            out[tool] = getattr(self, tool)
+        return out
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
+
+    def as_yaml(self):
+        return yaml.safe_dump(self.as_dict())
 
     @staticmethod
     def load(name_or_path, profile_path, allow_shorthand=True, forced_inherits=None):
