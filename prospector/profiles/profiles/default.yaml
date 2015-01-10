@@ -1,11 +1,4 @@
 strictness: medium
-doc-warnings: true
+doc-warnings: false
 test-warnings: false
 autodetect: true
-
-pep8:
-  full: true
-  options:
-    max-line-length: 999999999999999999
-  disable:
-   - E201

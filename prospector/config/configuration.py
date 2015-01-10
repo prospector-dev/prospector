@@ -21,10 +21,10 @@ def build_manager():
     manager.add(soc.BooleanSetting('blending', default=True))
     manager.add(soc.BooleanSetting('common_plugin', default=True))
 
-    manager.add(soc.BooleanSetting('doc_warnings', default=False))
-    manager.add(soc.BooleanSetting('test_warnings', default=False))
-    manager.add(soc.BooleanSetting('style_warnings', default=True))
-    manager.add(soc.BooleanSetting('full_pep8', default=False))
+    manager.add(soc.BooleanSetting('doc_warnings', default=None))
+    manager.add(soc.BooleanSetting('test_warnings', default=None))
+    manager.add(soc.BooleanSetting('no_style_warnings', default=None))
+    manager.add(soc.BooleanSetting('full_pep8', default=None))
     manager.add(soc.IntegerSetting('max_line_length', default=None))
 
     manager.add(soc.BooleanSetting('messages_only', default=False))
@@ -48,7 +48,7 @@ def build_manager():
     manager.add(soc.ChoiceSetting(
         'strictness',
         ['veryhigh', 'high', 'medium', 'low', 'verylow'],
-        default='medium',
+        default=None,
     ))
     manager.add(soc.BooleanSetting('show_profile', default=False))
 
@@ -132,7 +132,7 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             'flags': ['-T', '--test-warnings'],
             'help': 'Also check test modules and packages.',
         },
-        'style_warnings': {
+        'no_style_warnings': {
             'flags': ['-8', '--no-style-warnings'],
             'help': 'Don\'t create any warnings about style. This disables the'
                     ' PEP8 tool and similar checks for formatting.',

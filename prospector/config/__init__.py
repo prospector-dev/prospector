@@ -105,17 +105,17 @@ class ProspectorConfig(object):
             profile_name = 'default'
             extra_profiles = []
 
-            if not config.doc_warnings:
-                cmdline_implicit.append('no_doc_warnings')
-            if not config.test_warnings:
-                cmdline_implicit.append('no_test_warnings')
-            if not config.style_warnings:
+            if config.doc_warnings is not None and config.doc_warnings:
+                cmdline_implicit.append('doc_warnings')
+            if config.test_warnings is not None and config.test_warnings:
+                cmdline_implicit.append('test_warnings')
+            if config.no_style_warnings is not None and config.no_style_warnings:
                 cmdline_implicit.append('no_pep8')
-            if config.full_pep8:
+            if config.full_pep8 is not None and config.full_pep8:
                 cmdline_implicit.append('full_pep8')
 
             # Use the strictness profile only if no profile has been given
-            if config.strictness:
+            if config.strictness is not None and config.strictness:
                 cmdline_implicit.append('strictness_%s' % config.strictness)
                 strictness = config.strictness
 
