@@ -5,6 +5,7 @@ Prospector Changelog
 * The way that profiles are handled and parsed has completely been rewritten to avoid several bugs and introduce 'shorthand' options to profiles. This allows profiles to specify simple options like 'doc-warnings: true' inside profiles and configure anything that can be configured as a command line argument. Profiles can now use options like 'strictness: high' or 'doc-warnings: true' as a shortcut for inheriting the built-in prospector profiles.
 * A new `--show-profile` option is available to dump the calculated profile, which is helpful for figuring out what prospector thinks it is doing.
 * Profiles now have separate `ignore-paths` and `ignore-patterns` directives to match the command line arguments. The old `ignore` directive remains in place for backwards compatibility and will be deprecated in the future.
+* A new tool, `profile-validator`, has been added. It simply checks prospector profiles and validates the settings, providing warnings if any are incorrect.
 * [#89](https://github.com/landscapeio/prospector/issues/89) and [#40](https://github.com/landscapeio/prospector/pull/40) - profile merging was not behaving exactly as intended, with later profiles not overriding earlier profiles. This is now fixed as part of the aforementioned rewrite.
 * pep257 is now included by default; however it will not run unless the '--doc-warnings' flag is used.
 * pep257 messages are now properly blended with other tools' documentation warnings

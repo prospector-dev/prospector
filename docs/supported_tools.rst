@@ -1,7 +1,7 @@
 Supported Tools
 ===============
 
-Prospector currently supports 8 tools, of which 6 are defaults and 3 are optional extras.
+Prospector currently supports 10 tools, of which 7 are defaults and 3 are optional extras.
 
 Enabling or Disabling Tools
 ---------------------------
@@ -92,6 +92,14 @@ exactly as ``pep257`` expects it.
 
 It will not run by default, and must be enabled explicitly (via ``--with-tool pep257``
 or in a :doc:`profile <profiles>`) or implicitly (using the ``--doc-warnings`` flag).
+
+
+`profile-validator`
+```````````````````
+
+This is a simple tool built in to prospector which validates
+:doc:`prospector profiles <profiles>`.
+
 
 
 
