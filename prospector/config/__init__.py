@@ -87,7 +87,7 @@ class ProspectorConfig(object):
                 prospector_yaml = os.path.join(path, possible_profile)
                 if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
                     profile_provided = True
-                    profile_name = prospector_yaml
+                    profile_name = possible_profile
                     break
 
         strictness = None
