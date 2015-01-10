@@ -33,7 +33,7 @@ Prospector Changelog
 * Removed the "adaptors" concept. This was a sort of visitor pattern in which each tool's configuration could be updated by an adaptor, which 'visited' the tool to tweak settings based on what the adaptor represented. In practise this was not useful and a confusing way to tweak behaviour - tools now configure themselves based on configuration options directly.
 * Changed the default output format to be 'grouped' rather than 'text'
 * Support for Python 2.6 has been dropped, following Pylint's lead.
-* Using pylint 1.4's 'unsafe' mode, which allows it to load any C extentions (this was the behaviour for 1.3 and below). Not loading them causes many many inference errors.
+* Using pylint 1.4's 'unsafe' mode, which allows it to load any C extensions (this was the behaviour for 1.3 and below). Not loading them causes many many inference errors.
 * [#65](https://github.com/landscapeio/prospector/issues/65) Resolve UnicodeDecodeErrors thrown while attempting to auto-discover modules of interest by discovering target python source file encoding (PEP263), and issuing only a warning if it fails (thanks to [Jeff Quast](https://github.com/jquast)).
 
 ## Version 0.7.3
@@ -50,7 +50,7 @@ Prospector Changelog
 ## Version 0.7.1
 
 * [#60](https://github.com/landscapeio/prospector/issues/60) Prospector did not work with Python2.6 due to timedelta.total_seconds() not being available.
-* Restored the behaviour where std_out/std_err from pylint is supressed
+* Restored the behaviour where std_out/std_err from pylint is suppressed
 
 ## Version 0.7
 
