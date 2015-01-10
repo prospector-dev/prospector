@@ -27,10 +27,13 @@ class ProfileValidationTool(ToolBase):
 
     def __init__(self):
         self.to_check = set(AUTO_LOADED_PROFILES)
+        self.ignore_codes = ()
 
     def configure(self, prospector_config, found_files):
         for profile in prospector_config.config.profiles:
             self.to_check.add(profile)
+
+        self.ignore_codes = prospector_config.get_disabled_messages('profile-validator')
 
     def tool_names(self):
         # TODO: this is currently a circular import, which is why it is not at the top of
@@ -48,6 +51,8 @@ class ProfileValidationTool(ToolBase):
             raw_contents = raw_contents.split('\n')
 
         def add_message(code, message, setting):
+            if code in self.ignore_codes:
+                return
             line = -1
             for number, fileline in enumerate(raw_contents):
                 if setting in fileline:
