@@ -6,6 +6,7 @@ from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 from prospector.tools.mccabe import McCabeTool
 from prospector.tools.pep257 import Pep257Tool
+from prospector.tools.profile_validator import ProfileValidationTool
 
 
 def _tool_not_available(name, install_option_name):
@@ -40,6 +41,7 @@ TOOLS = {
     'pep8': Pep8Tool,
     'pylint': PylintTool,
     'pep257': Pep257Tool,
+    'profile-validator': ProfileValidationTool,
     'frosted': _optional_tool('frosted'),
     'vulture': _optional_tool('vulture'),
     'pyroma': _optional_tool('pyroma'),
@@ -52,5 +54,6 @@ DEFAULT_TOOLS = (
     'pyflakes',
     'pep8',
     'pylint',
-    'pep257'
+    'pep257',
+    'profile-validator'
 )

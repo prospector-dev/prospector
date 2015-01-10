@@ -169,11 +169,11 @@ def _find_paths(ignore, curpath, rootpath):
     files, modules, packages, directories = [], [], [], []
 
     for filename in os.listdir(curpath):
-        if filename.startswith('.'):
-            continue
-
         fullpath = os.path.join(curpath, filename)
         relpath = os.path.relpath(fullpath, rootpath)
+
+        if filename.startswith('.') and os.path.isdir(fullpath):
+            continue
 
         if os.path.islink(fullpath):
             continue

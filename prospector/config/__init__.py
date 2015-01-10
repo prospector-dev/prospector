@@ -1,9 +1,11 @@
 import os
 import re
+import sre_constants
 import sys
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
+from prospector.profiles import AUTO_LOADED_PROFILES
 from prospector.profiles.profile import ProspectorProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS
 
@@ -79,25 +81,10 @@ class ProspectorConfig(object):
 
         # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml' or equivalent landscape config
         # file then we'll include that
-        poss_profs = (
-            ('.landscape.yml',),
-            ('.landscape.yaml',),
-            ('landscape.yml',),
-            ('landscape.yaml',),
-            ('.prospector.yaml',),
-            ('.prospector.yml',),
-            ('prospector.yaml',),
-            ('prospector.yml',),
-            ('prospector', '.prospector.yaml'),
-            ('prospector', '.prospector.yml'),
-            ('prospector', 'prospector.yaml'),
-            ('prospector', 'prospector.yml'),
-        )
-
         profile_name = None
         if not profile_provided:
-            for possible_profile in poss_profs:
-                prospector_yaml = os.path.join(path, *possible_profile)  # pylint:disable=star-args
+            for possible_profile in AUTO_LOADED_PROFILES:
+                prospector_yaml = os.path.join(path, possible_profile)
                 if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
                     profile_provided = True
                     profile_name = prospector_yaml
@@ -205,14 +192,16 @@ class ProspectorConfig(object):
 
     def _determine_ignores(self, config, profile, libraries):
         # Grab ignore patterns from the options
-        ignores = [
-            re.compile(patt)
-            for patt in (config.ignore_patterns + profile.ignore_patterns)
-        ]
+        ignores = []
+        for patt in config.ignore_patterns + profile.ignore_patterns:
+            try:
+                ignores.append(re.compile(patt))
+            except sre_constants.error:
+                pass
 
         # Convert ignore paths into patterns
         boundary = r"(^|/|\\)%s(/|\\|$)"
-        for ignore_path in (config.ignore_paths + profile.ignore_paths):
+        for ignore_path in config.ignore_paths + profile.ignore_paths:
             if ignore_path.endswith('/') or ignore_path.endswith('\\'):
                 ignore_path = ignore_path[:-1]
             ignores.append(re.compile(boundary % re.escape(ignore_path)))

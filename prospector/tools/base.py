@@ -17,6 +17,9 @@ class ToolBase(object):
                  For example, this can be a path to the .pylintrc file used, if
                  used. Returning None means that prospector defaults were used.
         """
+        # We don't want Pylint to tell us that this method should be a function,
+        # it's an "abstract" class after all.
+        # pylint: disable=R0201
         return None
 
     def run(self, found_files):
