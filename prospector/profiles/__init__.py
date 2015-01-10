@@ -1,7 +1,7 @@
 import os
 
 
-AUTO_LOADED_PROFILES = (os.path.join(*parts) for parts in (
+AUTO_LOADED_PROFILES = list(os.path.join(*parts) for parts in (
     ('.landscape.yml',),
     ('.landscape.yaml',),
     ('landscape.yml',),
