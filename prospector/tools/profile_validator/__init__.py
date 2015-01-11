@@ -12,6 +12,7 @@ CONFIG_SETTING_MUST_BE_INTEGER = 'should-be-int'
 CONFIG_SETTING_MUST_BE_BOOL = 'should-be-bool'
 CONFIG_INVALID_VALUE = 'invalid-value'
 CONFIG_INVALID_REGEXP = 'invalid-regexp'
+CONFIG_DEPRECATED_SETTING = 'deprecated'
 
 
 class ProfileValidationTool(ToolBase):
@@ -81,6 +82,11 @@ class ProfileValidationTool(ToolBase):
                     add_message(CONFIG_INVALID_VALUE,
                                 '"%s" is not valid for "uses", must be one of %s' % (uses, ', '.join(possible)),
                                 uses)
+
+        if 'ignore' in parsed:
+            add_message(CONFIG_DEPRECATED_SETTING,
+                        '"ignore" is deprecated, please update to use "ignore-patterns" instead',
+                        'ignore')
 
         for pattern in parsed.get('ignore-patterns', []):
             try:
