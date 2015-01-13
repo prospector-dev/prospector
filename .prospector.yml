@@ -16,9 +16,9 @@ pyroma:
 
 pylint:
   disable:
-    - W0141
-    - R0903
-    - C0111
+    - bad-builtin
+    - too-few-public-methods
+    - missing-docstring
 
 pep8:
   full: true

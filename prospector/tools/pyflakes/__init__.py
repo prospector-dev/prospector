@@ -35,7 +35,7 @@ class ProspectorReporter(Reporter):
         self._messages = []
         self.ignore = ignore or ()
 
-    # pylint: disable=R0913
+    # pylint: disable=too-many-arguments
     def record_message(
             self,
             filename=None,
@@ -70,7 +70,7 @@ class ProspectorReporter(Reporter):
             message=msg,
         )
 
-    # pylint: disable=R0913
+    # pylint: disable=too-many-arguments
     def syntaxError(self, filename, msg, lineno, offset, text):  # noqa
         self.record_message(
             filename=filename,

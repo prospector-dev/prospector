@@ -58,7 +58,7 @@ class TestProfileInheritance(ProfileTestBase):
         profile = ProspectorProfile.load('inherittest3', self._profile_path, allow_shorthand=False)
         disable = profile.pylint['disable']
         disable.sort()
-        self.assertEqual(['I0001', 'I0002', 'I0003'], disable)
+        self.assertEqual(['I0002', 'I0003', 'raw-checker-failed'], disable)
 
     def test_disable_tool_inheritance(self):
         profile = ProspectorProfile.load('pep8_and_pylint_disabled', self._profile_path)
@@ -68,7 +68,7 @@ class TestProfileInheritance(ProfileTestBase):
     def test_precedence(self):
         profile = self._load('precedence')
         self.assertTrue(profile.is_tool_enabled('pylint'))
-        self.assertTrue('W0106' in profile.get_disabled_messages('pylint'))
+        self.assertTrue('expression-not-assigned' in profile.get_disabled_messages('pylint'))
 
     def test_strictness_equivalence(self):
         profile = self._load('strictness_equivalence')

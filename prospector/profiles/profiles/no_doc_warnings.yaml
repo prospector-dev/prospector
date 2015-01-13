@@ -5,8 +5,8 @@ ignore-patterns:
 
 pylint:
   disable:
-    - C0112
-    - C0111
+    - empty-docstring
+    - missing-docstring
 
 pyflakes:
   disable:

@@ -3,4 +3,4 @@ inherits:
 
 pylint:
   disable:
-    - I0001
+    - raw-checker-failed

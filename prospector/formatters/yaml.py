@@ -10,7 +10,7 @@ __all__ = (
 )
 
 
-# pylint: disable=R0903
+# pylint: disable=too-few-public-methods
 class YamlFormatter(Formatter):
     def render(self, summary=True, messages=True, profile=False):
         output = {}

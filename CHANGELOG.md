@@ -2,6 +2,7 @@ Prospector Changelog
 =======
 
 ## Version 0.9
+* Messages now use Pylint error symbols ('star-args') instead of codes ('W0142'). This makes it much more obvious what each message means and what is happening when errors are suppressed or ignored in profiles. The old error codes will continue to work in profiles.
 * The way that profiles are handled and parsed has completely been rewritten to avoid several bugs and introduce 'shorthand' options to profiles. This allows profiles to specify simple options like 'doc-warnings: true' inside profiles and configure anything that can be configured as a command line argument. Profiles can now use options like 'strictness: high' or 'doc-warnings: true' as a shortcut for inheriting the built-in prospector profiles.
 * A new `--show-profile` option is available to dump the calculated profile, which is helpful for figuring out what prospector thinks it is doing.
 * Profiles now have separate `ignore-paths` and `ignore-patterns` directives to match the command line arguments. The old `ignore` directive remains in place for backwards compatibility and will be deprecated in the future.

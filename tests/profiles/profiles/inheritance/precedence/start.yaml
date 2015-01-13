@@ -6,4 +6,4 @@ inherits:
 pylint:
   run: true
   enable:
-    - C0111
+    - missing-docstring

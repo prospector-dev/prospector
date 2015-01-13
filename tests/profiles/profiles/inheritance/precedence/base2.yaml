@@ -4,5 +4,5 @@ inherits:
 pylint:
   run: true
   disable:
-    - C0111
-    - W0106
+    - missing-docstring
+    - expression-not-assigned

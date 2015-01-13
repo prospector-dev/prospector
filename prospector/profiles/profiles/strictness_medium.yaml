@@ -5,42 +5,42 @@ inherits:
 
 pylint:
   disable:
-    - C0103
-    - C0202
-    - C0203
-    - C0204
-    - C0302
-    - C0321
+    - invalid-name
+    - bad-classmethod-argument
+    - bad-mcs-method-argument
+    - bad-mcs-classmethod-argument
+    - too-many-lines
+    - multiple-statements
     - C0322
     - C0323
     - C0324
-    - C0325
-    - C0326
-    - C0330
-    - E0213
+    - superfluous-parens
+    - bad-whitespace
+    - bad-continuation
+    - no-self-argument
     - E1103
     - I0014
-    - R0201
-    - R0901
-    - R0902
-    - R0911
-    - R0922
-    - W0122
-    - W0201
-    - W0223
-    - W0231
-    - W0232
-    - W0301
-    - W0401
-    - W0403
-    - W0601
-    - W0621
+    - no-self-use
+    - too-many-ancestors
+    - too-many-instance-attributes
+    - too-many-return-statements
+    - abstract-class-little-used
+    - exec-used
+    - attribute-defined-outside-init
+    - abstract-method
+    - super-init-not-called
+    - no-init
+    - unnecessary-semicolon
+    - wildcard-import
+    - relative-import
+    - global-variable-undefined
+    - redefined-outer-name
     - W0701
-    - W0703
-    - W0704
+    - broad-except
+    - pointless-except
     - W0713
-    - W1001
-    - W1401
+    - property-on-old-class
+    - anomalous-backslash-in-string
   options:
     max-line-length: 159
 

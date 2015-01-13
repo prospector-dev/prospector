@@ -49,7 +49,7 @@ class Prospector(object):
         for tool in self.config.get_tools(found_files):
             try:
                 messages += tool.run(found_files)
-            except Exception:  # pylint: disable=W0703
+            except Exception:  # pylint: disable=broad-except
                 if self.config.die_on_tool_error:
                     raise
                 else:
