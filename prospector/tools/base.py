@@ -4,7 +4,7 @@ class ToolBase(object):
     # This is an 'abstract' base class, used to provide an indication of
     # how to create a new tool class. Therefore, the arguments will be unused,
     # so that is suppressed here.
-    # pylint: disable=W0613
+    # pylint: disable=unused-argument
 
     def configure(self, prospector_config, found_files):
         """
@@ -19,7 +19,7 @@ class ToolBase(object):
         """
         # We don't want Pylint to tell us that this method should be a function,
         # it's an "abstract" class after all.
-        # pylint: disable=R0201
+        # pylint: disable=no-self-use
         return None
 
     def run(self, found_files):

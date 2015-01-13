@@ -39,7 +39,7 @@ class ProfileValidationTool(ToolBase):
     def tool_names(self):
         # TODO: this is currently a circular import, which is why it is not at the top of
         # the module. However, there's no obvious way to get around this right now...
-        # pylint: disable=R0401
+        # pylint: disable=cyclic-import
         from prospector.tools import TOOLS
         return TOOLS.keys()
 

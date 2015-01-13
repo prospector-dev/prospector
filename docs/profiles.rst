@@ -260,15 +260,15 @@ The typical desired action is to disable messages::
 
     pylint:
       disable:
-        - E0202
-        - E0203
+        - method-hidden
+        - access-member-before-definition
 
 However, you can also enable messages which were disabled by parent profiles::
 
     pylint:
       enable:
-        - E0202
-        - E0203
+        - method-hidden
+        - access-member-before-definition
 
 
 Tool Options

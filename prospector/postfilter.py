@@ -2,7 +2,7 @@ from collections import defaultdict
 import re
 
 
-_I0020_REGEXP = re.compile(r'^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$')
+_SUPPRESSED_MESSAGE_REGEXP = re.compile(r'^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$')
 
 _SUPPRESS_IF = {
     'pyflakes': {
@@ -18,14 +18,16 @@ def _get_pylint_informational(messages):
     remainder = []
     informational = defaultdict(lambda: defaultdict(list))
     for message in messages:
-        if message.source == 'pylint' and message.code.startswith('I'):
-            if message.code == 'I0020':
+        if message.source == 'pylint':
+            if message.code == 'suppressed-message':
                 # this is a message indicating that a message was raised
                 # by pylint but suppressed by configuration in the file
-                match = _I0020_REGEXP.match(message.message)
+                match = _SUPPRESSED_MESSAGE_REGEXP.match(message.message)
                 suppressed_code = match.group(1)
                 line_dict = informational[message.location.path]
                 line_dict[message.location.line].append(suppressed_code)
+            elif message.code not in ('file-ignored',):
+                remainder.append(message)
         else:
             remainder.append(message)
     return informational, remainder
@@ -42,7 +44,7 @@ def filter_messages(messages):
 
     For example:
 
-        import banana  # pylint:disable=W0611
+        import banana  # pylint:disable=unused-import
 
     In this situation, pylint will not warn about an unused import as there is
     inline configuration to disable the warning. Pyflakes will still raise that
@@ -54,7 +56,7 @@ def filter_messages(messages):
 
     filtered = []
     for message in messages:
-        # if this message is not one which we may supress, we can skip the next steps
+        # if this message is not one which we may suppress, we can skip the next steps
         suppress_if = _SUPPRESS_IF.get(message.source, {}).get(message.code, None)
         if suppress_if is None or message.location.path not in informational:
             filtered.append(message)
@@ -68,12 +70,12 @@ def filter_messages(messages):
 
         # now figure out if any of the information on this line is suppressing
         # this current message
-        for supress_code in info:
-            if supress_code in suppress_if:
+        for suppress_code in info:
+            if suppress_code in suppress_if:
                 # this means that a message was suppressed with a code which
                 # matches the current message's purpose - eg, pylint has
                 # suppressed an 'unused-import', and this message also represents
-                # an unused import, so should be supressed too
+                # an unused import, so should be suppressed too
                 break
         else:
             filtered.append(message)

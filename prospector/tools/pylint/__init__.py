@@ -11,7 +11,7 @@ from prospector.tools.pylint.indent_checker import IndentChecker
 from prospector.tools.pylint.linter import ProspectorLinter
 
 
-_W0614_RE = re.compile(r'^Unused import (.*) from wildcard import$')
+_UNUSED_WILDCARD_IMPORT_RE = re.compile(r'^Unused import (.*) from wildcard import$')
 
 
 class DummyStream(object):
@@ -30,7 +30,7 @@ class DummyStream(object):
 
 # The class name here is lowercase as it is a context manager, which
 # typically tend to me lowercase.
-class stdout_wrapper(object):  # noqa pylint:disable=C0103
+class stdout_wrapper(object):  # noqa pylint:disable=invalid-name
 
     def __init__(self, hide_stdout):
         self.hide_stdout = hide_stdout
@@ -73,7 +73,7 @@ class PylintTool(ToolBase):
         for msg_id in prospector_config.get_disabled_messages('pylint'):
             try:
                 linter.disable(msg_id)
-            # pylint: disable=W0704
+            # pylint: disable=pointless-except
             except UnknownMessage:
                 # If the msg_id doesn't exist in PyLint any more,
                 # don't worry about it.
@@ -90,20 +90,20 @@ class PylintTool(ToolBase):
 
         # The warnings about disabling warnings are useful for figuring out
         # with other tools to suppress messages from. For example, an unused
-        # import which is disabled with 'pylint disable=W0611' will still
+        # import which is disabled with 'pylint disable=unused-import' will still
         # generate an 'FL0001' unused import warning from pyflakes. Using the
         # information from these messages, we can figure out what was disabled.
-        linter.disable('I0011')  # notification about disabling a message
-        linter.disable('I0012')  # notification about enabling a message
-        linter.enable('I0013')   # notification about disabling an entire file
-        linter.enable('I0020')   # notification about a message being supressed
-        linter.disable('I0021')  # notification about message supressed which was not raised
-        linter.disable('I0022')  # notification about use of deprecated 'pragma' option
+        linter.disable('locally-disabled')  # notification about disabling a message
+        linter.disable('locally-enabled')  # notification about enabling a message
+        linter.enable('file-ignored')   # notification about disabling an entire file
+        linter.enable('suppressed-message')   # notification about a message being supressed
+        linter.disable('useless-suppression')  # notification about message supressed which was not raised
+        linter.disable('deprecated-pragma')  # notification about use of deprecated 'pragma' option
 
         # disable the 'mixed indentation' warning, since it actually will only allow
         # the indentation specified in the pylint configuration file; we replace it
         # instead with our own version which is more lenient and configurable
-        linter.disable('W0312')
+        linter.disable('mixed-indentation')
         indent_checker = IndentChecker(linter)
         linter.register_checker(indent_checker)
 
@@ -204,7 +204,7 @@ class PylintTool(ToolBase):
 
         # use the collector 'reporter' to simply gather the messages
         # given by PyLint
-        self._collector = Collector()
+        self._collector = Collector(linter.msgs_store)
         linter.set_reporter(self._collector)
 
         self._linter = linter
@@ -219,7 +219,7 @@ class PylintTool(ToolBase):
         out = []
 
         for message in messages:
-            if message.code == 'W0614':
+            if message.code == 'unused-wildcard-import':
                 by_loc[message.location].append(message)
             else:
                 out.append(message)
@@ -227,10 +227,10 @@ class PylintTool(ToolBase):
         for location, message_list in by_loc.items():
             names = []
             for msg in message_list:
-                names.append(_W0614_RE.match(msg.message).group(1))
+                names.append(_UNUSED_WILDCARD_IMPORT_RE.match(msg.message).group(1))
 
             msgtxt = 'Unused imports from wildcard import: %s' % ', '.join(names)
-            combined_message = Message('pylint', 'W0614', location, msgtxt)
+            combined_message = Message('pylint', 'unused-wildcard-import', location, msgtxt)
             out.append(combined_message)
 
         return out

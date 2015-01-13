@@ -6,7 +6,7 @@ __all__ = (
 )
 
 
-# pylint: disable=W0108
+# pylint: disable=unnecessary-lambda
 
 
 class TextFormatter(Formatter):
@@ -48,7 +48,7 @@ class TextFormatter(Formatter):
 
         return '\n'.join(output)
 
-    # pylint: disable=R0201
+    # pylint: disable=no-self-use
     def render_message(self, message):
         output = []
 

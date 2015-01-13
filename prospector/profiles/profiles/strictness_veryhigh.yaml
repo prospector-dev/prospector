@@ -6,8 +6,8 @@ ignore-patterns:
 
 pylint:
   disable:
-    - W0511
-    - C0330
+    - fixme
+    - bad-continuation
 
   options:
     max-locals: 15
