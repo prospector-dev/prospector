@@ -4,6 +4,7 @@ import yaml
 from prospector.message import Location, Message
 from prospector.profiles import AUTO_LOADED_PROFILES
 from prospector.tools import ToolBase
+from prospector.tools import pyflakes
 
 
 CONFIG_SETTING_SHOULD_BE_LIST = 'should-be-list'
@@ -13,6 +14,7 @@ CONFIG_SETTING_MUST_BE_BOOL = 'should-be-bool'
 CONFIG_INVALID_VALUE = 'invalid-value'
 CONFIG_INVALID_REGEXP = 'invalid-regexp'
 CONFIG_DEPRECATED_SETTING = 'deprecated'
+CONFIG_DEPRECATED_CODE = 'deprecated-tool-code'
 
 
 class ProfileValidationTool(ToolBase):
@@ -103,6 +105,13 @@ class ProfileValidationTool(ToolBase):
         for key in parsed.keys():
             if key not in ProfileValidationTool.ALL_SETTINGS and key not in self.tool_names():
                 add_message(CONFIG_UNKNOWN_SETTING, '"%s" is not a valid prospector setting' % key, key)
+
+        if 'pyflakes' in parsed:
+            for code in parsed['pyflakes'].get('enable', []) + parsed['pyflakes'].get('disable', []):
+                if code in pyflakes.LEGACY_CODE_MAP:
+                    add_message(CONFIG_DEPRECATED_CODE,
+                                'Pyflakes code %s was renamed to %s' % (code, pyflakes.LEGACY_CODE_MAP[code]),
+                                'pyflakes')
 
         return messages
 

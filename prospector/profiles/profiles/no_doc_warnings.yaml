@@ -8,10 +8,6 @@ pylint:
     - empty-docstring
     - missing-docstring
 
-pyflakes:
-  disable:
-    - FL0007
-
 frosted:
   disable:
     - E401

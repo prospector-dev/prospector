@@ -50,8 +50,8 @@ mccabe:
 
 pyflakes:
   disable:
-    - FL0005
-    - FL0011
+    - F403
+    - F810
 
 frosted:
   disable:
