@@ -19,6 +19,7 @@ pylint:
     - bad-builtin
     - too-few-public-methods
     - missing-docstring
+    - star-args
 
 pep8:
   full: true
