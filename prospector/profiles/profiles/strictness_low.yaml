@@ -40,8 +40,8 @@ pylint:
 
 pyflakes:
   disable:
-    - FL0001
-    - FL0013
+    - F401
+    - F841
 
 frosted:
   disable:
