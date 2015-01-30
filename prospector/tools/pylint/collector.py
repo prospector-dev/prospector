@@ -15,7 +15,6 @@ class Collector(BaseReporter):
 
     def add_message(self, msg_id, location, msg):
         # (* magic is acceptable here)
-        # pylint: disable=star-args
         loc = Location(*location)
         # At this point pylint will give us the code but we want the
         # more user-friendly symbol

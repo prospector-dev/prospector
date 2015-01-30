@@ -23,7 +23,7 @@ class Prospector(object):
         self.summary = None
         self.messages = None
 
-    def process_messages(self, messages):
+    def process_messages(self, found_files, messages):
         for message in messages:
             if self.config.absolute_paths:
                 message.to_absolute_path(self.config.workdir)
@@ -32,7 +32,8 @@ class Prospector(object):
         if self.config.blending:
             messages = blender.blend(messages)
 
-        return postfilter.filter_messages(messages)
+        filepaths = found_files.iter_module_paths(abspath=False)
+        return postfilter.filter_messages(filepaths, messages)
 
     def execute(self):
 
@@ -72,7 +73,7 @@ class Prospector(object):
                     )
                     messages.append(message)
 
-        messages = self.process_messages(messages)
+        messages = self.process_messages(found_files, messages)
 
         summary['message_count'] = len(messages)
         summary['completed'] = datetime.now()
