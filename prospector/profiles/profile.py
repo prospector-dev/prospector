@@ -26,6 +26,7 @@ class ProspectorProfile(object):
         self.ignore_patterns = profile_dict.get('ignore-patterns', []) + profile_dict.get('ignore', [])
 
         self.output_format = profile_dict.get('output-format')
+        self.member_warnings = profile_dict.get('member-warnings')
         self.autodetect = profile_dict.get('autodetect')
         self.uses = [uses for uses in _ensure_list(profile_dict.get('uses', [])) if uses in ('django', 'celery')]
         self.max_line_length = profile_dict.get('max-line-length')
@@ -63,7 +64,8 @@ class ProspectorProfile(object):
             'output-format': self.output_format,
             'autodetect': self.autodetect,
             'uses': self.uses,
-            'max-line-length': self.max_line_length
+            'max-line-length': self.max_line_length,
+            'member-warnings': self.member_warnings,
         }
         for tool in TOOLS.keys():
             out[tool] = getattr(self, tool)
@@ -146,7 +148,8 @@ def _merge_profile_dict(priority, base):
     out = dict(base.items())
 
     for key, value in priority.items():
-        if key in ('strictness', 'doc-warnings', 'test-warnings', 'output-format', 'autodetect', 'max-line-length'):
+        if key in ('strictness', 'doc-warnings', 'test-warnings', 'member-warnings',
+                   'output-format', 'autodetect', 'max-line-length',):
             # some keys are simple values which are overwritten
             out[key] = value
         elif key in ('ignore', 'ignore-patterns', 'ignore-paths', 'uses'):
@@ -193,6 +196,13 @@ def _determine_test_warnings(profile_dict):
     return (None if test_warnings else 'no_test_warnings'), True
 
 
+def _determine_member_warnings(profile_dict):
+    member_warnings = profile_dict.get('member-warnings')
+    if member_warnings is None:
+        return None, False
+    return ('member_warnings' if member_warnings else 'no_member_warnings'), True
+
+
 def _determine_implicit_inherits(profile_dict, already_inherits, shorthands_found):
     # Note: the ordering is very important here - the earlier items
     # in the list have precedence over the later items. The point of
@@ -202,7 +212,8 @@ def _determine_implicit_inherits(profile_dict, already_inherits, shorthands_foun
         ('pep8', _determine_pep8(profile_dict)),
         ('docs', _determine_doc_warnings(profile_dict)),
         ('tests', _determine_test_warnings(profile_dict)),
-        ('strictness', _determine_strictness(profile_dict, already_inherits))
+        ('strictness', _determine_strictness(profile_dict, already_inherits)),
+        ('members', _determine_member_warnings(profile_dict)),
     ]
     inherits = []
 
@@ -235,6 +246,9 @@ def _load_and_merge(name_or_path, profile_path, allow_shorthand=True, forced_inh
     if allow_shorthand:
         if 'docs' not in shorthands_found:
             data, inherit_list = _append_profiles('no_doc_warnings', profile_path, data, inherit_list)
+
+        if 'members' not in shorthands_found:
+            data, inherit_list = _append_profiles('no_member_warnings', profile_path, data, inherit_list)
 
         if 'tests' not in shorthands_found:
             data, inherit_list = _append_profiles('no_test_warnings', profile_path, data, inherit_list)

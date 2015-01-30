@@ -24,6 +24,7 @@ def build_manager():
     manager.add(soc.BooleanSetting('doc_warnings', default=None))
     manager.add(soc.BooleanSetting('test_warnings', default=None))
     manager.add(soc.BooleanSetting('no_style_warnings', default=None))
+    manager.add(soc.BooleanSetting('member_warnings', default=None))
     manager.add(soc.BooleanSetting('full_pep8', default=None))
     manager.add(soc.IntegerSetting('max_line_length', default=None))
 
@@ -136,6 +137,12 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             'flags': ['-8', '--no-style-warnings'],
             'help': 'Don\'t create any warnings about style. This disables the'
                     ' PEP8 tool and similar checks for formatting.',
+        },
+        'member_warnings': {
+            'flags': ['-m', '--member-warnings'],
+            'help': 'Attempt to warn when code tries to access an attribute of a '
+                    'class or member of a module which does not exist. This is disabled '
+                    'by default as it tends to be quite inaccurate.'
         },
         'full_pep8': {
             'flags': ['-F', '--full-pep8'],
