@@ -91,11 +91,19 @@ def _is_valid_extension(filename):
 
 
 def _load_content(name_or_path, profile_path):
-    if _is_valid_extension(name_or_path) and os.path.exists(name_or_path):
-        # assume that this is a full path that we can load
-        filename = name_or_path
+    filename = None
+
+    if _is_valid_extension(name_or_path):
+        for path in profile_path:
+            filepath = os.path.join(path, name_or_path)
+            if os.path.exists(filepath):
+                # this is a full path that we can load
+                filename = filepath
+                break
+
+        if filename is None:
+            raise ProfileNotFound(name_or_path, profile_path)
     else:
-        filename = None
         for path in profile_path:
             for ext in ('yml', 'yaml'):
                 filepath = os.path.join(path, '%s.%s' % (name_or_path, ext))

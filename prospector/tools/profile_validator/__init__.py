@@ -1,3 +1,4 @@
+import os
 import re
 import sre_constants
 import yaml
@@ -118,7 +119,10 @@ class ProfileValidationTool(ToolBase):
 
     def run(self, found_files):
         messages = []
-        for filepath in found_files.iter_file_paths(abspath=False, include_ignored=True):
-            if filepath in self.to_check:
-                messages += self.validate(filepath)
+        for filepath in found_files.iter_file_paths(abspath=True, include_ignored=True):
+            for possible in self.to_check:
+                if filepath.endswith(os.path.join(possible)):
+                    messages += self.validate(filepath)
+                    break
+
         return messages
