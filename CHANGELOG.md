@@ -2,6 +2,9 @@ Prospector Changelog
 =======
 
 ## Version 0.9
+* [#102](https://github.com/landscapeio/prospector/pull/102) By default, prospector will hide pylint's "no-member" warnings, because more often than not they are simply incorrect. They can be re-enabled with the '--member-warnings' command line flag or the 'member-warnings: true' profile option.
+* [#101](https://github.com/landscapeio/prospector/pull/101) Code annotated with pep8/flake8 style "# noqa" comments is now understood by prospector and will lead to messages from other tools being suppressed too.
+* [#100](https://github.com/landscapeio/prospector/pull/100) Pyflakes error codes have been replaced with the same as those used in flake8, for consistency. Profiles with the old values will still work, and the profile-validator will warn you to upgrade.
 * Messages now use Pylint error symbols ('star-args') instead of codes ('W0142'). This makes it much more obvious what each message means and what is happening when errors are suppressed or ignored in profiles. The old error codes will continue to work in profiles.
 * The way that profiles are handled and parsed has completely been rewritten to avoid several bugs and introduce 'shorthand' options to profiles. This allows profiles to specify simple options like 'doc-warnings: true' inside profiles and configure anything that can be configured as a command line argument. Profiles can now use options like 'strictness: high' or 'doc-warnings: true' as a shortcut for inheriting the built-in prospector profiles.
 * A new `--show-profile` option is available to dump the calculated profile, which is helpful for figuring out what prospector thinks it is doing.
