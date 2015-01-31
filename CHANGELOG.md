@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.9.1
+* Mandating version 0.2.3 of pylint-plugin-utils, as the earlier ones don't work with the add_message API changes made in pylint 1.4+
+
 ## Version 0.9
 * [#102](https://github.com/landscapeio/prospector/pull/102) By default, prospector will hide pylint's "no-member" warnings, because more often than not they are simply incorrect. They can be re-enabled with the '--member-warnings' command line flag or the 'member-warnings: true' profile option.
 * [#101](https://github.com/landscapeio/prospector/pull/101) Code annotated with pep8/flake8 style "# noqa" comments is now understood by prospector and will lead to messages from other tools being suppressed too.

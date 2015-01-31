@@ -79,7 +79,8 @@ class ProfileValidationTool(ToolBase):
 
         if 'uses' in parsed:
             possible = ('django', 'celery')
-            for uses in parsed['uses']:
+            parsed_list = parsed['uses'] if isinstance(parsed['uses'], list) else [parsed['uses']]
+            for uses in parsed_list:
                 if uses not in possible:
                     add_message(CONFIG_INVALID_VALUE,
                                 '"%s" is not valid for "uses", must be one of %s' % (uses, ', '.join(possible)),
