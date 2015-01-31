@@ -73,7 +73,7 @@ class ProfileValidationTool(ToolBase):
             add_message(CONFIG_SETTING_MUST_BE_INTEGER, '"max-line-length" should be an integer', 'max-line-length')
 
         if 'strictness' in parsed:
-            possible = ('veryhigh', 'high', 'medium', 'low', 'verylow')
+            possible = ('veryhigh', 'high', 'medium', 'low', 'verylow', 'none')
             if parsed['strictness'] not in possible:
                 add_message(CONFIG_INVALID_VALUE, '"strictness" must be one of %s' % ', '.join(possible), 'strictness')
 
