@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.9.2
+* There were some problems related to absolute paths when loading profiles that were not in the current working directory.
+
 ## Version 0.9.1
 * Mandating version 0.2.3 of pylint-plugin-utils, as the earlier ones don't work with the add_message API changes made in pylint 1.4+
 
