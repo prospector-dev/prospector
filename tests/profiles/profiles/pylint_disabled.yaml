@@ -1,3 +1,4 @@
+strictness: none
 
 pylint:
   run: false

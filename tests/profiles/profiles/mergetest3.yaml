@@ -1,5 +1,0 @@
-
-pylint:
-  disable:
-    - E0504
-    - W1010

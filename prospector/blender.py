@@ -58,13 +58,19 @@ def blend_line(messages, blend_combos=None):
                 (msg.source, msg.code),
             ),
         )
-        blended.append(blend_list[0])
+        if blend_list[0] not in blended:
+            # We may have already added this message if it represents
+            # several messages in other tools which are not being run -
+            # for example, pylint missing-docstring is blended with pep257 D100, D101
+            # and D102, but should not appear 3 times!
+            blended.append(blend_list[0])
 
         # Some messages from a tool point out an error that in another tool is handled by two
-        # different errors or more. For example, pylint emits the same warning (C0321) for "two statements on a line"
-        # separated by a colon and a semi-colon, while pep8 has E701 and E702 for those cases respectively. In
-        # this case, the pylint error will not be 'blended' as it will appear in two blend_lists. Therefore we
-        # mark anything not taken from the blend list as "consumed" and then filter later, to avoid such cases.
+        # different errors or more. For example, pylint emits the same warning (multiple-statements)
+        # for "two statements on a line" separated by a colon and a semi-colon, while pep8 has E701
+        # and E702 for those cases respectively. In this case, the pylint error will not be 'blended' as
+        # it will appear in two blend_lists. Therefore we mark anything not taken from the blend list
+        # as "consumed" and then filter later, to avoid such cases.
         for now_used in blend_list[1:]:
             now_used.used = True
 

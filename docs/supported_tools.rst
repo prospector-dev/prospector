@@ -1,7 +1,7 @@
 Supported Tools
 ===============
 
-Prospector currently supports 8 tools, of which 5 are defaults and 4 are optional extras.
+Prospector currently supports 10 tools, of which 7 are defaults and 3 are optional extras.
 
 Enabling or Disabling Tools
 ---------------------------
@@ -78,16 +78,42 @@ Dodgy is a very simple tool designed to find 'dodgy' things which should
 not be in a public project, such as secret keys, passwords, AWS tokens or 
 source control diffs.
 
+`pep257 <https://github.com/GreenSteam/pep257>`_
+````````````````````````````````````````````````
+
+``pep257`` is a simple tool to warn about violations of the
+`PEP257 Docstring Conventions <http://legacy.python.org/dev/peps/pep-0257/>`_.
+It produces messages for any divergence from the style guide.
+
+This tool is currently considered *experimental* due to some bugs in its
+ability to parse code. For example, modules that contain an ``__all__`` could
+end up producing bogus error messages if the ``__all__`` isn't formatted
+exactly as ``pep257`` expects it.
+
+It will not run by default, and must be enabled explicitly (via ``--with-tool pep257``
+or in a :doc:`profile <profiles>`) or implicitly (using the ``--doc-warnings`` flag).
+
+
+`profile-validator`
+```````````````````
+
+This is a simple tool built in to prospector which validates
+:doc:`prospector profiles <profiles>`.
+
+
+
 
 Optional Extras
 ---------------
 
-These extras are integrated into prospector but are not activated by default. This is because their output is not necessarily useful for all projects.
+These extras are integrated into prospector but are not activated by default.
+This is because their output is not necessarily useful for all projects.
 
 They are also not installed by default. The instructions for installing each tool is in the tool 
 section below. To install all extras at the same time, install prospector using the ``with_everything`` option::
 
     pip install prospector[with_everything]
+
 
 `Pyroma <https://bitbucket.org/regebro/pyroma>`_
 ````````````````````````````````````````````````
@@ -127,22 +153,3 @@ To install and use::
 
     pip install prospector[with_frosted]
     prospector --with-tool frosted
-
-
-`pep257 <https://github.com/GreenSteam/pep257>`_
-````````````````````````````````````````````````
-
-``pep257`` is a simple tool to warn about violations of the
-`PEP257 Docstring Conventions <http://legacy.python.org/dev/peps/pep-0257/>`_.
-It produces messages for any divergence from the style guide.
-
-To install and use::
-
-    pip install prospector[with_pep257]
-    prospector --with-tool pep257
-
-This tool is currently considered *experimental* due to some bugs in its
-ability to parse code. For example, modules that contain an ``__all__`` could
-end up producing bogus error messages if the ``__all__`` isn't formatted
-exactly as ``pep257`` expects it.
-

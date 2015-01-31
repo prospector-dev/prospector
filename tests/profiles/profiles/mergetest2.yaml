@@ -1,6 +1,0 @@
-
-pylint:
-  disable:
-    - W1010
-    - W1012
-    - C1000

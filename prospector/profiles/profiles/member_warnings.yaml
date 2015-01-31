@@ -1,0 +1,6 @@
+allow-shorthand: false
+
+pylint:
+  enable:
+    - no-member
+    - no-name-in-module

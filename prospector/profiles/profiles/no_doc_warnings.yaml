@@ -1,19 +1,16 @@
-ignore:
+allow-shorthand: false
+
+ignore-patterns:
   - ^docs?/
 
 pylint:
   disable:
-    - C0112
-    - C0111
-
-pyflakes:
-  disable:
-    - FL0007
+    - empty-docstring
+    - missing-docstring
 
 frosted:
   disable:
     - E401
-
 
 pep257:
   run: false

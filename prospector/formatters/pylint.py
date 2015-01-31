@@ -4,14 +4,15 @@ from prospector.formatters.base import Formatter
 
 
 class PylintFormatter(Formatter):
+
     """
     This formatter outputs messages in the same way as pylint -f parseable , which is used by several
     tools to parse pylint output. This formatter is therefore a compatability shim between tools built
     on top of pylint and prospector itself.
     """
 
-    def render(self, summary=True, messages=True):
-        # this formatter will always ignore the summary
+    def render(self, summary=True, messages=True, profile=False):
+        # this formatter will always ignore the summary and profile
         cur_loc = None
         output = []
         for message in sorted(self.messages):
@@ -24,7 +25,7 @@ class PylintFormatter(Formatter):
                 output.append(header)
 
             #   ={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
-            # prospector/configuration.py:65: [C0111(missing-docstring), build_default_sources] \
+            # prospector/configuration.py:65: [missing-docstring(missing-docstring), build_default_sources] \
             # Missing function docstring
 
             template = '%(path)s:%(line)s: [%(code)s(%(source)s), %(function)s] %(message)s'

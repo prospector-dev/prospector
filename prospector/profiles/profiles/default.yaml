@@ -1,0 +1,5 @@
+strictness: medium
+doc-warnings: false
+test-warnings: false
+autodetect: true
+member-warnings: false

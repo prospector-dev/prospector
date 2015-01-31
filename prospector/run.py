@@ -23,7 +23,7 @@ class Prospector(object):
         self.summary = None
         self.messages = None
 
-    def process_messages(self, messages):
+    def process_messages(self, found_files, messages):
         for message in messages:
             if self.config.absolute_paths:
                 message.to_absolute_path(self.config.workdir)
@@ -32,7 +32,8 @@ class Prospector(object):
         if self.config.blending:
             messages = blender.blend(messages)
 
-        return postfilter.filter_messages(messages)
+        filepaths = found_files.iter_module_paths(abspath=False)
+        return postfilter.filter_messages(filepaths, messages)
 
     def execute(self):
 
@@ -49,7 +50,7 @@ class Prospector(object):
         for tool in self.config.get_tools(found_files):
             try:
                 messages += tool.run(found_files)
-            except Exception:  # pylint: disable=W0703
+            except Exception:  # pylint: disable=broad-except
                 if self.config.die_on_tool_error:
                     raise
                 else:
@@ -72,7 +73,7 @@ class Prospector(object):
                     )
                     messages.append(message)
 
-        messages = self.process_messages(messages)
+        messages = self.process_messages(found_files, messages)
 
         summary['message_count'] = len(messages)
         summary['completed'] = datetime.now()
@@ -98,7 +99,7 @@ class Prospector(object):
 
         output_format = self.config.get_output_format()
         self.summary['formatter'] = output_format
-        formatter = FORMATTERS[output_format](self.summary, self.messages)
+        formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
 
         print_messages = not self.config.summary_only and self.messages
 
@@ -106,7 +107,8 @@ class Prospector(object):
         write_to.write(formatter.render(
             summary=not self.config.messages_only,
             messages=print_messages,
-        ))
+            profile=self.config.show_profile
+        ).encode('utf-8'))
         write_to.write('\n')
 
 

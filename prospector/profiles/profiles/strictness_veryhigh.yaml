@@ -1,12 +1,13 @@
 # This will enable almost every single warning
+allow-shorthand: false
 
-ignore:
+ignore-patterns:
   - (^|/)\..+
 
 pylint:
   disable:
-    - W0511
-    - C0330
+    - fixme
+    - bad-continuation
 
   options:
     max-locals: 15
@@ -33,3 +34,7 @@ pyroma:
   disable:
     - PYR19
     - PYR16
+
+pep257:
+  disable:
+    - D000

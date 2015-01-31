@@ -1,5 +1,0 @@
-
-pylint:
-  disable:
-    - C1000
-    - C1001

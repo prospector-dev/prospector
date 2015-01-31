@@ -1,6 +1,10 @@
 
 
 class ToolBase(object):
+    # This is an 'abstract' base class, used to provide an indication of
+    # how to create a new tool class. Therefore, the arguments will be unused,
+    # so that is suppressed here.
+    # pylint: disable=unused-argument
 
     def configure(self, prospector_config, found_files):
         """
@@ -13,6 +17,9 @@ class ToolBase(object):
                  For example, this can be a path to the .pylintrc file used, if
                  used. Returning None means that prospector defaults were used.
         """
+        # We don't want Pylint to tell us that this method should be a function,
+        # it's an "abstract" class after all.
+        # pylint: disable=no-self-use
         return None
 
     def run(self, found_files):

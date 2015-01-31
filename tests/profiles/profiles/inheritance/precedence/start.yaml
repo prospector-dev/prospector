@@ -1,0 +1,9 @@
+strictness: none
+
+inherits:
+  - base2
+
+pylint:
+  run: true
+  enable:
+    - missing-docstring

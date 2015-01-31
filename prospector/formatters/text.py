@@ -6,7 +6,7 @@ __all__ = (
 )
 
 
-# pylint: disable=W0108
+# pylint: disable=unnecessary-lambda
 
 
 class TextFormatter(Formatter):
@@ -15,11 +15,12 @@ class TextFormatter(Formatter):
         ('completed', 'Finished'),
         ('time_taken', 'Time Taken', lambda x: '%s seconds' % x),
         ('formatter', 'Formatter'),
+        ('profiles', 'Profiles'),
         ('strictness', 'Strictness'),
         ('libraries', 'Libraries Used', lambda x: ', '.join(x)),
         ('tools', 'Tools Run', lambda x: ', '.join(x)),
         ('adaptors', 'Adaptors', lambda x: ', '.join(x)),
-        ('message_count', 'Message Found'),
+        ('message_count', 'Messages Found'),
     )
 
     def render_summary(self):
@@ -39,7 +40,7 @@ class TextFormatter(Formatter):
                 else:
                     value = self.summary[key]
                 output.append(
-                    '%s: %s' % (
+                    ' %s: %s' % (
                         label.rjust(label_width),
                         value,
                     )
@@ -47,7 +48,7 @@ class TextFormatter(Formatter):
 
         return '\n'.join(output)
 
-    # pylint: disable=R0201
+    # pylint: disable=no-self-use
     def render_message(self, message):
         output = []
 
@@ -62,7 +63,7 @@ class TextFormatter(Formatter):
         output.append(
             '    L%s:%s %s: %s - %s' % (
                 message.location.line or '-',
-                message.location.character if message.location.line else '-',
+                message.location.character if message.location.character else '-',
                 message.location.function,
                 message.source,
                 message.code,
@@ -86,11 +87,23 @@ class TextFormatter(Formatter):
 
         return '\n'.join(output)
 
-    def render(self, summary=True, messages=True):
-        output = ''
+    def render_profile(self):
+        output = [
+            'Profile',
+            '=======',
+            '',
+            self.profile.as_yaml().strip()
+        ]
+
+        return '\n'.join(output)
+
+    def render(self, summary=True, messages=True, profile=False):
+        output = []
         if messages:
-            output += self.render_messages()
-        output += '\n\n\n'
+            output.append(self.render_messages())
+        if profile:
+            output.append(self.render_profile())
         if summary:
-            output += self.render_summary()
-        return output.strip() + '\n'
+            output.append(self.render_summary())
+
+        return '\n\n\n'.join(output) + '\n'
