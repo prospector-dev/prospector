@@ -30,20 +30,17 @@ def filter_messages(filepaths, messages):
 
         # some files are skipped entirely by messages
         if message.location.path in paths_to_ignore:
-            print 'skipping file', message.location.path
             continue
 
         # some lines are skipped entirely by messages
         if message.location.path in lines_to_ignore:
             if message.location.line in lines_to_ignore[message.location.path]:
-                print 'skipping line', message.location.path, message.location.line
                 continue
 
         # and some lines have only certain messages explicitly ignored
         if message.location.path in messages_to_ignore:
             if message.location.line in messages_to_ignore[message.location.path]:
                 if message.code in messages_to_ignore[message.location.path][message.location.line]:
-                    print 'skipping code', message.location.path, message.location.line, message.code
                     continue
 
         # otherwise this message was not filtered
