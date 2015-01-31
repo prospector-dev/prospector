@@ -117,6 +117,7 @@ your profile::
 
 This will turn on the otherwise disabled `pep257` tool.
 
+
 Test Warnings
 .............
 
@@ -124,6 +125,18 @@ Prospector will not inspect unit tests and test files by default. You can
 turn this on using the `--test-warnings` flag or in your profile::
 
     test-warnings: true
+
+
+Member Warnings
+'''''''''''''''
+
+Pylint generates warnings when you try to access an attribute of a class that does not exist, or
+import a module that does not exist. Unfortunately it is not always accurate and in some projects,
+this message is a large amount of noise. Prospector therefore turns these messages off by default,
+but you can turn it on using the `--member-warnings` flag or in a profile::
+
+    member-warnings: true
+
 
 PEP8 Control
 ............
