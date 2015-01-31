@@ -1,21 +1,23 @@
+allow-shorthand: false
+
 inherits:
   - strictness_veryhigh
 
-ignore:
+ignore-patterns:
   - ^setup.py$
 
 pylint:
   disable:
-    - C0303
-    - C0304
-    - R0903
-    - R0904
-    - W0110
-    - W0141
-    - W0142
-    - W0603
-    - W1111
-    - W1301
+    - trailing-whitespace
+    - missing-final-newline
+    - too-few-public-methods
+    - too-many-public-methods
+    - deprecated-lambda
+    - bad-builtin
+    - star-args
+    - global-statement
+    - assignment-from-none
+    - unused-format-string-key
     - W5103
 
   options:

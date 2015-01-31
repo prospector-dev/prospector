@@ -4,7 +4,7 @@ from logilab.common.configuration import OptionsManagerMixIn
 from pylint.lint import PyLinter
 
 
-class ProspectorLinter(PyLinter):  # pylint: disable=R0901,R0904
+class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many-public-methods
 
     def __init__(self, found_files, *args, **kwargs):
         self._files = found_files
@@ -15,7 +15,7 @@ class ProspectorLinter(PyLinter):  # pylint: disable=R0901,R0904
     def reset_options(self):
         # for example, we want to re-initialise the OptionsManagerMixin
         # to supress the config error warning
-        # pylint: disable=W0233
+        # pylint: disable=non-parent-init-called
         OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__, quiet=True)
 
     def expand_files(self, modules):

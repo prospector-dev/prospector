@@ -7,18 +7,18 @@ Prospector - Python Static Analysis
 About
 -----
 
-.. image:: https://pypip.in/v/prospector/badge.png
+.. image:: https://pypip.in/version/prospector/badge.svg?text=version&style=flat
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
 .. image:: https://travis-ci.org/landscapeio/prospector.png?branch=master
    :target: https://travis-ci.org/landscapeio/prospector
    :alt: Build Status
-.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png
+.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png?style=flat
    :target: https://landscape.io/github/landscapeio/prospector/master
    :alt: Code Health
-.. image:: https://coveralls.io/repos/landscapeio/prospector/badge.png
+.. image:: https://img.shields.io/coveralls/landscapeio/prospector.svg?style=flat
    :target: https://coveralls.io/r/landscapeio/prospector
-   :alt: Text Coverage
+   :alt: Test Coverage
 
 
 Prospector is a tool to analyse Python code and output information about errors, potential problems, convention violations and complexity.

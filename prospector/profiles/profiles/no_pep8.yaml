@@ -1,12 +1,13 @@
+allow-shorthand: false
 
 pylint:
   disable:
-    - C0301
-    - C0302
-    - C0303
-    - C0304
-    - W0301
-    - C0321
+    - line-too-long
+    - too-many-lines
+    - trailing-whitespace
+    - missing-final-newline
+    - unnecessary-semicolon
+    - multiple-statements
     - C0322
     - C0323
     - C0324

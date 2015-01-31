@@ -21,10 +21,11 @@ def build_manager():
     manager.add(soc.BooleanSetting('blending', default=True))
     manager.add(soc.BooleanSetting('common_plugin', default=True))
 
-    manager.add(soc.BooleanSetting('doc_warnings', default=False))
-    manager.add(soc.BooleanSetting('test_warnings', default=False))
-    manager.add(soc.BooleanSetting('style_warnings', default=True))
-    manager.add(soc.BooleanSetting('full_pep8', default=False))
+    manager.add(soc.BooleanSetting('doc_warnings', default=None))
+    manager.add(soc.BooleanSetting('test_warnings', default=None))
+    manager.add(soc.BooleanSetting('no_style_warnings', default=None))
+    manager.add(soc.BooleanSetting('member_warnings', default=None))
+    manager.add(soc.BooleanSetting('full_pep8', default=None))
     manager.add(soc.IntegerSetting('max_line_length', default=None))
 
     manager.add(soc.BooleanSetting('messages_only', default=False))
@@ -48,8 +49,10 @@ def build_manager():
     manager.add(soc.ChoiceSetting(
         'strictness',
         ['veryhigh', 'high', 'medium', 'low', 'verylow'],
-        default='medium',
+        default=None,
     ))
+    manager.add(soc.BooleanSetting('show_profile', default=False))
+
     manager.add(soc.BooleanSetting('no_external_config', default=False))
     manager.add(soc.StringSetting('pylint_config_file', default=None))
 
@@ -130,10 +133,16 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             'flags': ['-T', '--test-warnings'],
             'help': 'Also check test modules and packages.',
         },
-        'style_warnings': {
+        'no_style_warnings': {
             'flags': ['-8', '--no-style-warnings'],
             'help': 'Don\'t create any warnings about style. This disables the'
                     ' PEP8 tool and similar checks for formatting.',
+        },
+        'member_warnings': {
+            'flags': ['-m', '--member-warnings'],
+            'help': 'Attempt to warn when code tries to access an attribute of a '
+                    'class or member of a module which does not exist. This is disabled '
+                    'by default as it tends to be quite inaccurate.'
         },
         'full_pep8': {
             'flags': ['-F', '--full-pep8'],
@@ -209,6 +218,14 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             'help': 'Additional paths to search for profile files. By default this'
                     ' is the path that prospector will check, and a directory '
                     ' called ".prospector" in the path that prospector will check.',
+        },
+        'show_profile': {
+            'flags': ['--show-profile'],
+            'help': 'Include the computed profile in the summary. This will show what'
+                    ' prospector has decided the overall profile is once all profiles'
+                    ' have been combined and inherited from. This will produce a large'
+                    ' output in most cases so is only useful when trying to debug why'
+                    ' prospector is not behaving like you expect.',
         },
         'strictness': {
             'flags': ['-s', '--strictness'],

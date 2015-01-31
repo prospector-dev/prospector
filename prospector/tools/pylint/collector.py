@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from pylint.reporters import BaseReporter
+from pylint.utils import UnknownMessage
 from prospector.message import Location, Message
 
 
@@ -7,15 +8,27 @@ class Collector(BaseReporter):
 
     name = 'collector'
 
-    def __init__(self):
+    def __init__(self, message_store):
         BaseReporter.__init__(self, output=None)
+        self._message_store = message_store
         self._messages = []
 
     def add_message(self, msg_id, location, msg):
         # (* magic is acceptable here)
-        # pylint: disable=W0142
         loc = Location(*location)
-        message = Message('pylint', msg_id, loc, msg)
+        # At this point pylint will give us the code but we want the
+        # more user-friendly symbol
+        try:
+            msg_data = self._message_store.check_message_id(msg_id)
+        except UnknownMessage:
+            # this shouldn't happen, as all pylint errors should be
+            # in the message store, but just in case we'll fall back
+            # to using the code.
+            msg_symbol = msg_id
+        else:
+            msg_symbol = msg_data.symbol
+
+        message = Message('pylint', msg_symbol, loc, msg)
         self._messages.append(message)
 
     def _display(self, layout):

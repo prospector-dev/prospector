@@ -124,7 +124,7 @@ class Pep8Tool(ToolBase):
             # This means that we don't have existing config to use.
             # Make sure pep8's code ignores are fully reset to zero before
             # adding prospector-flavoured configuration.
-            # pylint: disable=W0201
+            # pylint: disable=attribute-defined-outside-init
             self.checker.options.select = ()
             self.checker.options.ignore = tuple(prospector_config.get_disabled_messages('pep8'))
 

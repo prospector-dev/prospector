@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+# pylint: skip-file
 import sys
 from distutils.core import setup
 from setuptools import find_packages
@@ -17,7 +18,7 @@ _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 _INSTALL_REQUIRES = [
     'pylint>=1.4',
     'pylint-celery>=0.3',
-    'pylint-django>=0.5.5',
+    'pylint-django>=0.6',
     'pylint-plugin-utils>=0.2.2',
     'pylint-common>=0.2.1',
     'requirements-detector>=0.3',
@@ -28,11 +29,14 @@ _INSTALL_REQUIRES = [
     'pyflakes>=0.8.1',
     'pep8>=1.5.7',
     'pep8-naming>=0.2.2',
+    'pep257>=0.3.2',
 ]
 
 _PACKAGE_DATA = {
     'prospector': [
         'blender_combinations.yaml',
+        'profiles/profiles/default.yaml',
+        'profiles/profiles/doc_warnings.yaml',
         'profiles/profiles/full_pep8.yaml',
         'profiles/profiles/no_doc_warnings.yaml',
         'profiles/profiles/no_pep8.yaml',
@@ -40,6 +44,7 @@ _PACKAGE_DATA = {
         'profiles/profiles/strictness_high.yaml',
         'profiles/profiles/strictness_low.yaml',
         'profiles/profiles/strictness_medium.yaml',
+        'profiles/profiles/strictness_none.yaml',
         'profiles/profiles/strictness_veryhigh.yaml',
         'profiles/profiles/strictness_verylow.yaml',
     ]
@@ -62,7 +67,7 @@ _OPTIONAL = {
     'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6',),
     'with_pyroma': ('pyroma>=1.6',),
-    'with_pep257': ('pep257>=0.3,<0.4',),
+    'with_pep257': (),  # note: this is no longer optional, so this option will be removed in a future release
 }
 _OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
 

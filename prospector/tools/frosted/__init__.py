@@ -16,7 +16,7 @@ class ProspectorReporter(object):
         self._messages = []
         self.ignore = ignore or ()
 
-    # pylint: disable=R0913
+    # pylint: disable=too-many-arguments
     def record_message(
             self,
             filename=None,

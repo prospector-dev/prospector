@@ -31,7 +31,7 @@ class Pep257Tool(ToolBase):
                 for error in checker.check_source(
                         open(code_file, 'r').read(),
                         code_file,
-                        ):
+                ):
                     location = Location(
                         path=code_file,
                         module=None,

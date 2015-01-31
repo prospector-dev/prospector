@@ -1,10 +1,12 @@
 import os
 import re
+import sre_constants
 import sys
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
-from prospector.profiles.profile import load_profiles, ProfileNotFound
+from prospector.profiles import AUTO_LOADED_PROFILES
+from prospector.profiles.profile import ProspectorProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS
 
 
@@ -27,8 +29,8 @@ class ProspectorConfig(object):
         else:
             self.workdir = os.getcwd()
 
-        self.profile, self.profile_names, self.strictness = self._get_profile(self.workdir, self.config)
-        self.libraries = self._find_used_libraries(self.config)
+        self.profile, self.strictness = self._get_profile(self.workdir, self.config)
+        self.libraries = self._find_used_libraries(self.config, self.profile)
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
         self.configured_by = {}
@@ -71,48 +73,53 @@ class ProspectorConfig(object):
         return paths
 
     def _get_profile(self, path, config):
-        # Use other specialty profiles based on options
-        profile_names = []
-
-        if not config.doc_warnings:
-            profile_names.append('no_doc_warnings')
-        if not config.test_warnings:
-            profile_names.append('no_test_warnings')
-        if not config.style_warnings:
-            profile_names.append('no_pep8')
-        if config.full_pep8:
-            profile_names.append('full_pep8')
-
         # Use the specified profiles
         profile_provided = False
         if len(config.profiles) > 0:
             profile_provided = True
-        profile_names += config.profiles
+        cmdline_implicit = []
 
-        # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml'
+        # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml' or equivalent landscape config
         # file then we'll include that
-        poss_profs = (
-            ('.prospector.yaml',),
-            ('.prospector.yml',),
-            ('prospector', '.prospector.yaml'),
-            ('prospector', '.prospector.yml'),
-        )
-
-        for possible_profile in poss_profs:
-            prospector_yaml = os.path.join(path, *possible_profile)  # pylint:disable=star-args
-            if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
-                profile_provided = True
-                profile_names.append(prospector_yaml)
+        profile_name = None
+        if not profile_provided:
+            for possible_profile in AUTO_LOADED_PROFILES:
+                prospector_yaml = os.path.join(path, possible_profile)
+                if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
+                    profile_provided = True
+                    profile_name = possible_profile
+                    break
 
         strictness = None
 
-        if not profile_provided:
-            # Use the strictness profile only if no profile has been given
-            if config.strictness:
-                profile_names = ['strictness_%s' % config.strictness] + profile_names
-                strictness = config.strictness
-        else:
+        if profile_provided:
+            if profile_name is None:
+                profile_name = config.profiles[0]
+                extra_profiles = config.profiles[1:]
+            else:
+                extra_profiles = config.profiles
+
             strictness = 'from profile'
+        else:
+            # Use the preconfigured prospector profiles
+            profile_name = 'default'
+            extra_profiles = []
+
+        if config.doc_warnings is not None and config.doc_warnings:
+            cmdline_implicit.append('doc_warnings')
+        if config.test_warnings is not None and config.test_warnings:
+            cmdline_implicit.append('test_warnings')
+        if config.no_style_warnings is not None and config.no_style_warnings:
+            cmdline_implicit.append('no_pep8')
+        if config.full_pep8 is not None and config.full_pep8:
+            cmdline_implicit.append('full_pep8')
+        if config.member_warnings is not None and config.member_warnings:
+            cmdline_implicit.append('member_warnings')
+
+        # Use the strictness profile only if no profile has been given
+        if config.strictness is not None and config.strictness:
+            cmdline_implicit.append('strictness_%s' % config.strictness)
+            strictness = config.strictness
 
         # the profile path is
         #   * anything provided as an argument
@@ -127,34 +134,34 @@ class ProspectorConfig(object):
 
         profile_path.append(path)
 
-        provided = os.path.join(os.path.dirname(__file__), '../profiles/profiles')
+        provided = os.path.abspath(os.path.join(os.path.dirname(__file__), '../profiles/profiles'))
         profile_path.append(provided)
 
         try:
-            profile = load_profiles(profile_names, profile_path)
+            forced_inherits = cmdline_implicit + extra_profiles
+            profile = ProspectorProfile.load(profile_name, profile_path, forced_inherits=forced_inherits)
         except ProfileNotFound as nfe:
             sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" %
                              (nfe.name, ':'.join(nfe.profile_path)))
             sys.exit(1)
         else:
-            return profile, profile_names, strictness
+            return profile, strictness
 
-    def _find_used_libraries(self, config):
+    def _find_used_libraries(self, config, profile):
         libraries = []
 
         # Bring in adaptors that we automatically detect are needed
-        if config.autodetect:
+        if config.autodetect and profile.autodetect is True:
             map(libraries.append, autodetect_libraries(self.workdir))
 
         # Bring in adaptors for the specified libraries
-        for name in config.uses:
+        for name in set(config.uses + profile.uses):
             if name not in libraries:
                 libraries.append(name)
 
         return libraries
 
     def _determine_tool_runners(self, config, profile):
-
         if config.tools is None:
             # we had no command line settings for an explicit list of
             # tools, so we use the defaults
@@ -172,7 +179,8 @@ class ProspectorConfig(object):
             to_run.add(tool)
 
         for tool in config.without_tools:
-            to_run.remove(tool)
+            if tool in to_run:
+                to_run.remove(tool)
 
         if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
             for tool in tools.TOOLS.keys():
@@ -185,24 +193,20 @@ class ProspectorConfig(object):
         return sorted(list(to_run))
 
     def _determine_ignores(self, config, profile, libraries):
-        # Grab ignore patterns from the profile adapter
-        ignores = [
-            re.compile(ignore)
-            for ignore in profile.ignore
-        ]
-
         # Grab ignore patterns from the options
-        ignores += [
-            re.compile(patt)
-            for patt in config.ignore_patterns
-        ]
+        ignores = []
+        for patt in config.ignore_patterns + profile.ignore_patterns:
+            try:
+                ignores.append(re.compile(patt))
+            except sre_constants.error:
+                pass
 
-        # Grab ignore paths from the options
+        # Convert ignore paths into patterns
         boundary = r"(^|/|\\)%s(/|\\|$)"
-        ignores += [
-            re.compile(boundary % re.escape(ignore_path))
-            for ignore_path in config.ignore_paths
-        ]
+        for ignore_path in config.ignore_paths + profile.ignore_paths:
+            if ignore_path.endswith('/') or ignore_path.endswith('\\'):
+                ignore_path = ignore_path[:-1]
+            ignores.append(re.compile(boundary % re.escape(ignore_path)))
 
         # some libraries have further automatic ignores
         if 'django' in libraries:
@@ -216,7 +220,7 @@ class ProspectorConfig(object):
         return {
             'libraries': self.libraries,
             'strictness': self.strictness,
-            'profiles': self.profile_names,
+            'profiles': ', '.join(self.profile.list_profiles()),
             'tools': self.tools_to_run,
         }
 
@@ -267,3 +271,7 @@ class ProspectorConfig(object):
     @property
     def loquacious_pylint(self):
         return self.config.loquacious_pylint
+
+    @property
+    def show_profile(self):
+        return self.config.show_profile

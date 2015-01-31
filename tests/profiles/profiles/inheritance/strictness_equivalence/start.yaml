@@ -1,0 +1,5 @@
+# this should be basically equivalent to the strictness_medium profile
+strictness: medium
+doc-warnings: false
+test-warmings: false
+

@@ -1,0 +1,8 @@
+inherits:
+  - base1
+
+pylint:
+  run: true
+  disable:
+    - missing-docstring
+    - expression-not-assigned

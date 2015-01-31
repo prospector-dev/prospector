@@ -1,9 +1,15 @@
 import os
+import sys
 
 
 class Location(object):
 
     def __init__(self, path, module, function, line, character, absolute_path=True):
+        if sys.version_info.major == 2 and isinstance(path, unicode):
+            # If this is not a bytestring, make it one! Some tools return
+            # paths as unicode, some as bytestring, so to ensure that they are
+            # all the same, we normalise here.
+            path = path.encode(sys.getfilesystemencoding())
         self.path = path
         self._path_is_absolute = absolute_path
         self.module = module or None

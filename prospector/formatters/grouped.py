@@ -16,7 +16,7 @@ class GroupedFormatter(TextFormatter):
             '',
         ]
 
-        # pylint: disable=W0108
+        # pylint: disable=unnecessary-lambda
         groups = defaultdict(lambda: defaultdict(list))
 
         for message in self.messages:

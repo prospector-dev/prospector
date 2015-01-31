@@ -1,41 +1,37 @@
 output-format: grouped
 
-inherits:
-  - strictness_veryhigh
+strictness: veryhigh
+doc-warnings: true
+test-warnings: false
+max-line-length: 120
 
-ignore:
-  - ^docs/
-
-dodgy:
-    run: true
-
-mccabe:
-    run: true
-
-pep257:
-    run: true
-
-pyflakes:
-    run: true
+ignore-paths:
+  - docs/
 
 frosted:
-    run: true
-
-vulture:
-    run: true
+  run: true
 
 pyroma:
   run: true
 
 pylint:
   disable:
-    - W0141
-    - R0903
-  options:
-    max-line-length: 120
+    - bad-builtin
+    - too-few-public-methods
+    - missing-docstring
+    - star-args
 
 pep8:
+  full: true
   disable:
     - E126
-  options:
-    max-line-length: 120
+
+pep257:
+  disable:
+    - D100
+    - D101
+    - D102
+    - D103
+    - D205
+    - D400
+    - D401

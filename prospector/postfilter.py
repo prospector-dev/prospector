@@ -1,37 +1,7 @@
-from collections import defaultdict
-import re
+from prospector.suppression import get_suppressions
 
 
-_I0020_REGEXP = re.compile(r'^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$')
-
-_SUPPRESS_IF = {
-    'pyflakes': {
-        'FL0001': ('unused-import',)
-    },
-    'frosted': {
-        'E101': ('unused-import',)
-    }
-}
-
-
-def _get_pylint_informational(messages):
-    remainder = []
-    informational = defaultdict(lambda: defaultdict(list))
-    for message in messages:
-        if message.source == 'pylint' and message.code.startswith('I'):
-            if message.code == 'I0020':
-                # this is a message indicating that a message was raised
-                # by pylint but suppressed by configuration in the file
-                match = _I0020_REGEXP.match(message.message)
-                suppressed_code = match.group(1)
-                line_dict = informational[message.location.path]
-                line_dict[message.location.line].append(suppressed_code)
-        else:
-            remainder.append(message)
-    return informational, remainder
-
-
-def filter_messages(messages):
+def filter_messages(filepaths, messages):
     """
     This method post-processes all messages output by all tools, in order to filter
     out any based on the overall output.
@@ -42,7 +12,7 @@ def filter_messages(messages):
 
     For example:
 
-        import banana  # pylint:disable=W0611
+        import banana  # pylint:disable=unused-import
 
     In this situation, pylint will not warn about an unused import as there is
     inline configuration to disable the warning. Pyflakes will still raise that
@@ -50,32 +20,30 @@ def filter_messages(messages):
     This method uses the information about suppressed messages from pylint to
     squash the unwanted redundant error from pyflakes and frosted.
     """
-    informational, messages = _get_pylint_informational(messages)
+    paths_to_ignore, lines_to_ignore, messages_to_ignore = get_suppressions(filepaths, messages)
 
     filtered = []
     for message in messages:
-        # if this message is not one which we may supress, we can skip the next steps
-        suppress_if = _SUPPRESS_IF.get(message.source, {}).get(message.code, None)
-        if suppress_if is None or message.location.path not in informational:
-            filtered.append(message)
+        # first get rid of the pylint informational messages
+        if message.source == 'pylint' and message.code in ('suppressed-message',):
             continue
 
-        # figure out if there's anything on the same line
-        info = informational.get(message.location.path, {}).get(message.location.line, None)
-        if info is None:
-            filtered.append(message)
+        # some files are skipped entirely by messages
+        if message.location.path in paths_to_ignore:
             continue
 
-        # now figure out if any of the information on this line is suppressing
-        # this current message
-        for supress_code in info:
-            if supress_code in suppress_if:
-                # this means that a message was suppressed with a code which
-                # matches the current message's purpose - eg, pylint has
-                # suppressed an 'unused-import', and this message also represents
-                # an unused import, so should be supressed too
-                break
-        else:
-            filtered.append(message)
+        # some lines are skipped entirely by messages
+        if message.location.path in lines_to_ignore:
+            if message.location.line in lines_to_ignore[message.location.path]:
+                continue
+
+        # and some lines have only certain messages explicitly ignored
+        if message.location.path in messages_to_ignore:
+            if message.location.line in messages_to_ignore[message.location.path]:
+                if message.code in messages_to_ignore[message.location.path][message.location.line]:
+                    continue
+
+        # otherwise this message was not filtered
+        filtered.append(message)
 
     return filtered
