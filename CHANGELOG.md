@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.9.5
+* Fixed a problem with profile serialising where it was using the incorrect dict value for strictness
+
 ## Version 0.9.4
 * The previous PEP257 hack was not compatible with older versions of pep257.
 
