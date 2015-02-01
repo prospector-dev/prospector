@@ -21,15 +21,25 @@ class ProspectorProfile(object):
         self.name = name
         self.inherit_order = inherit_order
 
-        self.ignore_paths = profile_dict.get('ignore-paths', [])
+        self.ignore_paths = _ensure_list(profile_dict.get('ignore-paths', []))
         # The 'ignore' directive is an old one which should be deprecated at some point
-        self.ignore_patterns = profile_dict.get('ignore-patterns', []) + profile_dict.get('ignore', [])
+        self.ignore_patterns = _ensure_list(
+            profile_dict.get('ignore-patterns', []) + profile_dict.get('ignore', [])
+        )
 
         self.output_format = profile_dict.get('output-format')
-        self.member_warnings = profile_dict.get('member-warnings')
         self.autodetect = profile_dict.get('autodetect')
         self.uses = [uses for uses in _ensure_list(profile_dict.get('uses', [])) if uses in ('django', 'celery')]
         self.max_line_length = profile_dict.get('max-line-length')
+
+        # informational shorthands
+        self.member_warnings = profile_dict.get('strictness')
+        self.test_warnings = profile_dict.get('test-warnings')
+        self.doc_warnings = profile_dict.get('doc-warnings')
+        self.member_warnings = profile_dict.get('member-warnings')
+
+        # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
+        self.requirements = _ensure_list(profile_dict.get('requirements', []))
 
         for tool in TOOLS.keys():
             conf = {
@@ -66,6 +76,10 @@ class ProspectorProfile(object):
             'uses': self.uses,
             'max-line-length': self.max_line_length,
             'member-warnings': self.member_warnings,
+            'doc-warnings': self.doc_warnings,
+            'test-warnings': self.test_warnings,
+            'strictness': self.test_warnings,
+            'requirements': self.requirements,
         }
         for tool in TOOLS.keys():
             out[tool] = getattr(self, tool)
@@ -160,7 +174,7 @@ def _merge_profile_dict(priority, base):
                    'output-format', 'autodetect', 'max-line-length',):
             # some keys are simple values which are overwritten
             out[key] = value
-        elif key in ('ignore', 'ignore-patterns', 'ignore-paths', 'uses'):
+        elif key in ('ignore', 'ignore-patterns', 'ignore-paths', 'uses', 'requirements'):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
         elif key in TOOLS.keys():
