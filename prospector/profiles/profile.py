@@ -33,7 +33,7 @@ class ProspectorProfile(object):
         self.max_line_length = profile_dict.get('max-line-length')
 
         # informational shorthands
-        self.member_warnings = profile_dict.get('strictness')
+        self.strictness = profile_dict.get('strictness')
         self.test_warnings = profile_dict.get('test-warnings')
         self.doc_warnings = profile_dict.get('doc-warnings')
         self.member_warnings = profile_dict.get('member-warnings')
@@ -78,7 +78,7 @@ class ProspectorProfile(object):
             'member-warnings': self.member_warnings,
             'doc-warnings': self.doc_warnings,
             'test-warnings': self.test_warnings,
-            'strictness': self.test_warnings,
+            'strictness': self.strictness,
             'requirements': self.requirements,
         }
         for tool in TOOLS.keys():
