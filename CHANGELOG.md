@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.9.4
+* The previous PEP257 hack was not compatible with older versions of pep257.
+
 ## Version 0.9.3
 * The PEP257 tool sets a logging level of DEBUG globally when imported as of version 0.4.1, and this causes huge amounts of tokenzing debug to be output. Prospector now has a hacky workaround until that is fixed.
 * Extra profile information (mainly the shorthand information) is kept when parsing and serializing profiles.
