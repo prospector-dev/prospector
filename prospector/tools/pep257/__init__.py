@@ -5,9 +5,10 @@ from __future__ import absolute_import
 # which causes it to spaff the output with tokenizing
 # information.
 import pep257
-def dummy_log(*args, **kwargs):  # noqa
-    pass
-pep257.log.debug = dummy_log
+if hasattr(pep257, 'log'):
+    def dummy_log(*args, **kwargs):  # noqa
+        pass
+    pep257.log.debug = dummy_log
 
 from pep257 import PEP257Checker, AllError
 from prospector.message import Location, Message
