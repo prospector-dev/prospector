@@ -1,7 +1,15 @@
 from __future__ import absolute_import
 
-from pep257 import PEP257Checker, AllError
+# HACK!
+# pep257 version 0.4.1 sets global log level to debug
+# which causes it to spaff the output with tokenizing
+# information.
+import pep257
+def dummy_log(*args, **kwargs):  # noqa
+    pass
+pep257.log.debug = dummy_log
 
+from pep257 import PEP257Checker, AllError
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
