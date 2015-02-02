@@ -32,8 +32,8 @@ class Prospector(object):
         if self.config.blending:
             messages = blender.blend(messages)
 
-        filepaths = found_files.iter_module_paths(abspath=True)
-        return postfilter.filter_messages(filepaths, messages)
+        filepaths = found_files.iter_module_paths(abspath=False)
+        return postfilter.filter_messages(filepaths, self.config.workdir, messages)
 
     def execute(self):
 
