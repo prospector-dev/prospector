@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.9.6
+* The profile validator tool was always outputting absolute paths in messages. This is now fixed.
+* The "# NOQA" checking was using absolute paths incorrectly, which meant the message locations (with relative paths) did not match up and no messages were suppressed.
+
 ## Version 0.9.5
 * Fixed a problem with profile serialising where it was using the incorrect dict value for strictness
 
