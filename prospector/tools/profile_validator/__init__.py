@@ -1,4 +1,3 @@
-import os
 import re
 import sre_constants
 import yaml
@@ -46,10 +45,10 @@ class ProfileValidationTool(ToolBase):
         from prospector.tools import TOOLS
         return TOOLS.keys()
 
-    def validate(self, filepath):
+    def validate(self, relative_filepath, absolute_filepath):
         messages = []
 
-        with open(filepath) as profile_file:
+        with open(absolute_filepath) as profile_file:
             raw_contents = profile_file.read()
             parsed = yaml.safe_load(raw_contents)
             raw_contents = raw_contents.split('\n')
@@ -62,7 +61,7 @@ class ProfileValidationTool(ToolBase):
                 if setting in fileline:
                     line = number + 1
                     break
-            location = Location(filepath, None, None, line, 0, False)
+            location = Location(relative_filepath, None, None, line, 0, False)
             message = Message('profile-validator', code, location, message)
             messages.append(message)
 
@@ -119,10 +118,11 @@ class ProfileValidationTool(ToolBase):
 
     def run(self, found_files):
         messages = []
-        for filepath in found_files.iter_file_paths(abspath=True, include_ignored=True):
+        for rel_filepath in found_files.iter_file_paths(abspath=False, include_ignored=True):
             for possible in self.to_check:
-                if filepath.endswith(os.path.join(possible)):
-                    messages += self.validate(filepath)
+                if rel_filepath in possible:
+                    abs_filepath = found_files.to_absolute_path(rel_filepath)
+                    messages += self.validate(rel_filepath, abs_filepath)
                     break
 
         return messages
