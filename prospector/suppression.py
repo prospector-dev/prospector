@@ -20,6 +20,7 @@ This module's job is to attempt to collect all of these methods into
 a single coherent list of error suppression locations.
 """
 from collections import defaultdict
+import os
 import re
 
 
@@ -75,7 +76,7 @@ def _parse_pylint_informational(messages):
     return ignore_files, ignore_messages
 
 
-def get_suppressions(filepaths, messages):
+def get_suppressions(relative_filepaths, root, messages):
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
@@ -86,8 +87,9 @@ def get_suppressions(filepaths, messages):
     messages_to_ignore = defaultdict(lambda: defaultdict(set))
 
     # first deal with 'noqa' style messages
-    for filepath in filepaths:
-        with open(filepath) as modulefile:
+    for filepath in relative_filepaths:
+        abspath = os.path.join(root, filepath)
+        with open(abspath) as modulefile:
             file_contents = modulefile.readlines()
         ignore_file, ignore_lines = get_noqa_suppressions(file_contents)
         if ignore_file:

@@ -1,7 +1,7 @@
 from prospector.suppression import get_suppressions
 
 
-def filter_messages(filepaths, messages):
+def filter_messages(relative_filepaths, root, messages):
     """
     This method post-processes all messages output by all tools, in order to filter
     out any based on the overall output.
@@ -20,7 +20,7 @@ def filter_messages(filepaths, messages):
     This method uses the information about suppressed messages from pylint to
     squash the unwanted redundant error from pyflakes and frosted.
     """
-    paths_to_ignore, lines_to_ignore, messages_to_ignore = get_suppressions(filepaths, messages)
+    paths_to_ignore, lines_to_ignore, messages_to_ignore = get_suppressions(relative_filepaths, root, messages)
 
     filtered = []
     for message in messages:
