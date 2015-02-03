@@ -172,8 +172,8 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             ),
         },
         'absolute_paths': {
-            'help': 'Whether to output absolute paths when referencing files'
-                    'in messages. By default, paths will be relative to the'
+            'help': 'Whether to output absolute paths when referencing files '
+                    'in messages. By default, paths will be relative to the '
                     'project path',
         },
         'tools': {
