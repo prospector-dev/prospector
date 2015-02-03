@@ -145,7 +145,7 @@ To install and use::
 `frosted <https://github.com/timothycrosley/frosted>`_
 ``````````````````````````````````````````````````````
 Frosted is a fork of pyflakes which was created with the intention of taking over
-from and extending pyflakes as development has slowed. Since Prospector was originally
+from and extending pyflakes as development had slowed. Since Prospector was originally
 created, pyflakes development has started up again and frosted has stagnated, so it has
 been demoted to be an optional extra.
 
