@@ -101,12 +101,10 @@ class Prospector(object):
         self.summary['formatter'] = output_format
         formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
 
-        print_messages = not self.config.summary_only and self.messages
-
         # Produce the output
         write_to.write(formatter.render(
             summary=not self.config.messages_only,
-            messages=print_messages,
+            messages=not self.config.summary_only,
             profile=self.config.show_profile
         ).encode('utf-8'))
         write_to.write('\n')
