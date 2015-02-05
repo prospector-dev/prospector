@@ -99,7 +99,7 @@ class TextFormatter(Formatter):
 
     def render(self, summary=True, messages=True, profile=False):
         output = []
-        if messages:
+        if messages and self.messages:  # if there are no messages, don't render an empty header
             output.append(self.render_messages())
         if profile:
             output.append(self.render_profile())
