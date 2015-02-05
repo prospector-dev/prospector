@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.9.7
+* [#104](https://github.com/landscapeio/prospector/issues/104) The previous attempt at normalising bytestrings and unicode in Python 2 was clumsily done and a bit broken. It is hopefully now using the correct voodoo incantations to get characters from one place to another.
+* The blender combinations were not updated to use the new PyFlakes error codes; this is now fixed.
+
 ## Version 0.9.6
 * The profile validator tool was always outputting absolute paths in messages. This is now fixed.
 * The "# NOQA" checking was using absolute paths incorrectly, which meant the message locations (with relative paths) did not match up and no messages were suppressed.
