@@ -106,7 +106,7 @@ class Prospector(object):
             summary=not self.config.messages_only,
             messages=not self.config.summary_only,
             profile=self.config.show_profile
-        ).encode('utf-8'))
+        ))
         write_to.write('\n')
 
 
