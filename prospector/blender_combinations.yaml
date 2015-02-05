@@ -8,26 +8,26 @@
 combinations:
     -   # Unused Import
         - pylint: unused-import
-        - pyflakes: FL0001
+        - pyflakes: F401
         - frosted: E101
 
     -   # Syntax Error
         - dodgy: diff
         - pylint: syntax-error
-        - pyflakes: FL9998
+        - pyflakes: F999
         - pep8: E901
         - mccabe: MC0000
         - frosted: E402
 
     -   # Undefined local variable
         - pylint: undefined-variable
-        - pyflakes: FL0006
+        - pyflakes: F821
         - frosted: E303
 
     -   # Unused variable
         - pylint: unused-variable
         - vulture: unused-variable
-        - pyflakes: FL0013
+        - pyflakes: F841
         - frosted: E307
 
     -   # Mixed tabs and spaces
@@ -37,7 +37,7 @@ combinations:
 
     -   # Import from __future__ not first import
         - pylint: misplaced-future
-        - pyflakes: FL0012
+        - pyflakes: F404
         - frosted: E207
 
     -   # Line too long
@@ -95,16 +95,16 @@ combinations:
 
     -   # undefined name in __all__
         - pylint: undefined-all-variable
-        - pyflakes: FL0008
+        - pyflakes: F822
         - frosted: E304
 
     -   # duplicate argument in function definition
         - pylint: duplicate-argument-name
-        - pyflakes: FL0010
+        - pyflakes: F831
         - frosted: E206
 
     -   # redefinition of unused function
-        - pyflakes: FL0002
+        - pyflakes: F811
         - pylint: function-redefined
 
     -   # first argument of a classmethod should be named 'cls'
@@ -121,12 +121,12 @@ combinations:
 
     -   # Redefining name from outer scope
         - pylint: redefined-outer-name
-        - pyflakes: FL0011
+        - pyflakes: F810
         - frosted: E306
 
     -   # Wildcard import
         - pylint: wildcard-import
-        - pyflakes: FL0005
+        - pyflakes: F403
         - frosted: E103
 
     -   # Return with argument inside generator
@@ -158,15 +158,15 @@ combinations:
         - pylint: bad-whitespace
 
     -   # redefinition of unused %r from line %r
-        - pyflakes: FL0002
+        - pyflakes: F811
         - frosted: E301
 
     -   # list comprehension redefines %r from line %r
-        - pyflakes: FL0003
+        - pyflakes: F812
         - frosted: E302
 
     -   # import %r from line %r shadowed by loop variable
-        - pyflakes: FL0004
+        - pyflakes: F402
         - frosted: E102
 
     -   # syntax error in doctest
@@ -174,7 +174,7 @@ combinations:
         - frosted: E401
 
     -   # local variable %r referenced before assignment
-        - pyflakes: FL0009
+        - pyflakes: F823
         - frosted: E305
 
     -   # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
