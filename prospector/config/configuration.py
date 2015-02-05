@@ -172,15 +172,15 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             ),
         },
         'absolute_paths': {
-            'help': 'Whether to output absolute paths when referencing files'
-                    'in messages. By default, paths will be relative to the'
+            'help': 'Whether to output absolute paths when referencing files '
+                    'in messages. By default, paths will be relative to the '
                     'project path',
         },
         'tools': {
             'flags': ['-t', '--tool'],
             'help': 'A list of tools to run. This lets you set exactly which '
                     'tools to run. To add extra tools to the defaults, see '
-                    '--extra-tool. Possible values are: %s. By '
+                    '--with-tool. Possible values are: %s. By '
                     'default, the following tools will be run: %s' % (
                         ', '.join(sorted(TOOLS.keys())),
                         ', '.join(sorted(DEFAULT_TOOLS)),
