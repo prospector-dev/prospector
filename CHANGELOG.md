@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.9.8
+* Fixing a crash when using pep8 1.6.0 due to the pep8 tool renaming something that Prospector uses
+
 ## Version 0.9.7
 * [#104](https://github.com/landscapeio/prospector/issues/104) The previous attempt at normalising bytestrings and unicode in Python 2 was clumsily done and a bit broken. It is hopefully now using the correct voodoo incantations to get characters from one place to another.
 * The blender combinations were not updated to use the new PyFlakes error codes; this is now fixed.
