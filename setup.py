@@ -27,7 +27,7 @@ _INSTALL_REQUIRES = [
     'pyyaml',
     'mccabe>=0.2.1',
     'pyflakes>=0.8.1',
-    'pep8>=1.5.7',
+    'pep8>=1.6.0',
     'pep8-naming>=0.2.2',
     'pep257>=0.3.2',
 ]

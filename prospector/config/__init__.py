@@ -6,7 +6,7 @@ from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.profiles.profile import ProspectorProfile, ProfileNotFound
+from prospector.profiles.profile import ProspectorProfile, ProfileNotFound, BUILTIN_PROFILE_PATH
 from prospector.tools import DEFAULT_TOOLS
 
 
@@ -133,9 +133,7 @@ class ProspectorConfig(object):
             profile_path.append(prospector_dir)
 
         profile_path.append(path)
-
-        provided = os.path.abspath(os.path.join(os.path.dirname(__file__), '../profiles/profiles'))
-        profile_path.append(provided)
+        profile_path.append(BUILTIN_PROFILE_PATH)
 
         try:
             forced_inherits = cmdline_implicit + extra_profiles
