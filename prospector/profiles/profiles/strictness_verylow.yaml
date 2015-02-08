@@ -43,6 +43,3 @@ pep8:
     - W603
     - W604
     - W293
-
-pyroma:
-  disable:

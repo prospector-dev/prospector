@@ -5,6 +5,9 @@ import os
 import yaml
 
 
+BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'profiles'))
+
+
 class ProfileNotFound(Exception):
     def __init__(self, name, profile_path):
         super(ProfileNotFound, self).__init__()
