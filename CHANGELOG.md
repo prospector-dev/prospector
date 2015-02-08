@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.9.9
+* pep8.py 1.6.0 added new messages, which are now in prospector's built-in profiles
+
 ## Version 0.9.8
 * Fixing a crash when using pep8 1.6.0 due to the pep8 tool renaming something that Prospector uses
 
