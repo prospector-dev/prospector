@@ -122,7 +122,7 @@ class PyFlakesTool(ToolBase):
     def configure(self, prospector_config, _):
         ignores = prospector_config.get_disabled_messages('pyflakes')
         # convert old style to new
-        self.ignore_codes = (LEGACY_CODE_MAP.get(code, code) for code in ignores)
+        self.ignore_codes = [LEGACY_CODE_MAP.get(code, code) for code in ignores]
         return None
 
     def run(self, found_files):
