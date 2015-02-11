@@ -194,6 +194,12 @@ class ProspectorConfig(object):
         # Grab ignore patterns from the options
         ignores = []
         for patt in config.ignore_patterns + profile.ignore_patterns:
+            if patt is None:
+                # this can happen if someone has a profile with an empty ignore-patterns value, eg:
+                #
+                #  ignore-patterns:
+                #  uses: django
+                continue
             try:
                 ignores.append(re.compile(patt))
             except sre_constants.error:
