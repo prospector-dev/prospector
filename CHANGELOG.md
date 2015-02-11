@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.9.10
+* Fixing a crash when using an empty `ignore-patterns` list in a profile
+* [#105](https://github.com/landscapeio/prospector/pull/105) pyflakes was not correctly ignoring errors.
+
 ## Version 0.9.9
 * pep8.py 1.6.0 added new messages, which are now in prospector's built-in profiles
 
