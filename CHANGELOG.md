@@ -2,7 +2,8 @@ Prospector Changelog
 =======
 
 ## Version 0.9.10
-* Fixing a crash when using an empty `ignore-patterns` list in a profile
+* Fixing a crash when using an empty `ignore-patterns` list in a profile.
+* Fixing a crash when a profile is not valid YAML at all.
 * [#105](https://github.com/landscapeio/prospector/pull/105) pyflakes was not correctly ignoring errors.
 
 ## Version 0.9.9

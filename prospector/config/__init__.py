@@ -6,7 +6,7 @@ from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.profiles.profile import ProspectorProfile, ProfileNotFound, BUILTIN_PROFILE_PATH
+from prospector.profiles.profile import ProspectorProfile, ProfileNotFound, BUILTIN_PROFILE_PATH, CannotParseProfile
 from prospector.tools import DEFAULT_TOOLS
 
 
@@ -138,6 +138,10 @@ class ProspectorConfig(object):
         try:
             forced_inherits = cmdline_implicit + extra_profiles
             profile = ProspectorProfile.load(profile_name, profile_path, forced_inherits=forced_inherits)
+        except CannotParseProfile as cpe:
+            sys.stderr.write("Failed to run:\nCould not parse profile %s as it is not valid YAML\n%s\n" %
+                             (cpe.filepath, cpe.get_parse_message()))
+            sys.exit(1)
         except ProfileNotFound as nfe:
             sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" %
                              (nfe.name, ':'.join(nfe.profile_path)))
