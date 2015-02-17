@@ -55,6 +55,7 @@ pep8:
     - E711
     - E712
     - E721
+    - W503
 
 pyroma:
   disable:
