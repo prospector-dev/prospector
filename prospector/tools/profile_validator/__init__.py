@@ -120,7 +120,7 @@ class ProfileValidationTool(ToolBase):
         messages = []
         for rel_filepath in found_files.iter_file_paths(abspath=False, include_ignored=True):
             for possible in self.to_check:
-                if rel_filepath in possible:
+                if rel_filepath == possible:
                     abs_filepath = found_files.to_absolute_path(rel_filepath)
                     messages += self.validate(rel_filepath, abs_filepath)
                     break
