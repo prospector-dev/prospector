@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.10
+
+
 ## Version 0.9.10
 * The profile validator would load any file whose name was a subset of '.prospector.yaml' due to using the incorrect comparison operator.
 * Fixing a crash when using an empty `ignore-patterns` list in a profile.
