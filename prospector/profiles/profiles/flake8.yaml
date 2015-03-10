@@ -1,0 +1,19 @@
+allow-shorthand: false
+
+pylint:
+  run: false
+
+pyroma:
+  run: false
+
+frosted:
+  run: false
+
+vulture:
+  run: false
+
+dodgy:
+  run: false
+
+pep257:
+  run: false
