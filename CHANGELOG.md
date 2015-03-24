@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.10
+* [#32](https://github.com/landscapeio/prospector/issues/32) and [#108](https://github.com/landscapeio/prospector/pull/108) Added a new 'xunit' output formatter for tools and services which integrate with this format (thanks to [lfrodrigues](https://github.com/lfrodrigues))
+* Added a new built-in profile called 'flake8' for people who want to mimic the behaviour of 'flake8' using prospector.
+
 ## Version 0.9.10
 * The profile validator would load any file whose name was a subset of '.prospector.yaml' due to using the incorrect comparison operator.
 * Fixing a crash when using an empty `ignore-patterns` list in a profile.
