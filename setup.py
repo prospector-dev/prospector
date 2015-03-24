@@ -21,7 +21,7 @@ _INSTALL_REQUIRES = [
     'pylint-django>=0.6',
     'pylint-plugin-utils>=0.2.3',
     'pylint-common>=0.2.1',
-    'requirements-detector>=0.3',
+    'requirements-detector>=0.4',
     'setoptconf>=0.2.0',
     'dodgy>=0.1.6',
     'pyyaml',
