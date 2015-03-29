@@ -139,6 +139,7 @@ Contents:
 
    usage
    profiles
+   suppression
    supported_tools
    contrib
 
