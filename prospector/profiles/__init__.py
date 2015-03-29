@@ -14,4 +14,8 @@ AUTO_LOADED_PROFILES = list(os.path.join(*parts) for parts in (
     ('prospector', '.prospector.yml'),
     ('prospector', 'prospector.yaml'),
     ('prospector', 'prospector.yml'),
+    ('.prospector', '.prospector.yaml'),
+    ('.prospector', '.prospector.yml'),
+    ('.prospector', 'prospector.yaml'),
+    ('.prospector', 'prospector.yml'),
 ))
