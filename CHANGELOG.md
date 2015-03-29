@@ -2,6 +2,7 @@ Prospector Changelog
 =======
 
 ## Version 0.10
+* [#112](https://github.com/landscapeio/prospector/issues/112) Profiles will now also be autoloaded from directories named `.prospector`.
 * [#32](https://github.com/landscapeio/prospector/issues/32) and [#108](https://github.com/landscapeio/prospector/pull/108) Added a new 'xunit' output formatter for tools and services which integrate with this format (thanks to [lfrodrigues](https://github.com/lfrodrigues))
 * Added a new built-in profile called 'flake8' for people who want to mimic the behaviour of 'flake8' using prospector.
 
