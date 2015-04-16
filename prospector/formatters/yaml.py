@@ -28,6 +28,5 @@ class YamlFormatter(Formatter):
             output,
             indent=2,
             default_flow_style=False,
-            encoding='utf-8',
             allow_unicode=True,
         )
