@@ -19,4 +19,5 @@ class FormatterTypeTest(TestCase):
                                     inherit_order=['horse'])
         for formatter_name, formatter in FORMATTERS.items():
             formatter_instance = formatter(summary, [], profile)
-            self.assertIsInstance(formatter_instance.render(True, True, False), str)
+            self.assertIsInstance(formatter_instance.render(True, True, False),
+                                  str)
