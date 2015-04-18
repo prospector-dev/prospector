@@ -54,5 +54,4 @@ class XunitFormatter(Formatter):
 
             testsuite_el.appendChild(testcase_el)
 
-        return xml_doc.toprettyxml(encoding='utf-8')
-
+        return xml_doc.toprettyxml()
