@@ -1,6 +1,11 @@
 Prospector Changelog
 =======
 
+## Version 0.10.1
+* [#116](https://github.com/landscapeio/prospector/issues/116) Comparison failed between messages with numeric values for character and those with a `None` value (thanks @smspillaz)
+* [#118](https://github.com/landscapeio/prospector/issues/118) Unified output of formatters to have correct output of str rather than bytes (thanks @prophile)
+* [#115](https://github.com/landscapeio/prospector/issues/115) Removed argparse as an explicit dependency as only Python 2.7+ is supported now
+
 ## Version 0.10
 * [#112](https://github.com/landscapeio/prospector/issues/112) Profiles will now also be autoloaded from directories named `.prospector`.
 * [#32](https://github.com/landscapeio/prospector/issues/32) and [#108](https://github.com/landscapeio/prospector/pull/108) Added a new 'xunit' output formatter for tools and services which integrate with this format (thanks to [lfrodrigues](https://github.com/lfrodrigues))
