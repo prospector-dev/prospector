@@ -89,7 +89,7 @@ def get_suppressions(relative_filepaths, root, messages):
     # first deal with 'noqa' style messages
     for filepath in relative_filepaths:
         abspath = os.path.join(root, filepath)
-        with open(abspath) as modulefile:
+        with open(abspath, encoding='utf-8') as modulefile:
             file_contents = modulefile.readlines()
         ignore_file, ignore_lines = get_noqa_suppressions(file_contents)
         if ignore_file:
