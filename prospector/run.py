@@ -85,6 +85,13 @@ class Prospector(object):
         total_seconds = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 1e6) / 1e6
         summary['time_taken'] = '%0.2f' % total_seconds
 
+        external_config = []
+        for tool, configured_by in self.config.configured_by.items():
+            if configured_by is not None:
+                external_config.append((tool, configured_by))
+        if len(external_config) > 0:
+            summary['external_config'] = ', '.join(['%s: %s' % info for info in external_config])
+
         self.summary = summary
         self.messages = messages
 

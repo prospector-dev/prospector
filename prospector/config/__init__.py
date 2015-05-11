@@ -40,7 +40,7 @@ class ProspectorConfig(object):
         runners = []
         for tool_name in self.tools_to_run:
             tool = tools.TOOLS[tool_name]()
-            self.configured_by[tool] = tool.configure(self, found_files)
+            self.configured_by[tool_name] = tool.configure(self, found_files)
             runners.append(tool)
         return runners
 

@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.10.2
+* Added information to summary to explain what external configuration was used (if any) to configure the underlying tools
+
 ## Version 0.10.1
 * [#116](https://github.com/landscapeio/prospector/issues/116) Comparison failed between messages with numeric values for character and those with a `None` value (thanks @smspillaz)
 * [#118](https://github.com/landscapeio/prospector/issues/118) Unified output of formatters to have correct output of str rather than bytes (thanks @prophile)

@@ -21,6 +21,7 @@ class TextFormatter(Formatter):
         ('tools', 'Tools Run', lambda x: ', '.join(x)),
         ('adaptors', 'Adaptors', lambda x: ', '.join(x)),
         ('message_count', 'Messages Found'),
+        ('external_config', 'External Config'),
     )
 
     def render_summary(self):
