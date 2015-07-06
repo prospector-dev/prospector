@@ -3,6 +3,7 @@ Prospector Changelog
 ## Version 0.10.2
 * Fixed supression-token search to use (or at least guess) correct file encoding
 * [#132](https://github.com/landscapeio/prospector/issues/132) Added support for custom flask linting thanks to the awesome [pylint-flask](https://github.com/jschaf/pylint-flask) plugin by [jschaf](https://github.com/jschaf)
+* Autodetect of libraries will now not search inside virtualenvironments
 
 ## Version 0.10.2
 * Added information to summary to explain what external configuration was used (if any) to configure the underlying tools

@@ -1,6 +1,7 @@
 import os
 from unittest import TestCase
-from prospector.finder import find_python, is_virtualenv
+from prospector.finder import find_python
+from prospector.pathutils import is_virtualenv
 
 
 class TestSysPath(TestCase):

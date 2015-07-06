@@ -1,4 +1,5 @@
 import os
+from prospector.pathutils import is_virtualenv
 
 
 class SingleFiles(object):
@@ -135,34 +136,6 @@ class FoundFiles(object):
         if absolute_paths:
             full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
         return full_list
-
-
-def is_virtualenv(path):
-    if os.name == 'nt':
-        # Windows!
-        clues = ('Scripts', 'lib', 'include')
-    else:
-        clues = ('bin', 'lib', 'include')
-
-    dircontents = os.listdir(path)
-
-    if not all([clue in dircontents for clue in clues]):
-        # we don't have the 3 directories which would imply
-        # this is a virtualenvironment
-        return False
-
-    if not all([os.path.isdir(os.path.join(path, clue)) for clue in clues]):
-        # some of them are not actually directories
-        return False
-
-    # if we do have all three directories, make sure that it's not
-    # just a coincidence by doing some heuristics on the rest of
-    # the directory
-    if len(dircontents) > 7:
-        # if there are more than 7 things it's probably not a virtualenvironment
-        return False
-
-    return True
 
 
 def _find_paths(ignore, curpath, rootpath):
