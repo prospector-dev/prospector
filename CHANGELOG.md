@@ -1,5 +1,7 @@
 Prospector Changelog
 =======
+## Version 0.10.2
+* Fixed supression-token search to use (or at least guess) correct file encoding
 
 ## Version 0.10.2
 * Added information to summary to explain what external configuration was used (if any) to configure the underlying tools
