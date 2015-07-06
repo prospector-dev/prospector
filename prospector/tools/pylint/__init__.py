@@ -69,6 +69,8 @@ class PylintTool(ToolBase):
             linter.load_plugin_modules(['pylint_django'])
         if 'celery' in prospector_config.libraries:
             linter.load_plugin_modules(['pylint_celery'])
+        if 'flask' in prospector_config.libraries:
+            linter.load_plugin_modules(['pylint_flask'])
 
         for msg_id in prospector_config.get_disabled_messages('pylint'):
             try:

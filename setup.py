@@ -19,6 +19,7 @@ _INSTALL_REQUIRES = [
     'pylint>=1.4',
     'pylint-celery>=0.3',
     'pylint-django>=0.6',
+    'pylint-flask>=0.1',
     'pylint-plugin-utils>=0.2.3',
     'pylint-common>=0.2.1',
     'requirements-detector>=0.4',

@@ -78,7 +78,7 @@ class ProfileValidationTool(ToolBase):
                 add_message(CONFIG_INVALID_VALUE, '"strictness" must be one of %s' % ', '.join(possible), 'strictness')
 
         if 'uses' in parsed:
-            possible = ('django', 'celery')
+            possible = ('django', 'celery', 'flask')
             parsed_list = parsed['uses'] if isinstance(parsed['uses'], list) else [parsed['uses']]
             for uses in parsed_list:
                 if uses not in possible:

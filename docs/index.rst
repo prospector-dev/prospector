@@ -89,6 +89,7 @@ There is currently support for the following frameworks:
 
 - `Celery <https://github.com/landscapeio/pylint-celery>`_
 - `Django <https://github.com/landscapeio/pylint-django>`_
+- `Flask <https://github.com/jschaf/pylint-flask>`_
 
 If you have a suggestion for another framework or library which should be supported, 
 please `add an issue <https://github.com/landscapeio/prospector/issues>`_ 

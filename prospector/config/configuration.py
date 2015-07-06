@@ -111,7 +111,7 @@ def build_command_line_source(prog=None, description='Performs static analysis o
         'uses': {
             'flags': ['-u', '--uses'],
             'help': 'A list of one or more libraries or frameworks that the'
-                    ' project uses. Possible values are: django, celery. This will be'
+                    ' project uses. Possible values are: django, celery, flask. This will be'
                     ' autodetected by default, but if autodetection doesn\'t'
                     ' work, manually specify them using this flag.'
         },

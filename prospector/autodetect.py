@@ -6,7 +6,7 @@ from requirements_detector.detect import RequirementsNotFound
 from prospector import encoding
 
 
-POSSIBLE_LIBRARIES = ('django', 'celery')
+POSSIBLE_LIBRARIES = ('django', 'celery', 'flask')
 
 
 # see http://docs.python.org/2/reference/lexical_analysis.html#identifiers

@@ -177,8 +177,9 @@ it manually in the profile::
     uses:
         - django
         - celery
+        - flask
 
-Currently, only Django and Celery have plugins.
+Currently, Django, Flask and Celery have plugins.
 
 If prospector is incorrectly deciding that you use one of these, you can turn off autodetection::
 
