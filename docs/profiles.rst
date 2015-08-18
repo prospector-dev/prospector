@@ -42,7 +42,7 @@ Example
 
 Here is an example profile::
   
-    output_format: json
+    output-format: json
 
     strictness: medium
     test-warnings: true
