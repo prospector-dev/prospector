@@ -9,9 +9,10 @@ __all__ = (
 class EmacsFormatter(TextFormatter):
     def render_message(self, message):
         output = [
-            '%s:%s :' % (
+            '%s:%s:%d:' % (
                 message.location.path,
                 message.location.line,
+                (message.location.character or 0) + 1,
             ),
             '    L%s:%s %s: %s - %s' % (
                 message.location.line or '-',
