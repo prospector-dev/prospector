@@ -24,7 +24,7 @@ class ProfileValidationTool(ToolBase):
     )
     ALL_SETTINGS = LIST_SETTINGS + (
         'strictness', 'autodetect', 'max-line-length',
-        'output-format', 'doc-warnings', 'test-warnings',
+        'output-format', 'doc-warnings', 'test-warnings', 'member-warnings',
         'requirements',  # bit of a grim hack; prospector does not use this but Landscape does
     )
 
