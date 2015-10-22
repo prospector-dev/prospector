@@ -50,7 +50,7 @@ To install optional dependencies such as ``pyroma``::
 For a full list of optional extras, see the :doc:`page on supported tools <supported_tools>`.
 
 For best results, you should install prospector to the same place as your project and its dependencies. That is,
-if you are using virtual environments, install pip into that virtual environment alongside your code. This
+if you are using virtual environments, install prospector into that virtual environment alongside your code. This
 allows the underlying tools to give better results, as they can infer and use knowledge of libraries that you use.
 If you install prospector system-wide and use it on a project in a virtual environment, you will see several
 incorrect errors because prospector cannot access the libraries your project uses.
