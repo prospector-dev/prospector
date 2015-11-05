@@ -13,7 +13,25 @@ Prospector is a tool to analyse Python code and output information about errors,
 
 It brings together the functionality of other Python analysis tools such as [pylint](http://pylint.org), [pep8](https://pypi.python.org/pypi/pep8) and [McCabe complexity](https://pypi.python.org/pypi/mccabe). More information and a complete list of supported tools is available on [the documentation site](http://prospector.readthedocs.org/en/latest/supported_tools.html).
 
-The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other Python analysis tools is that it takes a long time to filter through which errors are relevant or interesting to your own coding style. Prospector provides some default profiles, which hopefully will provide a good starting point and will be useful straight away, and adapts the output depending on the libraries your project uses. 
+The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other Python analysis tools is that it takes a long time to filter through which errors are relevant or interesting to your own coding style. Prospector provides some default profiles, which hopefully will provide a good starting point and will be useful straight away, and adapts the output depending on the libraries your project uses.
+
+# Installation
+
+Prospector can be installed using `pip` by running the following command:
+
+```
+pip install prospector
+```
+
+Optional dependencies for Prospector, such as `pyroma` can also be installed by running:
+
+```
+pip install prospector[with_pyroma]
+```
+
+For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs page on [supported tools](https://prospector.readthedocs.org/en/master/supported_tools.html#optional-extras).
+
+For more detailed information on installing the tool, see the [installation section](https://prospector.readthedocs.org/en/master/#installation) of the tool's main page on ReadTheDocs.
 
 # Documentation
 
