@@ -120,6 +120,7 @@ class PylintTool(ToolBase):
         with stdout_wrapper(self._hide_stdout):
             linter.load_default_plugins()
             linter.load_file_configuration(pylintrc)
+            linter.load_plugin_modules(linter.config.load_plugins)
 
     def configure(self, prospector_config, found_files):
 
