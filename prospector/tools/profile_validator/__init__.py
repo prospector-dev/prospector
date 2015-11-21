@@ -25,7 +25,9 @@ class ProfileValidationTool(ToolBase):
     ALL_SETTINGS = LIST_SETTINGS + (
         'strictness', 'autodetect', 'max-line-length',
         'output-format', 'doc-warnings', 'test-warnings', 'member-warnings',
-        'requirements',  # bit of a grim hack; prospector does not use this but Landscape does
+        # bit of a grim hack; prospector does not use the following but Landscape does:
+        # TODO: think of a better way to avoid Landscape-specific config leaking into prospector
+        'requirements',  'python-targets',
     )
 
     def __init__(self):

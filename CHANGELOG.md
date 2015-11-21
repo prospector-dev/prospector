@@ -3,7 +3,6 @@ Prospector Changelog
 
 ## Version 0.11
 * McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)
-* Fixed supression-token search to use (or at least guess) correct file encoding
 * Autodetect of libraries will now not search inside virtualenvironments
 * [#142](https://github.com/landscapeio/prospector/pull/142) better installation documentation in README (thanks [@ExcaliburZero](https://github.com/ExcaliburZero))
 * [#141](https://github.com/landscapeio/prospector/issues/141) profile-validator no longer complains about member-warnings (thanks [@alefteris](https://github.com/alefteris))
@@ -15,6 +14,7 @@ Prospector Changelog
 
 ## Version 0.10.2
 * Added information to summary to explain what external configuration was used (if any) to configure the underlying tools
+* Fixed supression-token search to use (or at least guess) correct file encoding
 
 ## Version 0.10.1
 * [#116](https://github.com/landscapeio/prospector/issues/116) Comparison failed between messages with numeric values for character and those with a `None` value (thanks @smspillaz)
