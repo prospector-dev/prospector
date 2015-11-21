@@ -3,12 +3,15 @@ Prospector Changelog
 
 ## Version 0.11
 * McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)
-
-
-## Version 0.10.2
 * Fixed supression-token search to use (or at least guess) correct file encoding
-* [#132](https://github.com/landscapeio/prospector/issues/132) Added support for custom flask linting thanks to the awesome [pylint-flask](https://github.com/jschaf/pylint-flask) plugin by [jschaf](https://github.com/jschaf)
 * Autodetect of libraries will now not search inside virtualenvironments
+* [#142](https://github.com/landscapeio/prospector/pull/142) better installation documentation in README (thanks [@ExcaliburZero](https://github.com/ExcaliburZero))
+* [#141](https://github.com/landscapeio/prospector/issues/141) profile-validator no longer complains about member-warnings (thanks [@alefteris](https://github.com/alefteris))
+* [#140](https://github.com/landscapeio/prospector/pull/140) emacs formatter includes character position (thanks [@philroberts](https://github.com/philroberts))
+* [#138](https://github.com/landscapeio/prospector/pull/138) docs fixed for 'output-format' profile option (thanks [@faulkner](https://github.com/faulkner))
+* [#137](https://github.com/landscapeio/prospector/pull/137) fixed various formatting issues in docs (thanks [@danstender](https://github.com/danstender))
+* [#132](https://github.com/landscapeio/prospector/issues/132) Added support for custom flask linting thanks to the awesome [pylint-flask](https://github.com/jschaf/pylint-flask) plugin by [jschaf](https://github.com/jschaf)
+* [#131](https://github.com/landscapeio/prospector/pull/131), [#134](https://github.com/landscapeio/prospector/pull/134) Custom pylint plugins are now loaded from existing .pylintrc files if present (thanks [@kaidokert](https://github.com/kaidokert) and [@antoviaque](https://github.com/antoviaque))
 
 ## Version 0.10.2
 * Added information to summary to explain what external configuration was used (if any) to configure the underlying tools
