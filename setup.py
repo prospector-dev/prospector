@@ -63,6 +63,7 @@ _CLASSIFIERS = (
     'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
     'License :: OSI Approved :: '
     'GNU General Public License v2 or later (GPLv2+)',
 )
