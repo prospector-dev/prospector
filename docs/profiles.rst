@@ -42,7 +42,7 @@ Example
 
 Here is an example profile::
   
-    output_format: json
+    output-format: json
 
     strictness: medium
     test-warnings: true
@@ -196,7 +196,7 @@ of the inheritance tree and overwriting values with those found lower.
 
 The example profile above inherits from another profile provided by the user,
 ``my/other/profile.yml``. This allows you to have, for example, a project wide
- default profile with specific overrides for each individual repository or library.
+default profile with specific overrides for each individual repository or library.
 
 It is possible to inherit from the built-in prospector profiles as well, although
 there are shortcuts for most of the built-ins, see below.::
@@ -232,7 +232,7 @@ specific file. For example, ``docs`` would ignore a directory in the repository 
 Secondly, ``ignore-patterns`` is a list of regular expressions. The relative path of files and directories is *searched*
 for each regular expression, and ignored if any matches are found. If the expression matches a directory, the directory
 contents and all subdirectories are ignored. For example, ``^example/doc_.*\.py$`` would ignore any files in the
-"example" directory beginning with "doc_". Another example: ``(^|/)docs(/|$)`` would ignore all directories called
+"example" directory beginning with "doc\_". Another example: ``(^|/)docs(/|$)`` would ignore all directories called
 "docs" in the entire repository.
 
 Note that a further option called ``ignore`` is available. This is equivalent to ``ignore-patterns``, and is from

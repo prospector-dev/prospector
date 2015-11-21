@@ -27,7 +27,7 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +-------------+----------------------------------------------------------------------------+
 | Format Name | Notes                                                                      |
 +=============+============================================================================+
-| ``emacs``   | | Support for emacs compilation output mode, see `issue_16`_.                |
+| ``emacs``   | | Support for emacs compilation output mode, see `issue_16`_.              |
 +-------------+----------------------------------------------------------------------------+
 | ``grouped`` | | Similar to ``text``, but groups all message on the same line together    |
 |             | | rather than having a separate entry per message.                         |
@@ -41,9 +41,9 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 | ``json``    | | Produces a structured, parseable output of the messages and summary. See |
 |             | | below for more information about the structure.                          |
 +-------------+----------------------------------------------------------------------------+
-| ``yaml``    | | Same as JSON except produces YAML output.                                  |
+| ``yaml``    | | Same as JSON except produces YAML output.                                |
 +-------------+----------------------------------------------------------------------------+
-| ``text``    | | The default output format, a simple human readable format.                 |
+| ``text``    | | The default output format, a simple human readable format.               |
 +-------------+----------------------------------------------------------------------------+
 
 

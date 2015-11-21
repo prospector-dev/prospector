@@ -19,11 +19,11 @@ in the file:
 This module's job is to attempt to collect all of these methods into
 a single coherent list of error suppression locations.
 """
-from collections import defaultdict
 import os
 import re
 import warnings
 from prospector import encoding
+from collections import defaultdict
 
 
 _FLAKE8_IGNORE_FILE = re.compile(r'flake8[:=]\s*noqa', re.IGNORECASE)
@@ -91,6 +91,7 @@ def get_suppressions(relative_filepaths, root, messages):
     # first deal with 'noqa' style messages
     for filepath in relative_filepaths:
         abspath = os.path.join(root, filepath)
+
         try:
             file_contents = encoding.read_py_file(abspath).split('\n')
         except encoding.CouldNotHandleEncoding as err:
