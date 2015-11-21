@@ -1,5 +1,10 @@
 Prospector Changelog
 =======
+
+## Version 0.11
+* McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)
+
+
 ## Version 0.10.2
 * Fixed supression-token search to use (or at least guess) correct file encoding
 * [#132](https://github.com/landscapeio/prospector/issues/132) Added support for custom flask linting thanks to the awesome [pylint-flask](https://github.com/jschaf/pylint-flask) plugin by [jschaf](https://github.com/jschaf)

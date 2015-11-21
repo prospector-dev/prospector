@@ -36,20 +36,36 @@ class McCabeTool(ToolBase):
                     open(code_file, 'r').read(),
                     filename=code_file,
                 )
-            except (SyntaxError, TypeError):
+            except SyntaxError as e:
                 location = Location(
                     path=code_file,
                     module=None,
                     function=None,
-                    line=1,
+                    line=e.lineno,
+                    character=e.offset,
+                )
+                message = Message(
+                    source='mccabe',
+                    code='MC0000',
+                    location=location,
+                    message='Syntax error',
+                )
+                messages.append(message)
+                continue
+            except TypeError:
+                location = Location(
+                    path=code_file,
+                    module=None,
+                    function=None,
+                    line=0,
                     character=0,
                 )
                 message = Message(
                     source='mccabe',
                     code='MC0000',
                     location=location,
-                    message='Could not parse file',
-                )
+                    message='Unable to parse file',
+                    )
                 messages.append(message)
                 continue
 
