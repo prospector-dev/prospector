@@ -37,7 +37,8 @@ or interesting to your own coding style. Prospector provides some default profil
 hopefully will provide a good starting point and will be useful straight away, and adapts
 the output depending on the libraries your project uses.
 
-# Installation
+Installation
+------------
 
 Prospector can be installed using ``pip`` by running the following command::
 
@@ -50,16 +51,16 @@ Optional dependencies for Prospector, such as ``pyroma`` can also be installed b
 
 
 For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs
-page on `supported tools<https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`.
+page on `supported tools<https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`_.
 
 For more detailed information on installing the tool, see the
-`installation section<http://prospector.landscape.io/en/latest/#installation>` of the tool's main page
+`installation section<http://prospector.landscape.io/en/latest/#installation>`_ of the tool's main page
 on ReadTheDocs.
 
 Documentation
 -------------
 
-Full `documentation is available at ReadTheDocs<http://prospector.landscape.io>`.
+Full `documentation is available at ReadTheDocs<http://prospector.landscape.io>`_.
 
 Usage
 -----
@@ -91,7 +92,7 @@ Profiles
 
 Prospector is configurable using "profiles". These are composable YAML files with directives to
 disable or enable tools or messages. For more information, read
-`the documentation about profiles<http://prospector.landscape.io/en/latest/profiles.html>`
+`the documentation about profiles<http://prospector.landscape.io/en/latest/profiles.html>`_.
 
 If your code uses frameworks and libraries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,7 +105,7 @@ For example, by default, pylint will generate an error for Django models when ac
 Prospector mitigates this by providing an understanding of these frameworks to the underlying tools.
 
 Prospector will try to intuit which libraries your project uses by
-`detecting dependencies<https://github.com/landscapeio/requirements-detector>` and automatically turning on
+`detecting dependencies<https://github.com/landscapeio/requirements-detector>`_ and automatically turning on
 support for the requisite libraries. You can see which adaptors were run in the metadata section of the report.
 
 If Prospector does not correctly detect your project's dependencies, you can specify them manually from the commandline::
