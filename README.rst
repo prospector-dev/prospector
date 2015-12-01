@@ -28,7 +28,7 @@ It brings together the functionality of other Python analysis tools such as
 `Pylint <http://docs.pylint.org/>`_,
 `pep8 <http://pep8.readthedocs.org/en/latest/>`_,
 and `McCabe complexity <https://pypi.python.org/pypi/mccabe>`_.
-See the `Supported Tools<http://prospector.landscape.io/en/master/supported_tools.html>`
+See the `Supported Tools <http://prospector.landscape.io/en/master/supported_tools.html>`
 documentation section for a complete list.
 
 The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other
@@ -51,16 +51,16 @@ Optional dependencies for Prospector, such as ``pyroma`` can also be installed b
 
 
 For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs
-page on `supported tools<https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`_.
+page on `supported tools <https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`_.
 
 For more detailed information on installing the tool, see the
-`installation section<http://prospector.landscape.io/en/latest/#installation>`_ of the tool's main page
+`installation section <http://prospector.landscape.io/en/latest/#installation>`_ of the tool's main page
 on ReadTheDocs.
 
 Documentation
 -------------
 
-Full `documentation is available at ReadTheDocs<http://prospector.landscape.io>`_.
+Full `documentation is available at ReadTheDocs <http://prospector.landscape.io>`_.
 
 Usage
 -----
@@ -92,7 +92,7 @@ Profiles
 
 Prospector is configurable using "profiles". These are composable YAML files with directives to
 disable or enable tools or messages. For more information, read
-`the documentation about profiles<http://prospector.landscape.io/en/latest/profiles.html>`_.
+`the documentation about profiles <http://prospector.landscape.io/en/latest/profiles.html>`_.
 
 If your code uses frameworks and libraries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
