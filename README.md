@@ -1,11 +1,11 @@
 prospector
 ==========
 
-[![Latest Version](https://pypip.in/version/prospector/badge.svg?text=version&style=flat)](https://pypi.python.org/pypi/prospector)
+[![Latest Version](https://img.shields.io/pypi/v/prospector.svg)](https://pypi.python.org/pypi/prospector)
 [![Build Status](https://travis-ci.org/landscapeio/prospector.png?branch=master)](https://travis-ci.org/landscapeio/prospector) 
 [![Health](https://landscape.io/github/landscapeio/prospector/master/landscape.svg?style=flat)](https://landscape.io/github/landscapeio/prospector/master)
 [![Coverage Status](https://img.shields.io/coveralls/landscapeio/prospector.svg?style=flat)](https://coveralls.io/r/landscapeio/prospector)
-[![Documentation](https://readthedocs.org/projects/prospector/badge/?version=master)](https://readthedocs.org/projects/prospector/)
+[![Documentation](https://readthedocs.org/projects/prospector/badge/?version=master)](http://prospector.landscape.io/)
 
 # About
 
@@ -29,13 +29,13 @@ Optional dependencies for Prospector, such as `pyroma` can also be installed by 
 pip install prospector[with_pyroma]
 ```
 
-For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs page on [supported tools](https://prospector.readthedocs.org/en/master/supported_tools.html#optional-extras).
+For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs page on [supported tools](https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras).
 
-For more detailed information on installing the tool, see the [installation section](https://prospector.readthedocs.org/en/master/#installation) of the tool's main page on ReadTheDocs.
+For more detailed information on installing the tool, see the [installation section](http://prospector.landscape.io/en/latest/#installation) of the tool's main page on ReadTheDocs.
 
 # Documentation
 
-Full [documentation is available at ReadTheDocs](http://prospector.readthedocs.org).
+Full [documentation is available at ReadTheDocs](http://prospector.landscape.io).
 
 # Usage
 
@@ -63,7 +63,7 @@ The default output format of `prospector` is designed to be human readable. For 
 
 ### Profiles
 
-Prospector is configurable using "profiles". These are composable YAML files with directives to disable or enable tools or messages. For more information, read [the documentation about profiles](http://prospector.readthedocs.org/en/latest/profiles.html)
+Prospector is configurable using "profiles". These are composable YAML files with directives to disable or enable tools or messages. For more information, read [the documentation about profiles](http://prospector.landscape.io/en/latest/profiles.html)
 
 ### If your code uses frameworks and libraries
 

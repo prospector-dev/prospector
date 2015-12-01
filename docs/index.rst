@@ -7,7 +7,7 @@ Prospector - Python Static Analysis
 About
 -----
 
-.. image:: https://pypip.in/version/prospector/badge.svg?text=version&style=flat
+.. image:: https://img.shields.io/pypi/v/prospector.svg
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
 .. image:: https://travis-ci.org/landscapeio/prospector.png?branch=master
