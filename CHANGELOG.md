@@ -2,6 +2,7 @@ Prospector Changelog
 =======
 
 ## Version 0.11
+* Compatability fixes to work with pylint>=1.5
 * McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)
 * Autodetect of libraries will now not search inside virtualenvironments
 * [#142](https://github.com/landscapeio/prospector/pull/142) better installation documentation in README (thanks [@ExcaliburZero](https://github.com/ExcaliburZero))
