@@ -1,6 +1,10 @@
 from __future__ import absolute_import
 
-from logilab.common.configuration import OptionsManagerMixIn
+from pylint.__pkginfo__ import numversion as PYLINT_VERSION
+if PYLINT_VERSION >= (1, 5):
+    from pylint.config import OptionsManagerMixIn
+else:
+    from logilab.common.configuration import OptionsManagerMixIn
 from pylint.lint import PyLinter
 
 
