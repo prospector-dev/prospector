@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 0.11.1
+* [#147](https://github.com/landscapeio/prospector/issues/147) Fixed crash when trying to load pylint configuration files in pylint 1.5
+
 ## Version 0.11
 * Compatability fixes to work with pylint>=1.5
 * McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)

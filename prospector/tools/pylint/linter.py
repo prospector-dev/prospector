@@ -16,6 +16,13 @@ class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many
         # set up the standard PyLint linter
         PyLinter.__init__(self, *args, **kwargs)
 
+    def config_from_file(self, config_file=None):
+        if PYLINT_VERSION >= (1, 5):
+            self.read_config_file(config_file)
+            self.load_config_file()
+        else:
+            self.load_file_configuration(config_file)
+
     def reset_options(self):
         # for example, we want to re-initialise the OptionsManagerMixin
         # to supress the config error warning

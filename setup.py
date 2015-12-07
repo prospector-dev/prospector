@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 # pylint: skip-file
+import codecs
+import os
 import sys
 from distutils.core import setup
 from setuptools import find_packages
@@ -16,7 +18,7 @@ if sys.version_info < (2, 7):
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.4',
+    'pylint>=1.5',
     'pylint-celery>=0.3',
     'pylint-django>=0.7',
     'pylint-flask>=0.1',
@@ -77,6 +79,12 @@ _OPTIONAL = {
 _OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
 
 
+if os.path.exists('README.rst'):
+    _LONG_DESCRIPTION = codecs.open('README.rst', 'r', 'utf-8').read()
+else:
+    _LONG_DESCRIPTION = 'Prospector: python static analysis tool. See http://prospector.landscape.io'
+
+
 setup(
     name='prospector',
     version=_VERSION,
@@ -86,6 +94,7 @@ setup(
     license='GPLv2',
     zip_safe=False,
     description='Prospector: python static analysis tool',
+    long_description=_LONG_DESCRIPTION,
     keywords='pylint pyflakes pep8 mccabe frosted prospector static code analysis',
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,

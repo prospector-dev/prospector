@@ -30,7 +30,7 @@ by searching the ``profile-path`` for files matching the name in the inheritance
 
 The ``profile-path`` is where Prospector should search when looking for profiles. By
 default, it will look in the directory containing the built-in profiles, as well as
-the directory where prospector is running, and a `.prospector` directory relative to
+the directory where prospector is running, and a ``.prospector`` directory relative to
 that. To add additional places to search::
 
     prospector --profile-path path/to/your/profiles
@@ -133,7 +133,7 @@ Member Warnings
 Pylint generates warnings when you try to access an attribute of a class that does not exist, or
 import a module that does not exist. Unfortunately it is not always accurate and in some projects,
 this message is a large amount of noise. Prospector therefore turns these messages off by default,
-but you can turn it on using the `--member-warnings` flag or in a profile::
+but you can turn it on using the ``--member-warnings`` flag or in a profile::
 
     member-warnings: true
 
@@ -168,7 +168,7 @@ Libraries Used and Autodetect
 .............................
 
 Prospector will adjust the behaviour of the underlying tools based on the libraries that your project
-uses. If you use Django, for example, the `pylint-django <https://github.com/landscapeio/pylint-django>` plugin
+uses. If you use Django, for example, the `pylint-django <https://github.com/landscapeio/pylint-django>`_ plugin
 will be loaded. This will happen automatically.
 
 If prospector is not correctly determining which of its supported libraries you use, you can specify

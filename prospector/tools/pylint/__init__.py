@@ -121,7 +121,7 @@ class PylintTool(ToolBase):
     def _pylintrc_configure(self, pylintrc, linter):
         with stdout_wrapper(self._hide_stdout):
             linter.load_default_plugins()
-            linter.load_file_configuration(pylintrc)
+            linter.config_from_file(pylintrc)
             if hasattr(linter.config, 'load_plugins'):
                 linter.load_plugin_modules(linter.config.load_plugins)
 
