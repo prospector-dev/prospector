@@ -88,7 +88,7 @@ else:
 setup(
     name='prospector',
     version=_VERSION,
-    url='https://github.com/landscapeio/prospector',
+    url='http://prospector.landscape.io',
     author='landscape.io',
     author_email='code@landscape.io',
     license='GPLv2',
