@@ -4,8 +4,8 @@ Profiles
 The behaviour of prospector can be configured by creating a profile. A profile is
 a YAML file containing several sections as described below.
 
-If you have a ``.prospector.yaml`` or ``.prospector/prospector.yaml`` file in the
-path that prospector is checking, it will automatically be loaded. Otherwise, you
+Prospector will search for a ``.prospector.yaml`` file (and `several others <https://github.com/landscapeio/prospector/blob/master/prospector/profiles/__init__.py>_`) in the path that it is checking.
+If found, it will automatically be loaded. Otherwise, you
 can pass in the profile as an argument::
 
     prospector --profile /path/to/your/profile.yaml
