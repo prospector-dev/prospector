@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import codecs
 import re
 
@@ -24,7 +25,8 @@ def detect_by_bom(path):
     for enc, boms in (
         ('utf-8-sig', (codecs.BOM_UTF8,)),
         ('utf-16', (codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE)),
-        ('utf-32', (codecs.BOM_UTF32_LE, codecs.BOM_UTF32_BE))):
+        ('utf-32', (codecs.BOM_UTF32_LE, codecs.BOM_UTF32_BE))
+    ):
         if any(raw.startswith(bom) for bom in boms):
             return enc
 
@@ -48,7 +50,7 @@ def determine_pyfile_encoding(path, default='utf8'):
         for line in (_line for _line in
                      (fip.readline(), fip.readline())
                      if _line.decode(default).startswith('#')):
-            match = next(re.finditer(_CODING_REGEX, line.decode('ascii')), None)
+            match = re.search(_CODING_REGEX, line.decode(default))
             if match:
                 return match.group(1)
         return default

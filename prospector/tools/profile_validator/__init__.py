@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import sre_constants
 import yaml
@@ -92,6 +93,17 @@ class ProfileValidationTool(ToolBase):
             add_message(CONFIG_DEPRECATED_SETTING,
                         '"ignore" is deprecated, please update to use "ignore-patterns" instead',
                         'ignore')
+
+        if 'python-targets' in parsed:
+            python_targets = parsed['python-targets'] \
+                if isinstance(parsed['python-targets'], list) \
+                else [parsed['python-targets']]
+
+            for target in python_targets:
+                if str(target) not in ('2', '3'):
+                    add_message(CONFIG_INVALID_VALUE,
+                                '"%s" is not valid for "python-targets", must be either 2 or 3',
+                                target)
 
         for pattern in parsed.get('ignore-patterns', []):
             try:
