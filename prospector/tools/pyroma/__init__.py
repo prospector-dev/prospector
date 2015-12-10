@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
@@ -38,7 +39,6 @@ class PyromaTool(ToolBase):
 
     def configure(self, prospector_config, found_files):
         self.ignore_codes = prospector_config.get_disabled_messages('pyroma')
-        return None
 
     def run(self, found_files):
         messages = []

@@ -1,15 +1,16 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
+
 import os.path
 import sys
-
 from datetime import datetime
 
-from prospector import tools, blender, postfilter
-from prospector.config import ProspectorConfig, configuration as cfg
+from prospector import blender, postfilter, tools
+from prospector.config import configuration as cfg
+from prospector.config import ProspectorConfig
 from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
-
 
 __all__ = (
     'Prospector',
@@ -21,7 +22,7 @@ class Prospector(object):
     def __init__(self, config):
         self.config = config
         self.summary = None
-        self.messages = None
+        self.messages = config.messages
 
     def process_messages(self, found_files, messages):
         for message in messages:
@@ -93,7 +94,7 @@ class Prospector(object):
             summary['external_config'] = ', '.join(['%s: %s' % info for info in external_config])
 
         self.summary = summary
-        self.messages = messages
+        self.messages = self.messages + messages
 
     def get_summary(self):
         return self.summary

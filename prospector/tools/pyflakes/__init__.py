@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 from pyflakes.api import checkPath
@@ -123,7 +124,6 @@ class PyFlakesTool(ToolBase):
         ignores = prospector_config.get_disabled_messages('pyflakes')
         # convert old style to new
         self.ignore_codes = [LEGACY_CODE_MAP.get(code, code) for code in ignores]
-        return None
 
     def run(self, found_files):
         reporter = ProspectorReporter(ignore=self.ignore_codes)

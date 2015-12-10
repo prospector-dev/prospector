@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 import ast
@@ -24,8 +25,6 @@ class McCabeTool(ToolBase):
         options = prospector_config.tool_options('mccabe')
         if 'max-complexity' in options:
             self.max_complexity = options['max-complexity']
-
-        return None
 
     def run(self, found_files):
         messages = []

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import re
 import sre_constants
@@ -34,13 +35,24 @@ class ProspectorConfig(object):
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
         self.configured_by = {}
+        self.messages = []
 
     def get_tools(self, found_files):
         self.configured_by = {}
         runners = []
         for tool_name in self.tools_to_run:
             tool = tools.TOOLS[tool_name]()
-            self.configured_by[tool_name] = tool.configure(self, found_files)
+            config_result = tool.configure(self, found_files)
+            if config_result is None:
+                configured_by = None
+                messages = []
+            else:
+                configured_by, messages = config_result
+                if messages is None:
+                    messages = []
+
+            self.configured_by[tool_name] = configured_by
+            self.messages += messages
             runners.append(tool)
         return runners
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 import os
@@ -147,7 +148,7 @@ class Pep8Tool(ToolBase):
         if max_line_length is not None:
             self.checker.options.max_line_length = max_line_length
 
-        return configured_by
+        return configured_by, []
 
     def run(self, _):
         report = self.checker.check_files()

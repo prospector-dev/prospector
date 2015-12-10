@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 # HACK!
@@ -28,7 +29,6 @@ class Pep257Tool(ToolBase):
 
     def configure(self, prospector_config, found_files):
         self.ignore_codes = prospector_config.get_disabled_messages('pep257')
-        return None
 
     def run(self, found_files):
         messages = []

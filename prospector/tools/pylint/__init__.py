@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 from collections import defaultdict
 import re
 import sys
 import os
 from pylint.config import find_pylintrc
 from pylint.utils import UnknownMessage
-from prospector.message import Message
+from prospector.message import Message, Location
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.indent_checker import IndentChecker
@@ -118,15 +119,31 @@ class PylintTool(ToolBase):
                     if option[0] == 'max-line-length':
                         checker.set_option('max-line-length', max_line_length)
 
+    def _error_message(self, filepath, message):
+        location = Location(filepath, None, None, 0, 0)
+        return Message(
+            'prospector',
+            'config-problem',
+            location,
+            message
+        )
+
     def _pylintrc_configure(self, pylintrc, linter):
+        errors = []
         with stdout_wrapper(self._hide_stdout):
             linter.load_default_plugins()
             linter.config_from_file(pylintrc)
             if hasattr(linter.config, 'load_plugins'):
-                linter.load_plugin_modules(linter.config.load_plugins)
+                for plugin in linter.config.load_plugins:
+                    try:
+                        linter.load_plugin_modules([plugin])
+                    except ImportError:
+                        errors.append(self._error_message(pylintrc, "Could not load plugin %s" % plugin))
+        return errors
 
     def configure(self, prospector_config, found_files):
 
+        config_messages = []
         extra_sys_path = found_files.get_minimal_syspath()
         self._hide_stdout = not prospector_config.loquacious_pylint
 
@@ -187,7 +204,7 @@ class PylintTool(ToolBase):
                 ext_found = True
 
                 self._args = linter.load_command_line_configuration(check_paths)
-                self._pylintrc_configure(pylintrc, linter)
+                config_messages += self._pylintrc_configure(pylintrc, linter)
 
         if not ext_found:
             linter.reset_options()
@@ -212,7 +229,7 @@ class PylintTool(ToolBase):
         linter.set_reporter(self._collector)
 
         self._linter = linter
-        return configured_by
+        return configured_by, config_messages
 
     def _combine_w0614(self, messages):
         """
@@ -250,12 +267,6 @@ class PylintTool(ToolBase):
         return sorted(combined)
 
     def run(self, found_files):
-        # note: Pylint will exit with a status code indicating the health of
-        # the code it was checking. Prospector will not mimic this behaviour,
-        # as it interferes with scripts which depend on and expect the exit
-        # code of the code checker to match whether the check itself was
-        # successful.
-
         # Additionally, pylint has occasional print statements which can be triggered
         # in exceptional cases. If this happens, then the output formatting of
         # prospector will be broken (for example, JSON format). Therefore we will
