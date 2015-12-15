@@ -1,11 +1,11 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # pylint: skip-file
 import codecs
 import os
 import sys
 from distutils.core import setup
-from setuptools import find_packages
 
+from setuptools import find_packages
 
 with open('prospector/__pkginfo__.py') as f:
     exec(f.read())
@@ -26,7 +26,7 @@ _INSTALL_REQUIRES = [
     'pylint-common>=0.2.2',
     'requirements-detector>=0.4.1',
     'setoptconf>=0.2.0',
-    'dodgy>=0.1.7',
+    'dodgy>=0.1.9',
     'pyyaml',
     'mccabe>=0.2.1',
     'pyflakes>=0.8.1',

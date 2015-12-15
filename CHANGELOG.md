@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+# Version 0.11.3
+* Fixed encoding of file contents handling by tool "dodgy" under Python3
+
 ## Version 0.11.2
 * Fixed a file encoding detection issue when running under Python3
 * If a pylint plugin is specified in a .pylintrc file which cannot be loaded, prospector will now carry on with a warning rather than simply crash

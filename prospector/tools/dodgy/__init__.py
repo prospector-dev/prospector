@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import mimetypes
 import os
 import re
-from dodgy.run import check_file
+from dodgy.checks import check_file_contents
+from prospector.encoding import read_py_file
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
@@ -22,7 +24,7 @@ class DodgyTool(ToolBase):
             mimetype = mimetypes.guess_type(filepath)
             if mimetype[0] is None or not mimetype[0].startswith('text/'):
                 continue
-            for line, code, message in check_file(filepath):
+            for line, code, message in check_file_contents(read_py_file(filepath)):
                 warnings.append({
                     'line': line, 'code': code, 'message': message,
                     'path': filepath
