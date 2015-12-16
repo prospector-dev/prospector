@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+# Version 0.11.4
+* Prevented 'dodgy' tool from trying to analyse compressed text data
+
 # Version 0.11.3
 * Fixed encoding of file contents handling by tool "dodgy" under Python3
 

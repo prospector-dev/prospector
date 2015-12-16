@@ -22,7 +22,7 @@ class DodgyTool(ToolBase):
         warnings = []
         for filepath in found_files.iter_file_paths():
             mimetype = mimetypes.guess_type(filepath)
-            if mimetype[0] is None or not mimetype[0].startswith('text/'):
+            if mimetype[0] is None or not mimetype[0].startswith('text/') or mimetype[1] is not None:
                 continue
             for line, code, message in check_file_contents(read_py_file(filepath)):
                 warnings.append({
