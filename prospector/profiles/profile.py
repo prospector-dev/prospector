@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
 import json
-from prospector.tools import TOOLS
-
 import os
-import yaml
 
+import yaml
+from prospector.tools import TOOLS
 
 BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'profiles'))
 
@@ -59,6 +59,7 @@ class ProspectorProfile(object):
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get('requirements', []))
+        self.python_targets = _ensure_list(profile_dict.get('python-targets', []))
 
         for tool in TOOLS.keys():
             conf = {
@@ -99,6 +100,7 @@ class ProspectorProfile(object):
             'test-warnings': self.test_warnings,
             'strictness': self.strictness,
             'requirements': self.requirements,
+            'python-targets': self.python_targets,
         }
         for tool in TOOLS.keys():
             out[tool] = getattr(self, tool)
@@ -196,7 +198,8 @@ def _merge_profile_dict(priority, base):
                    'output-format', 'autodetect', 'max-line-length',):
             # some keys are simple values which are overwritten
             out[key] = value
-        elif key in ('ignore', 'ignore-patterns', 'ignore-paths', 'uses', 'requirements'):
+        elif key in ('ignore', 'ignore-patterns', 'ignore-paths', 'uses',
+                     'requirements', 'python-targets'):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
         elif key in TOOLS.keys():

@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+# Version 0.11.5
+* Including forgotten 'python-targets' value in profile serialization
+
 # Version 0.11.4
 * Prevented 'dodgy' tool from trying to analyse compressed text data
 
