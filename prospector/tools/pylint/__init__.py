@@ -15,40 +15,6 @@ from prospector.tools.pylint.linter import ProspectorLinter
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r'^Unused import (.*) from wildcard import$')
 
 
-class DummyStream(object):
-    def __init__(self):
-        self.contents = ''
-
-    def write(self, text):
-        pass
-
-    def close(self):
-        pass
-
-    def flush(self):
-        pass
-
-
-# The class name here is lowercase as it is a context manager, which
-# typically tend to me lowercase.
-class stdout_wrapper(object):  # noqa pylint:disable=invalid-name
-
-    def __init__(self, hide_stdout):
-        self.hide_stdout = hide_stdout
-
-    def __enter__(self):
-        if self.hide_stdout:
-            self._streams = [sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__]
-            sys.stdout, sys.stderr = DummyStream(), DummyStream()
-            sys.__stdout__, sys.__stderr__ = DummyStream(), DummyStream()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.hide_stdout:
-            sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._streams
-            del self._streams
-
-
 class PylintTool(ToolBase):
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
@@ -59,8 +25,6 @@ class PylintTool(ToolBase):
         self._args = self._extra_sys_path = None
         self._collector = self._linter = None
         self._orig_sys_path = []
-        self._streams = []
-        self._hide_stdout = False
 
     def _prospector_configure(self, prospector_config, linter):
         linter.load_default_plugins()
@@ -130,22 +94,20 @@ class PylintTool(ToolBase):
 
     def _pylintrc_configure(self, pylintrc, linter):
         errors = []
-        with stdout_wrapper(self._hide_stdout):
-            linter.load_default_plugins()
-            linter.config_from_file(pylintrc)
-            if hasattr(linter.config, 'load_plugins'):
-                for plugin in linter.config.load_plugins:
-                    try:
-                        linter.load_plugin_modules([plugin])
-                    except ImportError:
-                        errors.append(self._error_message(pylintrc, "Could not load plugin %s" % plugin))
+        linter.load_default_plugins()
+        linter.config_from_file(pylintrc)
+        if hasattr(linter.config, 'load_plugins'):
+            for plugin in linter.config.load_plugins:
+                try:
+                    linter.load_plugin_modules([plugin])
+                except ImportError:
+                    errors.append(self._error_message(pylintrc, "Could not load plugin %s" % plugin))
         return errors
 
     def configure(self, prospector_config, found_files):
 
         config_messages = []
         extra_sys_path = found_files.get_minimal_syspath()
-        self._hide_stdout = not prospector_config.loquacious_pylint
 
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
@@ -267,17 +229,7 @@ class PylintTool(ToolBase):
         return sorted(combined)
 
     def run(self, found_files):
-        # Additionally, pylint has occasional print statements which can be triggered
-        # in exceptional cases. If this happens, then the output formatting of
-        # prospector will be broken (for example, JSON format). Therefore we will
-        # override stdout to neutralise these errant statements.
-        # For an example, see
-        # https://bitbucket.org/logilab/pylint/src/3f8ededd0b1637396937da8fe136f51f2bafb047/checkers/variables.py?at=default#cl-617
-
-        # TODO: it'd be nice in the future to do something with this data in case it's useful!
-
-        with stdout_wrapper(self._hide_stdout):
-            self._linter.check(self._args)
+        self._linter.check(self._args)
         sys.path = self._orig_sys_path
 
         messages = self._collector.get_messages()

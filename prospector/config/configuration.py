@@ -1,9 +1,8 @@
+# -*- coding: utf-8 -*-
 import setoptconf as soc
-
 from prospector.__pkginfo__ import __version__
 from prospector.formatters import FORMATTERS
-from prospector.tools import TOOLS, DEFAULT_TOOLS
-
+from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 __all__ = (
     'build_manager',
@@ -62,6 +61,10 @@ def build_manager():
     manager.add(soc.ListSetting('ignore_paths', soc.String, default=[]))
 
     manager.add(soc.BooleanSetting('die_on_tool_error', default=False))
+    manager.add(soc.BooleanSetting('include_tool_stdout', default=False))
+    manager.add(soc.BooleanSetting('direct_tool_stdout', default=False))
+
+    # deprecated
     manager.add(soc.BooleanSetting('loquacious_pylint', default=False))
 
     return manager
@@ -270,12 +273,22 @@ def build_command_line_source(prog=None, description='Performs static analysis o
                     ' exception the tool generated. Mostly useful for'
                     ' development on prospector.',
         },
+        'include-tool-stdout': {
+            'flags': ['--include-tool-stdout'],
+            'help': 'There are various places where tools will output warnings to '
+                    'stdout/stderr, which breaks parsing of JSON output. Therefore while tols '
+                    'is running, this is suppressed. For developing, it is sometimes useful to '
+                    'see this. This flag will cause stdout/stderr from a tool to be shown as '
+                    'a normal message amongst other warnings. See also --direct-tool-stdout'
+        },
+        'direct-tool-stdout': {
+            'flags': ['--direct-tool-stdout'],
+            'help': 'Same as --include-tool-stdout, except the output will be printed '
+                    'directly rather than shown as a message.'
+        },
         'loquacious_pylint': {
             'flags': ['--loquacious-pylint'],
-            'help': 'There are various places where pylint will randomly output warnings to '
-                    'stdout/stderr, which breaks parsing of JSON output. Therefore while pylint '
-                    'is running, this is suppressed. For developing, it is sometimes useful to '
-                    'allow this verbiage to appear, which this flag will do.'
+            'help': 'Deprecated - replaced by --include-tool-stdout'
         },
         'path': {
             'flags': ['-p', '--path'],

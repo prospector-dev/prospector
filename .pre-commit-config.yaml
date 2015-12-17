@@ -9,6 +9,7 @@
         args:
         - --max-line-length=160
         - --exclude=*/migrations/*,docs/*
+        - --ignore=E126
     -   id: check-added-large-files
 -   repo: git://github.com/FalconSocial/pre-commit-python-sorter
     sha: ec01d99f48a0dabb2ebbb2675139e2cc0fe2aa93

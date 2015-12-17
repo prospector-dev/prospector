@@ -1,5 +1,7 @@
 Prospector Changelog
 =======
+# Version 0.11.7
+* Wrapping all tools so that none can directly write to stdout/stderr, as this breaks the output format for things like json. Instead, it is captured and optionally included as a regular message.
 
 # Version 0.11.6
 * Yet more 'dodgy' encoding problem avoidance

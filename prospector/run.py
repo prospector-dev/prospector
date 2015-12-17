@@ -11,6 +11,7 @@ from prospector.config import ProspectorConfig
 from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
+from prospector.tools.utils import capture_output
 
 __all__ = (
     'Prospector',
@@ -49,19 +50,33 @@ class Prospector(object):
         # Run the tools
         messages = []
         for tool in self.config.get_tools(found_files):
+            for name, cls in tools.TOOLS.items():
+                if cls == tool.__class__:
+                    toolname = name
+                    break
+            else:
+                toolname = 'Unknown'
+
             try:
-                messages += tool.run(found_files)
+                # Tools can output to stdout/stderr in unexpected places, for example,
+                # pep257 emits warnings about __all__ and as pyroma exec's the setup.py
+                # file, it will execute any print statements in that, etc etc...
+                with capture_output(hide=not self.config.direct_tool_stdout) as capture:
+                    messages += tool.run(found_files)
+                    if self.config.include_tool_stdout:
+                        loc = Location(self.config.workdir, None, None, None, None)
+
+                        if capture.get_hidden_stderr():
+                            msg = 'stderr from %s:\n%s' % (toolname, capture.get_hidden_stderr())
+                            messages.append(Message(toolname, 'hidden-output', loc, message=msg))
+                        if capture.get_hidden_stdout():
+                            msg = 'stdout from %s:\n%s' % (toolname, capture.get_hidden_stdout())
+                            messages.append(Message(toolname, 'hidden-output', loc, message=msg))
+
             except Exception:  # pylint: disable=broad-except
                 if self.config.die_on_tool_error:
                     raise
                 else:
-                    for name, cls in tools.TOOLS.items():
-                        if cls == tool.__class__:
-                            toolname = name
-                            break
-                    else:
-                        toolname = 'Unknown'
-
                     loc = Location(self.config.workdir, None, None, None, None)
                     msg = 'Tool %s failed to run (exception was raised)' % (
                         toolname,
