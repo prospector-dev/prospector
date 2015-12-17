@@ -4,7 +4,7 @@ import mimetypes
 import os
 import re
 from dodgy.checks import check_file_contents
-from prospector.encoding import read_py_file
+from prospector.encoding import read_py_file, CouldNotHandleEncoding
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
@@ -24,7 +24,11 @@ class DodgyTool(ToolBase):
             mimetype = mimetypes.guess_type(filepath)
             if mimetype[0] is None or not mimetype[0].startswith('text/') or mimetype[1] is not None:
                 continue
-            for line, code, message in check_file_contents(read_py_file(filepath)):
+            try:
+                contents = read_py_file(filepath)
+            except CouldNotHandleEncoding:
+                continue
+            for line, code, message in check_file_contents(contents):
                 warnings.append({
                     'line': line, 'code': code, 'message': message,
                     'path': filepath

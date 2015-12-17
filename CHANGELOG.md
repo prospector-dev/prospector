@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+# Version 0.11.6
+* Yet more 'dodgy' encoding problem avoidance
+
 # Version 0.11.5
 * Including forgotten 'python-targets' value in profile serialization
 
