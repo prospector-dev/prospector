@@ -28,7 +28,7 @@ It brings together the functionality of other Python analysis tools such as
 `Pylint <http://docs.pylint.org/>`_,
 `pep8 <http://pep8.readthedocs.org/en/latest/>`_,
 and `McCabe complexity <https://pypi.python.org/pypi/mccabe>`_.
-See the `Supported Tools <http://prospector.landscape.io/en/master/supported_tools.html>`
+See the `Supported Tools <http://prospector.landscape.io/en/master/supported_tools.html>`_
 documentation section for a complete list.
 
 The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other
