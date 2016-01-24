@@ -57,6 +57,9 @@ class Pep257Tool(ToolBase):
                     )
                     messages.append(message)
             except AllError as exc:
+                # pep257's Parser.parse_all method raises AllError when an
+                # attempt to analyze the __all__ definition has failed.  This
+                # occurs when __all__ is too complexed to be parsed.
                 location = Location(
                     path=code_file,
                     module=None,
@@ -69,7 +72,7 @@ class Pep257Tool(ToolBase):
                     source='pep257',
                     code='D000',
                     location=location,
-                    message=exc.message,
+                    message=exc.args[0],
                 )
                 messages.append(message)
 
