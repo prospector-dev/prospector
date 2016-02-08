@@ -9,9 +9,15 @@ from prospector.tools.base import ToolBase
 # problems with other 3rd party modules as everything now logs to
 # stdout...
 _old = logging.basicConfig
-logging.basicConfig = lambda **k: None
-from pyroma import projectdata, ratings
-logging.basicConfig = _old
+try:
+    logging.basicConfig = lambda **k: None
+    from pyroma import projectdata, ratings
+except ImportError:
+    # raise the Exception
+    raise
+finally:
+    # always restore logging.basicConfig
+    logging.basicConfig = _old
 
 
 PYROMA_CODES = {
