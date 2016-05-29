@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
