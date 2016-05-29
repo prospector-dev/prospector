@@ -1,4 +1,4 @@
-from prospector.formatters import json, text, grouped, emacs, yaml, pylint, xunit
+from prospector.formatters import json, text, grouped, emacs, yaml, pylint, xunit, vscode
 
 
 __all__ = (
@@ -14,4 +14,5 @@ FORMATTERS = {
     'yaml': yaml.YamlFormatter,
     'pylint': pylint.PylintFormatter,
     'xunit': xunit.XunitFormatter,
+    'vscode': vscode.VSCodeFormatter,
 }
