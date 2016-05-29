@@ -286,7 +286,7 @@ class ProspectorConfig(object):
 
     @property
     def max_line_length(self):
-        return self.arguments.get('max_line_length', None)
+        return self.config.max_line_length
 
     @property
     def include_tool_stdout(self):
