@@ -53,6 +53,7 @@ _PACKAGE_DATA = {
         'profiles/profiles/strictness_none.yaml',
         'profiles/profiles/strictness_veryhigh.yaml',
         'profiles/profiles/strictness_verylow.yaml',
+        'profiles/profiles/test_warnings.yaml',
     ]
 }
 
@@ -73,7 +74,7 @@ _CLASSIFIERS = (
 _OPTIONAL = {
     'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6',),
-    'with_pyroma': ('pyroma>=1.6,<2.0',),
+    'with_pyroma': ('pyroma>=1.6,!=1.8.3',),
     'with_pep257': (),  # note: this is no longer optional, so this option will be removed in a future release
 }
 _OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
