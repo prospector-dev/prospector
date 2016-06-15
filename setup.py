@@ -76,8 +76,8 @@ _OPTIONAL = {
     'with_pyroma': ('pyroma>=1.6,<2.0',),
     'with_pep257': (),  # note: this is no longer optional, so this option will be removed in a future release
 }
-_OPTIONAL['with_everything'] = [req for req_list in _OPTIONAL.values() for req in req_list]
-
+with_everything = [req for req_list in _OPTIONAL.values() for req in req_list]
+_OPTIONAL['with_everything'] = sorted(with_everything)
 
 if os.path.exists('README.rst'):
     _LONG_DESCRIPTION = codecs.open('README.rst', 'r', 'utf-8').read()
