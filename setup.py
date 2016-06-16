@@ -18,10 +18,10 @@ if sys.version_info < (2, 7):
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.5',
+    'pylint>=1.5.6',
     'pylint-celery>=0.3',
-    'pylint-django>=0.7',
-    'pylint-flask>=0.1',
+    'pylint-django>=0.7.2',
+    'pylint-flask>=0.3',
     'pylint-plugin-utils>=0.2.3',
     'pylint-common>=0.2.2',
     'requirements-detector>=0.4.1',
