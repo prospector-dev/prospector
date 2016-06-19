@@ -75,8 +75,8 @@ class Prospector(object):
                             msg = 'stdout from %s:\n%s' % (toolname, capture.get_hidden_stdout())
                             messages.append(Message(toolname, 'hidden-output', loc, message=msg))
 
-            except FatalProspectorException as e:
-                sys.stderr.write(e.message)
+            except FatalProspectorException as fatal:
+                sys.stderr.write(fatal.message)
                 sys.exit(2)
 
             except Exception:  # pylint: disable=broad-except
