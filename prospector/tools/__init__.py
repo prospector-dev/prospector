@@ -1,4 +1,5 @@
-import sys
+# -*- coding: utf-8 -*-
+from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
 from prospector.tools.pep8 import Pep8Tool
@@ -12,9 +13,9 @@ from prospector.tools.profile_validator import ProfileValidationTool
 def _tool_not_available(name, install_option_name):
     class NotAvailableTool(ToolBase):
         def run(self, _):
-            sys.stderr.write("\nCannot run tool %s as support was not installed.\n"
-                             "Please install by running 'pip install prospector[%s]'\n\n" % (name, install_option_name))
-            sys.exit(2)
+            raise FatalProspectorException("\nCannot run tool %s as support was not installed.\n"
+                                           "Please install by running 'pip install prospector[%s]'\n\n"
+                                           % (name, install_option_name))
 
     return NotAvailableTool
 

@@ -8,6 +8,7 @@ from datetime import datetime
 from prospector import blender, postfilter, tools
 from prospector.config import configuration as cfg
 from prospector.config import ProspectorConfig
+from prospector.exceptions import FatalProspectorException
 from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
@@ -63,6 +64,7 @@ class Prospector(object):
                 # file, it will execute any print statements in that, etc etc...
                 with capture_output(hide=not self.config.direct_tool_stdout) as capture:
                     messages += tool.run(found_files)
+
                     if self.config.include_tool_stdout:
                         loc = Location(self.config.workdir, None, None, None, None)
 
@@ -72,6 +74,10 @@ class Prospector(object):
                         if capture.get_hidden_stdout():
                             msg = 'stdout from %s:\n%s' % (toolname, capture.get_hidden_stdout())
                             messages.append(Message(toolname, 'hidden-output', loc, message=msg))
+
+            except FatalProspectorException as fatal:
+                sys.stderr.write(fatal.message)
+                sys.exit(2)
 
             except Exception:  # pylint: disable=broad-except
                 if self.config.die_on_tool_error:

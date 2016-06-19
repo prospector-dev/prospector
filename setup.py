@@ -18,10 +18,10 @@ if sys.version_info < (2, 7):
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.5',
+    'pylint>=1.5.6',
     'pylint-celery>=0.3',
-    'pylint-django>=0.7',
-    'pylint-flask>=0.1',
+    'pylint-django>=0.7.2',
+    'pylint-flask>=0.3',
     'pylint-plugin-utils>=0.2.3',
     'pylint-common>=0.2.2',
     'requirements-detector>=0.4.1',
@@ -32,7 +32,7 @@ _INSTALL_REQUIRES = [
     'pyflakes>=0.8.1',
     'pep8>=1.6.0',
     'pep8-naming>=0.2.2',
-    'pep257>=0.3.2',
+    'pydocstyle>=0.1',
 ]
 
 _PACKAGE_DATA = {
@@ -53,6 +53,7 @@ _PACKAGE_DATA = {
         'profiles/profiles/strictness_none.yaml',
         'profiles/profiles/strictness_veryhigh.yaml',
         'profiles/profiles/strictness_verylow.yaml',
+        'profiles/profiles/test_warnings.yaml',
     ]
 }
 
@@ -74,7 +75,6 @@ _OPTIONAL = {
     'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6',),
     'with_pyroma': ('pyroma>=2.0.2',),
-    'with_pep257': (),  # note: this is no longer optional, so this option will be removed in a future release
 }
 with_everything = [req for req_list in _OPTIONAL.values() for req in req_list]
 _OPTIONAL['with_everything'] = sorted(with_everything)
