@@ -1,5 +1,9 @@
 Prospector Changelog
 =======
+
+# Version 0.12.1
+* [#172](https://github.com/landscapeio/prospector/issues/172) Fixed non-ascii file handling for mccabe tool
+
 # Version 0.12
 * [#170](https://github.com/landscapeio/prospector/issues/170) Changed from using pep257 to the pydocstyle (which is what pep257 is now called)
 * [#162](https://github.com/landscapeio/prospector/issues/162) Properly warning about optional tools which are not installed
