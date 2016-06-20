@@ -30,8 +30,8 @@ _INSTALL_REQUIRES = [
     'pyyaml',
     'mccabe>=0.2.1',
     'pyflakes>=0.8.1',
-    'pep8>=1.6.0',
-    'pep8-naming>=0.2.2',
+    'pycodestyle>=2.0.0',
+    'pep8-naming>=0.3.3',
     'pydocstyle>=0.1',
 ]
 

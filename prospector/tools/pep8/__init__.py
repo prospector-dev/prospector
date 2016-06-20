@@ -3,15 +3,15 @@ from __future__ import absolute_import
 
 import os
 import re
-from pep8 import StyleGuide, BaseReport, register_check, PROJECT_CONFIG
+from pycodestyle import StyleGuide, BaseReport, register_check, PROJECT_CONFIG
 from pep8ext_naming import NamingChecker
 
 try:
     # for pep8 <= 1.5.7
-    from pep8 import DEFAULT_CONFIG as USER_CONFIG
+    from pycodestyle import DEFAULT_CONFIG as USER_CONFIG
 except ImportError:
     # for pep8 >= 1.6.0
-    from pep8 import USER_CONFIG
+    from pycodestyle import USER_CONFIG
 
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
