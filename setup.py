@@ -28,7 +28,7 @@ _INSTALL_REQUIRES = [
     'setoptconf>=0.2.0',
     'dodgy>=0.1.9',
     'pyyaml',
-    'mccabe>=0.2.1',
+    'mccabe>=0.5.0',
     'pyflakes>=0.8.1',
     'pycodestyle>=2.0.0',
     'pep8-naming>=0.3.3',
