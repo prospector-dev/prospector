@@ -28,7 +28,7 @@ class ProfileValidationTool(ToolBase):
         'output-format', 'doc-warnings', 'test-warnings', 'member-warnings',
         # bit of a grim hack; prospector does not use the following but Landscape does:
         # TODO: think of a better way to avoid Landscape-specific config leaking into prospector
-        'requirements',  'python-targets',
+        'requirements', 'python-targets',
     )
 
     def __init__(self):
@@ -102,8 +102,8 @@ class ProfileValidationTool(ToolBase):
             for target in python_targets:
                 if str(target) not in ('2', '3'):
                     add_message(CONFIG_INVALID_VALUE,
-                                '"%s" is not valid for "python-targets", must be either 2 or 3',
-                                target)
+                                '"%s" is not valid for "python-targets", must be either 2 or 3' % target,
+                                str(target))
 
         for pattern in parsed.get('ignore-patterns', []):
             try:
