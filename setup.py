@@ -38,24 +38,10 @@ _INSTALL_REQUIRES = [
 _PACKAGE_DATA = {
     'prospector': [
         'blender_combinations.yaml',
-        'profiles/profiles/default.yaml',
-        'profiles/profiles/doc_warnings.yaml',
-        'profiles/profiles/full_pep8.yaml',
-        'profiles/profiles/flake8.yaml',
-        'profiles/profiles/member_warnings.yaml',
-        'profiles/profiles/no_doc_warnings.yaml',
-        'profiles/profiles/no_member_warnings.yaml',
-        'profiles/profiles/no_pep8.yaml',
-        'profiles/profiles/no_test_warnings.yaml',
-        'profiles/profiles/strictness_high.yaml',
-        'profiles/profiles/strictness_low.yaml',
-        'profiles/profiles/strictness_medium.yaml',
-        'profiles/profiles/strictness_none.yaml',
-        'profiles/profiles/strictness_veryhigh.yaml',
-        'profiles/profiles/strictness_verylow.yaml',
-        'profiles/profiles/test_warnings.yaml',
     ]
 }
+profiledir = os.path.join(os.path.dirname(__file__), 'prospector/profiles/profiles')
+_PACKAGE_DATA['prospector'] += [profile for profile in os.listdir(profiledir)]
 
 _CLASSIFIERS = (
     'Development Status :: 4 - Beta',
