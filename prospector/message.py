@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 
@@ -88,3 +89,20 @@ class Message(object):
         if self.location == other.location:
             return self.code < other.code
         return self.location < other.location
+
+
+def make_tool_error_message(filepath, source, code, message,
+                            line=0, character=0, module=None, function=None):
+    location = Location(
+        path=filepath,
+        module=module,
+        function=function,
+        line=line,
+        character=character
+    )
+    return Message(
+        source=source,
+        code=code,
+        location=location,
+        message=message
+    )

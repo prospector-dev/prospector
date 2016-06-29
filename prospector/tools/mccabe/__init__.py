@@ -3,9 +3,9 @@ from __future__ import absolute_import
 
 import ast
 from mccabe import PathGraphingAstVisitor
-from prospector.encoding import read_py_file
+from prospector.encoding import read_py_file, CouldNotHandleEncoding
 
-from prospector.message import Location, Message
+from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
 
 
@@ -36,37 +36,24 @@ class McCabeTool(ToolBase):
                     read_py_file(code_file),
                     filename=code_file,
                 )
-            except SyntaxError as e:
-                location = Location(
-                    path=code_file,
-                    module=None,
-                    function=None,
-                    line=e.lineno,
-                    character=e.offset,
-                )
-                message = Message(
-                    source='mccabe',
-                    code='MC0000',
-                    location=location,
-                    message='Syntax error',
-                )
-                messages.append(message)
+            except CouldNotHandleEncoding as err:
+                messages.append(make_tool_error_message(
+                    code_file, 'mccabe', 'MC0000',
+                    message='Could not handle the encoding of this file: %s' % err.encoding
+                ))
+                continue
+            except SyntaxError as err:
+                messages.append(make_tool_error_message(
+                    code_file, 'mccabe', 'MC0000',
+                    line=err.lineno, character=err.offset,
+                    message='Syntax Error'
+                ))
                 continue
             except TypeError:
-                location = Location(
-                    path=code_file,
-                    module=None,
-                    function=None,
-                    line=0,
-                    character=0,
-                )
-                message = Message(
-                    source='mccabe',
-                    code='MC0000',
-                    location=location,
-                    message='Unable to parse file',
-                )
-                messages.append(message)
+                messages.append(make_tool_error_message(
+                    code_file, 'mccabe', 'MC0000',
+                    message='Unable to parse file'
+                ))
                 continue
 
             visitor = PathGraphingAstVisitor()

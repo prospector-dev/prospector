@@ -10,4 +10,5 @@ class FatalProspectorException(Exception):
     be squashed and the user notified elegantly.
     """
 
-    pass
+    def __init__(self, message):
+        self.message = message

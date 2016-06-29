@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from vulture import Vulture
-from prospector.message import Location, Message
+from prospector.encoding import CouldNotHandleEncoding, read_py_file
+from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
 
 
@@ -8,6 +10,7 @@ class ProspectorVulture(Vulture):
     def __init__(self, found_files):
         Vulture.__init__(self, exclude=None, verbose=False)
         self._files = found_files
+        self._internal_messages = []
 
     def scavenge(self, _=None):
         # The argument is a list of paths, but we don't care
@@ -15,7 +18,14 @@ class ProspectorVulture(Vulture):
         # argument is here to explicitly acknowledge that we
         # are overriding the Vulture.scavenge method.
         for module in self._files.iter_module_paths():
-            module_string = open(module).read()
+            try:
+                module_string = read_py_file(module)
+            except CouldNotHandleEncoding as err:
+                self._internal_messages.append(make_tool_error_message(
+                    module, 'vulture', 'V000',
+                    message='Could not handle the encoding of this file: %s' % err.encoding
+                ))
+                continue
             self.file = module
             self.scan(module_string)
 
@@ -27,15 +37,15 @@ class ProspectorVulture(Vulture):
             ('unused-attribute', 'Unused attribute %s', self.unused_attrs)
         )
 
-        messages = []
+        vulture_messages = []
         for code, template, items in all_items:
             for item in items:
                 loc = Location(item.file, None, None, item.lineno, -1)
                 message_text = template % item
                 message = Message('vulture', code, loc, message_text)
-                messages.append(message)
+                vulture_messages.append(message)
 
-        return messages
+        return self._internal_messages + vulture_messages
 
 
 class VultureTool(ToolBase):
