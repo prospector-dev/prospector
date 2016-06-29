@@ -1,7 +1,12 @@
 Prospector Changelog
 =======
+
+# Version 0.12.1
+* [#173](https://github.com/landscapeio/prospector/issues/154) Changed from using pep8 to pycodestyle (which is what pep8 was renamed to)
+* [#172](https://github.com/landscapeio/prospector/issues/172) Fixed non-ascii file handling for mccabe tool
+
 # Version 0.12
-* [#170](https://github.com/landscapeio/prospector/issues/170) Changed from using pep257 to the pydocstyle (which is what pep257 is now called)
+* [#170](https://github.com/landscapeio/prospector/issues/170) Changed from using pep257 to pydocstyle (which is what pep257 is now called)
 * [#162](https://github.com/landscapeio/prospector/issues/162) Properly warning about optional tools which are not installed
 * [#166](https://github.com/landscapeio/prospector/pulls/166) Added vscode formater
 * [#153](https://github.com/landscapeio/prospector/pulls/153) Better pep257 support

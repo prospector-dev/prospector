@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 import ast
 from mccabe import PathGraphingAstVisitor
+from prospector.encoding import read_py_file
 
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
@@ -32,7 +33,7 @@ class McCabeTool(ToolBase):
         for code_file in found_files.iter_module_paths():
             try:
                 tree = ast.parse(
-                    open(code_file, 'r').read(),
+                    read_py_file(code_file),
                     filename=code_file,
                 )
             except SyntaxError as e:
@@ -64,7 +65,7 @@ class McCabeTool(ToolBase):
                     code='MC0000',
                     location=location,
                     message='Unable to parse file',
-                    )
+                )
                 messages.append(message)
                 continue
 

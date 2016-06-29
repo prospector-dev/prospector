@@ -28,34 +28,20 @@ _INSTALL_REQUIRES = [
     'setoptconf>=0.2.0',
     'dodgy>=0.1.9',
     'pyyaml',
-    'mccabe>=0.2.1',
+    'mccabe>=0.5.0',
     'pyflakes>=0.8.1',
-    'pep8>=1.6.0',
-    'pep8-naming>=0.2.2',
+    'pycodestyle>=2.0.0',
+    'pep8-naming>=0.3.3',
     'pydocstyle>=0.1',
 ]
 
 _PACKAGE_DATA = {
     'prospector': [
         'blender_combinations.yaml',
-        'profiles/profiles/default.yaml',
-        'profiles/profiles/doc_warnings.yaml',
-        'profiles/profiles/full_pep8.yaml',
-        'profiles/profiles/flake8.yaml',
-        'profiles/profiles/member_warnings.yaml',
-        'profiles/profiles/no_doc_warnings.yaml',
-        'profiles/profiles/no_member_warnings.yaml',
-        'profiles/profiles/no_pep8.yaml',
-        'profiles/profiles/no_test_warnings.yaml',
-        'profiles/profiles/strictness_high.yaml',
-        'profiles/profiles/strictness_low.yaml',
-        'profiles/profiles/strictness_medium.yaml',
-        'profiles/profiles/strictness_none.yaml',
-        'profiles/profiles/strictness_veryhigh.yaml',
-        'profiles/profiles/strictness_verylow.yaml',
-        'profiles/profiles/test_warnings.yaml',
     ]
 }
+profiledir = os.path.join(os.path.dirname(__file__), 'prospector/profiles/profiles')
+_PACKAGE_DATA['prospector'] += [profile for profile in os.listdir(profiledir)]
 
 _CLASSIFIERS = (
     'Development Status :: 4 - Beta',
