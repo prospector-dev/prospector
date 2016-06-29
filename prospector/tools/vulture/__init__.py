@@ -1,6 +1,7 @@
 from vulture import Vulture
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
+from prospector.encoding import read_py_file, CouldNotHandleEncoding
 
 
 class ProspectorVulture(Vulture):
@@ -15,7 +16,10 @@ class ProspectorVulture(Vulture):
         # argument is here to explicitly acknowledge that we
         # are overriding the Vulture.scavenge method.
         for module in self._files.iter_module_paths():
-            module_string = open(module).read()
+            try:
+                module_string = read_py_file(module)
+            except CouldNotHandleEncoding:
+                continue
             self.file = module
             self.scan(module_string)
 

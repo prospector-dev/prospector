@@ -6,6 +6,7 @@ from mccabe import PathGraphingAstVisitor
 
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
+from prospector.encoding import read_py_file, CouldNotHandleEncoding
 
 
 __all__ = (
@@ -31,8 +32,12 @@ class McCabeTool(ToolBase):
 
         for code_file in found_files.iter_module_paths():
             try:
+                try:
+                    contents = read_py_file(code_file)
+                except CouldNotHandleEncoding:
+                    continue
                 tree = ast.parse(
-                    open(code_file, 'r').read(),
+                    contents,
                     filename=code_file,
                 )
             except SyntaxError as e:

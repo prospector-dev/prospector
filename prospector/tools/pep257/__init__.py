@@ -14,6 +14,7 @@ if hasattr(pydocstyle, 'log'):  # noqa
 from pydocstyle import PEP257Checker, AllError
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
+from prospector.encoding import read_py_file, CouldNotHandleEncoding
 
 
 __all__ = (
@@ -37,8 +38,12 @@ class Pep257Tool(ToolBase):
 
         for code_file in found_files.iter_module_paths():
             try:
+                try:
+                    contents = read_py_file(code_file)
+                except CouldNotHandleEncoding:
+                    continue
                 for error in checker.check_source(
-                        open(code_file, 'r').read(),
+                        contents,
                         code_file,
                 ):
                     location = Location(
