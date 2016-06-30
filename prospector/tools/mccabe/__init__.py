@@ -32,8 +32,9 @@ class McCabeTool(ToolBase):
 
         for code_file in found_files.iter_module_paths():
             try:
+                contents = read_py_file(code_file)
                 tree = ast.parse(
-                    read_py_file(code_file),
+                    contents,
                     filename=code_file,
                 )
             except CouldNotHandleEncoding as err:

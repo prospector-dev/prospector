@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import codecs
 import re
+import sys
 
 
 class CouldNotHandleEncoding(Exception):
@@ -57,6 +58,9 @@ def determine_pyfile_encoding(path, default='utf8'):
 
 
 def read_py_file(path):
+    if sys.version_info < (3, ):
+        return open(path, 'r').read()
+
     encoding = determine_pyfile_encoding(path, default='utf8')
     with codecs.open(path, encoding=encoding) as fip:
         try:
