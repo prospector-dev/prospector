@@ -8,7 +8,11 @@ def is_virtualenv(path):
     else:
         clues = ('bin', 'lib', 'include')
 
-    dircontents = os.listdir(path)
+    try:
+        dircontents = os.listdir(path)
+    except (OSError, TypeError):
+        # listdir failed, probably due to path length issues in windows
+        return False
 
     if not all([clue in dircontents for clue in clues]):
         # we don't have the 3 directories which would imply
