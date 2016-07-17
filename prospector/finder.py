@@ -143,7 +143,11 @@ def _find_paths(ignore, curpath, rootpath):
 
     for filename in os.listdir(curpath):
         fullpath = os.path.join(curpath, filename)
-        relpath = os.path.relpath(fullpath, rootpath)
+        try:
+            relpath = os.path.relpath(fullpath, rootpath)
+        except ValueError:
+            # relpath breaks on long paths in Windows
+            continue
 
         if filename.startswith('.') and os.path.isdir(fullpath):
             continue
