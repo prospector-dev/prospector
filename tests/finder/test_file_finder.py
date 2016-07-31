@@ -44,7 +44,7 @@ class TestVirtualenvDetection(TestCase):
         operating systems.
         """
         path = [os.path.dirname(__file__), 'testdata', 'venvs']
-        path.extend(['long_path_not_a_venv'] * 9)
+        path.extend(['long_path_not_a_venv'] * 14)
         path.append('long_path_not_a_venv_long_path_not_a_v')
         path = os.path.join(*path)
         self.assertFalse(is_virtualenv(path))
