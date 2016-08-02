@@ -8,6 +8,7 @@ from prospector.tools import ToolBase
 from prospector.tools import pyflakes
 
 
+PROFILE_IS_EMPTY = 'profile-is-empty'
 CONFIG_SETTING_SHOULD_BE_LIST = 'should-be-list'
 CONFIG_UNKNOWN_SETTING = 'unknown-setting'
 CONFIG_SETTING_MUST_BE_INTEGER = 'should-be-int'
@@ -67,6 +68,11 @@ class ProfileValidationTool(ToolBase):
             location = Location(relative_filepath, None, None, line, 0, False)
             message = Message('profile-validator', code, location, message)
             messages.append(message)
+
+        if parsed is None:
+            # this happens if a completely empty profile is found
+            add_message(PROFILE_IS_EMPTY, "%s is a completely empty profile" % relative_filepath)
+            return messages
 
         for setting in ('doc-warnings', 'test-warnings', 'autodetect'):
             if not isinstance(parsed.get(setting, False), bool):
