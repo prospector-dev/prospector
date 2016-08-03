@@ -9,7 +9,7 @@ ignore-paths:
   - docs/
 
 frosted:
-  run: true
+  run: false
 
 pyroma:
   run: true
