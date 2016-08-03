@@ -36,3 +36,15 @@ class TestVirtualenvDetection(TestCase):
     def test_not_a_venv(self):
         path = os.path.join(os.path.dirname(__file__), 'testdata', 'venvs', 'not_a_venv')
         self.assertFalse(is_virtualenv(path))
+
+    def test_long_path_not_a_venv(self):
+        """
+        Windows doesn't allow extremely long paths. This unit test has to be
+        run in Windows to be meaningful, though it shouldn't fail in other
+        operating systems.
+        """
+        path = [os.path.dirname(__file__), 'testdata', 'venvs']
+        path.extend(['long_path_not_a_venv'] * 14)
+        path.append('long_path_not_a_venv_long_path_not_a_v')
+        path = os.path.join(*path)
+        self.assertFalse(is_virtualenv(path))
