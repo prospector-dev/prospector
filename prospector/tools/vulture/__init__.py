@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+from collections import namedtuple
 from vulture import Vulture
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
+
+
+_Item = namedtuple("_Item", "file lineno unused")
 
 
 class ProspectorVulture(Vulture):
@@ -11,6 +15,10 @@ class ProspectorVulture(Vulture):
         Vulture.__init__(self, exclude=None, verbose=False)
         self._files = found_files
         self._internal_messages = []
+        self._all_unused_funcs = []
+        self._all_unused_props = []
+        self._all_unused_vars = []
+        self._all_unused_attrs = []
 
     def scavenge(self, _=None):
         # The argument is a list of paths, but we don't care
@@ -29,19 +37,28 @@ class ProspectorVulture(Vulture):
             self.file = module
             self.scan(module_string)
 
+            self._all_unused_funcs.extend([_Item(self.file, 1, u)
+                                           for u in self.unused_funcs])
+            self._all_unused_props.extend([_Item(self.file, 1, u)
+                                           for u in self.unused_props])
+            self._all_unused_vars.extend([_Item(self.file, 1, u)
+                                          for u in self.unused_vars])
+            self._all_unused_attrs.extend([_Item(self.file, 1, u)
+                                           for u in self.unused_attrs])
+
     def get_messages(self):
         all_items = (
-            ('unused-function', 'Unused function %s', self.unused_funcs),
-            ('unused-property', 'Unused property %s', self.unused_props),
-            ('unused-variable', 'Unused variable %s', self.unused_vars),
-            ('unused-attribute', 'Unused attribute %s', self.unused_attrs)
+            ('unused-function', 'Unused function %s', self._all_unused_funcs),
+            ('unused-property', 'Unused property %s', self._all_unused_props),
+            ('unused-variable', 'Unused variable %s', self._all_unused_vars),
+            ('unused-attribute', 'Unused attribute %s', self._all_unused_attrs)
         )
 
         vulture_messages = []
         for code, template, items in all_items:
             for item in items:
                 loc = Location(item.file, None, None, item.lineno, -1)
-                message_text = template % item
+                message_text = template % item.unused
                 message = Message('vulture', code, loc, message_text)
                 vulture_messages.append(message)
 
