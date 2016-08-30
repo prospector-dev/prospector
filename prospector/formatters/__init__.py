@@ -1,4 +1,5 @@
-from prospector.formatters import json, text, grouped, emacs, yaml, pylint, xunit, vscode
+# -*- coding: utf-8 -*-
+from prospector.formatters import json, text, grouped, emacs, yaml, pylint, xunit, vscode, html
 
 
 __all__ = (
@@ -15,4 +16,5 @@ FORMATTERS = {
     'pylint': pylint.PylintFormatter,
     'xunit': xunit.XunitFormatter,
     'vscode': vscode.VSCodeFormatter,
+    'html': html.HTMLFormatter,
 }

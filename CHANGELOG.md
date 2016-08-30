@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+# Version 0.13.0
+* Added HTML formatter
+
 # Version 0.12.1
 * Fixed a crash in the profile_validator tool if an empty profile was found
 * [#178](https://github.com/landscapeio/prospector/pull/178) Long paths no longer cause crash in Windows.
