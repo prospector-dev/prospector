@@ -32,7 +32,7 @@ _INSTALL_REQUIRES = [
     'pyflakes>=0.8.1',
     'pycodestyle>=2.0.0',
     'pep8-naming>=0.3.3',
-    'pydocstyle>=0.1',
+    'pydocstyle==1.0.0',
 ]
 
 _PACKAGE_DATA = {
