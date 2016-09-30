@@ -1,3 +1,4 @@
+include LICENSE
 include prospector/blender_combinations.yaml
 include prospector/profiles/profiles/*.yaml
 graft prospector/formatters/templates
