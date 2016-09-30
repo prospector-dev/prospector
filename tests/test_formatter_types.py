@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+import datetime
 from unittest import TestCase
+
+import six
 from prospector.formatters import FORMATTERS
 from prospector.profiles.profile import ProspectorProfile
-import datetime
 
 
 class FormatterTypeTest(TestCase):
@@ -20,4 +23,4 @@ class FormatterTypeTest(TestCase):
         for formatter_name, formatter in FORMATTERS.items():
             formatter_instance = formatter(summary, [], profile)
             self.assertIsInstance(formatter_instance.render(True, True, False),
-                                  str)
+                                  six.string_types)

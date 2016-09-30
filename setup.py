@@ -33,6 +33,7 @@ _INSTALL_REQUIRES = [
     'pycodestyle>=2.0.0',
     'pep8-naming>=0.3.3',
     'pydocstyle>=0.1',
+    'Jinja2>=2.8',
 ]
 
 _PACKAGE_DATA = {
