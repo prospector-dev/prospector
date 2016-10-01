@@ -1,8 +1,12 @@
 Prospector Changelog
 =======
 
-# Version 0.12.1
+# Version 0.12.3
+* [#190](https://github.com/landscapeio/prospector/pull/190) Pinning pydocstyle version for now until API compatability with newer versions can be written
+* [#184](https://github.com/landscapeio/prospector/pull/184) Including the LICENCE file when building dists
 * Fixed a crash in the profile_validator tool if an empty profile was found
+
+# Version 0.12.1
 * [#178](https://github.com/landscapeio/prospector/pull/178) Long paths no longer cause crash in Windows.
 * [#173](https://github.com/landscapeio/prospector/issues/154) Changed from using pep8 to pycodestyle (which is what pep8 was renamed to)
 * [#172](https://github.com/landscapeio/prospector/issues/172) Fixed non-ascii file handling for mccabe tool and simplified all python source file reading
