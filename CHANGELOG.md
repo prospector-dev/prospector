@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+# Version 0.12.4
+* Panicky stapling of pyroma dependency until prospector is fied to not break with the new pyroma release
+
 # Version 0.12.3
 * [#190](https://github.com/landscapeio/prospector/pull/190) Pinning pydocstyle version for now until API compatability with newer versions can be written
 * [#184](https://github.com/landscapeio/prospector/pull/184) Including the LICENCE file when building dists
