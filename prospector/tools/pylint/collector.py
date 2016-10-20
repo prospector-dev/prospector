@@ -13,6 +13,10 @@ class Collector(BaseReporter):
         self._message_store = message_store
         self._messages = []
 
+    def handle_message(self, msg):
+        location = (msg.abspath, msg.module, msg.obj, msg.line, msg.column)
+        self.add_message(msg.msg_id, location, msg.msg)
+
     def add_message(self, msg_id, location, msg):
         # (* magic is acceptable here)
         loc = Location(*location)
