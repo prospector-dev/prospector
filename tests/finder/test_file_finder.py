@@ -162,6 +162,8 @@ class TestPathFinderSingleFiles(TestCase):
             'module.py',
             'plain.txt',
             ]
+        # SingleFiles.iter_module_paths yields all file paths, not just Python
+        # modules
         expected = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
@@ -189,6 +191,8 @@ class TestPathFinderSingleFiles(TestCase):
             'module.py',
             'plain.txt',
             ]
+        # SingleFiles.iter_module_paths yields the directories of all file
+        # paths (duplicates are not filtered)
         expected = [
             'package',
             'package/subpackage',
@@ -216,6 +220,8 @@ class TestPathFinderSingleFiles(TestCase):
             'module.py',
             'plain.txt',
             ]
+        # SingleFiles.iter_module_paths yields all file paths, not just Python
+        # packages
         expected = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
