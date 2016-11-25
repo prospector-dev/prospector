@@ -153,7 +153,8 @@ class TestProspectorStyleGuidePathConfig(TestCase):
 
     def test_paths_dir_arg_pep8_exclude_cfg(self):
         # test corresponding to a single command line PATH dir arg, with
-        # external pep8/pycodestyle config file
+        # external pep8/pycodestyle config file to exclude the 'subpackage'
+        # folder from checking
         root = os.path.join(
             os.path.dirname(__file__), '..', 'finder', 'testdata',
             'dirs_mods_packages')
