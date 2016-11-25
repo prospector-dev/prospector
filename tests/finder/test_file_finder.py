@@ -69,13 +69,17 @@ class TestPathFinderDir(TestCase):
         expected = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
         self._run_test(expected, FoundFiles.iter_file_paths)
@@ -84,10 +88,14 @@ class TestPathFinderDir(TestCase):
         expected = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
-            'package/package_module.py',
-            'nonpackage/nonpackage_module.py',
-            'module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
+            'module1.py',
+            'module2.py',
             ]
         self._run_test(expected, FoundFiles.iter_module_paths)
 
@@ -126,25 +134,33 @@ class TestPathFinderSingleFiles(TestCase):
         paths = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
         expected = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
         self._run_test(paths, expected, SingleFiles.iter_file_paths)
@@ -153,13 +169,17 @@ class TestPathFinderSingleFiles(TestCase):
         paths = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
         # SingleFiles.iter_module_paths yields all file paths, not just Python
@@ -167,13 +187,17 @@ class TestPathFinderSingleFiles(TestCase):
         expected = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
         self._run_test(paths, expected, SingleFiles.iter_module_paths)
@@ -182,26 +206,34 @@ class TestPathFinderSingleFiles(TestCase):
         paths = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
-        # SingleFiles.iter_module_paths yields the directories of all file
+        # SingleFiles.iter_directory_paths yields the directories of all file
         # paths (duplicates are not filtered)
         expected = [
             'package',
             'package/subpackage',
             'package/subpackage',
             'package/subpackage',
+            'package/subpackage',
+            'package',
             'package',
             'package',
             'nonpackage',
             'nonpackage',
+            'nonpackage',
+            '',
             '',
             '',
             ]
@@ -211,28 +243,37 @@ class TestPathFinderSingleFiles(TestCase):
         paths = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
-        # SingleFiles.iter_module_paths yields all file paths, not just Python
+        # SingleFiles.iter_package_paths yields all file paths, not just Python
         # packages
         expected = [
             'package/__init__.py',
             'package/subpackage/__init__.py',
-            'package/subpackage/subpackage_module.py',
+            'package/subpackage/subpackage_module1.py',
+            'package/subpackage/subpackage_module2.py',
             'package/subpackage/subpackage_plain.txt',
-            'package/package_module.py',
+            'package/package_module1.py',
+            'package/package_module2.py',
             'package/package_plain.txt',
-            'nonpackage/nonpackage_module.py',
+            'nonpackage/nonpackage_module1.py',
+            'nonpackage/nonpackage_module2.py',
             'nonpackage/nonpackage_plain.txt',
-            'module.py',
+            'module1.py',
+            'module2.py',
             'plain.txt',
             ]
         self._run_test(paths, expected, SingleFiles.iter_package_paths)
+
 
