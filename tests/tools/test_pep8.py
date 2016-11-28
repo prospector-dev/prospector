@@ -85,7 +85,6 @@ class TestProspectorStyleGuidePathConfig(TestCase):
         found_python = find_python(
             ignores=config.ignores, paths=paths,
             explicit_file_mode=True if len(paths)>1 else False)
-
         configured_by, _ = pep8tool.configure(config, found_python)
         if external_config is not None:
             expected_configuration_message = (
@@ -120,9 +119,8 @@ class TestProspectorStyleGuidePathConfig(TestCase):
              ], root)
 
         prospector_styleguide = self._setup_styleguide(paths)
-        self.assertEqual(
-            sorted(prospector_styleguide.checker_class.filenames),
-            sorted(expected))
+        actual = prospector_styleguide.checker_class.filenames
+        self.assertEqual(sorted(actual), sorted(expected))
 
     def test_paths_dir_arg_prospector_ignore_patterns_cfg(self):
         # test corresponding to a single command line PATH dir arg, with
@@ -133,7 +131,11 @@ class TestProspectorStyleGuidePathConfig(TestCase):
         # use the root directory itself as find_python input arg:
         paths = prepend_root([''], root)
 
-        ignores = ['(^|/)subpackage(/|$)', 'nonpackage', '^package/module1.py$']
+        ignores = [
+            '(^|/)subpackage(/|$)',
+            'nonpackage',
+            '^package/package_module1.py$'
+            ]
         expected = prepend_root(
             ['package/__init__.py',
              #'package/subpackage/__init__.py',
@@ -147,9 +149,8 @@ class TestProspectorStyleGuidePathConfig(TestCase):
              'module2.py',
              ], root)
         prospector_styleguide = self._setup_styleguide(paths, ignores=ignores)
-        self.assertEqual(
-            sorted(prospector_styleguide.checker_class.filenames),
-            sorted(expected))
+        actual = prospector_styleguide.checker_class.filenames
+        self.assertEqual(sorted(actual), sorted(expected))
 
     def test_paths_dir_arg_pep8_exclude_cfg(self):
         # test corresponding to a single command line PATH dir arg, with
@@ -183,9 +184,8 @@ exclude = subpackage
             f.flush()
             prospector_styleguide = self._setup_styleguide(
                 paths, external_config=f.name)
-            self.assertEqual(
-                sorted(prospector_styleguide.checker_class.filenames),
-                sorted(expected))
+            actual = prospector_styleguide.checker_class.filenames
+            self.assertEqual(sorted(actual), sorted(expected))
 
     def test_paths_py_modules_arg(self):
         # test corresponding to multiple Python module files PATHs args
@@ -220,9 +220,8 @@ exclude = subpackage
              'module2.py',
              ], root)
         prospector_styleguide = self._setup_styleguide(paths)
-        self.assertEqual(
-            sorted(prospector_styleguide.checker_class.filenames),
-            sorted(expected))
+        actual = prospector_styleguide.checker_class.filenames
+        self.assertEqual(sorted(actual), sorted(expected))
 
     def test_paths_files_arg(self):
         # test corresponding to multiple files PATHs args (Python modules and
@@ -269,7 +268,6 @@ exclude = subpackage
              ], root)
 
         prospector_styleguide = self._setup_styleguide(paths)
-        self.assertEqual(
-            sorted(prospector_styleguide.checker_class.filenames),
-            sorted(expected))
+        actual = prospector_styleguide.checker_class.filenames
+        self.assertEqual(sorted(actual), sorted(expected))
 

@@ -15,6 +15,7 @@ except ImportError:
 
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
+from prospector.finder import FoundFiles
 
 
 __all__ = (
@@ -82,10 +83,15 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        if os.path.isdir(os.path.join(self._files.rootpath, filename)):
+        # os.path.join() caters for parent or filename being absolute
+        fullpath = os.path.join(
+            self._files.rootpath,
+            '' if parent is None else parent,
+            filename)
+
+        if os.path.isdir(fullpath):
             return False
 
-        fullpath = os.path.join(self._files.rootpath, parent, filename) if parent else filename
         return fullpath not in self._module_paths
 
 
@@ -121,8 +127,15 @@ class Pep8Tool(ToolBase):
                             break
 
         # Instantiate our custom pep8 checker.
+        # TODO: Can this be implemented cleaner? Ultimately, pycodestyle needs
+        # TODO: to be driven differently for explicit paths vs root dir path
+        # TODO: to make both prospector and pycodestyle exclusion rules work.
+        if isinstance(found_files, FoundFiles):
+            checkpaths = [found_files.rootpath]
+        else:
+            checkpaths = list(found_files.iter_module_paths())
         self.checker = ProspectorStyleGuide(
-            paths=list(found_files.iter_package_paths()),
+            paths=checkpaths,
             found_files=found_files,
             config_file=external_config
         )
