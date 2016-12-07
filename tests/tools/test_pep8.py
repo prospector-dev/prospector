@@ -10,7 +10,7 @@ from prospector.config import ProspectorConfig
 # A very basic stub to avoid creating a real ProspectorConfig, which isn't
 # esasily tweakable for tests "from the outside".
 # Needed for handing into the Pep8Tool.configure(...) method, should expose at
-# least the ProspectorConfig interface accessed by this method.
+# least the ProspectorConfig interface accessed by said method.
 class StubProspectorConfig(object):
 
     def __init__(self, external_config=None, ignores=None,
