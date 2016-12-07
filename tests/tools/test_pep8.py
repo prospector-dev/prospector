@@ -163,7 +163,9 @@ class TestProspectorStyleGuidePathConfig(TestCase):
         paths = prepend_root([''], root)
 
         # set pep8/pycodestyle exclude config option
-        external_config_contents = """
+        # this is ascii-only content, simply use "b'" byte string prefix for
+        # Python 2/3 compat
+        external_config_contents = b"""
 [pep8]
 exclude = subpackage
         """
