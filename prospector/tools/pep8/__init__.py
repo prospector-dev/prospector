@@ -83,9 +83,7 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        # self._module_paths contains absolute paths(!)
-        fullpath = os.path.abspath(
-            os.path.join('' if parent is None else parent, filename))
+        fullpath = os.path.join('' if parent is None else parent, filename)
 
         if os.path.isdir(fullpath):
             return False
