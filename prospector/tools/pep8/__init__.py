@@ -83,11 +83,9 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        # os.path.join() caters for parent or filename being absolute
-        fullpath = os.path.join(
-            self._files.rootpath,
-            '' if parent is None else parent,
-            filename)
+        # self._module_paths contains absolute paths(!)
+        fullpath = os.path.abspath(
+            os.path.join('' if parent is None else parent, filename))
 
         if os.path.isdir(fullpath):
             return False
@@ -131,7 +129,7 @@ class Pep8Tool(ToolBase):
         # TODO: to be driven differently for explicit paths vs root dir path
         # TODO: to make both prospector and pycodestyle exclusion rules work.
         if isinstance(found_files, FoundFiles):
-            checkpaths = [found_files.rootpath]
+            checkpaths = [os.path.abspath(found_files.rootpath)]
         else:
             checkpaths = list(found_files.iter_module_paths())
         self.checker = ProspectorStyleGuide(

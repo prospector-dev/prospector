@@ -1,6 +1,7 @@
 import os
 import tempfile
 import re
+import contextlib
 from unittest import TestCase
 from prospector.finder import find_python
 from prospector.tools.pep8 import Pep8Tool
@@ -61,12 +62,23 @@ def dummy_checker():
     return DummyChecker
 
 
-# helper function
+# helper functions
 def prepend_root(paths, root=None):
     """Return list of paths with root dir prepended to each path."""
     if root:
         return [os.path.normpath(os.path.join(root, p)) for p in paths]
     return paths
+
+
+@contextlib.contextmanager
+def chdir(path):
+    """Context manager for changing the current working directory to the
+    specified path and back when leaving the context.
+    """
+    wd = os.getcwd()
+    os.chdir(path)
+    yield os.getcwd()
+    os.chdir(wd)
 
 
 class TestProspectorStyleGuidePathConfig(TestCase):
@@ -121,6 +133,37 @@ class TestProspectorStyleGuidePathConfig(TestCase):
         prospector_styleguide = self._setup_styleguide(paths)
         actual = prospector_styleguide.checker_class.filenames
         self.assertEqual(sorted(actual), sorted(expected))
+
+    def test_paths_relative_dir_arg(self):
+        # test corresponding to a single command line *relative* PATH dir arg
+        root = os.path.join(
+            os.path.dirname(__file__), '..', 'finder', 'testdata',
+            'dirs_mods_packages')
+        parent, rootdir = os.path.split(root)
+        with chdir(parent):
+            # use the root directory itself as find_python input arg:
+            paths = prepend_root([''], rootdir)
+            # all Python modules in the directory tree are expected (but
+            # nothing else)
+            # prospector hands absolute file paths to the pycodestyle/pep8
+            # backend, so expect full absolute paths
+            expected = prepend_root(
+                ['package/__init__.py',
+                 'package/subpackage/__init__.py',
+                 'package/subpackage/subpackage_module1.py',
+                 'package/subpackage/subpackage_module2.py',
+                 'package/package_module1.py',
+                 'package/package_module2.py',
+                 'nonpackage/nonpackage_module1.py',
+                 'nonpackage/nonpackage_module2.py',
+                 'module1.py',
+                 'module2.py',
+                 ], root)
+
+            prospector_styleguide = self._setup_styleguide(paths)
+            actual = prospector_styleguide.checker_class.filenames
+            self.assertEqual(sorted(actual), sorted(expected))
+
 
     def test_paths_dir_arg_prospector_ignore_patterns_cfg(self):
         # test corresponding to a single command line PATH dir arg, with
@@ -224,6 +267,46 @@ exclude = subpackage
         prospector_styleguide = self._setup_styleguide(paths)
         actual = prospector_styleguide.checker_class.filenames
         self.assertEqual(sorted(actual), sorted(expected))
+
+    def test_paths_relative_py_modules_arg(self):
+        # test corresponding to multiple Python module files PATHs args
+        root = os.path.join(
+            os.path.dirname(__file__), '..', 'finder', 'testdata',
+            'dirs_mods_packages')
+        parent, rootdir = os.path.split(root)
+        with chdir(parent):
+            paths = prepend_root(
+                ['package/__init__.py',
+                 'package/subpackage/__init__.py',
+                 'package/subpackage/subpackage_module1.py',
+                 'package/subpackage/subpackage_module2.py',
+                 'package/package_module1.py',
+                 'package/package_module2.py',
+                 'nonpackage/nonpackage_module1.py',
+                 'nonpackage/nonpackage_module2.py',
+                 'module1.py',
+                 'module2.py',
+                 ], rootdir)
+
+            # all Python modules given as paths args are expected (but nothing 
+            # else)
+            # prospector hands absolute file paths to the pycodestyle/pep8
+            # backend, so expect full absolute paths
+            expected = prepend_root(
+                ['package/__init__.py',
+                 'package/subpackage/__init__.py',
+                 'package/subpackage/subpackage_module1.py',
+                 'package/subpackage/subpackage_module2.py',
+                 'package/package_module1.py',
+                 'package/package_module2.py',
+                 'nonpackage/nonpackage_module1.py',
+                 'nonpackage/nonpackage_module2.py',
+                 'module1.py',
+                 'module2.py',
+                 ], root)
+            prospector_styleguide = self._setup_styleguide(paths)
+            actual = prospector_styleguide.checker_class.filenames
+            self.assertEqual(sorted(actual), sorted(expected))
 
     def test_paths_files_arg(self):
         # test corresponding to multiple files PATHs args (Python modules and
