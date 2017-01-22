@@ -110,19 +110,19 @@ Documentation Warnings
 
 By default prospector will not produce warnings about missing documentation or
 `docstring styleguide violations <https://www.python.org/dev/peps/pep-0257/>`_.
-If you want to see these, use the `--doc-warnings` flag at runtime or include it in
+If you want to see these, use the ``--doc-warnings`` flag at runtime or include it in
 your profile::
 
     doc-warnings: true
 
-This will turn on the otherwise disabled `pep257` tool.
+This will turn on the otherwise disabled ``pep257`` tool.
 
 
 Test Warnings
 .............
 
 Prospector will not inspect unit tests and test files by default. You can
-turn this on using the `--test-warnings` flag or in your profile::
+turn this on using the ``--test-warnings`` flag or in your profile::
 
     test-warnings: true
 
