@@ -1,6 +1,9 @@
 from __future__ import absolute_import
 from pylint.reporters import BaseReporter
-from pylint.utils import UnknownMessage
+try:
+    from pylint.utils import UnknownMessage
+except ImportError:
+    from pylint.utils import UnknownMessageError as UnknownMessage
 from prospector.message import Location, Message
 
 

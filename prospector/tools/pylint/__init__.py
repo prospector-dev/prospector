@@ -4,7 +4,10 @@ import re
 import sys
 import os
 from pylint.config import find_pylintrc
-from pylint.utils import UnknownMessage
+try:
+    from pylint.utils import UnknownMessage
+except ImportError:
+    from pylint.utils import UnknownMessageError as UnknownMessage
 from prospector.message import Message, Location
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
