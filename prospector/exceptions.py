@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-
+try:
+    from pylint.utils import UnknownMessage as UnknownMessageError
+except ImportError:
+    from pylint.exceptions import UnknownMessageError
 
 class FatalProspectorException(Exception):
 
