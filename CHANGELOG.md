@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+# Version 0.12.5
+* [#207](https://github.com/landscapeio/prospector/pull/207) Fixed missing 'UnknownMessage' exception caused by recent pylint submodule changes
+* Minor documentation formatting updates
+
 # Version 0.12.4
 * Panicky stapling of pyroma dependency until prospector is fied to not break with the new pyroma release
 
