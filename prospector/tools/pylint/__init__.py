@@ -4,7 +4,7 @@ import re
 import sys
 import os
 from pylint.config import find_pylintrc
-from pylint.utils import UnknownMessage
+from prospector.exceptions import UnknownMessageError
 from prospector.message import Message, Location
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
@@ -41,7 +41,7 @@ class PylintTool(ToolBase):
             try:
                 linter.disable(msg_id)
             # pylint: disable=pointless-except
-            except UnknownMessage:
+            except UnknownMessageError:
                 # If the msg_id doesn't exist in PyLint any more,
                 # don't worry about it.
                 pass
