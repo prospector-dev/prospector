@@ -356,4 +356,7 @@ def _load_profile(name_or_path, profile_path, shorthands_found=None,
         inherit_order += new_il
         shorthands_found |= new_sh
 
+    # note: a new list is returned here rather than simply using inherit_order to give astroid a
+    # clue about the type of the returned object, as otherwise it can recurse infinitely and crash,
+    # this meaning that prospector does not run on prospector cleanly!
     return contents_dict, list(inherit_order), shorthands_found
