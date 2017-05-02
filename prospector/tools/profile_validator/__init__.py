@@ -71,7 +71,7 @@ class ProfileValidationTool(ToolBase):
 
         if parsed is None:
             # this happens if a completely empty profile is found
-            add_message(PROFILE_IS_EMPTY, "%s is a completely empty profile" % relative_filepath)
+            add_message(PROFILE_IS_EMPTY, "%s is a completely empty profile" % relative_filepath, 'entire-file')
             return messages
 
         for setting in ('doc-warnings', 'test-warnings', 'autodetect'):

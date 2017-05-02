@@ -17,7 +17,7 @@ def read_py_file(filepath):
         # first just see if the file is properly encoded
         try:
             with open(filepath, 'rb') as f:
-                tokenize.detect_encoding(f.readline)
+                print(tokenize.detect_encoding(f.readline))
         except SyntaxError as err:
             # this warning is issued:
             #   (1) in badly authored files (contains non-utf8 in a comment line)
@@ -28,4 +28,10 @@ def read_py_file(filepath):
             #       with the encoding detected by inspecting the BOM
             raise CouldNotHandleEncoding(filepath, err)
 
-        return tokenize.open(filepath).read()
+        try:
+            return tokenize.open(filepath).read()
+            # this warning is issued:
+            #   (1) if uft-8 is specified, but latin1 is used with something like \x0e9 appearing
+            #       (see http://stackoverflow.com/a/5552623)
+        except UnicodeDecodeError as err:
+            raise CouldNotHandleEncoding(filepath, err)
