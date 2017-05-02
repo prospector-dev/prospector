@@ -160,7 +160,7 @@ def _find_paths(ignore, curpath, rootpath):
         if os.path.isdir(fullpath):
 
             # is it probably a virtualenvironment?
-            if is_virtualenv(fullpath):
+            if is_virtualenv(fullpath) or '.tox' in fullpath:
                 continue
 
             # this is a directory
