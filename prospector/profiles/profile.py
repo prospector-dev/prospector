@@ -356,4 +356,4 @@ def _load_profile(name_or_path, profile_path, shorthands_found=None,
         inherit_order += new_il
         shorthands_found |= new_sh
 
-    return contents_dict, inherit_order, shorthands_found
+    return contents_dict, list(inherit_order), shorthands_found
