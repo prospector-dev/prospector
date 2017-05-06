@@ -14,9 +14,12 @@ if hasattr(pydocstyle, 'log'):  # noqa
     pydocstyle.log.debug = dummy_log
 
 try:
-    from pydocstyle.checker import PEP257Checker, AllError  # pydocstyle >= 1.1.0
+    from pydocstyle.checker import ConventionChecker as PEP257Checker, AllError  # pydocstyle >= 2.0.0
 except ImportError:
-    from pydocstyle import PEP257Checker, AllError  # pydocstyle <= 1.1.0
+    try:
+        from pydocstyle.checker import PEP257Checker, AllError  # pydocstyle >= 1.1.0
+    except ImportError:
+        from pydocstyle import PEP257Checker, AllError  # pydocstyle <= 1.1.0
 
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
