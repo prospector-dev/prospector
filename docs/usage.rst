@@ -2,7 +2,7 @@ Command Line Usage
 ==================
 
 .. _issue_16: https://github.com/landscapeio/prospector/issues/16
-
+.. _vscode_python_plugin: https://marketplace.visualstudio.com/items?itemName=donjayamanne.python
 The simplest way to run prospector is from the project root with no arguments. It will try to figure everything else out itself and provide sensible defaults::
 
     prospector
@@ -29,7 +29,7 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +=============+============================================================================+
 | ``emacs``   | | Support for emacs compilation output mode, see `issue_16`_.              |
 +-------------+----------------------------------------------------------------------------+
-| ``vscode``  | | Support for vscode python plugin                                         |
+| ``vscode``  | | Support for `vscode_python_plugin`_                                      |
 +-------------+----------------------------------------------------------------------------+
 | ``grouped`` | | Similar to ``text``, but groups all message on the same line together    |
 |             | | rather than having a separate entry per message.                         |
