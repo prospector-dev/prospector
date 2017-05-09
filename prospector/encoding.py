@@ -17,7 +17,7 @@ def read_py_file(filepath):
         # first just see if the file is properly encoded
         try:
             with open(filepath, 'rb') as f:
-                print(tokenize.detect_encoding(f.readline))
+                tokenize.detect_encoding(f.readline)
         except SyntaxError as err:
             # this warning is issued:
             #   (1) in badly authored files (contains non-utf8 in a comment line)
