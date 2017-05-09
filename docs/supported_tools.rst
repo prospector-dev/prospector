@@ -62,7 +62,7 @@ Pyflakes analyzes programs and detects various errors. It is simpler and faster
 than pylint, but also not as thorough.
 
 
-`mccabe <https://github.com/flintwork/mccabe>`_
+`mccabe <https://github.com/PyCQA/mccabe>`_
 ```````````````````````````````````````````````
 `McCabe or cyclomatic complexity <http://en.wikipedia.org/wiki/Cyclomatic_complexity>`_ is
 a measurement of how many paths there are in a given function or method. It measures how
@@ -78,17 +78,17 @@ Dodgy is a very simple tool designed to find 'dodgy' things which should
 not be in a public project, such as secret keys, passwords, AWS tokens or 
 source control diffs.
 
-`pep257 <https://github.com/GreenSteam/pep257>`_
+`pydocstyle <https://github.com/PyCQA/pydocstyle>`_
 ````````````````````````````````````````````````
 
-``pep257`` is a simple tool to warn about violations of the
+``pydocstyle`` is a simple tool to warn about violations of the
 `PEP257 Docstring Conventions <http://legacy.python.org/dev/peps/pep-0257/>`_.
 It produces messages for any divergence from the style guide.
 
 This tool is currently considered *experimental* due to some bugs in its
 ability to parse code. For example, modules that contain an ``__all__`` could
 end up producing bogus error messages if the ``__all__`` isn't formatted
-exactly as ``pep257`` expects it.
+exactly as ``pydocstyle`` expects it.
 
 It will not run by default, and must be enabled explicitly (via ``--with-tool pep257``
 or in a :doc:`profile <profiles>`) or implicitly (using the ``--doc-warnings`` flag).
@@ -115,7 +115,7 @@ section below. To install all extras at the same time, install prospector using 
     pip install prospector[with_everything]
 
 
-`Pyroma <https://bitbucket.org/regebro/pyroma>`_
+`Pyroma <https://github.com/regebro/pyroma>`_
 ````````````````````````````````````````````````
 Pyroma is a tool to check your `setup.py` to ensure it is following best practices
 of the Python packaging ecosystem. It will warn you if you are missing any package 
@@ -128,7 +128,7 @@ To install and use::
     prospector --with-tool pyroma
 
 
-`Vulture <https://bitbucket.org/jendrikseipp/vulture>`_
+`Vulture <https://github.com/jendrikseipp/vulture>`_
 ```````````````````````````````````````````````````````
 
 Vulture finds unused classes, functions and variables in your code. This could
