@@ -4,6 +4,9 @@ Prospector Changelog
 * Version 0.12.6
 * [#210](https://github.com/landscapeio/prospector/issues/210) [#212](https://github.com/landscapeio/prospector/issues/212) Removing debug output accidentally left in (@souliane)
 * [#211](https://github.com/landscapeio/prospector/issues/211) Added VSCode extension to docs (@DonJayamanne)
+* [#215](https://github.com/landscapeio/prospector/pull/215) Support `pydocstyle>=2.0` (@samspillaz)
+* [#217](https://github.com/landscapeio/prospector/issues/217) Updating links to supported tools in docs (@mbeacom)
+* [#219](https://github.com/landscapeio/prospector/pull/219) Added a `__main__.py` to allow calling `python -m prospector` (@cprogrammer1994)
 
 # Version 0.12.5
 * [#207](https://github.com/landscapeio/prospector/pull/207) Fixed missing 'UnknownMessage' exception caused by recent pylint submodule changes
