@@ -1,26 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-# HACK!
-# pep257 version 0.4.1 sets global log level to debug
-# which causes it to spaff the output with tokenizing
-# information.
-import pydocstyle  # noqa
 from prospector.encoding import read_py_file, CouldNotHandleEncoding
-
-if hasattr(pydocstyle, 'log'):  # noqa
-    def dummy_log(*args, **kwargs):  # noqa
-        pass
-    pydocstyle.log.debug = dummy_log
-
-try:
-    from pydocstyle.checker import ConventionChecker as PEP257Checker, AllError  # pydocstyle >= 2.0.0
-except ImportError:
-    try:
-        from pydocstyle.checker import PEP257Checker, AllError  # pydocstyle >= 1.1.0
-    except ImportError:
-        from pydocstyle import PEP257Checker, AllError  # pydocstyle <= 1.1.0
-
+from pydocstyle.checker import ConventionChecker as PEP257Checker, AllError
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
 
@@ -49,6 +31,7 @@ class Pep257Tool(ToolBase):
                 for error in checker.check_source(
                     read_py_file(code_file),
                     code_file,
+                    None
                 ):
 
                     location = Location(
