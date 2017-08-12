@@ -22,7 +22,7 @@ class MypyTool(ToolBase):
     def run(self, found_files):
         paths = [path for path in found_files.iter_module_paths()]
         paths.extend(self.options)
-        report, err, status = self.checker.run(paths)
+        report, *_ = self.checker.run(paths)
         messages = []
 
         for message in report.splitlines():
