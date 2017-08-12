@@ -11,16 +11,17 @@ __all__ = (
 )
 
 
-class MypyTool(ToolBase):
-    LIST_OPTIONS = [
-        'allow',
-        'check',
-        'disallow',
-        'no-check',
-        'no-warn',
-        'warn'
-    ]
+MYPY_OPTIONS = [
+    'allow',
+    'check',
+    'disallow',
+    'no-check',
+    'no-warn',
+    'warn'
+]
 
+
+class MypyTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super(MypyTool, self).__init__(*args, **kwargs)
         self.checker = api
@@ -49,7 +50,7 @@ class MypyTool(ToolBase):
         if strict_optional:
             self.options.append('--strict-optional')
 
-        for list_option in self.LIST_OPTIONS:
+        for list_option in MYPY_OPTIONS:
             for entry in options.get(list_option, []):
                 self.options.append('--%s-%s' % (list_option, entry))
 
