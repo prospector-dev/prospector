@@ -2,6 +2,7 @@
 from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
+from prospector.tools.mypy import MypyTool
 from prospector.tools.pep8 import Pep8Tool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
@@ -38,6 +39,7 @@ def _optional_tool(name, package_name=None, tool_class_name=None, install_option
 TOOLS = {
     'dodgy': DodgyTool,
     'mccabe': McCabeTool,
+    'mypy': MypyTool,
     'pyflakes': PyFlakesTool,
     'pep8': Pep8Tool,
     'pylint': PylintTool,
