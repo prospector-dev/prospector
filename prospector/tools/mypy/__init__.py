@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
+from itertools import islice
 from mypy import api
 
 from prospector.message import Location, Message
@@ -57,11 +56,13 @@ class MypyTool(ToolBase):
     def run(self, found_files):
         paths = [path for path in found_files.iter_module_paths()]
         paths.extend(self.options)
-        report, *_ = self.checker.run(paths)
+        result = self.checker.run(paths)
+        report, _ = result[0], result[1:]
         messages = []
 
         for message in report.splitlines():
-            path, line, char, err_type, *err_msg = message.split(':')
+            iter_message = iter(message.split(':'))
+            (path, line, char, err_type), err_msg = islice(iter_message, 4), list(message)
             location = Location(
                 path=path,
                 module=None,
