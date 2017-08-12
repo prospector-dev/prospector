@@ -157,10 +157,10 @@ To install and use::
 
 `mypy <https://github.com/python/mypy>`_
 ``````````````````````````````````````````````````````
-Frosted is a fork of pyflakes which was created with the intention of taking over
-from and extending pyflakes as development had slowed. Since Prospector was originally
-created, pyflakes development has started up again and frosted has stagnated, so it has
-been demoted to be an optional extra.
+Mypy is an experimental optional static type checker for Python that aims to combine
+the benefits of dynamic (or "duck") typing and static typing. Mypy combines the
+expressive power and convenience of Python with a powerful type system and
+compile-time type checking.
 
 To install and use::
 
