@@ -13,6 +13,14 @@ __all__ = (
 
 
 class MypyTool(ToolBase):
+    LIST_OPTIONS = [
+        'allow',
+        'check',
+        'disallow',
+        'no-check',
+        'no-warn',
+        'warn'
+    ]
 
     def __init__(self, *args, **kwargs):
         super(MypyTool, self).__init__(*args, **kwargs)
@@ -28,13 +36,6 @@ class MypyTool(ToolBase):
         python_2_mode = options.get('python-2-mode', False)
         strict_optional = options.get('strict-optional', False)
 
-        allowed_options = options.get('allow', [])
-        check_options = options.get('check', [])
-        disallowed_options = options.get('disallow', [])
-        no_check_options = options.get('no-check', [])
-        no_warn_options = options.get('no-warn', [])
-        warn_options = options.get('warn', [])
-
         self.options.append('--follow-imports=%s' % follow_imports)
 
         if ignore_missing_imports:
@@ -49,23 +50,9 @@ class MypyTool(ToolBase):
         if strict_optional:
             self.options.append('--strict-optional')
 
-        for entry in allowed_options:
-            self.options.append('--allow-%s' % entry)
-        
-        for entry in check_options:
-            self.options.append('--check-%s' % entry)
-
-        for entry in disallowed_options:
-            self.options.append('--disallow-%s' % entry)
-
-        for entry in no_check_options:
-            self.options.append('--no-check-%s' % entry)
-
-        for entry in no_warn_options:
-            self.options.append('--no-warn-%s' % entry)
-
-        for entry in warn_options:
-            self.options.append('--warn-%s' % entry)
+        for list_option in self.LIST_OPTIONS:
+            for entry in options.get(list_option, []):
+                self.options.append('--%s-%s' % (list_option, entry))
 
     def run(self, found_files):
         paths = [path for path in found_files.iter_module_paths()]
