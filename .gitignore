@@ -31,6 +31,10 @@ nosetests.xml
 .project
 .pydevproject
 .idea
+.vscode
 
 # Sphinx
 docs/_build
+
+# Mypy
+.mypy_cache

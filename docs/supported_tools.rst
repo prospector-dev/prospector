@@ -153,3 +153,16 @@ To install and use::
 
     pip install prospector[with_frosted]
     prospector --with-tool frosted
+
+
+`mypy <https://github.com/python/mypy>`_
+``````````````````````````````````````````````````````
+Frosted is a fork of pyflakes which was created with the intention of taking over
+from and extending pyflakes as development had slowed. Since Prospector was originally
+created, pyflakes development has started up again and frosted has stagnated, so it has
+been demoted to be an optional extra.
+
+To install and use::
+
+    pip install prospector[with_mypy]
+    prospector --with-tool mypy
