@@ -12,5 +12,5 @@ frosted:
   disable:
     - E401
 
-pep257:
+pydocstyle:
   run: false

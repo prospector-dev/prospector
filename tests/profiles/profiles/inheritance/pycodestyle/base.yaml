@@ -1,2 +1,2 @@
-pep8:
+pycodestyle:
   none: true

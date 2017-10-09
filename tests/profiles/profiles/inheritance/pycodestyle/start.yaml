@@ -1,5 +1,5 @@
 inherits:
   - base
 
-pep8:
+pycodestyle:
   full: true

@@ -33,7 +33,7 @@ _PYLINT_SUPPRESSED_MESSAGE = re.compile(r'^Suppressed \'([a-z0-9-]+)\' \(from li
 
 def get_noqa_suppressions(file_contents):
     """
-    Finds all pep8/flake8 suppression messages
+    Finds all pycodestyle/flake8 suppression messages
 
     :param file_contents:
         A list of file lines

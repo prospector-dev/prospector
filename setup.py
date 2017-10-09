@@ -81,7 +81,7 @@ setup(
     zip_safe=False,
     description='Prospector: python static analysis tool',
     long_description=_LONG_DESCRIPTION,
-    keywords='pylint pyflakes pep8 mccabe frosted prospector static code analysis',
+    keywords='pylint pyflakes pycodestyle pydocstyle mccabe frosted prospector static code analysis',
     classifiers=_CLASSIFIERS,
     package_data=_PACKAGE_DATA,
     include_package_data=True,

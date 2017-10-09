@@ -70,7 +70,7 @@ class ProspectorProfile(object):
             }
             conf.update(profile_dict.get(tool, {}))
 
-            if self.max_line_length is not None and tool in ('pylint', 'pep8'):
+            if self.max_line_length is not None and tool in ('pylint', 'pycodestyle'):
                 conf['options']['max-line-length'] = self.max_line_length
 
             setattr(self, tool, conf)
@@ -171,7 +171,7 @@ def _simple_merge_dict(priority, base):
 def _merge_tool_config(priority, base):
     out = dict(base.items())
     for key, value in priority.items():
-        if key in ('run', 'full', 'none'):  # pep8 has extra 'full' and 'none' options
+        if key in ('run', 'full', 'none'):  # pycodestyle has extra 'full' and 'none' options
             out[key] = value
         elif key in ('options',):
             out[key] = _simple_merge_dict(value, base.get(key, {}))
@@ -220,12 +220,12 @@ def _determine_strictness(profile_dict, inherits):
     return ('strictness_%s' % strictness), True
 
 
-def _determine_pep8(profile_dict):
-    pep8 = profile_dict.get('pep8', {})
-    if pep8.get('full', False):
-        return 'full_pep8', True
-    elif pep8.get('none', False):
-        return 'no_pep8', True
+def _determine_pycodestyle(profile_dict):
+    pycodestyle = profile_dict.get('pycodestyle', {})
+    if pycodestyle.get('full', False):
+        return 'full_pycodestyle', True
+    elif pycodestyle.get('none', False):
+        return 'no_pycodestyle', True
     return None, False
 
 
@@ -253,10 +253,10 @@ def _determine_member_warnings(profile_dict):
 def _determine_implicit_inherits(profile_dict, already_inherits, shorthands_found):
     # Note: the ordering is very important here - the earlier items
     # in the list have precedence over the later items. The point of
-    # the doc/test/pep8 profiles is usually to restore items which were
+    # the doc/test/pycodestyle profiles is usually to restore items which were
     # turned off in the strictness profile, so they must appear first.
     implicit = [
-        ('pep8', _determine_pep8(profile_dict)),
+        ('pycodestyle', _determine_pycodestyle(profile_dict)),
         ('docs', _determine_doc_warnings(profile_dict)),
         ('tests', _determine_test_warnings(profile_dict)),
         ('strictness', _determine_strictness(profile_dict, already_inherits)),

@@ -15,7 +15,7 @@ combinations:
         - dodgy: diff
         - pylint: syntax-error
         - pyflakes: F999
-        - pep8: E901
+        - pycodestyle: E901
         - mccabe: MC0000
         - frosted: E402
 
@@ -31,8 +31,8 @@ combinations:
         - frosted: E307
 
     -   # Mixed tabs and spaces
-        - pep257: D206
-        - pep8: E101
+        - pydocstyle: D206
+        - pycodestyle: E101
         - pylint: indentation-mixture
 
     -   # Import from __future__ not first import
@@ -41,55 +41,55 @@ combinations:
         - frosted: E207
 
     -   # Line too long
-        - pep8: E501
+        - pycodestyle: E501
         - pylint: line-too-long
 
     -   # Trailing whitespace
-        - pep8: W291
+        - pycodestyle: W291
         - pylint: trailing-whitespace
 
     -   # Blank line contains whitespace
-        - pep8: W293
+        - pycodestyle: W293
         - pylint: trailing-whitespace
 
     -   # No newline at end of file
-        - pep8: W292
+        - pycodestyle: W292
         - pylint: missing-final-newline
 
     -   # line ends with semi-colon
-        - pep8: E703
+        - pycodestyle: E703
         - pylint: unnecessary-semicolon
 
     -   # multiple statements on one line (colon)
-        - pep8: E701
+        - pycodestyle: E701
         - pylint: multiple-statements
 
     -   # multiple statements on one line (semicolon)
-        - pep8: E702
+        - pycodestyle: E702
         - pylint: multiple-statements
 
     -   # incorrect indendation
-        - pep257: D207
-        - pep8: E111
+        - pydocstyle: D207
+        - pycodestyle: E111
         - pylint: bad-indentation
 
     -   # incorrect indendation
-        - pep257: D208
-        - pep8: E111
+        - pydocstyle: D208
+        - pycodestyle: E111
         - pylint: bad-indentation
 
     -   # comma not followed by a space
-        - pep8: E231
+        - pycodestyle: E231
         - pylint: C0324
         - pylint: bad-whitespace
 
     -   # missing whitespace around operator
-        - pep8: E225
+        - pycodestyle: E225
         - pylint: C0322
         - pylint: bad-whitespace
 
     -   # missing whitespace around operator
-        - pep8: E225
+        - pycodestyle: E225
         - pylint: C0323
         - pylint: bad-whitespace
 
@@ -108,15 +108,15 @@ combinations:
         - pylint: function-redefined
 
     -   # first argument of a classmethod should be named 'cls'
-        - pep8: N804
+        - pycodestyle: N804
         - pylint: bad-classmethod-argument
 
     -   # '<>' is deprecated, use '!='
-        - pep8: W603
+        - pycodestyle: W603
         - pylint: W0331
 
     -   # backticks are deprecated, use 'repr()'
-        - pep8: W604
+        - pycodestyle: W604
         - pylint: W0333
 
     -   # Redefining name from outer scope
@@ -150,11 +150,11 @@ combinations:
         - frosted: W101
 
     -   # Spaces around keyword/paramater equals
-        - pep8: E251
+        - pycodestyle: E251
         - pylint: bad-whitespace
 
     -   # Missing space after a comma
-        - pep8: E231
+        - pycodestyle: E231
         - pylint: bad-whitespace
 
     -   # redefinition of unused %r from line %r
@@ -177,30 +177,30 @@ combinations:
         - pyflakes: F823
         - frosted: E305
 
-    -   # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
+    -   # pycodestyle-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
         - pylint: bad-mcs-classmethod-argument
-        - pep8: N804
+        - pycodestyle: N804
 
     -   # class names should be camelcase
-        - pep8: N801
+        - pycodestyle: N801
         - pylint: invalid-name
 
     -   # too complex
         - mccabe: MC0001
         - pylint: too-many-branches
 
-    -   # pep257 takes preference over pylint documentation warnings
-        - pep257: D100
+    -   # pydocstyle takes preference over pylint documentation warnings
+        - pydocstyle: D100
         - pylint: missing-docstring
 
     -
-        - pep257: D101
+        - pydocstyle: D101
         - pylint: missing-docstring
 
     -
-        - pep257: D102
+        - pydocstyle: D102
         - pylint: missing-docstring
 
     -
-        - pep257: D103
+        - pydocstyle: D103
         - pylint: missing-docstring

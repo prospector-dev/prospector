@@ -36,7 +36,7 @@ mccabe:
   options:
     max-complexity: 25
 
-pep8:
+pycodestyle:
   disable:
     - W601
     - W602
