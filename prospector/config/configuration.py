@@ -24,7 +24,7 @@ def build_manager():
     manager.add(soc.BooleanSetting('test_warnings', default=None))
     manager.add(soc.BooleanSetting('no_style_warnings', default=None))
     manager.add(soc.BooleanSetting('member_warnings', default=None))
-    manager.add(soc.BooleanSetting('full_pep8', default=None))
+    manager.add(soc.BooleanSetting('full_pycodestyle', default=None))
     manager.add(soc.IntegerSetting('max_line_length', default=None))
 
     manager.add(soc.BooleanSetting('messages_only', default=False))
@@ -147,8 +147,8 @@ def build_command_line_source(prog=None, description='Performs static analysis o
                     'class or member of a module which does not exist. This is disabled '
                     'by default as it tends to be quite inaccurate.'
         },
-        'full_pep8': {
-            'flags': ['-F', '--full-pep8'],
+        'full_pycodestyle': {
+            'flags': ['-F', '--full-pycodestyle'],
             'help': 'Enables every PEP8 warning, so that all PEP8 style'
                     ' violations will be reported.',
         },

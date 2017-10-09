@@ -12,5 +12,5 @@ pylint:
     - C0323
     - C0324
 
-pep8:
+pycodestyle:
   run: false

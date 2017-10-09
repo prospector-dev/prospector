@@ -10,7 +10,7 @@ class ToolBase(object):
     def configure(self, prospector_config, found_files):
         """
         Tools have their own way of being configured from configuration files
-        on the current path - for example, a .pep8rc file. Prospector will use
+        on the current path - for example, a .pycodestylerc file. Prospector will use
         its own configuration settings unless this method discovers some
         tool-specific configuration that should be used instead.
 

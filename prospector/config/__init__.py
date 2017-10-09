@@ -122,9 +122,9 @@ class ProspectorConfig(object):
         if config.test_warnings is not None and config.test_warnings:
             cmdline_implicit.append('test_warnings')
         if config.no_style_warnings is not None and config.no_style_warnings:
-            cmdline_implicit.append('no_pep8')
-        if config.full_pep8 is not None and config.full_pep8:
-            cmdline_implicit.append('full_pep8')
+            cmdline_implicit.append('no_pycodestyle')
+        if config.full_pycodestyle is not None and config.full_pycodestyle:
+            cmdline_implicit.append('full_pycodestyle')
         if config.member_warnings is not None and config.member_warnings:
             cmdline_implicit.append('member_warnings')
 

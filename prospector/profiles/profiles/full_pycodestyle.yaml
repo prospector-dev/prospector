@@ -1,6 +1,6 @@
 allow-shorthand: false
 
-pep8:
+pycodestyle:
   run: true
   enable:
     - E101

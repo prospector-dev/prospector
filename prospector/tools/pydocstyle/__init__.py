@@ -19,7 +19,7 @@ class Pep257Tool(ToolBase):
         self.ignore_codes = ()
 
     def configure(self, prospector_config, found_files):
-        self.ignore_codes = prospector_config.get_disabled_messages('pep257')
+        self.ignore_codes = prospector_config.get_disabled_messages('pydocstyle')
 
     def run(self, found_files):
         messages = []
@@ -43,7 +43,7 @@ class Pep257Tool(ToolBase):
                         absolute_path=True,
                     )
                     message = Message(
-                        source='pep257',
+                        source='pydocstyle',
                         code=error.code,
                         location=location,
                         message=error.message.partition(':')[2].strip(),
@@ -51,16 +51,16 @@ class Pep257Tool(ToolBase):
                     messages.append(message)
             except CouldNotHandleEncoding as err:
                 messages.append(make_tool_error_message(
-                    code_file, 'pep257', 'D000',
+                    code_file, 'pydocstyle', 'D000',
                     message='Could not handle the encoding of this file: %s' % err.encoding
                 ))
                 continue
             except AllError as exc:
-                # pep257's Parser.parse_all method raises AllError when an
+                # pydocstyle's Parser.parse_all method raises AllError when an
                 # attempt to analyze the __all__ definition has failed.  This
                 # occurs when __all__ is too complex to be parsed.
                 messages.append(make_tool_error_message(
-                    code_file, 'pep257', 'D000',
+                    code_file, 'pydocstyle', 'D000',
                     line=1, character=0,
                     message=exc.args[0]
                 ))

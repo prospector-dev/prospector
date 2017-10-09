@@ -15,5 +15,5 @@ vulture:
 dodgy:
   run: false
 
-pep257:
+pydocstyle:
   run: false

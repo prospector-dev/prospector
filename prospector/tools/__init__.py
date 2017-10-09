@@ -2,11 +2,11 @@
 from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
-from prospector.tools.pep8 import Pep8Tool
+from prospector.tools.pycodestyle import Pep8Tool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 from prospector.tools.mccabe import McCabeTool
-from prospector.tools.pep257 import Pep257Tool
+from prospector.tools.pydocstyle import Pep257Tool
 from prospector.tools.profile_validator import ProfileValidationTool
 
 
@@ -39,9 +39,9 @@ TOOLS = {
     'dodgy': DodgyTool,
     'mccabe': McCabeTool,
     'pyflakes': PyFlakesTool,
-    'pep8': Pep8Tool,
+    'pycodestyle': Pep8Tool,
     'pylint': PylintTool,
-    'pep257': Pep257Tool,
+    'pydocstyle': Pep257Tool,
     'profile-validator': ProfileValidationTool,
     'frosted': _optional_tool('frosted'),
     'vulture': _optional_tool('vulture'),
@@ -53,8 +53,8 @@ DEFAULT_TOOLS = (
     'dodgy',
     'mccabe',
     'pyflakes',
-    'pep8',
+    'pycodestyle',
     'pylint',
-    'pep257',
+    'pydocstyle',
     'profile-validator'
 )

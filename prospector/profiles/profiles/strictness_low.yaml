@@ -2,7 +2,7 @@ allow-shorthand: false
 
 inherits:
   - strictness_medium
-  
+
 pylint:
   disable:
     - blacklisted-name
@@ -49,7 +49,7 @@ frosted:
     - E307
     - W101
 
-pep8:
+pycodestyle:
   disable:
     - E501
     - E711
@@ -62,5 +62,5 @@ pyroma:
     - PYR06
     - PYR09
 
-pep257:
+pydocstyle:
   run: false
