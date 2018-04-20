@@ -46,6 +46,7 @@ class ProspectorProfile(object):
         )
 
         self.output_format = profile_dict.get('output-format')
+        self.output_target = profile_dict.get('output-target')
         self.autodetect = profile_dict.get('autodetect')
         self.uses = [uses for uses in _ensure_list(profile_dict.get('uses', []))
                      if uses in ('django', 'celery', 'flask')]
@@ -92,6 +93,7 @@ class ProspectorProfile(object):
             'ignore-paths': self.ignore_paths,
             'ignore-patterns': self.ignore_patterns,
             'output-format': self.output_format,
+            'output-file': self.output_file,
             'autodetect': self.autodetect,
             'uses': self.uses,
             'max-line-length': self.max_line_length,
