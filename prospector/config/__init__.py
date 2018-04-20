@@ -61,10 +61,10 @@ class ProspectorConfig(object):
         if self.config.output_format is not None:
             output_report = self.config.output_format
         else:
-            output_report = (self.profile.output_format, self.profile.output_file)
+            output_report = [(self.profile.output_format, self.profile.output_target or [])]
 
         if not all(output_report):
-            output_report = ('grouped', [])
+            output_report = [('grouped', [])]
 
         return output_report
 
