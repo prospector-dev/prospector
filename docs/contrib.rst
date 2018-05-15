@@ -37,7 +37,7 @@ handling the output of other tools. However, please do run them before submittin
 
     nosetests tests/
 
-Prospector targets Python 2.7, 3.3 and 3.4. You can use `tox`_ to test this locally,
+Prospector targets Python 2.7, 3.3, 3.4, 3.5 and 3.6. You can use `tox`_ to test this locally,
 and all tests are run on `travis.org`_.
 
 .. _tox: https://tox.readthedocs.org/en/latest/
