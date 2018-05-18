@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+* Version 0.12.7
+* Enforcing pydocstyle >= 2.0.0 for API compatability reliability
+
 * Version 0.12.6
 * [#210](https://github.com/landscapeio/prospector/issues/210) [#212](https://github.com/landscapeio/prospector/issues/212) Removing debug output accidentally left in (@souliane)
 * [#211](https://github.com/landscapeio/prospector/issues/211) Added VSCode extension to docs (@DonJayamanne)

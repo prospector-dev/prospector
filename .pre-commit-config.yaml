@@ -1,5 +1,6 @@
--   repo: git@github.com:pre-commit/pre-commit-hooks
-    sha: v0.9.2
+repos:
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v1.2.3
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -12,6 +13,6 @@
         - --ignore=E126
     -   id: check-added-large-files
 -   repo: git://github.com/FalconSocial/pre-commit-python-sorter
-    sha: b57843b0b874df1d16eb0bef00b868792cb245c2
+    rev: b57843b0b874df1d16eb0bef00b868792cb245c2
     hooks:
     -   id: python-import-sorter

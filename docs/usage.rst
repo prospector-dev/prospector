@@ -47,9 +47,6 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +-------------+----------------------------------------------------------------------------+
 | ``xunit``   | | Same as JSON except produces xunit compatile XML output.                 |
 +-------------+----------------------------------------------------------------------------+
-| ``html``    | | Produces a bootstrap-based HTML output of the messages, summary and      |
-|             | | optionally the profile used.                                             |
-+-------------+----------------------------------------------------------------------------+
 | ``text``    | | The default output format, a simple human readable format.               |
 +-------------+----------------------------------------------------------------------------+
 
