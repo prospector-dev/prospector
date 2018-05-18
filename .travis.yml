@@ -16,6 +16,7 @@ install:
   - "pip install git+https://github.com/landscapeio/pylint-celery.git@develop"
   - "pip install git+https://github.com/landscapeio/pylint-django.git@develop"
   - "pip install git+https://github.com/landscapeio/requirements-detector.git@develop"
+  # reason: https://github.com/yaml/pyyaml/issues/126
   - "pip install git+https://github.com/yaml/pyyaml.git@master"
   - "pip install --editable ."
 script:
