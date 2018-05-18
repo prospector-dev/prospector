@@ -11,8 +11,8 @@ from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.indent_checker import IndentChecker
 from prospector.tools.pylint.linter import ProspectorLinter
 
-
-_UNUSED_WILDCARD_IMPORT_RE = re.compile(r'^Unused import (.*) from wildcard import$')
+_UNUSED_WILDCARD_IMPORT_RE = re.compile(
+    r'^Unused import (.*) from wildcard import$')
 
 
 class PylintTool(ToolBase):
@@ -57,19 +57,29 @@ class PylintTool(ToolBase):
 
         # The warnings about disabling warnings are useful for figuring out
         # with other tools to suppress messages from. For example, an unused
-        # import which is disabled with 'pylint disable=unused-import' will still
-        # generate an 'FL0001' unused import warning from pyflakes. Using the
-        # information from these messages, we can figure out what was disabled.
-        linter.disable('locally-disabled')  # notification about disabling a message
-        linter.disable('locally-enabled')  # notification about enabling a message
-        linter.enable('file-ignored')   # notification about disabling an entire file
-        linter.enable('suppressed-message')   # notification about a message being supressed
-        linter.disable('useless-suppression')  # notification about message supressed which was not raised
-        linter.disable('deprecated-pragma')  # notification about use of deprecated 'pragma' option
+        # import which is disabled with 'pylint disable=unused-import' will
+        # still generate an 'FL0001' unused import warning from pyflakes.
+        # Using the information from these messages, we can figure out what
+        # was disabled.
+        linter.disable(
+            'locally-disabled')  # notification about disabling a message
+        linter.disable(
+            'locally-enabled')  # notification about enabling a message
+        linter.enable(
+            'file-ignored')  # notification about disabling an entire file
+        linter.enable('suppressed-message'
+                      )  # notification about a message being supressed
+        linter.disable(
+            'useless-suppression'
+        )  # notification about message supressed which was not raised
+        linter.disable(
+            'deprecated-pragma'
+        )  # notification about use of deprecated 'pragma' option
 
-        # disable the 'mixed indentation' warning, since it actually will only allow
-        # the indentation specified in the pylint configuration file; we replace it
-        # instead with our own version which is more lenient and configurable
+        # disable the 'mixed indentation' warning, since it actually will only
+        # allow the indentation specified in the pylint configuration file; we
+        # replace it instead with our own version which is more lenient and
+        # configurable
         linter.disable('mixed-indentation')
         indent_checker = IndentChecker(linter)
         linter.register_checker(indent_checker)
@@ -85,12 +95,7 @@ class PylintTool(ToolBase):
 
     def _error_message(self, filepath, message):
         location = Location(filepath, None, None, 0, 0)
-        return Message(
-            'prospector',
-            'config-problem',
-            location,
-            message
-        )
+        return Message('prospector', 'config-problem', location, message)
 
     def _pylintrc_configure(self, pylintrc, linter):
         errors = []
@@ -101,7 +106,9 @@ class PylintTool(ToolBase):
                 try:
                     linter.load_plugin_modules([plugin])
                 except ImportError:
-                    errors.append(self._error_message(pylintrc, "Could not load plugin %s" % plugin))
+                    errors.append(
+                        self._error_message(
+                            pylintrc, "Could not load plugin %s" % plugin))
         return errors
 
     def configure(self, prospector_config, found_files):
@@ -111,7 +118,10 @@ class PylintTool(ToolBase):
 
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
-        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
+        packages = [
+            os.path.split(p)
+            for p in found_files.iter_package_paths(abspath=False)
+        ]
         packages.sort(key=len)
         check_paths = set()
         for package in packages:
@@ -156,7 +166,8 @@ class PylintTool(ToolBase):
             if pylintrc is None:
                 pylintrc = find_pylintrc()
             if pylintrc is None:
-                pylintrc_path = os.path.join(prospector_config.workdir, '.pylintrc')
+                pylintrc_path = os.path.join(prospector_config.workdir,
+                                             '.pylintrc')
                 if os.path.exists(pylintrc_path):
                     pylintrc = pylintrc_path
 
@@ -165,7 +176,8 @@ class PylintTool(ToolBase):
                 configured_by = pylintrc
                 ext_found = True
 
-                self._args = linter.load_command_line_configuration(check_paths)
+                self._args = linter.load_command_line_configuration(
+                    check_paths)
                 config_messages += self._pylintrc_configure(pylintrc, linter)
 
         if not ext_found:
@@ -173,13 +185,14 @@ class PylintTool(ToolBase):
             self._args = linter.load_command_line_configuration(check_paths)
             self._prospector_configure(prospector_config, linter)
 
-        # Pylint 1.4 introduced the idea of explicitly specifying which C-extensions
-        # to load. This is because doing so allows them to execute any code whatsoever,
-        # which is considered to be unsafe. The following option turns off this, allowing
-        # any extension to load again, since any setup.py can execute arbitrary code and
-        # the safety gained through this approach seems minimal. Leaving it on means
-        # that the inference engine cannot do much inference on modules with C-extensions
-        # which is a bit useless.
+        # Pylint 1.4 introduced the idea of explicitly specifying which
+        # C-extensions to load. This is because doing so allows them to
+        # execute any code whatsoever, which is considered to be unsafe.
+        # The following option turns off this, allowing any extension to
+        # load again, since any setup.py can execute arbitrary code and
+        # the safety gained through this approach seems minimal. Leaving
+        # it on means that the inference engine cannot do much inference
+        # on modules with C-extensions which is a bit useless.
         linter.set_option('unsafe-load-any-extension', True)
 
         # we don't want similarity reports right now
@@ -196,7 +209,8 @@ class PylintTool(ToolBase):
     def _combine_w0614(self, messages):
         """
         For the "unused import from wildcard import" messages,
-        we want to combine all warnings about the same line into a single message.
+        we want to combine all warnings about the same line into
+        a single message.
         """
         by_loc = defaultdict(list)
         out = []
@@ -210,19 +224,26 @@ class PylintTool(ToolBase):
         for location, message_list in by_loc.items():
             names = []
             for msg in message_list:
-                names.append(_UNUSED_WILDCARD_IMPORT_RE.match(msg.message).group(1))
+                names.append(
+                    _UNUSED_WILDCARD_IMPORT_RE.match(msg.message).group(1))
 
-            msgtxt = 'Unused imports from wildcard import: %s' % ', '.join(names)
-            combined_message = Message('pylint', 'unused-wildcard-import', location, msgtxt)
+            msgtxt = 'Unused imports from wildcard import: %s' % ', '.join(
+                names)
+            combined_message = Message('pylint', 'unused-wildcard-import',
+                                       location, msgtxt)
             out.append(combined_message)
 
         return out
 
     def combine(self, messages):
         """
-        Some error messages are repeated, causing many errors where only one is strictly necessary.
+        Combine repeated messages.
 
-        For example, having a wildcard import will result in one 'Unused Import' warning for every unused import.
+        Some error messages are repeated, causing many errors where
+        only one is strictly necessary.
+
+        For example, having a wildcard import will result in one
+        'Unused Import' warning for every unused import.
         This method will combine these into a single warning.
         """
         combined = self._combine_w0614(messages)
