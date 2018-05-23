@@ -4,8 +4,8 @@ prospector
 .. image:: https://img.shields.io/pypi/v/prospector.svg
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
-.. image:: https://travis-ci.org/landscapeio/prospector.png?branch=master
-   :target: https://travis-ci.org/landscapeio/prospector
+.. image:: https://travis-ci.org/PyCQA/prospector.png?branch=master
+   :target: https://travis-ci.org/PyCQA/prospector
    :alt: Build Status
 .. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png?style=flat
    :target: https://landscape.io/github/landscapeio/prospector/master
