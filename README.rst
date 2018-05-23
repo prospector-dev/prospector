@@ -10,8 +10,8 @@ prospector
 .. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png?style=flat
    :target: https://landscape.io/github/landscapeio/prospector/master
    :alt: Code Health
-.. image:: https://img.shields.io/coveralls/landscapeio/prospector.svg?style=flat
-   :target: https://coveralls.io/r/landscapeio/prospector
+.. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
+   :target: https://coveralls.io/r/PyCQA/prospector
    :alt: Test Coverage
 .. image:: https://readthedocs.org/projects/prospector/badge/?version=latest
    :target: http://prospector.landscape.io/
