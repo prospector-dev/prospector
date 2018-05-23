@@ -18,7 +18,7 @@ if sys.version_info < (2, 7):
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.5.6',
+    'pylint<2.0.0,>=1.5.6',
     'pylint-plugin-utils>=0.2.6',
     'pylint-common>=0.2.5',
     'requirements-detector>=0.4.1',
@@ -26,8 +26,8 @@ _INSTALL_REQUIRES = [
     'dodgy>=0.1.9',
     'pyyaml',
     'mccabe>=0.5.0',
-    'pyflakes>=0.8.1',
-    'pycodestyle<2.4.0',
+    'pyflakes<2.0.0,>=0.8.1',
+    'pycodestyle<2.4.0,>=2.0.0',
     'pep8-naming>=0.3.3',
     'pydocstyle>=2.0.0',
 ]
