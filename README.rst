@@ -51,7 +51,7 @@ Optional dependencies for Prospector, such as ``pyroma`` can also be installed b
 
 
 For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs
-page on `supported tools <https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`_.
+page on `Supported Tools Extras <https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`_.
 
 For more detailed information on installing the tool, see the
 `installation section <http://prospector.landscape.io/en/latest/#installation>`_ of the tool's main page
