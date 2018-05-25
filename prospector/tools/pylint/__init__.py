@@ -100,8 +100,8 @@ class PylintTool(ToolBase):
     def _pylintrc_configure(self, pylintrc, linter):
         errors = []
         linter.load_default_plugins()
-        linter.config_from_file(pylintrc)
-        if hasattr(linter.config, 'load_plugins'):
+        are_plugins_loaded = linter.config_from_file(pylintrc)
+        if not are_plugins_loaded and hasattr(linter.config, 'load_plugins'):
             for plugin in linter.config.load_plugins:
                 try:
                     linter.load_plugin_modules([plugin])
