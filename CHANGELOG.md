@@ -3,6 +3,7 @@ Prospector Changelog
 
 ## Version 0.12.10
 - Force pyroma >= 2.3
+- [#236](https://github.com/PyCQA/prospector/pull/236) Fix typo and update URLs in docs
 
 ## Version 0.12.9
 - [#237](https://github.com/PyCQA/prospector/pull/237) Load pylint plugins before pylint config
