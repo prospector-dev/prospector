@@ -1,6 +1,14 @@
 Prospector Changelog
 =======
 
+## Version 0.12.10
+- Force pyroma >= 2.3
+
+## Version 0.12.9
+- [#237](https://github.com/PyCQA/prospector/pull/237) Load pylint plugins before pylint config
+- [#253](https://github.com/PyCQA/prospector/issues/253) Relaxing pyroma constraint
+- [#229](https://github.com/PyCQA/prospector/issues/229) prospector crashes on startup if a recent pyroma is installed
+
 ## Version 0.12.8
 * Enforece pylint, pyflakes and pycodestyle versions to avoid breaking other dependent tools
 * [#242](https://github.com/PyCQA/prospector/pull/248) Fix absolute path issue with pylint
