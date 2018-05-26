@@ -307,4 +307,4 @@ The available options are:
 +-----------+------------------+----------------------------------------------+
 
 
-.. _pylint options: http://docs.pylint.org/features.html#options
+.. _pylint options: https://pylint.readthedocs.io/en/latest/user_guide/run.html

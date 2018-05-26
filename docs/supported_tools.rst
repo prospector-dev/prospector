@@ -26,17 +26,17 @@ To run the default tools but turn off one or two defaults::
 Defaults
 --------
 
-`Pylint <http://www.pylint.org>`_
+`Pylint <https://www.pylint.org>`_
 `````````````````````````````````
 Pylint is the most comprehensive static analysis tool for Python. It is extremely thorough
 and is the source of most messages that prospector outputs.
 
 
-`pep8.py <http://pep8.readthedocs.org/en/latest/>`_
+`pep8.py <https://pep8.readthedocs.io/>`_
 ```````````````````````````````````````````````````
 
 ``pep8.py`` is a simple tool to warn about violations of the 
-`PEP8 style guide <http://legacy.python.org/dev/peps/pep-0008/>`_. It produces
+`PEP8 style guide <https://www.python.org/dev/peps/pep-0008/>`_. It produces
 messages for any divergence from the style guide.
 
 Prospector's concept of :doc:`strictness <profiles>` turns off various warnings 
@@ -64,7 +64,7 @@ than pylint, but also not as thorough.
 
 `mccabe <https://github.com/PyCQA/mccabe>`_
 ```````````````````````````````````````````````
-`McCabe or cyclomatic complexity <http://en.wikipedia.org/wiki/Cyclomatic_complexity>`_ is
+`McCabe or cyclomatic complexity <https://en.wikipedia.org/wiki/Cyclomatic_complexity>`_ is
 a measurement of how many paths there are in a given function or method. It measures how
 complicated your functions are, and warns if they reach a certain threshold. Methods that
 are too complex are prone to logic errors, and should be refactored to a series of smaller
