@@ -4,14 +4,14 @@ prospector
 .. image:: https://img.shields.io/pypi/v/prospector.svg
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
-.. image:: https://travis-ci.org/landscapeio/prospector.png?branch=master
-   :target: https://travis-ci.org/landscapeio/prospector
+.. image:: https://travis-ci.org/PyCQA/prospector.png?branch=master
+   :target: https://travis-ci.org/PyCQA/prospector
    :alt: Build Status
 .. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png?style=flat
    :target: https://landscape.io/github/landscapeio/prospector/master
    :alt: Code Health
-.. image:: https://img.shields.io/coveralls/landscapeio/prospector.svg?style=flat
-   :target: https://coveralls.io/r/landscapeio/prospector
+.. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
+   :target: https://coveralls.io/r/PyCQA/prospector
    :alt: Test Coverage
 .. image:: https://readthedocs.org/projects/prospector/badge/?version=latest
    :target: http://prospector.landscape.io/
@@ -51,7 +51,7 @@ Optional dependencies for Prospector, such as ``pyroma`` can also be installed b
 
 
 For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs
-page on `supported tools <https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`_.
+page on `Supported Tools Extras <https://prospector.landscape.io/en/latest/supported_tools.html#optional-extras>`_.
 
 For more detailed information on installing the tool, see the
 `installation section <http://prospector.landscape.io/en/latest/#installation>`_ of the tool's main page

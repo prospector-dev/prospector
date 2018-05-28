@@ -10,7 +10,7 @@ Prospector will run with defaults enabled and optional extras disabled unless co
 
 To specify an exact list of tools to run, for example, only pylint and pep8::
 
-    prospector --tool pylint --tool pep8 
+    prospector --tool pylint --tool pep8
 
 Note that this command line option will override values set in :doc:`profiles<profiles>`.
 
@@ -26,20 +26,20 @@ To run the default tools but turn off one or two defaults::
 Defaults
 --------
 
-`Pylint <http://www.pylint.org>`_
+`Pylint <https://www.pylint.org>`_
 `````````````````````````````````
 Pylint is the most comprehensive static analysis tool for Python. It is extremely thorough
 and is the source of most messages that prospector outputs.
 
 
-`pep8.py <http://pep8.readthedocs.org/en/latest/>`_
+`pep8.py <https://pep8.readthedocs.io/>`_
 ```````````````````````````````````````````````````
 
-``pep8.py`` is a simple tool to warn about violations of the 
-`PEP8 style guide <http://legacy.python.org/dev/peps/pep-0008/>`_. It produces
+``pep8.py`` is a simple tool to warn about violations of the
+`PEP8 style guide <https://www.python.org/dev/peps/pep-0008/>`_. It produces
 messages for any divergence from the style guide.
 
-Prospector's concept of :doc:`strictness <profiles>` turns off various warnings 
+Prospector's concept of :doc:`strictness <profiles>` turns off various warnings
 depending on the strictness level. By default, several PEP8 errors will be
 supressed. To adjust this without adjusting the strictness of other tools, you have
 some options::
@@ -50,7 +50,7 @@ some options::
     # turn on complete pep8 checking:
     prospector --full-pep8
 
-    # change the maximum line length allowed 
+    # change the maximum line length allowed
     # (the default varies by strictness):
     prospector --max-line-length 120
 
@@ -64,7 +64,7 @@ than pylint, but also not as thorough.
 
 `mccabe <https://github.com/PyCQA/mccabe>`_
 ```````````````````````````````````````````````
-`McCabe or cyclomatic complexity <http://en.wikipedia.org/wiki/Cyclomatic_complexity>`_ is
+`McCabe or cyclomatic complexity <https://en.wikipedia.org/wiki/Cyclomatic_complexity>`_ is
 a measurement of how many paths there are in a given function or method. It measures how
 complicated your functions are, and warns if they reach a certain threshold. Methods that
 are too complex are prone to logic errors, and should be refactored to a series of smaller
@@ -75,7 +75,7 @@ methods.
 ```````````````````````````````````````````````
 
 Dodgy is a very simple tool designed to find 'dodgy' things which should
-not be in a public project, such as secret keys, passwords, AWS tokens or 
+not be in a public project, such as secret keys, passwords, AWS tokens or
 source control diffs.
 
 `pydocstyle <https://github.com/PyCQA/pydocstyle>`_
@@ -109,7 +109,7 @@ Optional Extras
 These extras are integrated into prospector but are not activated by default.
 This is because their output is not necessarily useful for all projects.
 
-They are also not installed by default. The instructions for installing each tool is in the tool 
+They are also not installed by default. The instructions for installing each tool is in the tool
 section below. To install all extras at the same time, install prospector using the ``with_everything`` option::
 
     pip install prospector[with_everything]
@@ -118,7 +118,7 @@ section below. To install all extras at the same time, install prospector using 
 `Pyroma <https://github.com/regebro/pyroma>`_
 ````````````````````````````````````````````````
 Pyroma is a tool to check your `setup.py` to ensure it is following best practices
-of the Python packaging ecosystem. It will warn you if you are missing any package 
+of the Python packaging ecosystem. It will warn you if you are missing any package
 metadata which would improve the quality of your package. This is recommended if you
 intend to publish your code on PyPI.
 
@@ -133,7 +133,7 @@ To install and use::
 
 Vulture finds unused classes, functions and variables in your code. This could
 be useful if your project is an application rather than a library, however, if
-you do a lot of dynamic access or metaprogramming, Vulture will likely warn 
+you do a lot of dynamic access or metaprogramming, Vulture will likely warn
 about unused code that is in fact used.
 
 To install and use::

@@ -18,10 +18,7 @@ if sys.version_info < (2, 7):
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=1.5.6',
-    'pylint-celery>=0.3',
-    'pylint-django>=0.7.2',
-    'pylint-flask>=0.3',
+    'pylint<2.0.0,>=1.5.6',
     'pylint-plugin-utils>=0.2.6',
     'pylint-common>=0.2.5',
     'requirements-detector>=0.4.1',
@@ -29,10 +26,10 @@ _INSTALL_REQUIRES = [
     'dodgy>=0.1.9',
     'pyyaml',
     'mccabe>=0.5.0',
-    'pyflakes>=0.8.1',
-    'pycodestyle==2.0.0',
+    'pyflakes<2.0.0,>=0.8.1',
+    'pycodestyle<2.4.0,>=2.0.0',
     'pep8-naming>=0.3.3',
-    'pydocstyle>=1.0.0',
+    'pydocstyle>=2.0.0',
 ]
 
 _PACKAGE_DATA = {
@@ -60,7 +57,7 @@ _CLASSIFIERS = (
 _OPTIONAL = {
     'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6',),
-    'with_pyroma': ('pyroma==2.0.2',)
+    'with_pyroma': ('pyroma>=2.3',),
 }
 
 if sys.version_info >= (3, 3):

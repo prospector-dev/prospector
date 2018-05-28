@@ -1,14 +1,31 @@
 Prospector Changelog
 =======
 
-* Version 0.12.6
+## Version 0.12.10
+- Force pyroma >= 2.3
+- [#236](https://github.com/PyCQA/prospector/pull/236) Fix typo and update URLs in docs
+
+## Version 0.12.9
+- [#237](https://github.com/PyCQA/prospector/pull/237) Load pylint plugins before pylint config
+- [#253](https://github.com/PyCQA/prospector/issues/253) Relaxing pyroma constraint
+- [#229](https://github.com/PyCQA/prospector/issues/229) prospector crashes on startup if a recent pyroma is installed
+
+## Version 0.12.8
+* Enforece pylint, pyflakes and pycodestyle versions to avoid breaking other dependent tools
+* [#242](https://github.com/PyCQA/prospector/pull/248) Fix absolute path issue with pylint
+* [#234](https://github.com/PyCQA/prospector/pull/234) Added Python 3.5/3.6 support on build
+
+## Version 0.12.7
+* Enforcing pydocstyle >= 2.0.0 for API compatability reliability
+
+## Version 0.12.6
 * [#210](https://github.com/landscapeio/prospector/issues/210) [#212](https://github.com/landscapeio/prospector/issues/212) Removing debug output accidentally left in (@souliane)
 * [#211](https://github.com/landscapeio/prospector/issues/211) Added VSCode extension to docs (@DonJayamanne)
 * [#215](https://github.com/landscapeio/prospector/pull/215) Support `pydocstyle>=2.0` (@samspillaz)
 * [#217](https://github.com/landscapeio/prospector/issues/217) Updating links to supported tools in docs (@mbeacom)
 * [#219](https://github.com/landscapeio/prospector/pull/219) Added a `__main__.py` to allow calling `python -m prospector` (@cprogrammer1994)
 
-# Version 0.12.5
+## Version 0.12.5
 * [#207](https://github.com/landscapeio/prospector/pull/207) Fixed missing 'UnknownMessage' exception caused by recent pylint submodule changes
 * Minor documentation formatting updates
 * [#202](https://github.com/landscapeio/prospector/issues/202) Ignoring .tox directories to avoid accidentally checking the code in there
@@ -17,21 +34,21 @@ Prospector Changelog
 * [#194](https://github.com/landscapeio/prospector/pull/194) Fixes for compatability with vulture 0.9+
 * [#191](https://github.com/landscapeio/prospector/pull/191) Fixes for compatability with pydocstyle 1.1+
 
-# Version 0.12.4
+## Version 0.12.4
 * Panicky stapling of pyroma dependency until prospector is fied to not break with the new pyroma release
 
-# Version 0.12.3
+## Version 0.12.3
 * [#190](https://github.com/landscapeio/prospector/pull/190) Pinning pydocstyle version for now until API compatability with newer versions can be written
 * [#184](https://github.com/landscapeio/prospector/pull/184) Including the LICENCE file when building dists
 * Fixed a crash in the profile_validator tool if an empty profile was found
 * (Version 0.12.2 does not exist due to a counting error...)
 
-# Version 0.12.1
+## Version 0.12.1
 * [#178](https://github.com/landscapeio/prospector/pull/178) Long paths no longer cause crash in Windows.
 * [#173](https://github.com/landscapeio/prospector/issues/154) Changed from using pep8 to pycodestyle (which is what pep8 was renamed to)
 * [#172](https://github.com/landscapeio/prospector/issues/172) Fixed non-ascii file handling for mccabe tool and simplified all python source file reading
 
-# Version 0.12
+## Version 0.12
 * [#170](https://github.com/landscapeio/prospector/issues/170) Changed from using pep257 to pydocstyle (which is what pep257 is now called)
 * [#162](https://github.com/landscapeio/prospector/issues/162) Properly warning about optional tools which are not installed
 * [#166](https://github.com/landscapeio/prospector/pulls/166) Added vscode formater
@@ -39,19 +56,19 @@ Prospector Changelog
 * [#156](https://github.com/landscapeio/prospector/pulls/156) Better pyroma logging hack for when pyroma is not installed
 * [#158](https://github.com/landscapeio/prospector/pulls/158) Fixed max-line-length command line option
 
-# Version 0.11.7
+## Version 0.11.7
 * Wrapping all tools so that none can directly write to stdout/stderr, as this breaks the output format for things like json. Instead, it is captured and optionally included as a regular message.
 
-# Version 0.11.6
+## Version 0.11.6
 * Yet more 'dodgy' encoding problem avoidance
 
-# Version 0.11.5
+## Version 0.11.5
 * Including forgotten 'python-targets' value in profile serialization
 
-# Version 0.11.4
+## Version 0.11.4
 * Prevented 'dodgy' tool from trying to analyse compressed text data
 
-# Version 0.11.3
+## Version 0.11.3
 * Fixed encoding of file contents handling by tool "dodgy" under Python3
 
 ## Version 0.11.2
