@@ -39,3 +39,6 @@ docs/_build
 
 # Mypy
 .mypy_cache
+
+# emacs
+TAGS

@@ -50,6 +50,8 @@ _CLASSIFIERS = (
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
     'License :: OSI Approved :: '
     'GNU General Public License v2 or later (GPLv2+)',
 )
@@ -69,15 +71,17 @@ _OPTIONAL['with_everything'] = sorted(with_everything)
 if os.path.exists('README.rst'):
     _LONG_DESCRIPTION = codecs.open('README.rst', 'r', 'utf-8').read()
 else:
-    _LONG_DESCRIPTION = 'Prospector: python static analysis tool. See http://prospector.landscape.io'
+    _LONG_DESCRIPTION = 'Prospector: python static analysis tool. See http://prospector.readthedocs.io'
 
 
 setup(
     name='prospector',
     version=_VERSION,
-    url='http://prospector.landscape.io',
+    url='http://prospector.readthedocs.io',
     author='landscape.io',
     author_email='code@landscape.io',
+    maintainer='Carlos Coelho',
+    maintainer_email='carlospecter@gmail.com',
     license='GPLv2',
     zip_safe=False,
     description='Prospector: python static analysis tool',
