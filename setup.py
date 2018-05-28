@@ -61,7 +61,7 @@ _OPTIONAL = {
 }
 
 if sys.version_info >= (3, 3):
-    _OPTIONAL['with_mypy'] = ('mypy>=0.521',)
+    _OPTIONAL['with_mypy'] = ('mypy>=0.600',)
 
 with_everything = [req for req_list in _OPTIONAL.values() for req in req_list]
 _OPTIONAL['with_everything'] = sorted(with_everything)
