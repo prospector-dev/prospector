@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 0.12.11
+- [#256](https://github.com/PyCQA/prospector/pull/256) Match relative paths that giving different results when using `--absolute-paths` flag
+- Pin vulture version < 0.25
+
 ## Version 0.12.10
 - Force pyroma >= 2.3
 - [#236](https://github.com/PyCQA/prospector/pull/236) Fix typo and update URLs in docs
