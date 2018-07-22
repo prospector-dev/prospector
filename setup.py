@@ -18,7 +18,6 @@ if sys.version_info < (2, 7):
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint>=2.0.0',
     'pylint-plugin-utils>=0.2.6',
     'pylint-common>=0.2.5',
     'requirements-detector>=0.6',
@@ -31,6 +30,11 @@ _INSTALL_REQUIRES = [
     'pep8-naming>=0.3.3',
     'pydocstyle>=2.0.0',
 ]
+
+if sys.version_info < 3:
+    _INSTALL_REQUIRES += ['pylint<2']
+else:
+    _INSTALL_REQUIRES += ['pylint>=2']
 
 _PACKAGE_DATA = {
     'prospector': [
