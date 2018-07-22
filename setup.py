@@ -31,7 +31,7 @@ _INSTALL_REQUIRES = [
     'pydocstyle>=2.0.0',
 ]
 
-if sys.version_info < 3:
+if sys.version_info < (3, 0):
     _INSTALL_REQUIRES += ['pylint<2']
 else:
     _INSTALL_REQUIRES += ['pylint>=2']
