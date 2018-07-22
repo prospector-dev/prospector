@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import setoptconf as soc
 from prospector.__pkginfo__ import __version__
+from prospector.config.datatype import OutputChoice
 from prospector.formatters import FORMATTERS
 from prospector.tools import DEFAULT_TOOLS, TOOLS
 
@@ -29,9 +30,9 @@ def build_manager():
 
     manager.add(soc.BooleanSetting('messages_only', default=False))
     manager.add(soc.BooleanSetting('summary_only', default=False))
-    manager.add(soc.ChoiceSetting(
+    manager.add(soc.ListSetting(
         'output_format',
-        sorted(FORMATTERS.keys()),
+        OutputChoice(sorted(FORMATTERS.keys())),
         default=None,
     ))
     manager.add(soc.BooleanSetting('absolute_paths', default=False))

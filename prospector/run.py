@@ -123,20 +123,28 @@ class Prospector(object):
     def get_messages(self):
         return self.messages
 
-    def print_messages(self, write_to=None):
-        write_to = write_to or sys.stdout
+    def print_messages(self):
+        output_reports = self.config.get_output_report()
 
-        output_format = self.config.get_output_format()
-        self.summary['formatter'] = output_format
-        formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
+        for report in output_reports:
+            output_format, output_files = report
+            self.summary['formatter'] = output_format
+            formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
+            if not output_files:
+                self.write_to(formatter, sys.stdout)
+            for output_file in output_files:
+                with open(output_file, 'w+') as target:
+                    self.write_to(formatter, target)
 
+    def write_to(self, formatter, target):
         # Produce the output
-        write_to.write(formatter.render(
+        target.write(formatter.render(
             summary=not self.config.messages_only,
             messages=not self.config.summary_only,
             profile=self.config.show_profile
         ))
-        write_to.write('\n')
+        target.write('\n')
+
 
 
 def get_parser():
