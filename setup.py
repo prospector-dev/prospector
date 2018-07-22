@@ -50,6 +50,8 @@ _CLASSIFIERS = (
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
     'License :: OSI Approved :: '
     'GNU General Public License v2 or later (GPLv2+)',
 )
@@ -59,6 +61,10 @@ _OPTIONAL = {
     'with_vulture': ('vulture>=0.6,<0.25',),
     'with_pyroma': ('pyroma>=2.3',),
 }
+
+if sys.version_info >= (3, 3):
+    _OPTIONAL['with_mypy'] = ('mypy>=0.600',)
+
 with_everything = [req for req_list in _OPTIONAL.values() for req in req_list]
 _OPTIONAL['with_everything'] = sorted(with_everything)
 
