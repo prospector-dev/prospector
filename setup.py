@@ -18,10 +18,10 @@ if sys.version_info < (2, 7):
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
-    'pylint<2.0.0,>=1.5.6',
+    'pylint>=2.0.0',
     'pylint-plugin-utils>=0.2.6',
     'pylint-common>=0.2.5',
-    'requirements-detector>=0.4.1',
+    'requirements-detector>=0.6',
     'setoptconf>=0.2.0',
     'dodgy>=0.1.9',
     'pyyaml',
@@ -40,21 +40,20 @@ _PACKAGE_DATA = {
 profiledir = os.path.join(os.path.dirname(__file__), 'prospector/profiles/profiles')
 _PACKAGE_DATA['prospector'] += [profile for profile in os.listdir(profiledir)]
 
-_CLASSIFIERS = (
+_CLASSIFIERS = [
     'Development Status :: 4 - Beta',
     'Environment :: Console',
     'Intended Audience :: Developers',
     'Operating System :: Unix',
     'Topic :: Software Development :: Quality Assurance',
     'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
     'License :: OSI Approved :: '
     'GNU General Public License v2 or later (GPLv2+)',
-)
+]
 
 _OPTIONAL = {
     'with_frosted': ('frosted>=1.4.1',),
