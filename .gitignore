@@ -22,6 +22,7 @@ pip-log.txt
 .coverage
 .tox
 nosetests.xml
+.noseids
 
 # Translations
 *.mo
@@ -31,9 +32,13 @@ nosetests.xml
 .project
 .pydevproject
 .idea
+.vscode
 
 # Sphinx
 docs/_build
+
+# Mypy
+.mypy_cache
 
 # emacs
 TAGS

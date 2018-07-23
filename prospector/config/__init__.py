@@ -56,17 +56,17 @@ class ProspectorConfig(object):
             runners.append(tool)
         return runners
 
-    def get_output_format(self):
+    def get_output_report(self):
         # Get the output formatter
         if self.config.output_format is not None:
-            output_format = self.config.output_format
+            output_report = self.config.output_format
         else:
-            output_format = self.profile.output_format
+            output_report = [(self.profile.output_format, self.profile.output_target or [])]
 
-        if output_format is None:
-            output_format = 'grouped'
+        if not all(output_report):
+            output_report = [('grouped', [])]
 
-        return output_format
+        return output_report
 
     def _configure_prospector(self):
         # first we will configure prospector as a whole

@@ -20,7 +20,10 @@ class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many
     def config_from_file(self, config_file=None):
         """Will return `True` if plugins have been loaded. For pylint>=1.5. Else `False`."""
         if PYLINT_VERSION >= (1, 5):
-            self.read_config_file(config_file)
+            if PYLINT_VERSION >= (2, 0):
+                self.read_config_file(config_file, quiet=True)
+            else:
+                self.read_config_file(config_file)
             if self.cfgfile_parser.has_option('MASTER', 'load-plugins'):
                 # pylint: disable=protected-access
                 plugins = _splitstrip(self.cfgfile_parser.get('MASTER', 'load-plugins'))
@@ -35,7 +38,10 @@ class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many
         # for example, we want to re-initialise the OptionsManagerMixin
         # to supress the config error warning
         # pylint: disable=non-parent-init-called
-        OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__, quiet=True)
+        if PYLINT_VERSION >= (2, 0):
+            OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__)
+        else:
+            OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__, quiet=True)
 
     def expand_files(self, modules):
         expanded = PyLinter.expand_files(self, modules)
