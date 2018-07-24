@@ -24,11 +24,7 @@ class ProspectorConfig(object):
 
         self.paths = self._get_work_path(self.config, self.arguments)
         self.explicit_file_mode = all(map(os.path.isfile, self.paths))
-
-        if os.path.isdir(self.paths[0]):
-            self.workdir = self.paths[0]
-        else:
-            self.workdir = os.getcwd()
+        self.workdir = os.getcwd()
 
         self.profile, self.strictness = self._get_profile(self.workdir, self.config)
         self.libraries = self._find_used_libraries(self.config, self.profile)
