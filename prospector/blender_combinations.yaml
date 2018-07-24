@@ -148,6 +148,7 @@ combinations:
     -   # No exception type(s) specified
         - pylint: bare-except
         - frosted: W101
+        - pep8: E722
 
     -   # Spaces around keyword/paramater equals
         - pep8: E251
