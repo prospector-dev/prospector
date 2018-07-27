@@ -21,9 +21,9 @@ class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many
         """Will return `True` if plugins have been loaded. For pylint>=1.5. Else `False`."""
         if PYLINT_VERSION >= (1, 5):
             if PYLINT_VERSION >= (2, 0):
-                self.read_config_file(config_file, quiet=True)
-            else:
                 self.read_config_file(config_file)
+            else:
+                self.read_config_file(config_file, quiet=True)
             if self.cfgfile_parser.has_option('MASTER', 'load-plugins'):
                 # pylint: disable=protected-access
                 plugins = _splitstrip(self.cfgfile_parser.get('MASTER', 'load-plugins'))
