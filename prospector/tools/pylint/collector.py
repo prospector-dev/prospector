@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
-from pylint.reporters import BaseReporter
+
 from prospector.exceptions import UnknownMessageError
 from prospector.message import Location, Message
+from pylint.__pkginfo__ import numversion as PYLINT_VERSION
+from pylint.reporters import BaseReporter
 
 
 class Collector(BaseReporter):
@@ -23,7 +26,10 @@ class Collector(BaseReporter):
         # At this point pylint will give us the code but we want the
         # more user-friendly symbol
         try:
-            msg_data = self._message_store.check_message_id(msg_id)
+            if PYLINT_VERSION < (2, 0):
+                msg_data = self._message_store.check_message_id(msg_id)
+            else:
+                msg_data = self._message_store.get_message_definition(msg_id)
         except UnknownMessageError:
             # this shouldn't happen, as all pylint errors should be
             # in the message store, but just in case we'll fall back
