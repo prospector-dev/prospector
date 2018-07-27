@@ -1,6 +1,13 @@
 Prospector Changelog
 =======
 
+## Version 1.0
+- [#228](https://github.com/PyCQA/prospector/pull/228) Add mypy support
+- [#249](https://github.com/PyCQA/prospector/pull/249) Add option to point to pylintrc inside prospector configuration file
+- [#250](https://github.com/PyCQA/prospector/pull/250) Add option to redirect prospector output to files
+- [#261](https://github.com/PyCQA/prospector/pull/261) Drop Python 3.3 support
+- [#261](https://github.com/PyCQA/prospector/pull/261) Use Pylint >= 2 for Python 3
+
 ## Version 0.12.11
 - [#256](https://github.com/PyCQA/prospector/pull/256) Match relative paths that giving different results when using `--absolute-paths` flag
 - Pin vulture version < 0.25
