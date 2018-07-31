@@ -62,6 +62,7 @@ _OPTIONAL = {
     'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6,<0.25',),
     'with_pyroma': ('pyroma>=2.3',),
+    'build_tools': ('nose', 'coverage', 'coveralls', 'mock'),
 }
 
 if sys.version_info >= (3, 3):
