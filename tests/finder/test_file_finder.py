@@ -1,16 +1,17 @@
+# -*- coding: utf-8 -*-
 import os
 from unittest import TestCase
+
 from prospector.finder import find_python
 from prospector.pathutils import is_virtualenv
 
 
 class TestSysPath(TestCase):
-
     def _run_test(self, name, expected):
         root = os.path.join(os.path.dirname(__file__), 'testdata', name)
         files = find_python([], [root], explicit_file_mode=False)
 
-        expected = [os.path.join(root, e).rstrip(os.path.sep) for e in expected]
+        expected = [os.path.relpath(os.path.join(root, e).rstrip(os.path.sep)) for e in expected]
         actual = files.get_minimal_syspath()
 
         expected.sort(key=lambda x: len(x))

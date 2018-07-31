@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import os
+
 from prospector.pathutils import is_virtualenv
 
 
@@ -187,7 +189,7 @@ def _find_paths(ignore, curpath, rootpath):
     return files, modules, packages, directories
 
 
-def find_python(ignores, paths, explicit_file_mode, workdir=None):
+def find_python(ignores, paths, explicit_file_mode, workdir=''):
     """
     Returns a FoundFiles class containing a list of files, packages, directories,
     where files are simply all python (.py) files, packages are directories
@@ -198,5 +200,5 @@ def find_python(ignores, paths, explicit_file_mode, workdir=None):
         return SingleFiles(paths, workdir or os.getcwd())
     else:
         assert len(paths) == 1
-        files, modules, directories, packages = _find_paths(ignores, paths[0], paths[0])
-        return FoundFiles(paths[0], files, modules, directories, packages, ignores)
+        files, modules, directories, packages = _find_paths(ignores, paths[0], workdir)
+        return FoundFiles(workdir, files, modules, directories, packages, ignores)

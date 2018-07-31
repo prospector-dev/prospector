@@ -24,11 +24,7 @@ class ProspectorConfig(object):
 
         self.paths = self._get_work_path(self.config, self.arguments)
         self.explicit_file_mode = all(map(os.path.isfile, self.paths))
-
-        if os.path.isdir(self.paths[0]):
-            self.workdir = self.paths[0]
-        else:
-            self.workdir = os.getcwd()
+        self.workdir = os.getcwd()
 
         self.profile, self.strictness = self._get_profile(self.workdir, self.config)
         self.libraries = self._find_used_libraries(self.config, self.profile)
@@ -61,10 +57,11 @@ class ProspectorConfig(object):
         if self.config.output_format is not None:
             output_report = self.config.output_format
         else:
-            output_report = [(self.profile.output_format, self.profile.output_target or [])]
+            output_report = [(self.profile.output_format, self.profile.output_target)]
 
-        if not all(output_report):
-            output_report = [('grouped', [])]
+        for index, report in enumerate(output_report):
+            if not all(report):
+                output_report[index] = (report[0] or 'grouped', report[1] or [])
 
         return output_report
 
