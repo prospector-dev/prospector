@@ -19,7 +19,6 @@ def build_manager():
     manager.add(soc.ListSetting('uses', soc.String, default=[]))
 
     manager.add(soc.BooleanSetting('blending', default=True))
-    manager.add(soc.BooleanSetting('common_plugin', default=True))
 
     manager.add(soc.BooleanSetting('doc_warnings', default=None))
     manager.add(soc.BooleanSetting('test_warnings', default=None))
@@ -125,9 +124,6 @@ def build_command_line_source(prog=None, description='Performs static analysis o
                     ' together messages from different tools if they represent'
                     ' the same error. Use this option to see all unmerged'
                     ' messages.',
-        },
-        'common_plugin': {
-            'flags': ['--no-common-plugin'],
         },
         'doc_warnings': {
             'flags': ['-D', '--doc-warnings'],
