@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 1.1.1
+- Removing [pylint-common](https://github.com/landscapeio/pylint-common) as a direct dependency as it does not add a lot of utility and is not kept up to date as much as other plugins
+
 ## Version 1.1
 - [#267](https://github.com/PyCQA/prospector/pull/267) Fix read_config_file using quiet keyword with older pylint versions
 - [#262](https://github.com/PyCQA/prospector/pull/262) Bugfix report different behavior based on path(includes KeyError on FORMATTERS fix)

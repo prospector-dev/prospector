@@ -28,7 +28,6 @@ class PylintTool(ToolBase):
 
     def _prospector_configure(self, prospector_config, linter):
         linter.load_default_plugins()
-        linter.load_plugin_modules(['pylint_common'])
 
         if 'django' in prospector_config.libraries:
             linter.load_plugin_modules(['pylint_django'])
