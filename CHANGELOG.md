@@ -1,6 +1,10 @@
 Prospector Changelog
 =======
 
+## Version 1.1
+- [#267](https://github.com/PyCQA/prospector/pull/267) Fix read_config_file using quiet keyword with older pylint versions
+- [#262](https://github.com/PyCQA/prospector/pull/262) Bugfix report different behavior based on path(includes KeyError on FORMATTERS fix)
+
 ## Version 1.0
 - [#228](https://github.com/PyCQA/prospector/pull/228) Add mypy support
 - [#249](https://github.com/PyCQA/prospector/pull/249) Add option to point to pylintrc inside prospector configuration file
