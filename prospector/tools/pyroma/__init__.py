@@ -20,28 +20,32 @@ finally:
     logging.basicConfig = _old
 
 
-PYROMA_CODES = {
-    ratings.Name: 'PYR01',
-    ratings.Version: 'PYR02',
-    ratings.VersionIsString: 'PYR03',
-    ratings.PEPVersion: 'PYR04',
-    ratings.Description: 'PYR05',
-    ratings.LongDescription: 'PYR06',
-    ratings.Classifiers: 'PYR07',
-    ratings.PythonVersion: 'PYR08',
-    ratings.Keywords: 'PYR09',
-    ratings.Author: 'PYR10',
-    ratings.AuthorEmail: 'PYR11',
-    ratings.Url: 'PYR12',
-    ratings.License: 'PYR13',
-    ratings.LicenceClassifier: 'PYR14',
-    ratings.ZipSafe: 'PYR15',
-    ratings.SDist: 'PYR16',
-    ratings.PackageDocs: 'PYR17',
-    ratings.ValidREST: 'PYR18',
-    ratings.BusFactor: 'PYR19',
+PYROMA_ALL_CODES = {
+    'Name': 'PYR01',
+    'Version': 'PYR02',
+    'VersionIsString': 'PYR03',
+    'PEPVersion': 'PYR04',
+    'Description': 'PYR05',
+    'LongDescription': 'PYR06',
+    'Classifiers': 'PYR07',
+    'PythonVersion': 'PYR08',
+    'Keywords': 'PYR09',
+    'Author': 'PYR10',
+    'AuthorEmail': 'PYR11',
+    'Url': 'PYR12',
+    'License': 'PYR13',
+    'LicenceClassifier': 'PYR14',
+    'ZipSafe': 'PYR15',
+    'SDist': 'PYR16',
+    'PackageDocs': 'PYR17',
+    'ValidREST': 'PYR18',
+    'BusFactor': 'PYR19',
 }
 
+PYROMA_CODES = {}
+for name, code in PYROMA_ALL_CODES.items():
+    if hasattr(ratings, name):
+        PYROMA_CODES[getattr(ratings, name)] = code
 
 PYROMA_TEST_CLASSES = [t.__class__ for t in ratings.ALL_TESTS]
 
@@ -66,7 +70,7 @@ class PyromaTool(ToolBase):
 
             all_tests = [m() for m in PYROMA_TEST_CLASSES]
             for test in all_tests:
-                code = PYROMA_CODES[test.__class__]
+                code = PYROMA_CODES.get(test.__class__, 'PYRUNKNOWN')
 
                 if code in self.ignore_codes:
                     continue
