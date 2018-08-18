@@ -2,7 +2,7 @@ Prospector Changelog
 =======
 
 ## Version 1.1.2
-- [#276](https://github.com/PyCQA/prospector/issues/276) Updating required Pyroma version and removing some warnings which were removed from Pyroma
+- [#276](https://github.com/PyCQA/prospector/issues/276) Updating required Pyroma version and removing some warnings which were removed from Pyroma - thanks [@volans-](https://github.com/volans-) for PR [#277](https://github.com/PyCQA/prospector/pull/277)
 
 ## Version 1.1.1
 - Removing [pylint-common](https://github.com/landscapeio/pylint-common) as a direct dependency as it does not add a lot of utility and is not kept up to date as much as other plugins
