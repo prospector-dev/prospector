@@ -82,7 +82,7 @@ class MypyTool(ToolBase):
                 module=None,
                 function=None,
                 line=line,
-                character=char,
+                character=int(char),
                 absolute_path=True
             )
             message = Message(
