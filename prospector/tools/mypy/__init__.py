@@ -76,7 +76,7 @@ class MypyTool(ToolBase):
 
         for message in report.splitlines():
             iter_message = iter(message.split(':'))
-            (path, line, char, err_type), err_msg = islice(iter_message, 4), list(message)
+            (path, line, char, err_type, err_msg) = islice(iter_message, 5)
             location = Location(
                 path=path,
                 module=None,
@@ -89,7 +89,7 @@ class MypyTool(ToolBase):
                 source='mypy',
                 code=err_type.lstrip(" "),
                 location=location,
-                message=''.join(err_msg).strip()
+                message=err_msg.lstrip(" ")
             )
             messages.append(message)
 
