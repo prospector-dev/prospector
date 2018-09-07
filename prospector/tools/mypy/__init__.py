@@ -30,7 +30,7 @@ class MypyTool(ToolBase):
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options('mypy')
         
-        mypy_ini = options.get('config-file', None)
+        strict = options.get('strict', False)
 
         follow_imports = options.get('follow-imports', 'normal')
         ignore_missing_imports = options.get('ignore-missing-imports', False)
@@ -42,8 +42,8 @@ class MypyTool(ToolBase):
 
         self.options.append('--follow-imports=%s' % follow_imports)
         
-        if mypy_ini:
-            self.options.append('--config-file mypy_ini')
+        if strict:
+            self.options.append('--strict')
 
         if ignore_missing_imports:
             self.options.append('--ignore-missing-imports')
