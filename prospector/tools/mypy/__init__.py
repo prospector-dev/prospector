@@ -87,7 +87,7 @@ class MypyTool(ToolBase):
             )
             message = Message(
                 source='mypy',
-                code=err_type,
+                code=err_type.lstrip(" "),
                 location=location,
                 message=''.join(err_msg).strip()
             )
