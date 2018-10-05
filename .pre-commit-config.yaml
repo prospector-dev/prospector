@@ -1,3 +1,4 @@
+fail_fast: true
 repos:
 -   repo: git://github.com/pre-commit/pre-commit-hooks
     rev: v1.2.3
