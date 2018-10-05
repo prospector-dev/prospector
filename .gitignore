@@ -42,3 +42,4 @@ docs/_build
 
 # emacs
 TAGS
+flycheck*
