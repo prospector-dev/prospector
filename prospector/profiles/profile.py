@@ -93,7 +93,7 @@ class ProspectorProfile(object):
             'ignore-paths': self.ignore_paths,
             'ignore-patterns': self.ignore_patterns,
             'output-format': self.output_format,
-            'output-file': self.output_file,
+            'output-target': self.output_target,
             'autodetect': self.autodetect,
             'uses': self.uses,
             'max-line-length': self.max_line_length,
