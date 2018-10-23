@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 1.1.3
+- [#279](https://github.com/PyCQA/prospector/issues/279) Fix --show-profile crash
+
 ## Version 1.1.2
 - [#276](https://github.com/PyCQA/prospector/issues/276) Updating required Pyroma version and removing some warnings which were removed from Pyroma - thanks [@volans-](https://github.com/volans-) for PR [#277](https://github.com/PyCQA/prospector/pull/277)
 
