@@ -1,6 +1,9 @@
 Prospector Changelog
 =======
 
+## Version 1.1.4
+- [#285](https://github.com/PyCQA/prospector/issues/285) Fix dependency tree resolution - now insists on `pep8-naming<=0.4.1` as later versions cause conflicting versions of flake8 to be installed.
+
 ## Version 1.1.3
 - [#279](https://github.com/PyCQA/prospector/issues/279) Fix --show-profile crash
 
