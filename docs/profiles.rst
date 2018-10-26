@@ -30,11 +30,14 @@ a profile called 'my_project.yaml', the name will be 'my_project'. Inheritance w
 by searching the ``profile-path`` for files matching the name in the inheritance list.
 
 The ``profile-path`` is where Prospector should search when looking for profiles. By
-default, it will look in the directory containing the built-in profiles, as well as
+default, it will look in the directory containing the `built-in profiles`_, as well as
 the directory where prospector is running, and a ``.prospector`` directory relative to
 that. To add additional places to search::
 
     prospector --profile-path path/to/your/profiles
+
+
+.. _built-in profiles: https://github.com/PyCQA/prospector/tree/master/prospector/profiles/profiles
 
 
 
