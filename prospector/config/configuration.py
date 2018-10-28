@@ -64,9 +64,6 @@ def build_manager():
     manager.add(soc.BooleanSetting('include_tool_stdout', default=False))
     manager.add(soc.BooleanSetting('direct_tool_stdout', default=False))
 
-    # deprecated
-    manager.add(soc.BooleanSetting('loquacious_pylint', default=False))
-
     return manager
 
 
@@ -282,10 +279,6 @@ def build_command_line_source(prog=None, description='Performs static analysis o
             'flags': ['--direct-tool-stdout'],
             'help': 'Same as --include-tool-stdout, except the output will be printed '
                     'directly rather than shown as a message.'
-        },
-        'loquacious_pylint': {
-            'flags': ['--loquacious-pylint'],
-            'help': 'Deprecated - replaced by --include-tool-stdout'
         },
         'path': {
             'flags': ['-p', '--path'],
