@@ -4,7 +4,7 @@ Profiles
 The behaviour of prospector can be configured by creating a profile. A profile is
 a YAML file containing several sections as described below.
 
-Prospector will search for a ``.prospector.yaml`` file (and `several others <https://github.com/landscapeio/prospector/blob/master/prospector/profiles/__init__.py>_`) in the path that it is checking.
+Prospector will search for a ``.prospector.yaml`` file (and `several others`_) in the path that it is checking.
 If found, it will automatically be loaded. Otherwise, you
 can pass in the profile as an argument::
 
@@ -17,6 +17,7 @@ You can also use a name instead of the path, if it is on the ``profile-path``::
 In general, command-line arguments override and take precedence over values found
 in profiles.
 
+.. _several others: https://github.com/PyCQA/prospector/blob/master/prospector/profiles/__init__.py
 
 .. _profile_path:
 
@@ -29,11 +30,14 @@ a profile called 'my_project.yaml', the name will be 'my_project'. Inheritance w
 by searching the ``profile-path`` for files matching the name in the inheritance list.
 
 The ``profile-path`` is where Prospector should search when looking for profiles. By
-default, it will look in the directory containing the built-in profiles, as well as
+default, it will look in the directory containing the `built-in profiles`_, as well as
 the directory where prospector is running, and a ``.prospector`` directory relative to
 that. To add additional places to search::
 
     prospector --profile-path path/to/your/profiles
+
+
+.. _built-in profiles: https://github.com/PyCQA/prospector/tree/master/prospector/profiles/profiles
 
 
 
