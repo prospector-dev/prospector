@@ -29,6 +29,8 @@ class MypyTool(ToolBase):
 
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options('mypy')
+        
+        strict = options.get('strict', False)
 
         follow_imports = options.get('follow-imports', 'normal')
         ignore_missing_imports = options.get('ignore-missing-imports', False)
@@ -39,6 +41,9 @@ class MypyTool(ToolBase):
         strict_optional = options.get('strict-optional', False)
 
         self.options.append('--follow-imports=%s' % follow_imports)
+        
+        if strict:
+            self.options.append('--strict')
 
         if ignore_missing_imports:
             self.options.append('--ignore-missing-imports')
@@ -71,20 +76,20 @@ class MypyTool(ToolBase):
 
         for message in report.splitlines():
             iter_message = iter(message.split(':'))
-            (path, line, char, err_type), err_msg = islice(iter_message, 4), list(message)
+            (path, line, char, err_type, err_msg) = islice(iter_message, 5)
             location = Location(
                 path=path,
                 module=None,
                 function=None,
                 line=line,
-                character=char,
+                character=int(char),
                 absolute_path=True
             )
             message = Message(
                 source='mypy',
-                code=err_type,
+                code=err_type.lstrip(" "),
                 location=location,
-                message=''.join(err_msg).strip()
+                message=err_msg.lstrip(" ")
             )
             messages.append(message)
 
