@@ -4,10 +4,10 @@ prospector
 .. image:: https://img.shields.io/pypi/v/prospector.svg
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
-.. image:: https://travis-ci.org/PyCQA/prospector.png?branch=master
+.. image:: https://travis-ci.org/PyCQA/prospector.svg?branch=master
    :target: https://travis-ci.org/PyCQA/prospector
    :alt: Build Status
-.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png?style=flat
+.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.svg?style=flat
    :target: https://landscape.io/github/landscapeio/prospector/master
    :alt: Code Health
 .. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
