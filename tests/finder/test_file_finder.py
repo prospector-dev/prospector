@@ -12,6 +12,7 @@ class TestSysPath(TestCase):
         files = find_python([], [root], explicit_file_mode=False)
 
         expected = [os.path.relpath(os.path.join(root, e).rstrip(os.path.sep)) for e in expected]
+        expected.append(files.rootpath)
         actual = files.get_minimal_syspath()
 
         expected.sort(key=lambda x: len(x))

@@ -134,7 +134,7 @@ class FoundFiles(object):
             if dirname not in packages:
                 module_list.append(dirname)
 
-        full_list = sorted(set(module_list) | package_list, key=len)
+        full_list = sorted(set(module_list) | package_list | {self.rootpath}, key=len)
         if absolute_paths:
             full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
         return full_list
