@@ -1,0 +1,6 @@
+-   id: prospector
+    name: prospector
+    description: Analyze Python code using Prospector
+    entry: prospector
+    language: python
+    types: [python]
