@@ -1,8 +1,15 @@
 Prospector Changelog
 =======
 
-## Version 1.1.5 (placeholder for release)
+## Version 1.1.6 (placeholder for release)
 - [#292](https://github.com/PyCQA/prospector/issues/292) Adding pylint plugin dependencies back and fixing autodetect behaviour.
+
+# Version 1.1.5
+- [#283](https://github.com/PyCQA/prospector/pull/283) Remove unexpected argument from read_config_file - Remove quiet 
+argument
+- [#291](https://github.com/PyCQA/prospector/pull/291) Update pycodestyle support until 2.4.0
+- [#280](https://github.com/PyCQA/prospector/pull/280) Add strict option and fixed emacs output format for mypy tool
+- [#282](https://github.com/PyCQA/prospector/pull/282) Fix working dir detection
 
 ## Version 1.1.4
 - [#285](https://github.com/PyCQA/prospector/issues/285) Fix dependency tree resolution - now insists on `pep8-naming<=0.4.1` as later versions cause conflicting versions of flake8 to be installed.
