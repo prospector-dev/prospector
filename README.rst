@@ -4,10 +4,10 @@ prospector
 .. image:: https://img.shields.io/pypi/v/prospector.svg
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
-.. image:: https://travis-ci.org/PyCQA/prospector.png?branch=master
+.. image:: https://travis-ci.org/PyCQA/prospector.svg?branch=master
    :target: https://travis-ci.org/PyCQA/prospector
    :alt: Build Status
-.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png?style=flat
+.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.svg?style=flat
    :target: https://landscape.io/github/landscapeio/prospector/master
    :alt: Code Health
 .. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
@@ -132,6 +132,18 @@ Possible values are ``verylow``, ``low``, ``medium``, ``high``, ``veryhigh``.
 Prospector does not include documentation warnings by default, but you can turn
 this on using the ``--doc-warnings`` flag.
 
+pre-commit
+----------
+
+If you'd like Prospector to be run automatically when making changes to files in your Git
+repository, you can install `pre-commit <https://pre-commit.com/>`_ and add the following
+text to your repositories' ``.pre-commit-config.yaml``::
+
+    repos:
+    -   repo: https://github.com/PyCQA/prospector
+        rev: 1.1.4 # The version of Prospector to use
+        hooks:
+        -   id: prospector
 
 License
 -------

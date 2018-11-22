@@ -163,7 +163,8 @@ class ProspectorConfig(object):
 
         # Bring in adaptors that we automatically detect are needed
         if config.autodetect and profile.autodetect is True:
-            map(libraries.append, autodetect_libraries(self.workdir))
+            for found_dep in autodetect_libraries(self.workdir):
+                libraries.append(found_dep)
 
         # Bring in adaptors for the specified libraries
         for name in set(config.uses + profile.uses):
