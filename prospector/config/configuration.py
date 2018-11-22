@@ -164,7 +164,7 @@ def build_command_line_source(prog=None, description='Performs static analysis o
         },
         'output_format': {
             'flags': ['-o', '--output-format'],
-            'help': 'The output format. Valid values are: %s' % (
+            'help': 'The output format. Valid values are: %s. This will output to stdout by default, however a target file can be used instead by adding :path-to-output-file, eg, -o json:output.json' % (
                 ', '.join(sorted(FORMATTERS.keys())),
             ),
         },
