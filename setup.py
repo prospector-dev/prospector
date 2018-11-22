@@ -19,7 +19,6 @@ _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 _INSTALL_REQUIRES = [
     'pylint-plugin-utils>=0.2.6',
-    'pylint-django==2.0.2',
     'pylint-celery==0.3',
     'pylint-flask==0.5',
     'requirements-detector>=0.6',
@@ -34,9 +33,9 @@ _INSTALL_REQUIRES = [
 ]
 
 if sys.version_info < (3, 0):
-    _INSTALL_REQUIRES += ['pylint<2']
+    _INSTALL_REQUIRES += ['pylint<2', 'pylint-django<0.9']
 else:
-    _INSTALL_REQUIRES += ['pylint>=2']
+    _INSTALL_REQUIRES += ['pylint>=2', 'pylint-django==2.0.2']
 
 _PACKAGE_DATA = {
     'prospector': [
