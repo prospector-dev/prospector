@@ -1,8 +1,9 @@
 Prospector Changelog
 =======
 
-## Version 1.1.6 (placeholder for release)
+## Version 1.1.6.1
 - [#292](https://github.com/PyCQA/prospector/issues/292) Adding pylint plugin dependencies back and fixing autodetect behaviour.
+- (note: .1 added as 1.1.6 upload to PyPI was broken)
 
 # Version 1.1.5
 - [#283](https://github.com/PyCQA/prospector/pull/283) Remove unexpected argument from read_config_file - Remove quiet 
