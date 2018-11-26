@@ -1,7 +1,10 @@
 Prospector Changelog
 =======
 
-## Version 1.1.6 (placeholder for release)
+## Version 1.1.6.2 (placeholder for release)
+- [#304](https://github.com/PyCQA/prospector/pull/304) Pin pylint to 2.1.1 for now as prospector is not compatible with 2.2.0
+ 
+## Version 1.1.6.1
 - [#292](https://github.com/PyCQA/prospector/issues/292) Adding pylint plugin dependencies back and fixing autodetect behaviour.
 
 # Version 1.1.5
