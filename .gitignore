@@ -43,3 +43,6 @@ docs/_build
 # emacs
 TAGS
 flycheck*
+
+# local configuration
+.env
