@@ -133,11 +133,9 @@ class Pep8Tool(ToolBase):
             if len(package) == 1:
                 check_paths.add(package_path)
                 continue
-            for i in range(1, len(package)):
-                if os.path.join(*package[:-i]) in check_paths:
-                    break
-            else:
-                check_paths.add(package_path)
+            if os.path.join(*package) in check_paths:
+                continue
+            check_paths.add(package_path)
 
         for filepath in found_files.iter_module_paths(abspath=False):
             package = os.path.dirname(filepath).split(os.path.sep)
