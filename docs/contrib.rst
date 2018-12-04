@@ -10,8 +10,8 @@ All contributions are very welcome! You can contribute in many ways:
 * Submit pull requests on the GitHub `repository`_. Ideally make a pull request to the *develop* branch, as I prefer to keep the master branch the same as the most recent release on PyPI. If you do this, be sure to add yourself to the CONTRIBUTORS.md file too!
 
 .. _python code quality: https://mail.python.org/mailman/listinfo/code-quality
-.. _issue tracker: https://github.com/landscapeio/prospector/issues
-.. _repository: https://github.com/landscapeio/prospector
+.. _issue tracker: https://github.com/PyCQA/prospector/issues
+.. _repository: https://github.com/PyCQA/prospector
 
 
 Code Quality
@@ -41,4 +41,4 @@ Prospector targets Python 2.7, 3.3, 3.4, 3.5 and 3.6. You can use `tox`_ to test
 and all tests are run on `travis-ci.org`_.
 
 .. _tox: https://tox.readthedocs.io/en/latest/
-.. _travis-ci.org: https://travis-ci.org/landscapeio/prospector
+.. _travis-ci.org: https://travis-ci.org/PyCQA/prospector
