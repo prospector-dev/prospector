@@ -1,7 +1,7 @@
 Command Line Usage
 ==================
 
-.. _issue_16: https://github.com/landscapeio/prospector/issues/16
+.. _issue_16: https://github.com/PyCQA/prospector/issues/16
 .. _vscode_python_plugin: https://marketplace.visualstudio.com/items?itemName=donjayamanne.python
 The simplest way to run prospector is from the project root with no arguments. It will try to figure everything else out itself and provide sensible defaults::
 
@@ -54,18 +54,18 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 If your code uses frameworks and libraries
 ''''''''''''''''''''''''''''''''''''''''''
 
-Often tools such as pylint find errors in code which is not an error, due to attributes of 
-classes being created at run time by a library or framework used by 
-your project. For example, by default, pylint will generate an error for Django 
-models when accessing ``objects``, as the ``objects`` attribute is not part of the ``Model`` 
-class definition. 
+Often tools such as pylint find errors in code which is not an error, due to attributes of
+classes being created at run time by a library or framework used by
+your project. For example, by default, pylint will generate an error for Django
+models when accessing ``objects``, as the ``objects`` attribute is not part of the ``Model``
+class definition.
 
-Prospector mitigates this by providing an understanding of these frameworks to the underlying 
+Prospector mitigates this by providing an understanding of these frameworks to the underlying
 tools.
 
-Prospector will try to intuit which libraries your project uses by 
-`detecting dependencies <https://github.com/landscapeio/requirements-detector>` 
-and automatically turning on support for the requisite libraries. You can see which adaptors 
+Prospector will try to intuit which libraries your project uses by
+`detecting dependencies <https://github.com/landscapeio/requirements-detector>`
+and automatically turning on support for the requisite libraries. You can see which adaptors
 were run in the metadata section of the report.
 
 If Prospector does not correctly detect your project's dependencies, you can specify them manually from the commandline::

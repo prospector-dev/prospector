@@ -25,7 +25,7 @@ in profiles.
 Profile Path
 ------------
 
-The name of a profile is the filename without the ``.yaml`` extension. So if you create 
+The name of a profile is the filename without the ``.yaml`` extension. So if you create
 a profile called 'my_project.yaml', the name will be 'my_project'. Inheritance works
 by searching the ``profile-path`` for files matching the name in the inheritance list.
 
@@ -45,7 +45,7 @@ Example
 -------
 
 Here is an example profile::
-  
+
     output-format: json
 
     strictness: medium
@@ -78,7 +78,7 @@ Builtin Profiles
 ----------------
 
 Prospector comes with several built-in profiles, which power some of strictness and style
-options. You can see the `full list on GitHub <https://github.com/landscapeio/prospector/tree/master/prospector/profiles/profiles>`_.
+options. You can see the `full list on GitHub <https://github.com/PyCQA/prospector/tree/master/prospector/profiles/profiles>`_.
 
 
 .. _strictness:
@@ -172,7 +172,7 @@ Libraries Used and Autodetect
 .............................
 
 Prospector will adjust the behaviour of the underlying tools based on the libraries that your project
-uses. If you use Django, for example, the `pylint-django <https://github.com/landscapeio/pylint-django>`_ plugin
+uses. If you use Django, for example, the `pylint-django <https://github.com/PyCQA/pylint-django>`_ plugin
 will be loaded. This will happen automatically.
 
 If prospector is not correctly determining which of its supported libraries you use, you can specify
@@ -194,9 +194,9 @@ If prospector is incorrectly deciding that you use one of these, you can turn of
 Inheritance
 -----------
 
-Profiles can inherit from other profiles, and can inherit from more than one profile. 
+Profiles can inherit from other profiles, and can inherit from more than one profile.
 Prospector merges together all of the options in each profile, starting at the top
-of the inheritance tree and overwriting values with those found lower. 
+of the inheritance tree and overwriting values with those found lower.
 
 The example profile above inherits from another profile provided by the user,
 ``my/other/profile.yml``. This allows you to have, for example, a project wide
@@ -209,7 +209,7 @@ there are shortcuts for most of the built-ins, see below.::
         - strictness_medium
         - full_pep8
 
-For lists, such as the ``ignore`` section, they will be merged together rather than 
+For lists, such as the ``ignore`` section, they will be merged together rather than
 overwritten - so essentially, the ``ignore`` section will accumulate.
 
 The profile named in the ``inherits`` section must be on the :ref:`profile path <profile_path>`.
@@ -247,9 +247,9 @@ your profile if you are using it.
 Tool Configuration
 ------------------
 
-Each tool can be individually configured with a section beginning with the tool name 
-(in lowercase). Valid values are 
-``pylint``, ``pep8``, ``mccabe``, ``dodgy``, ``pyflakes``, ``frosted``, 
+Each tool can be individually configured with a section beginning with the tool name
+(in lowercase). Valid values are
+``pylint``, ``pep8``, ``mccabe``, ``dodgy``, ``pyflakes``, ``frosted``,
 ``vulture`` and ``pyroma``.
 
 Enabling and Disabling Tools
@@ -271,8 +271,8 @@ Enabling and Disabling Messages
 
 Messages can be enabled or disabled using the tool's code for the output. These codes are
 either from the tool itself, or provided by prospector for those tools which do not have
-message codes. The list of tools and message codes can be found 
-`in the tools package <https://github.com/landscapeio/prospector/tree/master/prospector/tools>`_.
+message codes. The list of tools and message codes can be found
+`in the tools package <https://github.com/PyCQA/prospector/tree/master/prospector/tools>`_.
 
 The typical desired action is to disable messages::
 

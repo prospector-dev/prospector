@@ -23,14 +23,14 @@ About
 
 Prospector is a tool to analyse Python code and output information about errors, potential problems, convention violations and complexity.
 
-It brings together the functionality of other Python analysis tools such as `Pylint`_, `pep8`_, and `McCabe complexity`_. 
+It brings together the functionality of other Python analysis tools such as `Pylint`_, `pep8`_, and `McCabe complexity`_.
 See the :doc:`Supported Tools<supported_tools>` section for a complete list.
 
-The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other 
-Python analysis tools is that it takes a long time to filter through which errors are relevant 
-or interesting to your own coding style. Prospector provides some default profiles, which 
-hopefully will provide a good starting point and will be useful straight away, 
-and adapts the output depending on the libraries your project uses. 
+The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other
+Python analysis tools is that it takes a long time to filter through which errors are relevant
+or interesting to your own coding style. Prospector provides some default profiles, which
+hopefully will provide a good starting point and will be useful straight away,
+and adapts the output depending on the libraries your project uses.
 
 .. _pylint: https://pylint.readthedocs.io/
 .. _pep8: https://pep8.readthedocs.io/
@@ -82,25 +82,25 @@ Adapting to Dependencies
 
 Prospector will `try to detect <https://github.com/landscapeio/requirements-detector>`_ the
 libraries that your project uses, and adapt the output and filtering to those libraries.
-For example, if you use Django, the 
-`pylint-django <https://github.com/landscapeio/pylint-django>`_ plugin will be loaded 
+For example, if you use Django, the
+`pylint-django <https://github.com/PyCQA/pylint-django>`_ plugin will be loaded
 to help Pylint inspect Django-specific code.
 
 There is currently support for the following frameworks:
 
-- `Celery <https://github.com/landscapeio/pylint-celery>`_
-- `Django <https://github.com/landscapeio/pylint-django>`_
+- `Celery <https://github.com/PyCQA/pylint-celery>`_
+- `Django <https://github.com/PyCQA/pylint-django>`_
 - `Flask <https://github.com/jschaf/pylint-flask>`_
 
-If you have a suggestion for another framework or library which should be supported, 
-please `add an issue <https://github.com/landscapeio/prospector/issues>`_ 
+If you have a suggestion for another framework or library which should be supported,
+please `add an issue <https://github.com/PyCQA/prospector/issues>`_
 or :doc:`consider creating a pull request <contrib>`.
 
 
 Strictness
 ``````````
 
-Prospector can be configured to be more or less strict. The more strict, the more errors and 
+Prospector can be configured to be more or less strict. The more strict, the more errors and
 warnings it will find. At higher strictness levels, you may find that the output is a bit too
 picky. The default level is designed to give useful output and warnings but also to suppress
 messages which are not necessarily useful.
@@ -109,7 +109,7 @@ To change the strictness level::
 
     prospector --strictness high
 
-Valid levels are ``verylow``, ``low``, ``medium``, ``high`` and ``veryhigh``. 
+Valid levels are ``verylow``, ``low``, ``medium``, ``high`` and ``veryhigh``.
 
 
 Profiles
@@ -122,7 +122,7 @@ project.
 
 Note that the 'strictness' is implemented as a profile.
 
-There is more detail about profiles and how to use them on 
+There is more detail about profiles and how to use them on
 :doc:`the profiles documentation <profiles>` page.
 
 
