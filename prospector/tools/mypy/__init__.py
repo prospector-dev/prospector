@@ -29,7 +29,7 @@ class MypyTool(ToolBase):
 
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options('mypy')
-        
+
         strict = options.get('strict', False)
 
         follow_imports = options.get('follow-imports', 'normal')
@@ -41,7 +41,7 @@ class MypyTool(ToolBase):
         strict_optional = options.get('strict-optional', False)
 
         self.options.append('--follow-imports=%s' % follow_imports)
-        
+
         if strict:
             self.options.append('--strict')
 
@@ -71,7 +71,7 @@ class MypyTool(ToolBase):
         paths = [path for path in found_files.iter_module_paths()]
         paths.extend(self.options)
         result = self.checker.run(paths)
-        report, _ = result[0], result[1:]
+        report, _ = result[0], result[1:]  # noqa
         messages = []
 
         for message in report.splitlines():
@@ -81,7 +81,7 @@ class MypyTool(ToolBase):
                 path=path,
                 module=None,
                 function=None,
-                line=line,
+                line=int(line),
                 character=int(char),
                 absolute_path=True
             )
