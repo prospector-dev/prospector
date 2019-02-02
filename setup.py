@@ -20,7 +20,7 @@ _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 _INSTALL_REQUIRES = [
     'pylint-plugin-utils>=0.2.6',
     'pylint-celery==0.3',
-    'pylint-flask==0.5',
+    'pylint-flask==0.6',
     'requirements-detector>=0.6',
     'setoptconf>=0.2.0',
     'dodgy>=0.1.9',
