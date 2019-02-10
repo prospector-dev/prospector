@@ -44,6 +44,10 @@ class TestProfileParsing(ProfileTestBase):
         self.assertFalse(profile.is_tool_enabled('pylint'))
         self.assertTrue(profile.is_tool_enabled('pep8') is None)
 
+    def test_load_plugins(self):
+        profile = ProspectorProfile.load('pylint_load_plugins', self._profile_path)
+        self.assertEqual(['first_plugin', 'second_plugin'], profile.pylint['load-plugins'])
+
 
 class TestProfileInheritance(ProfileTestBase):
 
