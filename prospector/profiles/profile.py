@@ -173,7 +173,9 @@ def _simple_merge_dict(priority, base):
 def _merge_tool_config(priority, base):
     out = dict(base.items())
     for key, value in priority.items():
-        if key in ('run', 'full', 'none'):  # pep8 has extra 'full' and 'none' options
+        # pep8 has extra 'full' and 'none' options
+        # pylint has extra 'load-plugins' option
+        if key in ('run', 'full', 'none', 'load-plugins'):
             out[key] = value
         elif key in ('options',):
             out[key] = _simple_merge_dict(value, base.get(key, {}))
