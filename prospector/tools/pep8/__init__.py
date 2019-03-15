@@ -82,10 +82,11 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        if os.path.isdir(os.path.join(self._files.rootpath, filename)):
+        fullpath = os.path.join(self._files.rootpath, parent or '', filename)
+        if os.path.isdir(fullpath):
             return False
 
-        fullpath = os.path.join(self._files.rootpath, parent, filename) if parent else filename
+        fullpath = fullpath if parent else filename
         return fullpath not in self._module_paths
 
 
