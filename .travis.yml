@@ -1,12 +1,12 @@
-language: python
+dist: xenial  # required for Python >= 3.7
 # http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
 language: python
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
-  - "3.7-dev"
+  - "3.7"
+  - "nightly"
 install:
   - "pip install --editable .[build_tools]"
 script:
