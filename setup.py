@@ -35,7 +35,7 @@ _INSTALL_REQUIRES = [
 if sys.version_info < (3, 0):
     _INSTALL_REQUIRES += ['pylint<2', 'pylint-django<0.9']
 else:
-    _INSTALL_REQUIRES += ['pylint==2.3', 'pylint-django==2.0.9']
+    _INSTALL_REQUIRES += ['pylint==2.3.1', 'pylint-django==2.0.9']
 
 _PACKAGE_DATA = {
     'prospector': [
