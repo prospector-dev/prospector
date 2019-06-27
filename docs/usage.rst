@@ -70,7 +70,7 @@ were run in the metadata section of the report.
 
 If Prospector does not correctly detect your project's dependencies, you can specify them manually from the commandline::
 
-    prospector --uses django celery flask
+    prospector --uses "django celery flask"
 
 
 Additionally, if Prospector is automatically detecting a library that you do not in fact use, you can turn off autodetection completely::
