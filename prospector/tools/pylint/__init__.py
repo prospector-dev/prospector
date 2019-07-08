@@ -27,6 +27,7 @@ class PylintTool(ToolBase):
         self._orig_sys_path = []
 
     def _prospector_configure(self, prospector_config, linter):
+        errors = []
         linter.load_default_plugins()
 
         if 'django' in prospector_config.libraries:
@@ -35,6 +36,16 @@ class PylintTool(ToolBase):
             linter.load_plugin_modules(['pylint_celery'])
         if 'flask' in prospector_config.libraries:
             linter.load_plugin_modules(['pylint_flask'])
+
+        profile_path = os.path.join(
+            prospector_config.workdir, prospector_config.profile.name)
+        for plugin in prospector_config.profile.pylint.get('load-plugins', []):
+            try:
+                linter.load_plugin_modules([plugin])
+            except ImportError:
+                errors.append(
+                    self._error_message(
+                        profile_path, "Could not load plugin %s" % plugin))
 
         for msg_id in prospector_config.get_disabled_messages('pylint'):
             try:
@@ -89,6 +100,7 @@ class PylintTool(ToolBase):
                 if max_line_length is not None:
                     if option[0] == 'max-line-length':
                         checker.set_option('max-line-length', max_line_length)
+        return errors
 
     def _error_message(self, filepath, message):
         location = Location(filepath, None, None, 0, 0)
@@ -184,7 +196,8 @@ class PylintTool(ToolBase):
         if not ext_found:
             linter.reset_options()
             self._args = linter.load_command_line_configuration(check_paths)
-            self._prospector_configure(prospector_config, linter)
+            config_messages = self._prospector_configure(
+                prospector_config, linter)
 
         # Pylint 1.4 introduced the idea of explicitly specifying which
         # C-extensions to load. This is because doing so allows them to
