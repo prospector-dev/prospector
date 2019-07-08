@@ -73,8 +73,6 @@ class PylintTool(ToolBase):
         # was disabled.
         linter.disable(
             'locally-disabled')  # notification about disabling a message
-        linter.disable(
-            'locally-enabled')  # notification about enabling a message
         linter.enable(
             'file-ignored')  # notification about disabling an entire file
         linter.enable('suppressed-message'
