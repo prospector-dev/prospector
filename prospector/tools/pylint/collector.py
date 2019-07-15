@@ -29,7 +29,7 @@ class Collector(BaseReporter):
             if PYLINT_VERSION < (2, 0):
                 msg_data = self._message_store.check_message_id(msg_id)
             else:
-                msg_data = self._message_store.get_message_definition(msg_id)
+                msg_data = self._message_store.get_message_definitions(msg_id)[0]
         except UnknownMessageError:
             # this shouldn't happen, as all pylint errors should be
             # in the message store, but just in case we'll fall back
