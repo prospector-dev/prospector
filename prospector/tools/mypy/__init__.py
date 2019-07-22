@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-from itertools import islice
 from mypy import api
-
 from prospector.message import Location, Message
 from prospector.tools import ToolBase
-
 
 __all__ = (
     'MypyTool',
@@ -19,6 +16,28 @@ MYPY_OPTIONS = [
     'no-warn',
     'warn'
 ]
+
+
+def format_message(message):
+    try:
+        (path, line, char, err_type, err_msg) = message.split(':', 4)
+        character = int(char)
+    except ValueError:
+        (path, line, err_type, err_msg) = message.split(':', 3)
+        character = None
+    location = Location(
+        path=path,
+        module=None,
+        function=None,
+        line=int(line),
+        character=character,
+    )
+    return Message(
+        source='mypy',
+        code=err_type.lstrip(" "),
+        location=location,
+        message=err_msg.lstrip(" ")
+    )
 
 
 class MypyTool(ToolBase):
@@ -72,25 +91,5 @@ class MypyTool(ToolBase):
         paths.extend(self.options)
         result = self.checker.run(paths)
         report, _ = result[0], result[1:]  # noqa
-        messages = []
 
-        for message in report.splitlines():
-            iter_message = iter(message.split(':'))
-            (path, line, char, err_type, err_msg) = islice(iter_message, 5)
-            location = Location(
-                path=path,
-                module=None,
-                function=None,
-                line=int(line),
-                character=int(char),
-                absolute_path=True
-            )
-            message = Message(
-                source='mypy',
-                code=err_type.lstrip(" "),
-                location=location,
-                message=err_msg.lstrip(" ")
-            )
-            messages.append(message)
-
-        return messages
+        return [format_message(message) for message in report.splitlines()]
