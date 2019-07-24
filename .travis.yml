@@ -10,11 +10,10 @@ matrix:
   allow_failures:
     - python: "nightly"
 install:
-  - "pip install --editable .[build_tools]"
+  - "pip install --editable .[with_everything]"
 script:
   - "nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/"
   - "mv .coverage .coverage.x"
-  - "pip install -e .[with_everything]"
   - "coverage run --parallel-mode prospector/run.py || true"
   - "coverage combine"
   - "coverage report --show-missing"
