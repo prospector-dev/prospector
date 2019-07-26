@@ -1,7 +1,7 @@
 Supported Tools
 ===============
 
-Prospector currently supports 10 tools, of which 7 are defaults and 3 are optional extras.
+Prospector currently supports 12 tools, of which 7 are defaults and 5 are optional extras.
 
 Enabling or Disabling Tools
 ---------------------------
@@ -166,3 +166,14 @@ To install and use::
 
     pip install prospector[with_mypy]
     prospector --with-tool mypy
+
+
+
+`bandit <https://github.com/PyCQA/bandit>`_
+``````````````````````````````````````````````````````
+Bandit finds common security issues in Python code.
+
+To install and use::
+
+    pip install prospector[with_bandit]
+    prospector --with-tool bandit

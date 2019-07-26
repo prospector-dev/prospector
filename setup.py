@@ -61,6 +61,7 @@ _CLASSIFIERS = [
 ]
 
 _OPTIONAL = {
+    'with_bandit': ('bandit>=1.5.1',),
     'with_frosted': ('frosted>=1.4.1',),
     'with_vulture': ('vulture>=0.6,<0.25',),
     'with_pyroma': ('pyroma>=2.4',),
