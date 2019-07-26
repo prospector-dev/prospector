@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-from itertools import islice
 from mypy import api
-
 from prospector.message import Location, Message
 from prospector.tools import ToolBase
-
 
 __all__ = (
     'MypyTool',
@@ -21,6 +18,28 @@ MYPY_OPTIONS = [
 ]
 
 
+def format_message(message):
+    try:
+        (path, line, char, err_type, err_msg) = message.split(':', 4)
+        character = int(char)
+    except ValueError:
+        (path, line, err_type, err_msg) = message.split(':', 3)
+        character = None
+    location = Location(
+        path=path,
+        module=None,
+        function=None,
+        line=int(line),
+        character=character,
+    )
+    return Message(
+        source='mypy',
+        code=err_type.lstrip(" "),
+        location=location,
+        message=err_msg.lstrip(" ")
+    )
+
+
 class MypyTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super(MypyTool, self).__init__(*args, **kwargs)
@@ -29,7 +48,7 @@ class MypyTool(ToolBase):
 
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options('mypy')
-        
+
         strict = options.get('strict', False)
 
         follow_imports = options.get('follow-imports', 'normal')
@@ -41,7 +60,7 @@ class MypyTool(ToolBase):
         strict_optional = options.get('strict-optional', False)
 
         self.options.append('--follow-imports=%s' % follow_imports)
-        
+
         if strict:
             self.options.append('--strict')
 
@@ -71,26 +90,6 @@ class MypyTool(ToolBase):
         paths = [path for path in found_files.iter_module_paths()]
         paths.extend(self.options)
         result = self.checker.run(paths)
-        report, _ = result[0], result[1:]
-        messages = []
+        report, _ = result[0], result[1:]  # noqa
 
-        for message in report.splitlines():
-            iter_message = iter(message.split(':'))
-            (path, line, char, err_type, err_msg) = islice(iter_message, 5)
-            location = Location(
-                path=path,
-                module=None,
-                function=None,
-                line=line,
-                character=int(char),
-                absolute_path=True
-            )
-            message = Message(
-                source='mypy',
-                code=err_type.lstrip(" "),
-                location=location,
-                message=err_msg.lstrip(" ")
-            )
-            messages.append(message)
-
-        return messages
+        return [format_message(message) for message in report.splitlines()]

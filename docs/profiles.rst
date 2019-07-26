@@ -142,6 +142,20 @@ but you can turn it on using the ``--member-warnings`` flag or in a profile::
     member-warnings: true
 
 
+Pylint Plugins
+'''''''''''''''
+
+It is possible to specify list of plugins for Pylint. You can do this by using ``load-plugins``
+option in ``pylint`` section::
+
+    pylint:
+        load-plugins:
+            - plugin
+            - plugin
+
+Note that this option doesn't affect loading of :ref:`autodetected plugins <libraries-used-and-autodetect>`.
+
+
 PEP8 Control
 ............
 

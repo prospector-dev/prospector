@@ -1,0 +1,5 @@
+
+pylint:
+  load-plugins:
+    - first_plugin
+    - second_plugin

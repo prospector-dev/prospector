@@ -205,3 +205,6 @@ combinations:
     -
         - pep257: D103
         - pylint: missing-docstring
+    -
+        - pylint: singleton-comparison
+        - pep8: E711
