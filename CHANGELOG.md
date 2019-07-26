@@ -1,6 +1,15 @@
 Prospector Changelog
 =======
 
+## Version 1.1.7
+- [#299](https://github.com/PyCQA/prospector/pull/299) Output path tests and abspaths for windows
+- [#300](https://github.com/PyCQA/prospector/pull/300) Fix `check_paths` definition for pep8tool
+- [#318](https://github.com/PyCQA/prospector/pull/318) Add support pylint --load-plugins option in profile
+- [#336](https://github.com/PyCQA/prospector/pull/336) Pylint fix for message definitions usage
+- [#340](https://github.com/PyCQA/prospector/pull/340) Bump pylint django
+- [#343](https://github.com/PyCQA/prospector/pull/343) Support more kinds of mypy messages
+- [@5ea0e95](https://github.com/PyCQA/prospector/pull/342/commits/5ea0e95ac28db0911e37bc07be036c27078591b4) Pin astroid to 2.2.5
+
 ## Version 1.1.6.4
 - [#333](https://github.com/PyCQA/prospector/pull/333) Hotfix for pylint module run
 - [#309](https://github.com/PyCQA/prospector/pull/309) Remove the pylint locally-enabled message suppression
