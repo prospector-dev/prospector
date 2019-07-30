@@ -46,3 +46,4 @@ flycheck*
 
 # local configuration
 .env
+.venv

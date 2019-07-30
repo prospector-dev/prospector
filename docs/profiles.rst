@@ -268,7 +268,7 @@ Each tool can be individually configured with a section beginning with the tool 
 
 Enabling and Disabling Tools
 ````````````````````````````
-There are :doc:`6 default and 2 optional <supported_tools>`. Unless otherwise configured,
+There are :doc:`7 default and 5 optional <supported_tools>`. Unless otherwise configured,
 the defaults are enabled and the optional tools are disabled.
 
 In a profile, you can enable or disable a tool using the boolean ``run``::
