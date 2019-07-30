@@ -13,6 +13,7 @@ Contributors
 * Florian Bruhin ([@The-Compiler](https://github.com/The-Compiler))
 * Ian Lee ([@IanLee1521](https://github.com/IanLee1521))
 * Ian Stapleton Cordasco ([@sigmavirus24](https://github.com/sigmavirus24))
+* Joe Wallis ([@Peilonrayz](https://github.com/Peilonrayz))
 * Jon Parise ([@jparise](https://github.com/jparise))
 * Kristian Glass ([@doismellburning](https://github.com/doismellburning))
 * Luke Hinds ([@lukehinds](https://github.com/lukehinds))
