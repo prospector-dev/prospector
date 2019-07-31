@@ -24,7 +24,6 @@ ENV HOME /workspaces/prospector
 USER $USERNAME
 WORKDIR /workspaces/prospector/
 RUN sudo python3 -m pip install --no-cache-dir -e .[with_everything]
-
+RUN sudo python3 -m pip install --no-cache-dir pre-commit rope
+RUN pre-commit install
 ENV DEBIAN_FRONTEND=dialog
-
-
