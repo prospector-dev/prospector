@@ -33,6 +33,11 @@ nosetests.xml
 .pydevproject
 .idea
 .vscode
+.vscode-server
+.devcontainer.json
+.vs-liveshare-keychain
+.local
+.gitconfig
 
 # Sphinx
 docs/_build
@@ -47,3 +52,6 @@ flycheck*
 # local configuration
 .env
 .venv
+
+# Pylint
+.pylint.d
