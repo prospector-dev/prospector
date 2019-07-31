@@ -160,6 +160,15 @@ def _find_paths(ignore, curpath, rootpath):
         ignored = any([m.search(relpath) for m in ignore])
 
         if os.path.isdir(fullpath):
+            split_fullpath = fullpath.split(os.path.sep)
+
+            # node_modules should be ignored
+            if 'node_modules' in split_fullpath:
+                continue
+
+            # __pycache__ should also be skipped
+            if '__pycache__' in split_fullpath:
+                continue
 
             # is it probably a virtualenvironment?
             if is_virtualenv(fullpath) or '.tox' in fullpath:
