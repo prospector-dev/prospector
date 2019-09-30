@@ -96,6 +96,6 @@ class MypyTool(ToolBase):
         for message in report.splitlines():
             try:
                 formatted.append(format_message(message))
-             except ValueError:
+            except ValueError:
                 pass
         return formatted
