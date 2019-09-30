@@ -92,4 +92,10 @@ class MypyTool(ToolBase):
         result = self.checker.run(paths)
         report, _ = result[0], result[1:]  # noqa
 
-        return [format_message(message) for message in report.splitlines()]
+        formatted = []
+        for message in report.splitlines():
+            try:
+                formatted.append(format_message(message))
+             except ValueError:
+                pass
+        return formatted
