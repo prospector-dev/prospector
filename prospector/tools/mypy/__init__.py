@@ -89,7 +89,9 @@ class MypyTool(ToolBase):
     def run(self, found_files):
         paths = [path for path in found_files.iter_module_paths()]
         paths.extend(self.options)
-        result = self.checker.run(paths)
-        report, _ = result[0], result[1:]  # noqa
+        report, _ = self.checker.run(paths)
+        messages = report.splitlines()
+        if messages and messages[-1].startswith(('Found', 'Success')):
+            del messages[-1]
 
-        return [format_message(message) for message in report.splitlines()]
+        return [format_message(message) for message in messages]
