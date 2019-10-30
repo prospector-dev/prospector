@@ -18,7 +18,7 @@ Code Quality
 ------------
 
 As a code quality testing tool, it makes sense to strive to be a good example of good code!
-To that end, prospector is checked by `Landscape <https://landscape.io>_` and ideally when
+To that end, prospector is checked by `Landscape <https://landscape.io>`_ and ideally when
 making a pull request, please take note of any decreases in quality.
 
 Additionally, there is a `pre-commit <http://pre-commit.com/>`_ configuration to prevent
