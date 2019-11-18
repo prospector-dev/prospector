@@ -54,6 +54,7 @@ flycheck*
 # local configuration
 .env
 .venv
+venv
 
 # Pylint
 .pylint.d
