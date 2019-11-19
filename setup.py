@@ -26,7 +26,7 @@ _INSTALL_REQUIRES = [
     'dodgy>=0.1.9',
     'pyyaml',
     'mccabe>=0.5.0',
-    'pyflakes<2.1.0,>=0.8.1',
+    'pyflakes<2.2.0,>=0.8.1',
     'pycodestyle<=2.4.0,>=2.0.0',
     'pep8-naming>=0.3.3,<=0.4.1',
     'pydocstyle>=2.0.0',
@@ -34,8 +34,10 @@ _INSTALL_REQUIRES = [
 
 if sys.version_info < (3, 0):
     _INSTALL_REQUIRES += ['pylint<2', 'pylint-django<0.9']
-else:
+elif sys.version_info < (3, 5):
     _INSTALL_REQUIRES += ['pylint==2.3.1', 'pylint-django==2.0.10', 'astroid==2.2.5']
+else:
+    _INSTALL_REQUIRES += ['pylint==2.4.4', 'pylint-django==2.0.12', 'astroid==2.3.3']
 
 _PACKAGE_DATA = {
     'prospector': [
@@ -56,6 +58,7 @@ _CLASSIFIERS = [
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
     'License :: OSI Approved :: '
     'GNU General Public License v2 or later (GPLv2+)',
 ]
