@@ -19,6 +19,7 @@ Contributors
 * Jon Parise ([@jparise](https://github.com/jparise))
 * Kristian Glass ([@doismellburning](https://github.com/doismellburning))
 * Luke Hinds ([@lukehinds](https://github.com/lukehinds))
+* Matt Seymour ([@mattseymour](https://github.com/mattseymour))
 * Phil Frost ([@bitglue](https://github.com/bitglue))
 * Phil Jones ([@pgjones](https://github.com/pgjones))
 * SergeyKosarchuk ([@SergeyKosarchuk](https://github.com/SergeyKosarchuk))
