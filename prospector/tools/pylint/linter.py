@@ -33,7 +33,7 @@ class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many
 
     def reset_options(self):
         # for example, we want to re-initialise the OptionsManagerMixin
-        # to supress the config error warning
+        # to suppress the config error warning
         # pylint: disable=non-parent-init-called
         if PYLINT_VERSION >= (2, 0):
             OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__)
