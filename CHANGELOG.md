@@ -1,6 +1,14 @@
 Prospector Changelog
 =======
 
+## Version 1.2.0
+- Drop Python 3.4 support
+- [#308](https://github.com/PyCQA/prospector/pull/308) Update pyflakes support to < 2.1.0
+- [#324](https://github.com/PyCQA/prospector/pull/324) Add bandit support
+- [#344](https://github.com/PyCQA/prospector/pull/344) Ignore __pycache__ and node_modules
+- [#349](https://github.com/PyCQA/prospector/pull/349) and [#355](https://github.com/PyCQA/prospector/pull/355) Fix compatibility issues with mypy >= 0.730
+- [#356](https://github.com/PyCQA/prospector/pull/356) Add support for Python 3.8
+
 ## Version 1.1.7
 - [#299](https://github.com/PyCQA/prospector/pull/299) Output path tests and abspaths for windows
 - [#300](https://github.com/PyCQA/prospector/pull/300) Fix `check_paths` definition for pep8tool
@@ -16,14 +24,14 @@ Prospector Changelog
 
 ## Version 1.1.6.2
 - [#304](https://github.com/PyCQA/prospector/pull/304) Pin pylint to 2.1.1 for now as prospector is not compatible with 2.2.0
-- [#302](https://github.com/PyCQA/prospector/issues/302) Pin astroid to 2.0.4 as pylint-django and pylint-flask need fixes to be compatible with newer versions 
+- [#302](https://github.com/PyCQA/prospector/issues/302) Pin astroid to 2.0.4 as pylint-django and pylint-flask need fixes to be compatible with newer versions
 
 ## Version 1.1.6.1
 - [#292](https://github.com/PyCQA/prospector/issues/292) Adding pylint plugin dependencies back and fixing autodetect behaviour.
 - (note: .1 added as 1.1.6 upload to PyPI was broken)
 
 # Version 1.1.5
-- [#283](https://github.com/PyCQA/prospector/pull/283) Remove unexpected argument from read_config_file - Remove quiet 
+- [#283](https://github.com/PyCQA/prospector/pull/283) Remove unexpected argument from read_config_file - Remove quiet
 argument
 - [#291](https://github.com/PyCQA/prospector/pull/291) Update pycodestyle support until 2.4.0
 - [#280](https://github.com/PyCQA/prospector/pull/280) Add strict option and fixed emacs output format for mypy tool
