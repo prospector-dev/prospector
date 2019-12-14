@@ -38,6 +38,8 @@ nosetests.xml
 .vs-liveshare-keychain
 .local
 .gitconfig
+.cache
+.bash_history
 
 # Sphinx
 docs/_build
@@ -52,6 +54,7 @@ flycheck*
 # local configuration
 .env
 .venv
+venv
 
 # Pylint
 .pylint.d

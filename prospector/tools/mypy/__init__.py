@@ -44,7 +44,7 @@ class MypyTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super(MypyTool, self).__init__(*args, **kwargs)
         self.checker = api
-        self.options = ['--show-column-numbers']
+        self.options = ['--show-column-numbers', '--no-error-summary']
 
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options('mypy')
