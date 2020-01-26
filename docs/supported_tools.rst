@@ -114,6 +114,9 @@ section below. To install all extras at the same time, install prospector using 
 
     pip install prospector[with_everything]
 
+Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped: 
+
+    pip install prospector\\[with_everything\\]
 
 `Pyroma <https://github.com/regebro/pyroma>`_
 ````````````````````````````````````````````````
