@@ -48,6 +48,11 @@ To install optional dependencies such as ``pyroma``::
 
     pip install prospector[with_pyroma]
 
+
+Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped::
+
+    pip install prospector\[with_pyroma\]
+
 For a full list of optional extras, see the :doc:`page on supported tools <supported_tools>`.
 
 For best results, you should install prospector to the same place as your project and its dependencies. That is,
