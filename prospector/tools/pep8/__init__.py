@@ -3,8 +3,11 @@ from __future__ import absolute_import
 
 import os
 import re
-from pycodestyle import StyleGuide, BaseReport, register_check, PROJECT_CONFIG
+
 from pep8ext_naming import NamingChecker
+from prospector.message import Location, Message
+from prospector.tools.base import ToolBase
+from pycodestyle import PROJECT_CONFIG, BaseReport, StyleGuide, register_check
 
 try:
     # for pep8 <= 1.5.7
@@ -12,9 +15,6 @@ try:
 except ImportError:
     # for pep8 >= 1.6.0
     from pycodestyle import USER_CONFIG
-
-from prospector.message import Location, Message
-from prospector.tools.base import ToolBase
 
 
 __all__ = (
@@ -114,8 +114,8 @@ class Pep8Tool(ToolBase):
 
             for conf_path in paths:
                 if os.path.exists(conf_path) and os.path.isfile(conf_path):
-                    # this file exists - but does it have pep8 config in it?
-                    header = re.compile(r'\[pep8\]')
+                    # this file exists - but does it have pep8 or pycodestyle config in it?
+                    header = re.compile(r'\[(pep8|pycodestyle)\]')
                     with open(conf_path) as conf_file:
                         if any([header.search(line) for line in conf_file.readlines()]):
                             external_config = conf_path
