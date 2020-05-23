@@ -203,7 +203,7 @@ def _merge_profile_dict(priority, base):
             # some keys are simple values which are overwritten
             out[key] = value
         elif key in ('ignore', 'ignore-patterns', 'ignore-paths', 'uses',
-                     'requirements', 'python-targets'):
+                     'requirements', 'python-targets','output-target',):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
         elif key in TOOLS.keys():
