@@ -52,6 +52,7 @@ TAGS
 flycheck*
 
 # local configuration
+.python-version
 .env
 .venv
 venv

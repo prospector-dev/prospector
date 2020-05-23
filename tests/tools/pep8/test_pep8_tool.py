@@ -39,3 +39,19 @@ class TestPep8Tool(TestCase):
         self.assertTrue(any(message.code == 'E111' for message in messages))
         self.assertTrue(any(message.code == 'W191' for message in messages))
         self.assertTrue(all(message.source == 'pep8' for message in messages))
+
+    def test_find_pep8_section_in_config(self):
+        workdir = os.path.join(os.path.dirname(__file__), 'testsettings', 'pep8')
+        root = os.path.join(os.path.dirname(__file__), 'testsettings', 'pep8', 'testfile.py')
+        found_files = find_python([], [root], explicit_file_mode=True, workdir=workdir)
+        configured_by, _ = self.pep8_tool.configure(self.config, found_files)
+        expected_config_path = os.path.join(workdir, "setup.cfg")
+        self.assertEqual(configured_by, "Configuration found at %s" % expected_config_path)
+
+    def test_find_pycodestyle_section_in_config(self):
+        workdir = os.path.join(os.path.dirname(__file__), 'testsettings', 'pycodestyle')
+        root = os.path.join(os.path.dirname(__file__), 'testsettings', 'pycodestyle', 'testfile.py')
+        found_files = find_python([], [root], explicit_file_mode=True, workdir=workdir)
+        configured_by, _ = self.pep8_tool.configure(self.config, found_files)
+        expected_config_path = os.path.join(workdir, "setup.cfg")
+        self.assertEqual(configured_by, "Configuration found at %s" % expected_config_path)
