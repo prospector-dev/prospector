@@ -151,7 +151,7 @@ def _find_paths(ignore, curpath, rootpath):
             # relpath breaks on long paths in Windows
             continue
 
-        if filename.startswith('.') and os.path.isdir(fullpath):
+        if filename.startswith(".") and os.path.isdir(fullpath):
             continue
 
         if os.path.islink(fullpath):
@@ -163,22 +163,22 @@ def _find_paths(ignore, curpath, rootpath):
             split_fullpath = fullpath.split(os.path.sep)
 
             # node_modules should be ignored
-            if 'node_modules' in split_fullpath:
+            if "node_modules" in split_fullpath:
                 continue
 
             # __pycache__ should also be skipped
-            if '__pycache__' in split_fullpath:
+            if "__pycache__" in split_fullpath:
                 continue
 
             # is it probably a virtualenvironment?
-            if is_virtualenv(fullpath) or '.tox' in fullpath:
+            if is_virtualenv(fullpath) or ".tox" in fullpath:
                 continue
 
             # this is a directory
             directories.append((relpath, ignored))
 
             # is it also a package?
-            initpy = os.path.join(fullpath, '__init__.py')
+            initpy = os.path.join(fullpath, "__init__.py")
             if os.path.exists(initpy) and os.path.isfile(initpy):
                 packages.append((relpath, ignored))
 
@@ -191,14 +191,14 @@ def _find_paths(ignore, curpath, rootpath):
 
         else:
             # this is a file, is it a python module?
-            if fullpath.endswith('.py'):
+            if fullpath.endswith(".py"):
                 modules.append((relpath, ignored))
             files.append((relpath, ignored))
 
     return files, modules, packages, directories
 
 
-def find_python(ignores, paths, explicit_file_mode, workdir=''):
+def find_python(ignores, paths, explicit_file_mode, workdir=""):
     """
     Returns a FoundFiles class containing a list of files, packages, directories,
     where files are simply all python (.py) files, packages are directories

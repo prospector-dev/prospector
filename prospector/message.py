@@ -4,14 +4,7 @@ import sys
 
 
 class Location(object):
-
     def __init__(self, path, module, function, line, character, absolute_path=True):
-        if sys.version_info.major == 2 and isinstance(path, str):
-            # If this is not a unicode object, make it one! Some tools return
-            # paths as unicode, some as bytestring, so to ensure that they are
-            # all the same, we normalise here. For Python3 this is (probably)
-            # always a str so no need to do anything.
-            path = path.decode(sys.getfilesystemencoding())
         self.path = path
         self._path_is_absolute = absolute_path
         self.module = module or None
@@ -33,11 +26,11 @@ class Location(object):
 
     def as_dict(self):
         return {
-            'path': self.path,
-            'module': self.module,
-            'function': self.function,
-            'line': self.line,
-            'character': self.character
+            "path": self.path,
+            "module": self.module,
+            "function": self.function,
+            "line": self.line,
+            "character": self.character,
         }
 
     def __hash__(self):
@@ -55,7 +48,6 @@ class Location(object):
 
 
 class Message(object):
-
     def __init__(self, source, code, location, message):
         self.source = source
         self.code = code
@@ -70,10 +62,10 @@ class Message(object):
 
     def as_dict(self):
         return {
-            'source': self.source,
-            'code': self.code,
-            'location': self.location.as_dict(),
-            'message': self.message
+            "source": self.source,
+            "code": self.code,
+            "location": self.location.as_dict(),
+            "message": self.message,
         }
 
     def __repr__(self):
@@ -91,18 +83,6 @@ class Message(object):
         return self.location < other.location
 
 
-def make_tool_error_message(filepath, source, code, message,
-                            line=0, character=0, module=None, function=None):
-    location = Location(
-        path=filepath,
-        module=module,
-        function=function,
-        line=line,
-        character=character
-    )
-    return Message(
-        source=source,
-        code=code,
-        location=location,
-        message=message
-    )
+def make_tool_error_message(filepath, source, code, message, line=0, character=0, module=None, function=None):
+    location = Location(path=filepath, module=module, function=function, line=line, character=character)
+    return Message(source=source, code=code, location=location, message=message)

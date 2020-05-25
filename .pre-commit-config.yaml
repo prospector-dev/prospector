@@ -9,7 +9,7 @@ repos:
     -   id: fix-encoding-pragma
     -   id: flake8
         args:
-        - --max-line-length=160
+        - --max-line-length=120
         - --exclude=*/migrations/*,docs/*
         - --ignore=E126
     -   id: check-added-large-files

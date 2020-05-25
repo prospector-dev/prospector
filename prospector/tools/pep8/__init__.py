@@ -17,9 +17,7 @@ except ImportError:
     from pycodestyle import USER_CONFIG
 
 
-__all__ = (
-    'Pep8Tool',
-)
+__all__ = ("Pep8Tool",)
 
 
 class ProspectorReport(BaseReport):
@@ -28,12 +26,7 @@ class ProspectorReport(BaseReport):
         self._prospector_messages = []
 
     def error(self, line_number, offset, text, check):
-        code = super(ProspectorReport, self).error(
-            line_number,
-            offset,
-            text,
-            check,
-        )
+        code = super(ProspectorReport, self).error(line_number, offset, text, check,)
         if code is None:
             # The error pep8 found is being ignored, let's move on.
             return
@@ -42,23 +35,12 @@ class ProspectorReport(BaseReport):
             text = text[5:]
 
         # mixed indentation (E101) is a file global message
-        if code == 'E101':
+        if code == "E101":
             line_number = None
 
         # Record the message using prospector's data structures.
-        location = Location(
-            path=self.filename,
-            module=None,
-            function=None,
-            line=line_number,
-            character=(offset + 1),
-        )
-        message = Message(
-            source='pep8',
-            code=code,
-            location=location,
-            message=text,
-        )
+        location = Location(path=self.filename, module=None, function=None, line=line_number, character=(offset + 1),)
+        message = Message(source="pep8", code=code, location=location, message=text,)
 
         self._prospector_messages.append(message)
 
@@ -72,7 +54,7 @@ class ProspectorStyleGuide(StyleGuide):
         self._module_paths = set(self._files.iter_module_paths())
 
         # Override the default reporter with our custom one.
-        kwargs['reporter'] = ProspectorReport
+        kwargs["reporter"] = ProspectorReport
 
         super(ProspectorStyleGuide, self).__init__(*args, **kwargs)
 
@@ -82,7 +64,7 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pep8's exclusion rules, check it against
         # prospector's patterns.
-        fullpath = os.path.join(self._files.rootpath, parent or '', filename)
+        fullpath = os.path.join(self._files.rootpath, parent or "", filename)
         if os.path.isdir(fullpath):
             return False
 
@@ -103,19 +85,19 @@ class Pep8Tool(ToolBase):
         # 'none' means we ignore any external config, so just carry on
         use_config = False
 
-        if prospector_config.use_external_config('pep8'):
+        if prospector_config.use_external_config("pep8"):
             use_config = True
 
             paths = [os.path.join(found_files.rootpath, name) for name in PROJECT_CONFIG]
             paths.append(USER_CONFIG)
-            ext_loc = prospector_config.external_config_location('pep8')
+            ext_loc = prospector_config.external_config_location("pep8")
             if ext_loc is not None:
                 paths = [ext_loc] + paths
 
             for conf_path in paths:
                 if os.path.exists(conf_path) and os.path.isfile(conf_path):
                     # this file exists - but does it have pep8 or pycodestyle config in it?
-                    header = re.compile(r'\[(pep8|pycodestyle)\]')
+                    header = re.compile(r"\[(pep8|pycodestyle)\]")
                     with open(conf_path) as conf_file:
                         if any([header.search(line) for line in conf_file.readlines()]):
                             external_config = conf_path
@@ -123,10 +105,7 @@ class Pep8Tool(ToolBase):
 
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
-        packages = [
-            os.path.split(p)
-            for p in found_files.iter_package_paths(abspath=False)
-        ]
+        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
         packages.sort(key=len)
         check_paths = set()
         for package in packages:
@@ -141,7 +120,7 @@ class Pep8Tool(ToolBase):
         for filepath in found_files.iter_module_paths(abspath=False):
             package = os.path.dirname(filepath).split(os.path.sep)
             for i in range(0, len(package)):
-                if os.path.join(*package[:i + 1]) in check_paths:
+                if os.path.join(*package[: i + 1]) in check_paths:
                     break
             else:
                 check_paths.add(filepath)
@@ -149,11 +128,7 @@ class Pep8Tool(ToolBase):
         check_paths = [found_files.to_absolute_path(p) for p in check_paths]
 
         # Instantiate our custom pep8 checker.
-        self.checker = ProspectorStyleGuide(
-            paths=check_paths,
-            found_files=found_files,
-            config_file=external_config
-        )
+        self.checker = ProspectorStyleGuide(paths=check_paths, found_files=found_files, config_file=external_config)
         if not use_config or external_config is None:
             configured_by = None
             # This means that we don't have existing config to use.
@@ -161,11 +136,10 @@ class Pep8Tool(ToolBase):
             # adding prospector-flavoured configuration.
             # pylint: disable=attribute-defined-outside-init
             self.checker.options.select = ()
-            self.checker.options.ignore = tuple(prospector_config.get_disabled_messages('pep8'))
+            self.checker.options.ignore = tuple(prospector_config.get_disabled_messages("pep8"))
 
-            if 'max-line-length' in prospector_config.tool_options('pep8'):
-                self.checker.options.max_line_length = \
-                    prospector_config.tool_options('pep8')['max-line-length']
+            if "max-line-length" in prospector_config.tool_options("pep8"):
+                self.checker.options.max_line_length = prospector_config.tool_options("pep8")["max-line-length"]
         else:
             configured_by = "Configuration found at %s" % external_config
 

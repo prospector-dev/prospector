@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import re
 from prospector.formatters.base import Formatter
@@ -18,19 +19,22 @@ class VSCodeFormatter(Formatter):
 
             if cur_loc != message.location.path:
                 cur_loc = message.location.path
-                module_name = message.location.path.replace(os.path.sep, '.')
-                module_name = re.sub(r'(\.__init__)?\.py$', '', module_name)
+                module_name = message.location.path.replace(os.path.sep, ".")
+                module_name = re.sub(r"(\.__init__)?\.py$", "", module_name)
 
-                header = '************* Module %s' % module_name
+                header = "************* Module %s" % module_name
                 output.append(header)
 
-            template = '%(line)s,%(character)s,%(code)s,%(code)s:%(source)s %(message)s'
-            output.append(template % {
-                'line': message.location.line,
-                'character': message.location.character,
-                'source': message.source,
-                'code': message.code,
-                'message': message.message.strip()
-            })
+            template = "%(line)s,%(character)s,%(code)s,%(code)s:%(source)s %(message)s"
+            output.append(
+                template
+                % {
+                    "line": message.location.line,
+                    "character": message.location.character,
+                    "source": message.source,
+                    "code": message.code,
+                    "message": message.message.strip(),
+                }
+            )
 
-        return '\n'.join(output)
+        return "\n".join(output)

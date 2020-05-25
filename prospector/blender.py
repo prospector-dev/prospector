@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This module contains the logic for "blending" of errors.
 # Since prospector runs multiple tools with overlapping functionality, this
 # module exists to merge together equivalent warnings from different tools for
@@ -11,8 +12,8 @@ import yaml
 
 
 __all__ = (
-    'blend',
-    'BLEND_COMBOS',
+    "blend",
+    "BLEND_COMBOS",
 )
 
 
@@ -53,11 +54,7 @@ def blend_line(messages, blend_combos=None):
     for blend_combo_idx, blend_list in enumerate(blend_lists):
         if len(blend_list) == 0:
             continue
-        blend_list.sort(
-            key=lambda msg: blend_combos[blend_combo_idx].index(
-                (msg.source, msg.code),
-            ),
-        )
+        blend_list.sort(key=lambda msg: blend_combos[blend_combo_idx].index((msg.source, msg.code),),)
         if blend_list[0] not in blended:
             # We may have already added this message if it represents
             # several messages in other tools which are not being run -
@@ -74,7 +71,7 @@ def blend_line(messages, blend_combos=None):
         for now_used in blend_list[1:]:
             now_used.used = True
 
-    return [m for m in blended if not getattr(m, 'used', False)]
+    return [m for m in blended if not getattr(m, "used", False)]
 
 
 def blend(messages, blend_combos=None):
@@ -84,9 +81,7 @@ def blend(messages, blend_combos=None):
     msgs_grouped = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
-        msgs_grouped[message.location.path][message.location.line].append(
-            message,
-        )
+        msgs_grouped[message.location.path][message.location.line].append(message,)
 
     # now blend together all messages on the same line
     out = []
@@ -98,10 +93,8 @@ def blend(messages, blend_combos=None):
 
 
 def get_default_blend_combinations():
-    combos = yaml.safe_load(
-        pkg_resources.resource_string(__name__, 'blender_combinations.yaml')
-    )
-    combos = combos.get('combinations', [])
+    combos = yaml.safe_load(pkg_resources.resource_string(__name__, "blender_combinations.yaml"))
+    combos = combos.get("combinations", [])
 
     defaults = []
     for combo in combos:

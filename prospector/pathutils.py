@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
 import os
 
 
 def is_virtualenv(path):
-    if os.name == 'nt':
+    if os.name == "nt":
         # Windows!
-        clues = ('Scripts', 'lib', 'include')
+        clues = ("Scripts", "lib", "include")
     else:
-        clues = ('bin', 'lib', 'include')
+        clues = ("bin", "lib", "include")
 
     try:
         dircontents = os.listdir(path)

@@ -1,7 +1,5 @@
-
-__all__ = (
-    'Formatter',
-)
+# -*- coding: utf-8 -*-
+__all__ = ("Formatter",)
 
 
 # pylint: disable=too-few-public-methods

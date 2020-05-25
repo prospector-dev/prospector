@@ -3,9 +3,12 @@ Prospector Changelog
 
 ## Version 1.3.0
 - Update pylint support to 2.5.2
+- Update pylint-django to 2.0.15
 - Update pyflakes support to 2.2.0
 - Update pycodestyle support to 2.6.0
 - Update pep8-naming support to 0.10.0
+- Update vulture to 1.5
+- Drop Python 2 support
 - [#378](https://github.com/PyCQA/prospector/pull/378) Add output-target field when merging profiles
 - [#369](https://github.com/PyCQA/prospector/pull/369) Add support for [pycodestyle] external config section
 

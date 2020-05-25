@@ -8,6 +8,7 @@ except ImportError:
     # pylint >= 1.7
     from pylint.exceptions import UnknownMessageError
 
+
 class FatalProspectorException(Exception):
 
     """
