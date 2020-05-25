@@ -1,6 +1,12 @@
 Prospector Changelog
 =======
 
+## Version 1.3.0
+- Update pylint support to 2.5.2
+- Update pyflakes support to 2.2.0
+- [#378](https://github.com/PyCQA/prospector/pull/378) Add output-target field when merging profiles
+- [#369](https://github.com/PyCQA/prospector/pull/369) Add support for [pycodestyle] external config section
+
 ## Version 1.2.0
 - Drop Python 3.4 support
 - [#308](https://github.com/PyCQA/prospector/pull/308) Update pyflakes support to < 2.1.0
@@ -10,6 +16,7 @@ Prospector Changelog
 - [#356](https://github.com/PyCQA/prospector/pull/356) Add support for Python 3.8
 
 ## Version 1.1.7
+
 - [#299](https://github.com/PyCQA/prospector/pull/299) Output path tests and abspaths for windows
 - [#300](https://github.com/PyCQA/prospector/pull/300) Fix `check_paths` definition for pep8tool
 - [#318](https://github.com/PyCQA/prospector/pull/318) Add support pylint --load-plugins option in profile
