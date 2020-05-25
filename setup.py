@@ -37,7 +37,7 @@ if sys.version_info < (3, 0):
 elif sys.version_info < (3, 5):
     _INSTALL_REQUIRES += ['pylint==2.3.1', 'pylint-django==2.0.10', 'astroid==2.2.5']
 else:
-    _INSTALL_REQUIRES += ['pylint==2.4.4', 'pylint-django==2.0.12', 'astroid==2.3.3']
+    _INSTALL_REQUIRES += ['pylint==2.5.2', 'pylint-django==2.0.12', 'astroid==2.4.1']
 
 _PACKAGE_DATA = {
     'prospector': [
