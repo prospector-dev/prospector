@@ -8,6 +8,7 @@ Contributors
 * Bryce Guinta ([@brycepg](https://github.com/brycepg))
 * Carl Crowder ([@carlio](https://github.com/carlio))
 * Carlos Coêlho ([@chocoelho](https://github.com/chocoelho))
+* Carlos Cruz ([@ccruz09](https://github.com/ccruz09))
 * Claudiu Popa ([@PCManticore](https://github.com/PCManticore))
 * David J Pugh ([@djpugh](https://github.com/djpugh))
 * Eric Brown ([@ericwb](https://github.com/ericwb))
