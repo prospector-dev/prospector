@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 import logging
+import os
+
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 

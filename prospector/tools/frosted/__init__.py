@@ -2,10 +2,8 @@
 from __future__ import absolute_import
 
 from frosted.api import check_path
-
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
-
 
 __all__ = ("FrostedTool",)
 

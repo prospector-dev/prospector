@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import unittest
+
 from prospector.suppression import get_noqa_suppressions
 
 

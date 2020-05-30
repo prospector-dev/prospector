@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa
 import setoptconf as soc
 from prospector.__pkginfo__ import __version__
 from prospector.config.datatype import OutputChoice
@@ -101,8 +102,8 @@ def build_command_line_source(prog=None, description="Performs static analysis o
             " the same error. Use this option to see all unmerged"
             " messages.",
         },
-        "doc_warnings": {"flags": ["-D", "--doc-warnings"], "help": "Include warnings about documentation.",},
-        "test_warnings": {"flags": ["-T", "--test-warnings"], "help": "Also check test modules and packages.",},
+        "doc_warnings": {"flags": ["-D", "--doc-warnings"], "help": "Include warnings about documentation.", },
+        "test_warnings": {"flags": ["-T", "--test-warnings"], "help": "Also check test modules and packages.", },
         "no_style_warnings": {
             "flags": ["-8", "--no-style-warnings"],
             "help": "Don't create any warnings about style. This disables the"

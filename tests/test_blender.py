@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
+
 from prospector import blender
-from prospector.message import Message, Location
+from prospector.message import Location, Message
 
 
 class TestBlendLine(TestCase):

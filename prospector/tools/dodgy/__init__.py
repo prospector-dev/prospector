@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+
 import mimetypes
 import os
 import re
+
 from dodgy.checks import check_file_contents
-from prospector.encoding import read_py_file, CouldNotHandleEncoding
+from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
@@ -34,7 +36,7 @@ class DodgyTool(ToolBase):
         for warning in warnings:
             path = warning["path"]
             prefix = os.path.commonprefix([found_files.rootpath, path])
-            loc = Location(path, module_from_path(path[len(prefix) :]), "", warning["line"], 0, absolute_path=True,)
+            loc = Location(path, module_from_path(path[len(prefix):]), "", warning["line"], 0, absolute_path=True,)
             msg = Message("dodgy", warning["code"], loc, warning["message"])
             messages.append(msg)
 

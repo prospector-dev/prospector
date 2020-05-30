@@ -8,8 +8,8 @@
 from collections import defaultdict
 
 import pkg_resources
-import yaml
 
+import yaml
 
 __all__ = (
     "blend",

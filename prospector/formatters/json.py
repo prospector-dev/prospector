@@ -2,11 +2,9 @@
 from __future__ import absolute_import
 
 import json
-
 from datetime import datetime
 
 from prospector.formatters.base import Formatter
-
 
 __all__ = ("JsonFormatter",)
 

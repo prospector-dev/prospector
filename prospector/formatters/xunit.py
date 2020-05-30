@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from prospector.formatters.base import Formatter
 from xml.dom.minidom import Document
+
+from prospector.formatters.base import Formatter
 
 
 class XunitFormatter(Formatter):

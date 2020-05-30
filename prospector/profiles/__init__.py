@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-
 AUTO_LOADED_PROFILES = list(
     os.path.join(*parts)
     for parts in (

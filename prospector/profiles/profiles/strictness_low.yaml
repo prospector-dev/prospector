@@ -2,7 +2,7 @@ allow-shorthand: false
 
 inherits:
   - strictness_medium
-  
+
 pylint:
   disable:
     - blacklisted-name

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import re
 import os
+import re
 import sys
 
 from setoptconf.datatype import Choice

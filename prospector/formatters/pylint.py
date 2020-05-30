@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+
 from prospector.formatters.base import Formatter
 
 

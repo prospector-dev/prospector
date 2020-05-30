@@ -6,8 +6,8 @@ import sys
 from datetime import datetime
 
 from prospector import blender, postfilter, tools
-from prospector.config import configuration as cfg
 from prospector.config import ProspectorConfig
+from prospector.config import configuration as cfg
 from prospector.exceptions import FatalProspectorException
 from prospector.finder import find_python
 from prospector.formatters import FORMATTERS

@@ -2,12 +2,11 @@
 from __future__ import absolute_import
 
 import ast
-from mccabe import PathGraphingAstVisitor
-from prospector.encoding import read_py_file, CouldNotHandleEncoding
 
+from mccabe import PathGraphingAstVisitor
+from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
-
 
 __all__ = ("McCabeTool",)
 

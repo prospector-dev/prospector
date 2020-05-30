@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from pyflakes.api import checkPath
-from pyflakes.reporter import Reporter
-
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
-
+from pyflakes.api import checkPath
+from pyflakes.reporter import Reporter
 
 __all__ = ("PyFlakesTool",)
 

@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
 import sre_constants
+
 import yaml
 from prospector.message import Location, Message
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.tools import ToolBase
-from prospector.tools import pyflakes
-
+from prospector.tools import ToolBase, pyflakes
 
 PROFILE_IS_EMPTY = "profile-is-empty"
 CONFIG_SETTING_SHOULD_BE_LIST = "should-be-list"

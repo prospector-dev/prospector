@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
 
 # We are trying to handle pylint changes in their exception classes
-try:
-    # pylint < 1.7
-    from pylint.utils import UnknownMessage as UnknownMessageError
-except ImportError:
-    # pylint >= 1.7
-    from pylint.exceptions import UnknownMessageError
-
 
 class FatalProspectorException(Exception):
 

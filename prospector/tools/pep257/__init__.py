@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from prospector.encoding import read_py_file, CouldNotHandleEncoding
-from pydocstyle.checker import ConventionChecker as PEP257Checker, AllError
+from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
-
+from pydocstyle.checker import AllError
+from pydocstyle.checker import ConventionChecker as PEP257Checker
 
 __all__ = ("Pep257Tool",)
 

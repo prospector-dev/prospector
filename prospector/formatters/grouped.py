@@ -3,7 +3,6 @@ from collections import defaultdict
 
 from prospector.formatters.text import TextFormatter
 
-
 __all__ = ("GroupedFormatter",)
 
 

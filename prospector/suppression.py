@@ -23,9 +23,9 @@ a single coherent list of error suppression locations.
 import os
 import re
 import warnings
-from prospector import encoding
 from collections import defaultdict
 
+from prospector import encoding
 
 _FLAKE8_IGNORE_FILE = re.compile(r"flake8[:=]\s*noqa", re.IGNORECASE)
 _PEP8_IGNORE_LINE = re.compile(r"#\s+noqa", re.IGNORECASE)

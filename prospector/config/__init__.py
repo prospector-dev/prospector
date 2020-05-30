@@ -3,16 +3,14 @@ import os
 import re
 import sre_constants
 import sys
+
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.profiles.profile import (
-    ProspectorProfile,
-    ProfileNotFound,
-    BUILTIN_PROFILE_PATH,
-    CannotParseProfile,
-)
+from prospector.profiles.profile import (BUILTIN_PROFILE_PATH,
+                                         CannotParseProfile, ProfileNotFound,
+                                         ProspectorProfile)
 from prospector.tools import DEFAULT_TOOLS
 
 

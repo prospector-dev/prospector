@@ -2,12 +2,12 @@
 from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
-from prospector.tools.pep8 import Pep8Tool
-from prospector.tools.pyflakes import PyFlakesTool
-from prospector.tools.pylint import PylintTool
 from prospector.tools.mccabe import McCabeTool
+from prospector.tools.pep8 import Pep8Tool
 from prospector.tools.pep257 import Pep257Tool
 from prospector.tools.profile_validator import ProfileValidationTool
+from prospector.tools.pyflakes import PyFlakesTool
+from prospector.tools.pylint import PylintTool
 
 
 def _tool_not_available(name, install_option_name):
