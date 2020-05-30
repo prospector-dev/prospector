@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from prospector.exceptions import UnknownMessageError
 from prospector.message import Location, Message
+from pylint.exceptions import UnknownMessageError
 from pylint.reporters import BaseReporter
 
 

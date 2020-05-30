@@ -4,13 +4,13 @@ import re
 import sys
 from collections import defaultdict
 
-from prospector.exceptions import UnknownMessageError
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.indent_checker import IndentChecker
 from prospector.tools.pylint.linter import ProspectorLinter
 from pylint.config import find_pylintrc
+from pylint.exceptions import UnknownMessageError
 
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import (.*) from wildcard import$")
 
