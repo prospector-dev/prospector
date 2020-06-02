@@ -36,7 +36,7 @@ class DodgyTool(ToolBase):
         for warning in warnings:
             path = warning["path"]
             prefix = os.path.commonprefix([found_files.rootpath, path])
-            loc = Location(path, module_from_path(path[len(prefix):]), "", warning["line"], 0, absolute_path=True,)
+            loc = Location(path, module_from_path(path[len(prefix) :]), "", warning["line"], 0, absolute_path=True,)
             msg = Message("dodgy", warning["code"], loc, warning["message"])
             messages.append(msg)
 

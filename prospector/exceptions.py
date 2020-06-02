@@ -2,6 +2,7 @@
 
 # We are trying to handle pylint changes in their exception classes
 
+
 class FatalProspectorException(Exception):
 
     """

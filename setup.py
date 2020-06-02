@@ -31,12 +31,12 @@ _INSTALL_REQUIRES = [
     "pep8-naming>=0.3.3,<=0.10.0",
     "pydocstyle>=2.0.0",
     "pylint==2.5.2",
-    "pylint-django==2.0.12",
+    "pylint-django==2.0.15",
     "astroid==2.4.1",
 ]
 
 
-_PACKAGE_DATA = {"prospector": ["blender_combinations.yaml", ]}
+_PACKAGE_DATA = {"prospector": ["blender_combinations.yaml",]}
 profiledir = os.path.join(os.path.dirname(__file__), "prospector/profiles/profiles")
 _PACKAGE_DATA["prospector"] += [profile for profile in os.listdir(profiledir)]
 
@@ -88,7 +88,7 @@ setup(
     package_data=_PACKAGE_DATA,
     include_package_data=True,
     packages=_PACKAGES,
-    entry_points={"console_scripts": ["prospector = prospector.run:main", ]},
+    entry_points={"console_scripts": ["prospector = prospector.run:main",]},
     install_requires=_INSTALL_REQUIRES,
     extras_require=_OPTIONAL,
 )

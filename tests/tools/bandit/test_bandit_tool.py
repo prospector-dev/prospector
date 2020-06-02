@@ -20,18 +20,9 @@ class TestBanditTool(TestCase):
         self.bandit_tool.configure(self.config, found_files)
         messages = self.bandit_tool.run(found_files)
         expected_messages_list = [
-            {
-                "code": "B107",
-                "line": 1
-            },
-            {
-                "code": "B107",
-                "line": 16
-            },
-            {
-                "code": "B106",
-                "line": 22
-            }
+            {"code": "B107", "line": 1},
+            {"code": "B107", "line": 16},
+            {"code": "B106", "line": 22},
         ]
         for index, message in enumerate(messages):
             with self.subTest(i=index):
