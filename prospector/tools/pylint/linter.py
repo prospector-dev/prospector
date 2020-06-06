@@ -9,7 +9,6 @@ from pylint.utils import _splitstrip
 class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many-public-methods
     def __init__(self, found_files, *args, **kwargs):
         self._files = found_files
-
         # set up the standard PyLint linter
         PyLinter.__init__(self, *args, **kwargs)
 
@@ -29,8 +28,8 @@ class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many
         # pylint: disable=non-parent-init-called
         OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__)
 
-    def expand_files(self, modules):
-        expanded = PyLinter.expand_files(self, modules)
+    def _expand_files(self, modules):
+        expanded = PyLinter._expand_files(self, modules)
         filtered = []
         for module in expanded:
             if self._files.check_module(module["path"]):
