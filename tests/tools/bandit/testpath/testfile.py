@@ -29,6 +29,7 @@ def NoMatch3(a, b):
 
 doLogin(password="blerg")
 password = "blerg"
+d = {}
 d["password"] = "blerg"
 
 EMAIL_PASSWORD = "secret"

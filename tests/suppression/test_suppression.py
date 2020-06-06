@@ -19,4 +19,4 @@ class SuppressionTest(unittest.TestCase):
     def test_ignore_lines(self):
         file_contents = self._get_file_contents("test_ignore_lines/test.py")
         _, lines = get_noqa_suppressions(file_contents)
-        self.assertSetEqual(set((2, 3)), lines)
+        self.assertSetEqual(set((3, 4, 5)), lines)
