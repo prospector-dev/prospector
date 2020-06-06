@@ -1,5 +1,10 @@
 [tool.black]
 line-length = 120
+exclude = '''
+/(
+    tests/
+)/
+'''
 
 [tool.isort]
 multi_line_output = 3

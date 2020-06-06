@@ -9,9 +9,11 @@ repos:
     -   id: fix-encoding-pragma
     -   id: check-added-large-files
 -   repo: https://github.com/psf/black
-    rev: stable
+    rev: 19.10b0
     hooks:
     -   id: black
+        args:
+            - --exclude=/(tests)/
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.8.2
     hooks:
