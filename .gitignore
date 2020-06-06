@@ -59,3 +59,5 @@ venv
 
 # Pylint
 .pylint.d
+
+pip-wheel-metadata
