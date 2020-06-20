@@ -11,6 +11,7 @@ from prospector.tools.pylint.indent_checker import IndentChecker
 from prospector.tools.pylint.linter import ProspectorLinter
 from pylint.config import find_pylintrc
 from pylint.exceptions import UnknownMessageError
+from pylint.lint.run import _cpu_count
 
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import (.*) from wildcard import$")
 
@@ -198,7 +199,8 @@ class PylintTool(ToolBase):
         # given by PyLint
         self._collector = Collector(linter.msgs_store)
         linter.set_reporter(self._collector)
-
+        if linter.config.jobs == 0:
+            linter.config.jobs = _cpu_count()
         self._linter = linter
         return configured_by, config_messages
 
