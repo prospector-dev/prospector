@@ -10,7 +10,7 @@ from prospector.tools.bandit import BanditTool
 
 class TestBanditTool(TestCase):
     def setUp(self):
-        with patch("sys.argv", ["'"]):
+        with patch("sys.argv", [""]):
             self.config = ProspectorConfig()
         self.bandit_tool = BanditTool()
 
