@@ -24,4 +24,4 @@ class SuppressionTest(unittest.TestCase):
     def test_ignore_enum_error(self):
         file_contents = self._get_file_contents("test_ignore_enum/test.py")
         _, lines = get_noqa_suppressions(file_contents)
-        self.assertSetEqual(set((5,)), lines)
+        self.assertSetEqual(set((6,)), lines)
