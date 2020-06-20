@@ -8,9 +8,7 @@ from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.profiles.profile import (BUILTIN_PROFILE_PATH,
-                                         CannotParseProfile, ProfileNotFound,
-                                         ProspectorProfile)
+from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile, ProfileNotFound, ProspectorProfile
 from prospector.tools import DEFAULT_TOOLS
 
 
@@ -213,21 +211,22 @@ class ProspectorConfig(object):
     def _determine_ignores(self, config, profile, libraries):
         # Grab ignore patterns from the options
         ignores = []
-        for patt in config.ignore_patterns + profile.ignore_patterns:
-            if patt is None:
+        for pattern in config.ignore_patterns + profile.ignore_patterns:
+            if pattern is None:
                 # this can happen if someone has a profile with an empty ignore-patterns value, eg:
                 #
                 #  ignore-patterns:
                 #  uses: django
                 continue
             try:
-                ignores.append(re.compile(patt))
+                ignores.append(re.compile(pattern))
             except sre_constants.error:
                 pass
 
         # Convert ignore paths into patterns
         boundary = r"(^|/|\\)%s(/|\\|$)"
         for ignore_path in config.ignore_paths + profile.ignore_paths:
+            ignore_path = str(ignore_path)
             if ignore_path.endswith("/") or ignore_path.endswith("\\"):
                 ignore_path = ignore_path[:-1]
             ignores.append(re.compile(boundary % re.escape(ignore_path)))
