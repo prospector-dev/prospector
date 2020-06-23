@@ -11,7 +11,7 @@ matrix:
     - python: "nightly"
 install:
   - "pip install --editable .[with_everything]"
-  - "pip install safety"
+  - "pip install safety pipenv -U"
   - "pip freeze | safety check --stdin"
 script:
   - "nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/"
