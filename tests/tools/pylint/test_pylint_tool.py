@@ -49,11 +49,12 @@ class TestPylintTool(TestCase):
                 self.fail("useless-suppression was thrown")
 
     def test_use_pylint_default_path_finder(self):
-        workdir = "tests/tools/pylint/testpath/absolute-import/"
-        with patch("os.getcwd", return_value=os.path.realpath(workdir)):
-            pylint_tool, config = _get_pylint_tool_and_prospector_config(argv_patch=["", "-P", "pylint-default-finder"])
+        workdir = os.path.realpath("tests/tools/pylint/testpath/absolute-import/")
+        pylint_tool, config = _get_pylint_tool_and_prospector_config(
+            argv_patch=["", "-P", os.path.join(workdir, ".prospector", "pylint-default-finder.yml")]
+        )
         root = os.path.join(os.path.dirname(__file__), "testpath", "absolute-import", "pkg")
-        found_files = find_python([], [root], False)
+        found_files = find_python([], [root], False, workdir)
         pylint_tool.configure(config, found_files)
         messages = pylint_tool.run(found_files)
         self.assertListEqual(messages, [])
