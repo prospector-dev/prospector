@@ -44,3 +44,27 @@ class TestPylintTool(TestCase):
         for message in messages:
             if message.code == "useless-suppression":
                 self.fail("useless-suppression was thrown")
+
+    def test_use_pylint_default_path_finder(self):
+        workdir = "tests/tools/pylint/testpath/absolute-import/"
+        with patch("os.getcwd", return_value=os.path.realpath(workdir)):
+            pylint_tool, config = self._get_pylint_tool_and_prospector_config(
+                argv_patch=["", "-P", "pylint-default-finder"]
+            )
+        root = os.path.join(os.path.dirname(__file__), "testpath", "absolute-import", "pkg")
+        found_files = find_python([], [root], False)
+        pylint_tool.configure(config, found_files)
+        messages = pylint_tool.run(found_files)
+        self.assertListEqual(messages, [])
+
+    def test_use_prospector_default_path_finder(self):
+        workdir = "tests/tools/pylint/testpath/absolute-import/"
+        with patch("os.getcwd", return_value=os.path.realpath(workdir)):
+            pylint_tool, config = self._get_pylint_tool_and_prospector_config(
+                argv_patch=["", "-P", "prospector-default-finder"]
+            )
+        root = os.path.join(os.path.dirname(__file__), "testpath", "absolute-import", "pkg")
+        found_files = find_python([], [root], False)
+        pylint_tool.configure(config, found_files)
+        messages = pylint_tool.run(found_files)
+        self.assertEqual(messages[0].code, "no-name-in-module")
