@@ -59,7 +59,6 @@ _OPTIONAL = {
     "with_vulture": ("vulture>=1.5",),
     "with_pyroma": ("pyroma>=2.4",),
     "with_mypy": ("mypy>=0.600",),
-    "build_tools": ("nose", "coverage", "coveralls", "mock"),
 }
 
 with_everything = [req for req_list in _OPTIONAL.values() for req in req_list]

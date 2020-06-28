@@ -23,7 +23,7 @@ class PylintTool(ToolBase):
     # pylint:disable=no-self-use
 
     def __init__(self):
-        self._args = self._extra_sys_path = None
+        self._args = None
         self._collector = self._linter = None
         self._orig_sys_path = []
 
@@ -114,73 +114,19 @@ class PylintTool(ToolBase):
         config_messages = []
         extra_sys_path = found_files.get_minimal_syspath()
 
-        # create a list of packages, but don't include packages which are
-        # subpackages of others as checks will be duplicated
-        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
-        packages.sort(key=len)
-        check_paths = set()
-        for package in packages:
-            package_path = os.path.join(*package)
-            if len(package) == 1:
-                check_paths.add(package_path)
-                continue
-            for i in range(1, len(package)):
-                if os.path.join(*package[:-i]) in check_paths:
-                    break
-            else:
-                check_paths.add(package_path)
+        check_paths = self._get_pylint_check_paths(found_files)
 
-        for filepath in found_files.iter_module_paths(abspath=False):
-            package = os.path.dirname(filepath).split(os.path.sep)
-            for i in range(0, len(package)):
-                if os.path.join(*package[: i + 1]) in check_paths:
-                    break
-            else:
-                check_paths.add(filepath)
+        pylint_options = prospector_config.tool_options("pylint")
+        self._set_path_finder(extra_sys_path, pylint_options)
 
-        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
-
-        # insert the target path into the system path to get correct behaviour
-        self._orig_sys_path = sys.path
-        # note: we prepend, so that modules are preferentially found in the
-        # path given as an argument. This prevents problems where we are
-        # checking a module which is already on sys.path before this
-        # manipulation - for example, if we are checking 'requests' in a local
-        # checkout, but 'requests' is already installed system wide, pylint
-        # will discover the system-wide modules first if the local checkout
-        # does not appear first in the path
-        sys.path = list(extra_sys_path) + sys.path
+        linter = ProspectorLinter(found_files)
 
         ext_found = False
         configured_by = None
 
-        linter = ProspectorLinter(found_files)
-        if prospector_config.use_external_config("pylint"):
-            # try to find a .pylintrc
-            pylint_options = prospector_config.tool_options("pylint")
-            pylintrc = pylint_options.get("config_file")
-            external_config = prospector_config.external_config_location("pylint")
-            if pylintrc is None or external_config:
-                pylintrc = external_config
-            if pylintrc is None:
-                pylintrc = find_pylintrc()
-            if pylintrc is None:
-                pylintrc_path = os.path.join(prospector_config.workdir, ".pylintrc")
-                if os.path.exists(pylintrc_path):
-                    pylintrc = pylintrc_path
-
-            if pylintrc is not None:
-                # load it!
-                configured_by = pylintrc
-                ext_found = True
-
-                self._args = linter.load_command_line_configuration(check_paths)
-                config_messages += self._pylintrc_configure(pylintrc, linter)
-
-        if not ext_found:
-            linter.reset_options()
-            self._args = linter.load_command_line_configuration(check_paths)
-            config_messages = self._prospector_configure(prospector_config, linter)
+        config_messages, configured_by = self._get_pylint_configuration(
+            check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
+        )
 
         # Pylint 1.4 introduced the idea of explicitly specifying which
         # C-extensions to load. This is because doing so allows them to
@@ -203,6 +149,74 @@ class PylintTool(ToolBase):
             linter.config.jobs = _cpu_count()
         self._linter = linter
         return configured_by, config_messages
+
+    def _set_path_finder(self, extra_sys_path, pylint_options):
+        # insert the target path into the system path to get correct behaviour
+        self._orig_sys_path = sys.path
+        if not pylint_options.get("use_pylint_default_path_finder"):
+            # note: we prepend, so that modules are preferentially found in the
+            # path given as an argument. This prevents problems where we are
+            # checking a module which is already on sys.path before this
+            # manipulation - for example, if we are checking 'requests' in a local
+            # checkout, but 'requests' is already installed system wide, pylint
+            # will discover the system-wide modules first if the local checkout
+            # does not appear first in the path
+            sys.path = list(extra_sys_path) + sys.path
+
+    def _get_pylint_check_paths(self, found_files):
+        # create a list of packages, but don't include packages which are
+        # subpackages of others as checks will be duplicated
+        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
+        packages.sort(key=len)
+        check_paths = set()
+        for package in packages:
+            package_path = os.path.join(*package)
+            if len(package) == 1:
+                check_paths.add(package_path)
+                continue
+            for i in range(1, len(package)):
+                if os.path.join(*package[:-i]) in check_paths:
+                    break
+            else:
+                check_paths.add(package_path)
+        for filepath in found_files.iter_module_paths(abspath=False):
+            package = os.path.dirname(filepath).split(os.path.sep)
+            for i in range(0, len(package)):
+                if os.path.join(*package[: i + 1]) in check_paths:
+                    break
+            else:
+                check_paths.add(filepath)
+        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
+        return check_paths
+
+    def _get_pylint_configuration(
+        self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
+    ):
+        if prospector_config.use_external_config("pylint"):
+            # try to find a .pylintrc
+            pylintrc = pylint_options.get("config_file")
+            external_config = prospector_config.external_config_location("pylint")
+            if pylintrc is None or external_config:
+                pylintrc = external_config
+            if pylintrc is None:
+                pylintrc = find_pylintrc()
+            if pylintrc is None:
+                pylintrc_path = os.path.join(prospector_config.workdir, ".pylintrc")
+                if os.path.exists(pylintrc_path):
+                    pylintrc = pylintrc_path
+
+            if pylintrc is not None:
+                # load it!
+                configured_by = pylintrc
+                ext_found = True
+
+                self._args = linter.load_command_line_configuration(check_paths)
+                config_messages += self._pylintrc_configure(pylintrc, linter)
+        if not ext_found:
+            linter.reset_options()
+            self._args = linter.load_command_line_configuration(check_paths)
+            config_messages = self._prospector_configure(prospector_config, linter)
+        return config_messages, configured_by
 
     def _combine_w0614(self, messages):
         """
