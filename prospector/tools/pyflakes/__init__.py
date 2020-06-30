@@ -10,13 +10,49 @@ __all__ = ("PyFlakesTool",)
 
 
 # Prospector uses the same pyflakes codes as flake8 defines,
-# see http://flake8.readthedocs.org/en/latest/warnings.html
-# and https://bitbucket.org/tarek/flake8/src/a209fb69350c572c9b2d7b4b09c7657be153be5e/flake8/_pyflakes.py
+# see https://flake8.pycqa.org/en/latest/user/error-codes.html
+# and https://gitlab.com/pycqa/flake8/-/blob/e817c63a/src/flake8/plugins/pyflakes.py
 _MESSAGE_CODES = {
     "UnusedImport": "F401",
     "ImportShadowedByLoopVar": "F402",
     "ImportStarUsed": "F403",
     "LateFutureImport": "F404",
+    "ImportStarUsage": "F405",
+    "ImportStarNotPermitted": "F406",
+    "FutureFeatureNotDefined": "F407",
+    "PercentFormatInvalidFormat": "F501",
+    "PercentFormatExpectedMapping": "F502",
+    "PercentFormatExpectedSequence": "F503",
+    "PercentFormatExtraNamedArguments": "F504",
+    "PercentFormatMissingArgument": "F505",
+    "PercentFormatMixedPositionalAndNamed": "F506",
+    "PercentFormatPositionalCountMismatch": "F507",
+    "PercentFormatStarRequiresSequence": "F508",
+    "PercentFormatUnsupportedFormatCharacter": "F509",
+    "StringDotFormatInvalidFormat": "F521",
+    "StringDotFormatExtraNamedArguments": "F522",
+    "StringDotFormatExtraPositionalArguments": "F523",
+    "StringDotFormatMissingArgument": "F524",
+    "StringDotFormatMixingAutomatic": "F525",
+    "FStringMissingPlaceholders": "F541",
+    "MultiValueRepeatedKeyLiteral": "F601",
+    "MultiValueRepeatedKeyVariable": "F602",
+    "TooManyExpressionsInStarredAssignment": "F621",
+    "TwoStarredExpressions": "F622",
+    "AssertTuple": "F631",
+    "IsLiteral": "F632",
+    "InvalidPrintSyntax": "F633",
+    "IfTuple": "F634",
+    "BreakOutsideLoop": "F701",
+    "ContinueOutsideLoop": "F702",
+    "ContinueInFinally": "F703",
+    "YieldOutsideFunction": "F704",
+    "ReturnWithArgsInsideGenerator": "F705",
+    "ReturnOutsideFunction": "F706",
+    "DefaultExceptNotLast": "F707",
+    "DoctestSyntaxError": "F721",
+    "ForwardAnnotationSyntaxError": "F722",
+    "CommentAnnotationSyntaxError": "F723",
     "Redefined": "F810",
     "RedefinedWhileUnused": "F811",
     "RedefinedInListComp": "F812",
@@ -25,6 +61,7 @@ _MESSAGE_CODES = {
     "UndefinedLocal": "F823",
     "DuplicateArgument": "F831",
     "UnusedVariable": "F841",
+    "RaiseNotImplemented": "F901",
 }
 
 # The old prospector codes were deprecated in favour of using the codes
