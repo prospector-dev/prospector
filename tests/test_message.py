@@ -1,15 +1,17 @@
+# -*- coding: utf-8 -*-
+# flake8: noqa
 from unittest import TestCase
+
 from prospector.message import Location
 
 
 class LocationOrderTest(TestCase):
-
     def test_path_order(self):
 
         locs = [
-            Location('/tmp/path/module3.py', 'module3', 'somefunc', 15, 0),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 0),
-            Location('/tmp/path/module2.py', 'module2', 'somefunc', 9, 0)
+            Location("/tmp/path/module3.py", "module3", "somefunc", 15, 0),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 0),
+            Location("/tmp/path/module2.py", "module2", "somefunc", 9, 0),
         ]
 
         paths = [loc.path for loc in locs]
@@ -20,9 +22,9 @@ class LocationOrderTest(TestCase):
     def test_line_order(self):
 
         locs = [
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 15, 0),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 0),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 12, 0)
+            Location("/tmp/path/module1.py", "module1", "somefunc", 15, 0),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 0),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 12, 0),
         ]
 
         lines = [loc.line for loc in locs]
@@ -33,9 +35,9 @@ class LocationOrderTest(TestCase):
     def test_sort_between_none_lines(self):
 
         locs = [
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 15, 0),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 0),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', -1, 0)
+            Location("/tmp/path/module1.py", "module1", "somefunc", 15, 0),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 0),
+            Location("/tmp/path/module1.py", "module1", "somefunc", -1, 0),
         ]
 
         lines = [(loc.line or -1) for loc in locs]
@@ -46,9 +48,9 @@ class LocationOrderTest(TestCase):
     def test_char_order(self):
 
         locs = [
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 7),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 0),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 2)
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 7),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 0),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 2),
         ]
 
         chars = [loc.character for loc in locs]
@@ -59,9 +61,9 @@ class LocationOrderTest(TestCase):
     def test_sort_between_none_chars(self):
 
         locs = [
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, -1),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 1),
-            Location('/tmp/path/module1.py', 'module1', 'somefunc', 10, 2)
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, -1),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 1),
+            Location("/tmp/path/module1.py", "module1", "somefunc", 10, 2),
         ]
 
         chars = [(loc.character or -1) for loc in locs]

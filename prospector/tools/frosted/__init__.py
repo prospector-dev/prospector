@@ -2,14 +2,10 @@
 from __future__ import absolute_import
 
 from frosted.api import check_path
-
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
-
-__all__ = (
-    'FrostedTool',
-)
+__all__ = ("FrostedTool",)
 
 
 class ProspectorReporter(object):
@@ -18,41 +14,22 @@ class ProspectorReporter(object):
         self.ignore = ignore or ()
 
     # pylint: disable=too-many-arguments
-    def record_message(
-            self,
-            filename=None,
-            line=None,
-            character=None,
-            code=None,
-            message=None):
+    def record_message(self, filename=None, line=None, character=None, code=None, message=None):
 
         if code in self.ignore:
             return
 
-        location = Location(
-            path=filename,
-            module=None,
-            function=None,
-            line=line,
-            character=character,
-        )
-        message = Message(
-            source='frosted',
-            code=code,
-            location=location,
-            message=message,
-        )
+        location = Location(path=filename, module=None, function=None, line=line, character=character,)
+        message = Message(source="frosted", code=code, location=location, message=message,)
         self._messages.append(message)
 
     def unexpected_error(self, filename, msg):
         self.record_message(
-            filename=filename,
-            code='U999',
-            message=msg,
+            filename=filename, code="U999", message=msg,
         )
 
     def flake(self, message):
-        filename, _, msg = message.message.split(':', 2)
+        filename, _, msg = message.message.split(":", 2)
 
         self.record_message(
             filename=filename,
@@ -72,7 +49,7 @@ class FrostedTool(ToolBase):
         self.ignore_codes = ()
 
     def configure(self, prospector_config, _):
-        self.ignore_codes = prospector_config.get_disabled_messages('frosted')
+        self.ignore_codes = prospector_config.get_disabled_messages("frosted")
 
     def run(self, found_files):
         reporter = ProspectorReporter(ignore=self.ignore_codes)

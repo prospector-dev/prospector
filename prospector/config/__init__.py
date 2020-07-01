@@ -3,11 +3,12 @@ import os
 import re
 import sre_constants
 import sys
+
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.profiles.profile import ProspectorProfile, ProfileNotFound, BUILTIN_PROFILE_PATH, CannotParseProfile
+from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile, ProfileNotFound, ProspectorProfile
 from prospector.tools import DEFAULT_TOOLS
 
 
@@ -61,7 +62,7 @@ class ProspectorConfig(object):
 
         for index, report in enumerate(output_report):
             if not all(report):
-                output_report[index] = (report[0] or 'grouped', report[1] or [])
+                output_report[index] = (report[0] or "grouped", report[1] or [])
 
         return output_report
 
@@ -73,10 +74,10 @@ class ProspectorConfig(object):
 
     def _get_work_path(self, config, arguments):
         # Figure out what paths we're prospecting
-        if config['path']:
-            paths = [self.config['path']]
-        elif arguments['checkpath']:
-            paths = arguments['checkpath']
+        if config["path"]:
+            paths = [self.config["path"]]
+        elif arguments["checkpath"]:
+            paths = arguments["checkpath"]
         else:
             paths = [os.getcwd()]
         return paths
@@ -108,26 +109,26 @@ class ProspectorConfig(object):
             else:
                 extra_profiles = config.profiles
 
-            strictness = 'from profile'
+            strictness = "from profile"
         else:
             # Use the preconfigured prospector profiles
-            profile_name = 'default'
+            profile_name = "default"
             extra_profiles = []
 
         if config.doc_warnings is not None and config.doc_warnings:
-            cmdline_implicit.append('doc_warnings')
+            cmdline_implicit.append("doc_warnings")
         if config.test_warnings is not None and config.test_warnings:
-            cmdline_implicit.append('test_warnings')
+            cmdline_implicit.append("test_warnings")
         if config.no_style_warnings is not None and config.no_style_warnings:
-            cmdline_implicit.append('no_pep8')
+            cmdline_implicit.append("no_pep8")
         if config.full_pep8 is not None and config.full_pep8:
-            cmdline_implicit.append('full_pep8')
+            cmdline_implicit.append("full_pep8")
         if config.member_warnings is not None and config.member_warnings:
-            cmdline_implicit.append('member_warnings')
+            cmdline_implicit.append("member_warnings")
 
         # Use the strictness profile only if no profile has been given
         if config.strictness is not None and config.strictness:
-            cmdline_implicit.append('strictness_%s' % config.strictness)
+            cmdline_implicit.append("strictness_%s" % config.strictness)
             strictness = config.strictness
 
         # the profile path is
@@ -137,7 +138,7 @@ class ProspectorConfig(object):
         #   * prospector provided profiles
         profile_path = config.profile_path
 
-        prospector_dir = os.path.join(path, '.prospector')
+        prospector_dir = os.path.join(path, ".prospector")
         if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
             profile_path.append(prospector_dir)
 
@@ -148,12 +149,15 @@ class ProspectorConfig(object):
             forced_inherits = cmdline_implicit + extra_profiles
             profile = ProspectorProfile.load(profile_name, profile_path, forced_inherits=forced_inherits)
         except CannotParseProfile as cpe:
-            sys.stderr.write("Failed to run:\nCould not parse profile %s as it is not valid YAML\n%s\n" %
-                             (cpe.filepath, cpe.get_parse_message()))
+            sys.stderr.write(
+                "Failed to run:\nCould not parse profile %s as it is not valid YAML\n%s\n"
+                % (cpe.filepath, cpe.get_parse_message())
+            )
             sys.exit(1)
         except ProfileNotFound as nfe:
-            sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" %
-                             (nfe.name, ':'.join(nfe.profile_path)))
+            sys.stderr.write(
+                "Failed to run:\nCould not find profile %s. Search path: %s\n" % (nfe.name, ":".join(nfe.profile_path))
+            )
             sys.exit(1)
         else:
             return profile, strictness
@@ -207,39 +211,38 @@ class ProspectorConfig(object):
     def _determine_ignores(self, config, profile, libraries):
         # Grab ignore patterns from the options
         ignores = []
-        for patt in config.ignore_patterns + profile.ignore_patterns:
-            if patt is None:
+        for pattern in config.ignore_patterns + profile.ignore_patterns:
+            if pattern is None:
                 # this can happen if someone has a profile with an empty ignore-patterns value, eg:
                 #
                 #  ignore-patterns:
                 #  uses: django
                 continue
             try:
-                ignores.append(re.compile(patt))
+                ignores.append(re.compile(pattern))
             except sre_constants.error:
                 pass
 
         # Convert ignore paths into patterns
         boundary = r"(^|/|\\)%s(/|\\|$)"
         for ignore_path in config.ignore_paths + profile.ignore_paths:
-            if ignore_path.endswith('/') or ignore_path.endswith('\\'):
+            ignore_path = str(ignore_path)
+            if ignore_path.endswith("/") or ignore_path.endswith("\\"):
                 ignore_path = ignore_path[:-1]
             ignores.append(re.compile(boundary % re.escape(ignore_path)))
 
         # some libraries have further automatic ignores
-        if 'django' in libraries:
-            ignores += [
-                re.compile('(^|/)(south_)?migrations(/|$)')
-            ]
+        if "django" in libraries:
+            ignores += [re.compile("(^|/)(south_)?migrations(/|$)")]
 
         return ignores
 
     def get_summary_information(self):
         return {
-            'libraries': self.libraries,
-            'strictness': self.strictness,
-            'profiles': ', '.join(self.profile.list_profiles()),
-            'tools': self.tools_to_run,
+            "libraries": self.libraries,
+            "strictness": self.strictness,
+            "profiles": ", ".join(self.profile.list_profiles()),
+            "tools": self.tools_to_run,
         }
 
     def exit_with_zero_on_success(self):
@@ -257,10 +260,10 @@ class ProspectorConfig(object):
         tool = getattr(self.profile, tool_name, None)
         if tool is None:
             return {}
-        return tool.get('options', {})
+        return tool.get("options", {})
 
     def external_config_location(self, tool_name):
-        return getattr(self.config, '%s_config_file' % tool_name, None)
+        return getattr(self.config, "%s_config_file" % tool_name, None)
 
     @property
     def die_on_tool_error(self):

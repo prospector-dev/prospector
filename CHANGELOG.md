@@ -1,6 +1,23 @@
 Prospector Changelog
 =======
 
+## Version 1.3.0
+- Update pylint support to 2.5.2
+- Update pylint-django to 2.0.15
+- Update pyflakes support to 2.2.0
+- Update pycodestyle support to 2.6.0
+- Update pep8-naming support to 0.10.0
+- Update pyflakes to <2.3.0 and >=2.2.0
+- Update pycodestyle to <2.7.0 and >=2.6.0
+- Update vulture to 1.5
+- Drop Python 2 support
+- Add output-target field when merging profiles
+- Add support for [pycodestyle] external config section
+- Fix AttributeExceptionError being raised when ignore_paths is an integer
+- Use black on entire project
+- Add new pylint option: `use_pylint_default_path_finder` to make sure there's an option to preserve pylint default behavior.
+- Update pyflakes error code list to the recent version
+
 ## Version 1.2.0
 - Drop Python 3.4 support
 - [#308](https://github.com/PyCQA/prospector/pull/308) Update pyflakes support to < 2.1.0
@@ -10,6 +27,7 @@ Prospector Changelog
 - [#356](https://github.com/PyCQA/prospector/pull/356) Add support for Python 3.8
 
 ## Version 1.1.7
+
 - [#299](https://github.com/PyCQA/prospector/pull/299) Output path tests and abspaths for windows
 - [#300](https://github.com/PyCQA/prospector/pull/300) Fix `check_paths` definition for pep8tool
 - [#318](https://github.com/PyCQA/prospector/pull/318) Add support pylint --load-plugins option in profile

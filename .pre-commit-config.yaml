@@ -1,19 +1,24 @@
 fail_fast: true
 repos:
 -   repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: v1.2.3
+    rev: v3.1.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: debug-statements
     -   id: fix-encoding-pragma
-    -   id: flake8
-        args:
-        - --max-line-length=160
-        - --exclude=*/migrations/*,docs/*
-        - --ignore=E126
     -   id: check-added-large-files
--   repo: git://github.com/FalconSocial/pre-commit-python-sorter
-    rev: b57843b0b874df1d16eb0bef00b868792cb245c2
+-   repo: https://github.com/psf/black
+    rev: 19.10b0
     hooks:
-    -   id: python-import-sorter
+    -   id: black
+        args:
+            - --exclude=/(tests)/
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.2
+    hooks:
+    -   id: flake8
+        additional_dependencies:
+        - flake8-black
+        args:
+            - --ignore=E203,E231,W503

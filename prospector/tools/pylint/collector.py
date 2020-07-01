@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from prospector.exceptions import UnknownMessageError
 from prospector.message import Location, Message
-from pylint.__pkginfo__ import numversion as PYLINT_VERSION
+from pylint.exceptions import UnknownMessageError
 from pylint.reporters import BaseReporter
 
 
 class Collector(BaseReporter):
 
-    name = 'collector'
+    name = "collector"
 
     def __init__(self, message_store):
         BaseReporter.__init__(self, output=None)
@@ -26,19 +25,16 @@ class Collector(BaseReporter):
         # At this point pylint will give us the code but we want the
         # more user-friendly symbol
         try:
-            if PYLINT_VERSION < (2, 0):
-                msg_data = self._message_store.check_message_id(msg_id)
-            else:
-                msg_data = self._message_store.get_message_definitions(msg_id)[0]
+            msg_data = self._message_store.get_message_definitions(msg_id)
         except UnknownMessageError:
             # this shouldn't happen, as all pylint errors should be
             # in the message store, but just in case we'll fall back
             # to using the code.
             msg_symbol = msg_id
         else:
-            msg_symbol = msg_data.symbol
+            msg_symbol = msg_data[0].symbol
 
-        message = Message('pylint', msg_symbol, loc, msg)
+        message = Message("pylint", msg_symbol, loc, msg)
         self._messages.append(message)
 
     def _display(self, layout):

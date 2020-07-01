@@ -107,6 +107,50 @@ combinations:
         - pyflakes: F811
         - pylint: function-redefined
 
+    -   # f-string is missing placeholders
+        - pylint: f-string-without-interpolation
+        - pyflakes: F541
+
+    -   # Duplicate key in dictionary
+        - pylint: duplicate-key
+        - pyflakes: F601
+
+    -   # More than one starred expression in assignment
+        - pylint: too-many-star-expressions
+        - pyflakes: F622
+
+    -   # Assert called on a tuple
+        - pylint: assert-on-tuple
+        - pyflakes: F631
+
+    -   # 'break' outside loop
+        - pylint: not-in-loop
+        - pyflakes: F701
+
+    -   # 'continue' not properly in loop
+        - pylint: not-in-loop
+        - pyflakes: F702
+
+    -   # 'continue' not supported inside 'finally' clause
+        - pylint: continue-in-finally
+        - pyflakes: F703
+
+    -   # Yield outside function
+        - pylint: yield-outside-function
+        - pyflakes: F704
+
+    -   # Return outside function
+        - pylint: return-outside-function
+        - pyflakes: F706
+
+    -   # default 'except:' must be last
+        - pylint: bad-except-order
+        - pyflakes: F707
+
+    -   # NotImplemented raised - should raise NotImplementedError
+        - pylint: notimplemented-raised
+        - pyflakes: F901
+
     -   # first argument of a classmethod should be named 'cls'
         - pep8: N804
         - pylint: bad-classmethod-argument

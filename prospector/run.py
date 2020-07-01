@@ -6,8 +6,8 @@ import sys
 from datetime import datetime
 
 from prospector import blender, postfilter, tools
-from prospector.config import configuration as cfg
 from prospector.config import ProspectorConfig
+from prospector.config import configuration as cfg
 from prospector.exceptions import FatalProspectorException
 from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
@@ -15,8 +15,8 @@ from prospector.message import Location, Message
 from prospector.tools.utils import capture_output
 
 __all__ = (
-    'Prospector',
-    'main',
+    "Prospector",
+    "main",
 )
 
 
@@ -41,12 +41,13 @@ class Prospector(object):
     def execute(self):
 
         summary = {
-            'started': datetime.now(),
+            "started": datetime.now(),
         }
         summary.update(self.config.get_summary_information())
 
-        found_files = find_python(self.config.ignores, self.config.paths,
-                                  self.config.explicit_file_mode, self.config.workdir)
+        found_files = find_python(
+            self.config.ignores, self.config.paths, self.config.explicit_file_mode, self.config.workdir,
+        )
 
         # Run the tools
         messages = []
@@ -56,7 +57,7 @@ class Prospector(object):
                     toolname = name
                     break
             else:
-                toolname = 'Unknown'
+                toolname = "Unknown"
 
             try:
                 # Tools can output to stdout/stderr in unexpected places, for example,
@@ -69,11 +70,11 @@ class Prospector(object):
                         loc = Location(self.config.workdir, None, None, None, None)
 
                         if capture.get_hidden_stderr():
-                            msg = 'stderr from %s:\n%s' % (toolname, capture.get_hidden_stderr())
-                            messages.append(Message(toolname, 'hidden-output', loc, message=msg))
+                            msg = "stderr from %s:\n%s" % (toolname, capture.get_hidden_stderr(),)
+                            messages.append(Message(toolname, "hidden-output", loc, message=msg))
                         if capture.get_hidden_stdout():
-                            msg = 'stdout from %s:\n%s' % (toolname, capture.get_hidden_stdout())
-                            messages.append(Message(toolname, 'hidden-output', loc, message=msg))
+                            msg = "stdout from %s:\n%s" % (toolname, capture.get_hidden_stdout(),)
+                            messages.append(Message(toolname, "hidden-output", loc, message=msg))
 
             except FatalProspectorException as fatal:
                 sys.stderr.write(fatal.message)
@@ -84,35 +85,28 @@ class Prospector(object):
                     raise
                 else:
                     loc = Location(self.config.workdir, None, None, None, None)
-                    msg = 'Tool %s failed to run (exception was raised)' % (
-                        toolname,
-                    )
-                    message = Message(
-                        toolname,
-                        'failure',
-                        loc,
-                        message=msg,
-                    )
+                    msg = "Tool %s failed to run (exception was raised)" % (toolname,)
+                    message = Message(toolname, "failure", loc, message=msg,)
                     messages.append(message)
 
         messages = self.process_messages(found_files, messages)
 
-        summary['message_count'] = len(messages)
-        summary['completed'] = datetime.now()
+        summary["message_count"] = len(messages)
+        summary["completed"] = datetime.now()
 
         # Timedelta.total_seconds() is not available
         # on Python<=2.6 so we calculate it ourselves
         # See issue #60 and http://stackoverflow.com/a/3694895
-        delta = (summary['completed'] - summary['started'])
+        delta = summary["completed"] - summary["started"]
         total_seconds = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 1e6) / 1e6
-        summary['time_taken'] = '%0.2f' % total_seconds
+        summary["time_taken"] = "%0.2f" % total_seconds
 
         external_config = []
         for tool, configured_by in self.config.configured_by.items():
             if configured_by is not None:
                 external_config.append((tool, configured_by))
         if len(external_config) > 0:
-            summary['external_config'] = ', '.join(['%s: %s' % info for info in external_config])
+            summary["external_config"] = ", ".join(["%s: %s" % info for info in external_config])
 
         self.summary = summary
         self.messages = self.messages + messages
@@ -128,23 +122,24 @@ class Prospector(object):
 
         for report in output_reports:
             output_format, output_files = report
-            self.summary['formatter'] = output_format
+            self.summary["formatter"] = output_format
             formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
             if not output_files:
                 self.write_to(formatter, sys.stdout)
             for output_file in output_files:
-                with open(output_file, 'w+') as target:
+                with open(output_file, "w+") as target:
                     self.write_to(formatter, target)
 
     def write_to(self, formatter, target):
         # Produce the output
-        target.write(formatter.render(
-            summary=not self.config.messages_only,
-            messages=not self.config.summary_only,
-            profile=self.config.show_profile
-        ))
-        target.write('\n')
-
+        target.write(
+            formatter.render(
+                summary=not self.config.messages_only,
+                messages=not self.config.summary_only,
+                profile=self.config.show_profile,
+            )
+        )
+        target.write("\n")
 
 
 def get_parser():
@@ -153,7 +148,7 @@ def get_parser():
     be used with the Sphinx argparse plugin for documentation.
     """
     manager = cfg.build_manager()
-    source = cfg.build_command_line_source(prog='prospector', description=None)
+    source = cfg.build_command_line_source(prog="prospector", description=None)
     return source.build_parser(manager.settings, None)
 
 
@@ -163,8 +158,7 @@ def main():
 
     paths = config.paths
     if len(paths) > 1 and not all([os.path.isfile(path) for path in paths]):
-        sys.stderr.write('\nIn multi-path mode, all inputs must be files, '
-                         'not directories.\n\n')
+        sys.stderr.write("\nIn multi-path mode, all inputs must be files, " "not directories.\n\n")
         get_parser().print_usage()
         sys.exit(2)
 
@@ -186,5 +180,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
