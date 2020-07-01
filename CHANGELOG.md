@@ -11,11 +11,12 @@ Prospector Changelog
 - Update pycodestyle to <2.7.0 and >=2.6.0
 - Update vulture to 1.5
 - Drop Python 2 support
-- [#378](https://github.com/PyCQA/prospector/pull/378) Add output-target field when merging profiles
-- [#369](https://github.com/PyCQA/prospector/pull/369) Add support for [pycodestyle] external config section
+- Add output-target field when merging profiles
+- Add support for [pycodestyle] external config section
 - Fix AttributeExceptionError being raised when ignore_paths is an integer
 - Use black on entire project
 - Add new pylint option: `use_pylint_default_path_finder` to make sure there's an option to preserve pylint default behavior.
+- Update pyflakes error code list to the recent version
 
 ## Version 1.2.0
 - Drop Python 3.4 support
