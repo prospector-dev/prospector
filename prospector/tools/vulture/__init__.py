@@ -7,7 +7,7 @@ from vulture import Vulture
 
 class ProspectorVulture(Vulture):
     def __init__(self, found_files):
-        Vulture.__init__(self, exclude=None, verbose=False)
+        Vulture.__init__(self, verbose=False)
         self._files = found_files
         self._internal_messages = []
 
@@ -51,7 +51,11 @@ class ProspectorVulture(Vulture):
                     filename = item.file
                 except AttributeError:
                     filename = item.filename
-                loc = Location(filename, None, None, item.lineno, -1)
+                if hasattr(item, 'lineno'):
+                    lineno = item.lineno  # for older versions of vulture
+                else:
+                    lineno = item.first_lineno
+                loc = Location(filename, None, None, lineno, -1)
                 message_text = template % item
                 message = Message("vulture", code, loc, message_text)
                 vulture_messages.append(message)
