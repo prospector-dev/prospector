@@ -24,7 +24,7 @@ About
 Prospector is a tool to analyse Python code and output information about errors, potential problems, convention violations and complexity.
 
 It brings together the functionality of other Python analysis tools such as `Pylint`_, `pep8`_, and `McCabe complexity`_.
-See the :doc:`Supported Tools<supported_tools>` section for a complete list.
+See the :doc:`Supported Tools<supported_tools>` section for a complete list of default and optional extra tools.
 
 The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other
 Python analysis tools is that it takes a long time to filter through which errors are relevant
@@ -40,20 +40,38 @@ and adapts the output depending on the libraries your project uses.
 Installation
 ------------
 
-You can install using ``pip``::
+You can install default tools using ``pip`` command::
 
     pip install prospector
 
-To install optional dependencies such as ``pyroma``::
+
+For a full list of optional extra tools, and specific examples to install each of them,
+see the :doc:`page on supported tools <supported_tools>`.
+
+For example to install an optional tool such as ``pyroma``::
 
     pip install prospector[with_pyroma]
 
 
-Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped::
+.. Note:: Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped
+   ::
 
-    pip install prospector\[with_pyroma\]
+       pip install prospector\[with_pyroma\]
 
-For a full list of optional extras, see the :doc:`page on supported tools <supported_tools>`.
+
+To install two or more optional extra tools at the same time, they must be comma separated (and without spaces).
+For example to install mypy and bandit::
+
+    pip install prospector[with_mypy,with_bandit]
+
+
+And to install all optional extra tools at the same time, install prospector using the ``with_everything`` option::
+
+    pip install prospector[with_everything]
+
+
+
+
 
 For best results, you should install prospector to the same place as your project and its dependencies. That is,
 if you are using virtual environments, install pip into that virtual environment alongside your code. This
@@ -138,23 +156,3 @@ License
 
 Prospector is available under the GPLv2 License.
 
-
-Contents:
-
-.. toctree::
-   :maxdepth: 1
-
-   usage
-   profiles
-   suppression
-   supported_tools
-   contrib
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

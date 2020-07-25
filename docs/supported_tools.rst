@@ -27,21 +27,21 @@ Defaults
 --------
 
 `Pylint <https://www.pylint.org>`_
-`````````````````````````````````
+```````````````````````````````````
 Pylint is the most comprehensive static analysis tool for Python. It is extremely thorough
 and is the source of most messages that prospector outputs.
 
 
-`pep8.py <https://pep8.readthedocs.io/>`_
+`Pep8 <https://pep8.readthedocs.io/>`_
 ```````````````````````````````````````````````````
 
-``pep8.py`` is a simple tool to warn about violations of the
+Pep8 is a simple tool to warn about violations of the
 `PEP8 style guide <https://www.python.org/dev/peps/pep-0008/>`_. It produces
 messages for any divergence from the style guide.
 
 Prospector's concept of :doc:`strictness <profiles>` turns off various warnings
 depending on the strictness level. By default, several PEP8 errors will be
-supressed. To adjust this without adjusting the strictness of other tools, you have
+suppressed. To adjust this without adjusting the strictness of other tools, you have
 some options::
 
     # turn off pep8 checking completely:
@@ -55,14 +55,14 @@ some options::
     prospector --max-line-length 120
 
 
-`pyflakes <https://launchpad.net/pyflakes>`_
+`Pyflakes <https://launchpad.net/pyflakes>`_
 ````````````````````````````````````````````
 
 Pyflakes analyzes programs and detects various errors. It is simpler and faster
 than pylint, but also not as thorough.
 
 
-`mccabe <https://github.com/PyCQA/mccabe>`_
+`Mccabe <https://github.com/PyCQA/mccabe>`_
 ```````````````````````````````````````````````
 `McCabe or cyclomatic complexity <https://en.wikipedia.org/wiki/Cyclomatic_complexity>`_ is
 a measurement of how many paths there are in a given function or method. It measures how
@@ -71,17 +71,17 @@ are too complex are prone to logic errors, and should be refactored to a series 
 methods.
 
 
-`dodgy <https://github.com/landscapeio/dodgy>`_
+`Dodgy <https://github.com/landscapeio/dodgy>`_
 ```````````````````````````````````````````````
 
 Dodgy is a very simple tool designed to find 'dodgy' things which should
 not be in a public project, such as secret keys, passwords, AWS tokens or
 source control diffs.
 
-`pydocstyle <https://github.com/PyCQA/pydocstyle>`_
-````````````````````````````````````````````````
+`Pydocstyle / Pep257 <https://github.com/PyCQA/pydocstyle>`_
+````````````````````````````````````````````````````````````
 
-``pydocstyle`` is a simple tool to warn about violations of the
+Pydocstyle is a simple tool to warn about violations of the
 `PEP257 Docstring Conventions <http://legacy.python.org/dev/peps/pep-0257/>`_.
 It produces messages for any divergence from the style guide.
 
@@ -93,8 +93,10 @@ exactly as ``pydocstyle`` expects it.
 It will not run by default, and must be enabled explicitly (via ``--with-tool pep257``
 or in a :doc:`profile <profiles>`) or implicitly (using the ``--doc-warnings`` flag).
 
+.. Note:: Pep257 is the name used for this tool from now on this documentation
 
-`profile-validator`
+
+`Profile-validator`
 ```````````````````
 
 This is a simple tool built in to prospector which validates
@@ -110,13 +112,7 @@ These extras are integrated into prospector but are not activated by default.
 This is because their output is not necessarily useful for all projects.
 
 They are also not installed by default. The instructions for installing each tool is in the tool
-section below. To install all extras at the same time, install prospector using the ``with_everything`` option::
-
-    pip install prospector[with_everything]
-
-Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped::
-
-    pip install prospector\[with_everything\]
+section below. For more detailed information on installing, see :doc:`install section<index>`.
 
 `Pyroma <https://github.com/regebro/pyroma>`_
 ````````````````````````````````````````````````
@@ -145,7 +141,7 @@ To install and use::
     prospector --with-tool vulture
 
 
-`frosted <https://github.com/timothycrosley/frosted>`_
+`Frosted <https://github.com/timothycrosley/frosted>`_
 ``````````````````````````````````````````````````````
 Frosted is a fork of pyflakes which was created with the intention of taking over
 from and extending pyflakes as development had slowed. Since Prospector was originally
@@ -158,7 +154,7 @@ To install and use::
     prospector --with-tool frosted
 
 
-`mypy <https://github.com/python/mypy>`_
+`Mypy <https://github.com/python/mypy>`_
 ``````````````````````````````````````````````````````
 Mypy is an experimental optional static type checker for Python that aims to combine
 the benefits of dynamic (or "duck") typing and static typing. Mypy combines the
@@ -172,7 +168,7 @@ To install and use::
 
 
 
-`bandit <https://github.com/PyCQA/bandit>`_
+`Bandit <https://github.com/PyCQA/bandit>`_
 ``````````````````````````````````````````````````````
 Bandit finds common security issues in Python code.
 
