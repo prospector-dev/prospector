@@ -1,5 +1,5 @@
 Contributors
-===
+------------
 
 * Abdullah Hilson ([@abumalick](https://github.com/abumalick))
 * Amir Rachum ([@Nurdok](https://github.com/Nurdok))
