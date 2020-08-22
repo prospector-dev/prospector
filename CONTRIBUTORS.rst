@@ -2,6 +2,7 @@ Contributors
 ------------
 
 * Abdullah Hilson ([@abumalick](https://github.com/abumalick))
+* Adam Hodges ([@ajhodges](https://github.com/ajhodges))
 * alblasco ([@alblasco](https://github.com/alblasco))
 * Amir Rachum ([@Nurdok](https://github.com/Nurdok))
 * Anthony Ricaud ([@rik](https://github.com/rik))
