@@ -2,8 +2,9 @@ Contributors
 ------------
 
 * Abdullah Hilson ([@abumalick](https://github.com/abumalick))
-* alblasco ([@alblasco](https://github.com/alblasco))
+* Adam Hodges ([@ajhodges](https://github.com/ajhodges))
 * Amir Rachum ([@Nurdok](https://github.com/Nurdok))
+* Angel Blasco ([@alblasco](https://github.com/alblasco))
 * Anthony Ricaud ([@rik](https://github.com/rik))
 * Bram ([@Psycojoker](https://github.com/Psycojoker))
 * Bryce Guinta ([@brycepg](https://github.com/brycepg))
