@@ -362,7 +362,7 @@ The available options are:
 +---------+------------------------+----------------------------------------------+
 | mypy    | strict                 | strict mode                                  |
 +---------+------------------------+----------------------------------------------+
-| mypy    | follow.imports         | How to treat imports                         |
+| mypy    | follow-imports         | How to treat imports                         |
 +---------+------------------------+----------------------------------------------+
 | mypy    | ignore-missing-import  | Silently ignore imports of missing modules   |
 +---------+------------------------+----------------------------------------------+
