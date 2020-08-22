@@ -1,0 +1,21 @@
+<h3><a href="{{ pathto(master_doc) }}">{{ _('Table Of Contents') }}</a></h3>
+
+<ul>
+  <li><a href="{{ pathto('index') }}">1. Home</a></li>
+  <li><a href="{{ pathto('usage') }}">2. Command Line Usage</a></li>
+  <li><a href="{{ pathto('profiles') }}">3. Profiles / Configuration</a></li>
+  <li><a href="{{ pathto('suppression') }}">4. Error Suppression</a></li>
+  <li><a href="{{ pathto('supported_tools') }}">5. Supported tools</a></li>
+  <li><a href="{{ pathto('contrib') }}">6. Contributing</a></li>
+  <li><a href="{{ pathto('changelog') }}">Changelog</a></li>
+  <li><a href="{{ pathto('contents') }}">Contents</a></li>
+</ul>
+
+{%- if display_toc %}
+  <hr>
+  {{ toc }}
+{%- endif %}
+
+<hr>
+<a href="{{ pathto('genindex') }}">Index</a>
+<hr>
