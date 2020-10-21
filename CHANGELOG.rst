@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.3.1
+-------------
+- [#390](https://github.com/PyCQA/prospector/pull/390) Updating Vulture API usage for newer versions of Vulture
+- [#394](https://github.com/PyCQA/prospector/pull/394) Update pylint and pylint-django
+
 Version 1.3.0
 -------------
 - Update pylint support to 2.5.2
