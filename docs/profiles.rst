@@ -387,8 +387,8 @@ See `bandit options`_ for more details
 
 
 .. _pylint options: https://pylint.readthedocs.io/en/latest/user_guide/run.html
-.. _bandit options: https://https://bandit.readthedocs.io/en/latest/config.html
-.. _mypy options: https://https://bandit.readthedocs.io/en/latest/config.html
+.. _bandit options: https://bandit.readthedocs.io/en/latest/config.html
+.. _mypy options: https://mypy.readthedocs.io/en/stable/config_file.html
 
 
 
