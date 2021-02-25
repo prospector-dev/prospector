@@ -79,7 +79,7 @@ class PylintTool(ToolBase):
         # allow the indentation specified in the pylint configuration file; we
         # replace it instead with our own version which is more lenient and
         # configurable
-        linter.disable("mixed-indentation")
+        linter.disable("mixed-indentation", ignore_unknown=True)
         indent_checker = IndentChecker(linter)
         linter.register_checker(indent_checker)
 
