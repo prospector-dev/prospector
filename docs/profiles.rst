@@ -350,36 +350,36 @@ Some tools can be further configured or tweaked using an options hash::
 
 The available options are:
 
-+---------+------------------------+----------------------------------------------+
-| Tool    + Option Name            + Possible Values                              |
-+=========+========================+==============================================+
-| mccabe  | max-complexity         | Maximum number of paths allowed in a method  |
-+---------+------------------------+----------------------------------------------+
-| pep8    | max-line-length        | Maximum line length allowed (This option is  |
-|         |                        | overriden by global option max-line-length_) |
-+---------+------------------------+----------------------------------------------+
-| pylint  | -anything-             | Any of the `pylint options`_                 |
-+---------+------------------------+----------------------------------------------+
-| mypy    | strict                 | strict mode                                  |
-+---------+------------------------+----------------------------------------------+
-| mypy    | follow-imports         | How to treat imports                         |
-+---------+------------------------+----------------------------------------------+
-| mypy    | ignore-missing-import  | Silently ignore imports of missing modules   |
-+---------+------------------------+----------------------------------------------+
-| mypy    | platform               | Check for the given platform                 |
-+---------+------------------------+----------------------------------------------+
-| mypy    | python-version         | assume it will be running on Python x.y      |
-+---------+------------------------+----------------------------------------------+
-| mypy    | strict-optional        | Checking of Optional types and None values   |
-+---------+------------------------+----------------------------------------------+
-| bandit  | config                 | configuration filename                       |
-+---------+------------------------+----------------------------------------------+
-| bandit  | profile                | profile to use                               |
-+---------+------------------------+----------------------------------------------+
-| bandit  | severity               | report only issues of a given severity       |
-+---------+------------------------+----------------------------------------------+
-| bandit  | confidence             | report only issues of a given confidence     |
-+---------+------------------------+----------------------------------------------+
++---------+------------------------+-----------------------------------------------+
+| Tool    + Option Name            + Possible Values                               |
++=========+========================+===============================================+
+| mccabe  | max-complexity         | Maximum number of paths allowed in a method   |
++---------+------------------------+-----------------------------------------------+
+| pep8    | max-line-length        | Maximum line length allowed (This option is   |
+|         |                        | overridden by global option max-line-length_) |
++---------+------------------------+-----------------------------------------------+
+| pylint  | -anything-             | Any of the `pylint options`_                  |
++---------+------------------------+-----------------------------------------------+
+| mypy    | strict                 | strict mode                                   |
++---------+------------------------+-----------------------------------------------+
+| mypy    | follow-imports         | How to treat imports                          |
++---------+------------------------+-----------------------------------------------+
+| mypy    | ignore-missing-import  | Silently ignore imports of missing modules    |
++---------+------------------------+-----------------------------------------------+
+| mypy    | platform               | Check for the given platform                  |
++---------+------------------------+-----------------------------------------------+
+| mypy    | python-version         | assume it will be running on Python x.y       |
++---------+------------------------+-----------------------------------------------+
+| mypy    | strict-optional        | Checking of Optional types and None values    |
++---------+------------------------+-----------------------------------------------+
+| bandit  | config                 | configuration filename                        |
++---------+------------------------+-----------------------------------------------+
+| bandit  | profile                | profile to use                                |
++---------+------------------------+-----------------------------------------------+
+| bandit  | severity               | report only issues of a given severity        |
++---------+------------------------+-----------------------------------------------+
+| bandit  | confidence             | report only issues of a given confidence      |
++---------+------------------------+-----------------------------------------------+
 
 See `mypy options`_ for more details
 See `bandit options`_ for more details
