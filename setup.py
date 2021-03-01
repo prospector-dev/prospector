@@ -11,8 +11,8 @@ with open("prospector/__pkginfo__.py") as f:
     exec(f.read())
 _VERSION = globals()["__version__"]
 
-if sys.version_info < (3, 5):
-    raise Exception("Prospector %s requires Python 3.5 or higher." % _VERSION)
+if sys.version_info < (3, 6):
+    raise Exception("Prospector %s requires Python 3.6 or higher." % _VERSION)
 
 
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
@@ -46,7 +46,6 @@ _CLASSIFIERS = [
     "Intended Audience :: Developers",
     "Operating System :: Unix",
     "Topic :: Software Development :: Quality Assurance",
-    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
