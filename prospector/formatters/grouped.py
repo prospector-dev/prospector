@@ -21,7 +21,7 @@ class GroupedFormatter(TextFormatter):
             groups[message.location.path][message.location.line].append(message)
 
         for filename in sorted(groups.keys()):
-            output.append(filename)
+            output.append("%s" % filename)
 
             for line in sorted(groups[filename].keys(), key=lambda x: 0 if x is None else int(x)):
                 output.append("  Line: %s" % line)
