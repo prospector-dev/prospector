@@ -16,7 +16,8 @@ jobs:
       - run: pip install --editable .[with_everything]
       - run: mkdir -p .mypy_cache
       - run: mypy --install-types --non-interactive . || true
-      - run: pytest . || true
+      - run: pip install tzlocal
+      - run: pytest .
       - run: pytest --doctest-modules . || true
       - run: shopt -s globstar && pyupgrade --py36-plus **/*.py || true
-      - run: safety check
+      - run: safety check || true
