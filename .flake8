@@ -1,4 +1,0 @@
-[flake8]
-ignore = E126
-max-line-length = 120
-exclude = */migrations/*,docs/*
