@@ -13,8 +13,8 @@ jobs:
       - run: flake8 --ignore=E203,E231,E265,F401 --max-complexity=29 --max-line-length=123
                     --show-source --statistics . --show-source --statistics
       - run: isort --check-only --profile black . || true
+      - run: pip install --editable .[with_everything]
       - run: mkdir -p .mypy_cache
-      - run: pip install -r requirements.txt || true
       - run: mypy --install-types --non-interactive . || true
       - run: pytest . || true
       - run: pytest --doctest-modules . || true
