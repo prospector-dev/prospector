@@ -45,7 +45,7 @@ and all tests are run on `travis-ci.org`_.
 
 .. include:: ../CONTRIBUTORS.rst
 
-Developper Reference
+Developer Reference
 --------------------
 .. toctree::
    :maxdepth: 2

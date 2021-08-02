@@ -8,7 +8,7 @@ class XunitFormatter(Formatter):
 
     """
     This formatter outputs messages in the Xunit xml format, which is used by several
-    CI tools to parse output. This formatter is therefore a compatability shim between tools built
+    CI tools to parse output. This formatter is therefore a compatibility shim between tools built
     to use Xunit and prospector itself.
     """
 
