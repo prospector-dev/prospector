@@ -71,8 +71,8 @@ class PylintTool(ToolBase):
         # was disabled.
         linter.disable("locally-disabled")  # notification about disabling a message
         linter.enable("file-ignored")  # notification about disabling an entire file
-        linter.enable("suppressed-message")  # notification about a message being supressed
-        linter.disable("useless-suppression")  # notification about message supressed which was not raised
+        linter.enable("suppressed-message")  # notification about a message being suppressed
+        linter.disable("useless-suppression")  # notification about message suppressed which was not raised
         linter.disable("deprecated-pragma")  # notification about use of deprecated 'pragma' option
 
         # disable the 'mixed indentation' warning, since it actually will only

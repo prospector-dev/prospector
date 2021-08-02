@@ -68,12 +68,12 @@ combinations:
         - pep8: E702
         - pylint: multiple-statements
 
-    -   # incorrect indendation
+    -   # incorrect indentation
         - pep257: D207
         - pep8: E111
         - pylint: bad-indentation
 
-    -   # incorrect indendation
+    -   # incorrect indentation
         - pep257: D208
         - pep8: E111
         - pylint: bad-indentation
@@ -194,7 +194,7 @@ combinations:
         - frosted: W101
         - pep8: E722
 
-    -   # Spaces around keyword/paramater equals
+    -   # Spaces around keyword/parameter equals
         - pep8: E251
         - pylint: bad-whitespace
 

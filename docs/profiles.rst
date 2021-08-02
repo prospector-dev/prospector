@@ -356,7 +356,7 @@ The available options are:
 | mccabe  | max-complexity         | Maximum number of paths allowed in a method  |
 +---------+------------------------+----------------------------------------------+
 | pep8    | max-line-length        | Maximum line length allowed (This option is  |
-|         |                        | overriden by global option max-line-length_) |
+|         |                        | overridden by global option max-line-length_) |
 +---------+------------------------+----------------------------------------------+
 | pylint  | -anything-             | Any of the `pylint options`_                 |
 +---------+------------------------+----------------------------------------------+

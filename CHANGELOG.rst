@@ -119,7 +119,7 @@ Version 0.12.8
 
 Version 0.12.7
 ---------------
-* Enforcing pydocstyle >= 2.0.0 for API compatability reliability
+* Enforcing pydocstyle >= 2.0.0 for API compatibility reliability
 
 Version 0.12.6
 ---------------
@@ -134,18 +134,18 @@ Version 0.12.5
 * [#207](https://github.com/landscapeio/prospector/pull/207) Fixed missing 'UnknownMessage' exception caused by recent pylint submodule changes
 * Minor documentation formatting updates
 * [#202](https://github.com/landscapeio/prospector/issues/202) Ignoring .tox directories to avoid accidentally checking the code in there
-* [#205](https://github.com/landscapeio/prospector/pull/205) Fixes for compatability with pylint 1.7+
-* [#193](https://github.com/landscapeio/prospector/pull/193) Fixes for compatability with pylint 1.6+
-* [#194](https://github.com/landscapeio/prospector/pull/194) Fixes for compatability with vulture 0.9+
-* [#191](https://github.com/landscapeio/prospector/pull/191) Fixes for compatability with pydocstyle 1.1+
+* [#205](https://github.com/landscapeio/prospector/pull/205) Fixes for compatibility with pylint 1.7+
+* [#193](https://github.com/landscapeio/prospector/pull/193) Fixes for compatibility with pylint 1.6+
+* [#194](https://github.com/landscapeio/prospector/pull/194) Fixes for compatibility with vulture 0.9+
+* [#191](https://github.com/landscapeio/prospector/pull/191) Fixes for compatibility with pydocstyle 1.1+
 
 Version 0.12.4
 ---------------
-* Panicky stapling of pyroma dependency until prospector is fied to not break with the new pyroma release
+* Panicky stapling of pyroma dependency until prospector is fixed to not break with the new pyroma release
 
 Version 0.12.3
 ---------------
-* [#190](https://github.com/landscapeio/prospector/pull/190) Pinning pydocstyle version for now until API compatability with newer versions can be written
+* [#190](https://github.com/landscapeio/prospector/pull/190) Pinning pydocstyle version for now until API compatibility with newer versions can be written
 * [#184](https://github.com/landscapeio/prospector/pull/184) Including the LICENCE file when building dists
 * Fixed a crash in the profile_validator tool if an empty profile was found
 * (Version 0.12.2 does not exist due to a counting error...)
@@ -160,7 +160,7 @@ Version 0.12
 ---------------
 * [#170](https://github.com/landscapeio/prospector/issues/170) Changed from using pep257 to pydocstyle (which is what pep257 is now called)
 * [#162](https://github.com/landscapeio/prospector/issues/162) Properly warning about optional tools which are not installed
-* [#166](https://github.com/landscapeio/prospector/pulls/166) Added vscode formater
+* [#166](https://github.com/landscapeio/prospector/pulls/166) Added vscode formatter
 * [#153](https://github.com/landscapeio/prospector/pulls/153) Better pep257 support
 * [#156](https://github.com/landscapeio/prospector/pulls/156) Better pyroma logging hack for when pyroma is not installed
 * [#158](https://github.com/landscapeio/prospector/pulls/158) Fixed max-line-length command line option
@@ -196,7 +196,7 @@ Version 0.11.1
 
 Version 0.11
 ---------------
-* Compatability fixes to work with pylint>=1.5
+* Compatibility fixes to work with pylint>=1.5
 * McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)
 * Autodetect of libraries will now not search inside virtualenvironments
 * [#142](https://github.com/landscapeio/prospector/pull/142) better installation documentation in README (thanks [@ExcaliburZero](https://github.com/ExcaliburZero))
