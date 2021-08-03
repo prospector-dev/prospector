@@ -62,7 +62,7 @@ _OPTIONAL = {
 }
 
 with_everything = [req for req_list in _OPTIONAL.values() for req in req_list]
-_OPTIONAL["with_everything"] = sorted(with_everything)
+_OPTIONAL["with_everything"] = tuple(sorted(with_everything))
 
 if os.path.exists("README.rst"):
     _LONG_DESCRIPTION = codecs.open("README.rst", "r", "utf-8").read()
