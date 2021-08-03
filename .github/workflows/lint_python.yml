@@ -15,7 +15,7 @@ jobs:
       - run: isort --check-only --profile black . || true
       - run: pip install --editable .[with_everything]
       - run: mkdir -p .mypy_cache
-      - run: mypy --exclude tests/suppression/testdata/test_ignore_file/test.py --install-types --non-interactive . || true
+      - run: mypy --exclude tests/ --install-types --non-interactive . || true
       - run: pip install tzlocal
       - run: pytest .
       - run: pytest --doctest-modules . || true
