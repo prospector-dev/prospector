@@ -17,7 +17,7 @@ jobs:
       - run: pip install tzlocal
       - run: pip install --editable .[with_everything]
       - run: mkdir -p .mypy_cache
-      - run: mypy --exclude '(docs/conf\.py|tests/)' --ignore-missing-imports --install-types --non-interactive .
+      - run: mypy --exclude '(docs/conf\.py|setup\.py|tests/)' --ignore-missing-imports --install-types --non-interactive .
       - run: pytest .
       - run: pytest --doctest-modules . || true
       - run: shopt -s globstar && pyupgrade --py36-plus **/*.py || true
