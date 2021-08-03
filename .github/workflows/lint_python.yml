@@ -6,6 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+      - run: pip install --upgrade pip wheel
       - run: pip install bandit black codespell flake8 isort mypy pytest pyupgrade safety
       - run: bandit --recursive --skip B101,B102,B105,B106,B107,B108,B408 .
       - run: black --check . || true
@@ -13,10 +14,10 @@ jobs:
       - run: flake8 --ignore=E203,E231,E265,F401 --max-complexity=29 --max-line-length=123
                     --show-source --statistics . --show-source --statistics
       - run: isort --check-only --profile black . || true
+      - run: pip install tzlocal
       - run: pip install --editable .[with_everything]
       - run: mkdir -p .mypy_cache
-      - run: mypy --exclude tests/ --install-types --non-interactive . || true
-      - run: pip install tzlocal
+      - run: mypy --exclude tests/ --ignore-missing-imports --install-types --non-interactive . || true
       - run: pytest .
       - run: pytest --doctest-modules . || true
       - run: shopt -s globstar && pyupgrade --py36-plus **/*.py || true
