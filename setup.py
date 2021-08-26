@@ -30,9 +30,8 @@ _INSTALL_REQUIRES = [
     "pycodestyle<2.7.0,>=2.6.0",
     "pep8-naming>=0.3.3,<=0.10.0",
     "pydocstyle>=2.0.0",
-    "pylint<3,>=2.5.3",
+    "pylint<3,>=2.8.3",
     "pylint-django<2.2.0",
-    "astroid==2.4.1",
 ]
 
 
@@ -46,10 +45,10 @@ _CLASSIFIERS = [
     "Intended Audience :: Developers",
     "Operating System :: Unix",
     "Topic :: Software Development :: Quality Assurance",
-    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "License :: OSI Approved :: " "GNU General Public License v2 or later (GPLv2+)",
 ]
 
