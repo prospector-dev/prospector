@@ -155,4 +155,3 @@ License
 -------
 
 Prospector is available under the GPLv2 License.
-

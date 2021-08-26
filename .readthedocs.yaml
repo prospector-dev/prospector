@@ -9,4 +9,3 @@ python:
       path: .
       extra_requirements:
         - with_everything
-
