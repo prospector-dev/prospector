@@ -51,7 +51,7 @@ class ProspectorVulture(Vulture):
                     filename = item.file
                 except AttributeError:
                     filename = item.filename
-                if hasattr(item, 'lineno'):
+                if hasattr(item, "lineno"):
                     lineno = item.lineno  # for older versions of vulture
                 else:
                     lineno = item.first_lineno

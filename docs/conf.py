@@ -151,20 +151,8 @@ html_short_title = "prospector-%s" % version
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    "index": [
-        "slim_searchbox.html",
-        "sidebarintro.html",
-        "globaltoc.html",
-        "links.html",
-        "sourcelink.html",
-    ],
-    "**": [
-        "slim_searchbox.html",
-        "globaltoc.html",
-        "relations.html",
-        "links.html",
-        "sourcelink.html",
-    ],
+    "index": ["slim_searchbox.html", "sidebarintro.html", "globaltoc.html", "links.html", "sourcelink.html",],
+    "**": ["slim_searchbox.html", "globaltoc.html", "relations.html", "links.html", "sourcelink.html",],
 }
 
 # Additional templates that should be rendered to pages, maps page names to
