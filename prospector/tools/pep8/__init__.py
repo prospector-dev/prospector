@@ -26,7 +26,12 @@ class ProspectorReport(BaseReport):
         self._prospector_messages = []
 
     def error(self, line_number, offset, text, check):
-        code = super(ProspectorReport, self).error(line_number, offset, text, check,)
+        code = super(ProspectorReport, self).error(
+            line_number,
+            offset,
+            text,
+            check,
+        )
         if code is None:
             # The error pep8 found is being ignored, let's move on.
             return
@@ -39,8 +44,19 @@ class ProspectorReport(BaseReport):
             line_number = None
 
         # Record the message using prospector's data structures.
-        location = Location(path=self.filename, module=None, function=None, line=line_number, character=(offset + 1),)
-        message = Message(source="pep8", code=code, location=location, message=text,)
+        location = Location(
+            path=self.filename,
+            module=None,
+            function=None,
+            line=line_number,
+            character=(offset + 1),
+        )
+        message = Message(
+            source="pep8",
+            code=code,
+            location=location,
+            message=text,
+        )
 
         self._prospector_messages.append(message)
 

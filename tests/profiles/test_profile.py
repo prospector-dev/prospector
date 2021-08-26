@@ -77,7 +77,8 @@ class TestProfileInheritance(ProfileTestBase):
         profile = self._load("strictness_equivalence")
         medium_strictness = ProspectorProfile.load("strictness_medium", self._profile_path)
         self.assertListEqual(
-            sorted(profile.pylint["disable"]), sorted(medium_strictness.pylint["disable"]),
+            sorted(profile.pylint["disable"]),
+            sorted(medium_strictness.pylint["disable"]),
         )
 
     def test_shorthand_inheritance(self):

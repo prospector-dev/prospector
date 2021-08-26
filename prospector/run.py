@@ -46,7 +46,10 @@ class Prospector(object):
         summary.update(self.config.get_summary_information())
 
         found_files = find_python(
-            self.config.ignores, self.config.paths, self.config.explicit_file_mode, self.config.workdir,
+            self.config.ignores,
+            self.config.paths,
+            self.config.explicit_file_mode,
+            self.config.workdir,
         )
 
         # Run the tools
@@ -70,10 +73,16 @@ class Prospector(object):
                         loc = Location(self.config.workdir, None, None, None, None)
 
                         if capture.get_hidden_stderr():
-                            msg = "stderr from %s:\n%s" % (toolname, capture.get_hidden_stderr(),)
+                            msg = "stderr from %s:\n%s" % (
+                                toolname,
+                                capture.get_hidden_stderr(),
+                            )
                             messages.append(Message(toolname, "hidden-output", loc, message=msg))
                         if capture.get_hidden_stdout():
-                            msg = "stdout from %s:\n%s" % (toolname, capture.get_hidden_stdout(),)
+                            msg = "stdout from %s:\n%s" % (
+                                toolname,
+                                capture.get_hidden_stdout(),
+                            )
                             messages.append(Message(toolname, "hidden-output", loc, message=msg))
 
             except FatalProspectorException as fatal:
@@ -86,7 +95,12 @@ class Prospector(object):
                 else:
                     loc = Location(self.config.workdir, None, None, None, None)
                     msg = "Tool %s failed to run (exception was raised)" % (toolname,)
-                    message = Message(toolname, "failure", loc, message=msg,)
+                    message = Message(
+                        toolname,
+                        "failure",
+                        loc,
+                        message=msg,
+                    )
                     messages.append(message)
 
         messages = self.process_messages(found_files, messages)

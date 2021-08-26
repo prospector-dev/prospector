@@ -38,7 +38,13 @@ class TextFormatter(Formatter):
                     value = summary_label[2](self.summary[key])
                 else:
                     value = self.summary[key]
-                output.append(" %s: %s" % (label.rjust(label_width), value,))
+                output.append(
+                    " %s: %s"
+                    % (
+                        label.rjust(label_width),
+                        value,
+                    )
+                )
 
         return "\n".join(output)
 

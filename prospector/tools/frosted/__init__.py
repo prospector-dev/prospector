@@ -19,13 +19,26 @@ class ProspectorReporter(object):
         if code in self.ignore:
             return
 
-        location = Location(path=filename, module=None, function=None, line=line, character=character,)
-        message = Message(source="frosted", code=code, location=location, message=message,)
+        location = Location(
+            path=filename,
+            module=None,
+            function=None,
+            line=line,
+            character=character,
+        )
+        message = Message(
+            source="frosted",
+            code=code,
+            location=location,
+            message=message,
+        )
         self._messages.append(message)
 
     def unexpected_error(self, filename, msg):
         self.record_message(
-            filename=filename, code="U999", message=msg,
+            filename=filename,
+            code="U999",
+            message=msg,
         )
 
     def flake(self, message):

@@ -21,4 +21,9 @@ class YamlFormatter(Formatter):
         if messages:
             output["messages"] = [m.as_dict() for m in self.messages]
 
-        return yaml.safe_dump(output, indent=2, default_flow_style=False, allow_unicode=True,)
+        return yaml.safe_dump(
+            output,
+            indent=2,
+            default_flow_style=False,
+            allow_unicode=True,
+        )

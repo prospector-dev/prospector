@@ -29,7 +29,12 @@ class Pep257Tool(ToolBase):
                 for error in checker.check_source(read_py_file(code_file), code_file, None):
 
                     location = Location(
-                        path=code_file, module=None, function="", line=error.line, character=0, absolute_path=True,
+                        path=code_file,
+                        module=None,
+                        function="",
+                        line=error.line,
+                        character=0,
+                        absolute_path=True,
                     )
                     message = Message(
                         source="pep257",
@@ -53,7 +58,14 @@ class Pep257Tool(ToolBase):
                 # attempt to analyze the __all__ definition has failed.  This
                 # occurs when __all__ is too complex to be parsed.
                 messages.append(
-                    make_tool_error_message(code_file, "pep257", "D000", line=1, character=0, message=exc.args[0],)
+                    make_tool_error_message(
+                        code_file,
+                        "pep257",
+                        "D000",
+                        line=1,
+                        character=0,
+                        message=exc.args[0],
+                    )
                 )
                 continue
 

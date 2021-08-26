@@ -15,7 +15,10 @@ class ProfileNotFound(Exception):
         self.profile_path = profile_path
 
     def __repr__(self):
-        return "Could not find profile %s; searched in %s" % (self.name, ":".join(self.profile_path),)
+        return "Could not find profile %s; searched in %s" % (
+            self.name,
+            ":".join(self.profile_path),
+        )
 
 
 class CannotParseProfile(Exception):
@@ -113,7 +116,10 @@ class ProspectorProfile(object):
     def load(name_or_path, profile_path, allow_shorthand=True, forced_inherits=None):
         # First simply load all of the profiles and those that it explicitly inherits from
         data, inherits = _load_and_merge(
-            name_or_path, profile_path, allow_shorthand, forced_inherits=forced_inherits or [],
+            name_or_path,
+            profile_path,
+            allow_shorthand,
+            forced_inherits=forced_inherits or [],
         )
         return ProspectorProfile(name_or_path, data, inherits)
 
@@ -301,7 +307,10 @@ def _append_profiles(name, profile_path, data, inherit_list, allow_shorthand=Fal
 def _load_and_merge(name_or_path, profile_path, allow_shorthand=True, forced_inherits=None):
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
-        name_or_path, profile_path, allow_shorthand=allow_shorthand, forced_inherits=forced_inherits or [],
+        name_or_path,
+        profile_path,
+        allow_shorthand=allow_shorthand,
+        forced_inherits=forced_inherits or [],
     )
 
     if allow_shorthand:
@@ -335,7 +344,12 @@ def _load_and_merge(name_or_path, profile_path, allow_shorthand=True, forced_inh
 
 
 def _load_profile(
-    name_or_path, profile_path, shorthands_found=None, already_loaded=None, allow_shorthand=True, forced_inherits=None,
+    name_or_path,
+    profile_path,
+    shorthands_found=None,
+    already_loaded=None,
+    allow_shorthand=True,
+    forced_inherits=None,
 ):
     # recursively get the contents of the basic profile and those it inherits from
     base_contents = _load_content(name_or_path, profile_path)
@@ -366,7 +380,11 @@ def _load_profile(
 
         already_loaded.append(inherit_profile)
         new_cd, new_il, new_sh = _load_profile(
-            inherit_profile, profile_path, shorthands_found, already_loaded, allow_shorthand,
+            inherit_profile,
+            profile_path,
+            shorthands_found,
+            already_loaded,
+            allow_shorthand,
         )
         contents_dict.update(new_cd)
         inherit_order += new_il

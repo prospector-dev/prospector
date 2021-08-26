@@ -28,15 +28,33 @@ def build_manager():
 
     manager.add(soc.BooleanSetting("messages_only", default=False))
     manager.add(soc.BooleanSetting("summary_only", default=False))
-    manager.add(soc.ListSetting("output_format", OutputChoice(sorted(FORMATTERS.keys())), default=None,))
+    manager.add(
+        soc.ListSetting(
+            "output_format",
+            OutputChoice(sorted(FORMATTERS.keys())),
+            default=None,
+        )
+    )
     manager.add(soc.BooleanSetting("absolute_paths", default=False))
 
-    manager.add(soc.ListSetting("tools", soc.Choice(sorted(TOOLS.keys())), default=None,))
+    manager.add(
+        soc.ListSetting(
+            "tools",
+            soc.Choice(sorted(TOOLS.keys())),
+            default=None,
+        )
+    )
     manager.add(soc.ListSetting("with_tools", soc.String, default=[]))
     manager.add(soc.ListSetting("without_tools", soc.String, default=[]))
     manager.add(soc.ListSetting("profiles", soc.String, default=[]))
     manager.add(soc.ListSetting("profile_path", soc.String, default=[]))
-    manager.add(soc.ChoiceSetting("strictness", ["veryhigh", "high", "medium", "low", "verylow"], default=None,))
+    manager.add(
+        soc.ChoiceSetting(
+            "strictness",
+            ["veryhigh", "high", "medium", "low", "verylow"],
+            default=None,
+        )
+    )
     manager.add(soc.BooleanSetting("show_profile", default=False))
 
     manager.add(soc.BooleanSetting("no_external_config", default=False))
@@ -58,8 +76,19 @@ def build_default_sources():
     sources = [
         build_command_line_source(),
         soc.EnvironmentVariableSource(),
-        soc.ConfigFileSource((".prospectorrc", "setup.cfg", "tox.ini",)),
-        soc.ConfigFileSource((soc.ConfigDirectory(".prospectorrc"), soc.HomeDirectory(".prospectorrc"),)),
+        soc.ConfigFileSource(
+            (
+                ".prospectorrc",
+                "setup.cfg",
+                "tox.ini",
+            )
+        ),
+        soc.ConfigFileSource(
+            (
+                soc.ConfigDirectory(".prospectorrc"),
+                soc.HomeDirectory(".prospectorrc"),
+            )
+        ),
     ]
 
     return sources
@@ -102,8 +131,14 @@ def build_command_line_source(prog=None, description="Performs static analysis o
             " the same error. Use this option to see all unmerged"
             " messages.",
         },
-        "doc_warnings": {"flags": ["-D", "--doc-warnings"], "help": "Include warnings about documentation.",},
-        "test_warnings": {"flags": ["-T", "--test-warnings"], "help": "Also check test modules and packages.",},
+        "doc_warnings": {
+            "flags": ["-D", "--doc-warnings"],
+            "help": "Include warnings about documentation.",
+        },
+        "test_warnings": {
+            "flags": ["-T", "--test-warnings"],
+            "help": "Also check test modules and packages.",
+        },
         "no_style_warnings": {
             "flags": ["-8", "--no-style-warnings"],
             "help": "Don't create any warnings about style. This disables the"
@@ -148,7 +183,10 @@ def build_command_line_source(prog=None, description="Performs static analysis o
             "tools to run. To add extra tools to the defaults, see "
             "--with-tool. Possible values are: %s. By "
             "default, the following tools will be run: %s"
-            % (", ".join(sorted(TOOLS.keys())), ", ".join(sorted(DEFAULT_TOOLS)),),
+            % (
+                ", ".join(sorted(TOOLS.keys())),
+                ", ".join(sorted(DEFAULT_TOOLS)),
+            ),
         },
         "with_tools": {
             "flags": ["-w", "--with-tool"],
@@ -264,5 +302,8 @@ def build_command_line_source(prog=None, description="Performs static analysis o
     )
 
     return soc.CommandLineSource(
-        options=options, version=__version__, parser_options=parser_options, positional=positional,
+        options=options,
+        version=__version__,
+        parser_options=parser_options,
+        positional=positional,
     )

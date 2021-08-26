@@ -95,19 +95,36 @@ class ProspectorReporter(Reporter):
         if code in self.ignore:
             return
 
-        location = Location(path=filename, module=None, function=None, line=line, character=character,)
-        message = Message(source="pyflakes", code=code, location=location, message=message,)
+        location = Location(
+            path=filename,
+            module=None,
+            function=None,
+            line=line,
+            character=character,
+        )
+        message = Message(
+            source="pyflakes",
+            code=code,
+            location=location,
+            message=message,
+        )
         self._messages.append(message)
 
     def unexpectedError(self, filename, msg):  # noqa
         self.record_message(
-            filename=filename, code="F999", message=msg,
+            filename=filename,
+            code="F999",
+            message=msg,
         )
 
     # pylint: disable=too-many-arguments
     def syntaxError(self, filename, msg, lineno, offset, text):  # noqa
         self.record_message(
-            filename=filename, line=lineno, character=offset, code="F999", message=msg,
+            filename=filename,
+            line=lineno,
+            character=offset,
+            code="F999",
+            message=msg,
         )
 
     def flake(self, message):
