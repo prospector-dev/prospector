@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.4.0
+-------------
+
+- [#424](https://github.com/PyCQA/prospector/pull/424) GitHub Action to discover typos with codespell
+- [#421](https://github.com/PyCQA/prospector/pull/421) Loosen pylint requirement
+- [#427](https://github.com/PyCQA/prospector/pull/427) Fix prospector for latest pylint version and add Github actions
+
 Version 1.3.1
 -------------
 - [#390](https://github.com/PyCQA/prospector/pull/390) Updating Vulture API usage for newer versions of Vulture

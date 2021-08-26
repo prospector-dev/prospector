@@ -32,7 +32,7 @@ jobs:
         id: generate-python-key
         run: >-
           echo "::set-output name=key::base-venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg', 'requirements_test.txt', 'requirements_test_min.txt')
+            hashFiles('setup.cfg')
           }}"
       - name: Restore Python virtual environment
         id: cache-venv
@@ -50,7 +50,8 @@ jobs:
           python -m venv venv
           . venv/bin/activate
           python -m pip install -U pip setuptools wheel
-          pip install -U -r requirements_test.txt
+          pip3 install coveralls coverage pre-commit pytest-cov pytest-benchmark
+          pip3 install -e ".["with_everything"]"
       - name: Generate pre-commit restore key
         id: generate-pre-commit-key
         run: >-
@@ -111,37 +112,7 @@ jobs:
         run: |
           . venv/bin/activate
           pip install -e .
-          pre-commit run pylint --all-files
-
-  spelling:
-    name: Run spelling checks
-    runs-on: ubuntu-latest
-    needs: prepare-base
-    steps:
-      - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
-      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
-        id: python
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: ${{ env.DEFAULT_PYTHON }}
-      - name: Restore Python virtual environment
-        id: cache-venv
-        uses: actions/cache@v2.1.6
-        with:
-          path: venv
-          key:
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
-            needs.prepare-base.outputs.python-key }}
-      - name: Fail job if Python cache restore failed
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          echo "Failed to restore Python venv from cache"
-          exit 1
-      - name: Run spelling checks
-        run: |
-          . venv/bin/activate
-          pytest tests/ -k unittest_spelling
+          pre-commit run --all-files
 
   prepare-tests-linux:
     name: Prepare tests for Python ${{ matrix.python-version }} (Linux)
@@ -165,7 +136,7 @@ jobs:
         id: generate-python-key
         run: >-
           echo "::set-output name=key::venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg', 'requirements_test.txt', 'requirements_test_min.txt')
+            hashFiles('setup.cfg')
           }}"
       - name: Restore Python virtual environment
         id: cache-venv
@@ -182,8 +153,8 @@ jobs:
         run: |
           python -m venv venv
           . venv/bin/activate
-          python -m pip install -U pip setuptools wheel
-          pip install -U -r requirements_test.txt
+          python -m pip install -U pip setuptools wheel coveralls coverage pre-commit pytest-cov pytest-benchmark
+          pip3 install -e ".["with_everything"]"
 
   pytest-linux:
     name: Run tests Python ${{ matrix.python-version }} (Linux)
@@ -217,6 +188,7 @@ jobs:
       - name: Run pytest
         run: |
           . venv/bin/activate
+          python -m pip install -U pip setuptools wheel coveralls coverage pre-commit pytest-cov pytest-benchmark
           pytest --benchmark-disable --cov --cov-report= tests/
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v2.2.4
@@ -267,210 +239,3 @@ jobs:
         run: |
           . venv/bin/activate
           coveralls --rcfile=${{ env.COVERAGERC_FILE }} --service=github
-
-  benchmark-linux:
-    name: Run benchmark tests Python ${{ matrix.python-version }} (Linux)
-    runs-on: ubuntu-latest
-    needs: prepare-tests-linux
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.8, 3.9]
-    steps:
-      - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
-      - name: Set up Python ${{ matrix.python-version }}
-        id: python
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Restore Python virtual environment
-        id: cache-venv
-        uses: actions/cache@v2.1.6
-        with:
-          path: venv
-          key:
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
-            needs.prepare-tests-linux.outputs.python-key }}
-      - name: Fail job if Python cache restore failed
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          echo "Failed to restore Python venv from cache"
-          exit 1
-      - name: Run pytest
-        run: |
-          . venv/bin/activate
-          pip install pygal
-          pip install -e .
-          pytest --exitfirst \
-            --benchmark-only \
-            --benchmark-autosave \
-            --benchmark-save-data \
-            --benchmark-group-by="group"
-      - name: Create partial artifact name suffix
-        id: artifact-name-suffix
-        run: >-
-          echo "::set-output name=datetime::"$(date "+%Y%m%d_%H%M")
-      - name: Upload benchmark artifact
-        uses: actions/upload-artifact@v2.2.4
-        with:
-          name:
-            benchmark-${{ runner.os }}-${{ matrix.python-version }}_${{
-            steps.artifact-name-suffix.outputs.datetime }}
-          path: .benchmarks/
-
-  prepare-tests-windows:
-    name: Prepare tests for Python ${{ matrix.python-version }} (Windows)
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, 3.10-dev]
-    outputs:
-      python-key: ${{ steps.generate-python-key.outputs.key }}
-    steps:
-      - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
-        with:
-          fetch-depth: 0
-      - name: Set up Python ${{ matrix.python-version }}
-        id: python
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Generate partial Python venv restore key
-        id: generate-python-key
-        run: >-
-          echo "::set-output name=key::venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg', 'requirements_test_min.txt')
-          }}"
-      - name: Restore Python virtual environment
-        id: cache-venv
-        uses: actions/cache@v2.1.6
-        with:
-          path: venv
-          key: >-
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
-            steps.generate-python-key.outputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-venv-${{ env.CACHE_VERSION }}-
-      - name: Create Python virtual environment
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          python -m venv venv
-          . venv\\Scripts\\activate
-          python -m pip install -U pip setuptools wheel
-          pip install -U -r requirements_test_min.txt
-
-  pytest-windows:
-    name: Run tests Python ${{ matrix.python-version }} (Windows)
-    runs-on: windows-latest
-    needs: prepare-tests-windows
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, 3.10-dev]
-    steps:
-      - name: Set temp directory
-        run: echo "TEMP=$env:USERPROFILE\AppData\Local\Temp" >> $env:GITHUB_ENV
-        # Workaround to set correct temp directory on Windows
-        # https://github.com/actions/virtual-environments/issues/712
-      - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
-      - name: Set up Python ${{ matrix.python-version }}
-        id: python
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Restore Python virtual environment
-        id: cache-venv
-        uses: actions/cache@v2.1.6
-        with:
-          path: venv
-          key:
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
-            needs.prepare-tests-windows.outputs.python-key }}
-      - name: Fail job if Python cache restore failed
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          echo "Failed to restore Python venv from cache"
-          exit 1
-      - name: Run pytest
-        run: |
-          . venv\\Scripts\\activate
-          pytest --benchmark-disable tests/
-
-  prepare-tests-pypy:
-    name: Prepare tests for Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["pypy3"]
-    outputs:
-      python-key: ${{ steps.generate-python-key.outputs.key }}
-    steps:
-      - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
-        with:
-          fetch-depth: 0
-      - name: Set up Python ${{ matrix.python-version }}
-        id: python
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Generate partial Python venv restore key
-        id: generate-python-key
-        run: >-
-          echo "::set-output name=key::venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg', 'requirements_test_min.txt')
-          }}"
-      - name: Restore Python virtual environment
-        id: cache-venv
-        uses: actions/cache@v2.1.6
-        with:
-          path: venv
-          key: >-
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
-            steps.generate-python-key.outputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-venv-${{ env.CACHE_VERSION }}-
-      - name: Create Python virtual environment
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          python -m venv venv
-          . venv/bin/activate
-          python -m pip install -U pip setuptools wheel
-          pip install -U -r requirements_test_min.txt
-
-  pytest-pypy:
-    name: Run tests Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
-    needs: prepare-tests-pypy
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["pypy3"]
-    steps:
-      - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
-      - name: Set up Python ${{ matrix.python-version }}
-        id: python
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Restore Python virtual environment
-        id: cache-venv
-        uses: actions/cache@v2.1.6
-        with:
-          path: venv
-          key:
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
-            needs.prepare-tests-pypy.outputs.python-key }}
-      - name: Fail job if Python cache restore failed
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          echo "Failed to restore Python venv from cache"
-          exit 1
-      - name: Run pytest
-        run: |
-          . venv/bin/activate
-          pytest --benchmark-disable tests/
