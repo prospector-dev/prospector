@@ -30,7 +30,10 @@ class McCabeTool(ToolBase):
         for code_file in found_files.iter_module_paths():
             try:
                 contents = read_py_file(code_file)
-                tree = ast.parse(contents, filename=code_file,)
+                tree = ast.parse(
+                    contents,
+                    filename=code_file,
+                )
             except CouldNotHandleEncoding as err:
                 messages.append(
                     make_tool_error_message(
@@ -44,7 +47,12 @@ class McCabeTool(ToolBase):
             except SyntaxError as err:
                 messages.append(
                     make_tool_error_message(
-                        code_file, "mccabe", "MC0000", line=err.lineno, character=err.offset, message="Syntax Error",
+                        code_file,
+                        "mccabe",
+                        "MC0000",
+                        line=err.lineno,
+                        character=err.offset,
+                        message="Syntax Error",
                     )
                 )
                 continue
@@ -70,7 +78,11 @@ class McCabeTool(ToolBase):
                         source="mccabe",
                         code="MC0001",
                         location=location,
-                        message="%s is too complex (%s)" % (graph.entity, complexity,),
+                        message="%s is too complex (%s)"
+                        % (
+                            graph.entity,
+                            complexity,
+                        ),
                     )
                     messages.append(message)
 

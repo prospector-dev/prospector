@@ -57,7 +57,9 @@ class IndentChecker(BaseTokenChecker):
                     if self.config.indent_strict_spaces:
                         # we have tabs but are configured to only allow spaces
                         self.add_message(
-                            "incorrect-indentation", line=line_num, args=("tabs", "spaces"),
+                            "incorrect-indentation",
+                            line=line_num,
+                            args=("tabs", "spaces"),
                         )
                     tab_count += 1
 
@@ -65,7 +67,9 @@ class IndentChecker(BaseTokenChecker):
                     if self.config.indent_strict_tabs:
                         # we have tabs but are configured to only allow spaces
                         self.add_message(
-                            "incorrect-indentation", line=line_num, args=("spaces", "tabs"),
+                            "incorrect-indentation",
+                            line=line_num,
+                            args=("spaces", "tabs"),
                         )
                     space_count += 1
 

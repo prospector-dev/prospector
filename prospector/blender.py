@@ -54,7 +54,11 @@ def blend_line(messages, blend_combos=None):
     for blend_combo_idx, blend_list in enumerate(blend_lists):
         if len(blend_list) == 0:
             continue
-        blend_list.sort(key=lambda msg: blend_combos[blend_combo_idx].index((msg.source, msg.code),),)
+        blend_list.sort(
+            key=lambda msg: blend_combos[blend_combo_idx].index(
+                (msg.source, msg.code),
+            ),
+        )
         if blend_list[0] not in blended:
             # We may have already added this message if it represents
             # several messages in other tools which are not being run -
@@ -81,7 +85,9 @@ def blend(messages, blend_combos=None):
     msgs_grouped = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
-        msgs_grouped[message.location.path][message.location.line].append(message,)
+        msgs_grouped[message.location.path][message.location.line].append(
+            message,
+        )
 
     # now blend together all messages on the same line
     out = []

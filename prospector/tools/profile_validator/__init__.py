@@ -77,26 +77,34 @@ class ProfileValidationTool(ToolBase):
         if parsed is None:
             # this happens if a completely empty profile is found
             add_message(
-                PROFILE_IS_EMPTY, "%s is a completely empty profile" % relative_filepath, "entire-file",
+                PROFILE_IS_EMPTY,
+                "%s is a completely empty profile" % relative_filepath,
+                "entire-file",
             )
             return messages
 
         for setting in ("doc-warnings", "test-warnings", "autodetect"):
             if not isinstance(parsed.get(setting, False), bool):
                 add_message(
-                    CONFIG_SETTING_MUST_BE_BOOL, '"%s" should be true or false' % setting, setting,
+                    CONFIG_SETTING_MUST_BE_BOOL,
+                    '"%s" should be true or false' % setting,
+                    setting,
                 )
 
         if not isinstance(parsed.get("max-line-length", 0), int):
             add_message(
-                CONFIG_SETTING_MUST_BE_INTEGER, '"max-line-length" should be an integer', "max-line-length",
+                CONFIG_SETTING_MUST_BE_INTEGER,
+                '"max-line-length" should be an integer',
+                "max-line-length",
             )
 
         if "strictness" in parsed:
             possible = ("veryhigh", "high", "medium", "low", "verylow", "none")
             if parsed["strictness"] not in possible:
                 add_message(
-                    CONFIG_INVALID_VALUE, '"strictness" must be one of %s' % ", ".join(possible), "strictness",
+                    CONFIG_INVALID_VALUE,
+                    '"strictness" must be one of %s' % ", ".join(possible),
+                    "strictness",
                 )
 
         if "uses" in parsed:
@@ -145,7 +153,9 @@ class ProfileValidationTool(ToolBase):
         for key in parsed.keys():
             if key not in ProfileValidationTool.ALL_SETTINGS and key not in self.tool_names():
                 add_message(
-                    CONFIG_UNKNOWN_SETTING, '"%s" is not a valid prospector setting' % key, key,
+                    CONFIG_UNKNOWN_SETTING,
+                    '"%s" is not a valid prospector setting' % key,
+                    key,
                 )
 
         if "pyflakes" in parsed:

@@ -54,7 +54,10 @@ def get_noqa_suppressions(file_contents):
 
 _PYLINT_EQUIVALENTS = {
     # TODO: blending has this info already?
-    "unused-import": (("pyflakes", "FL0001"), ("frosted", "E101"),)
+    "unused-import": (
+        ("pyflakes", "FL0001"),
+        ("frosted", "E101"),
+    )
 }
 
 
