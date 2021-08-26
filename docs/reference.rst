@@ -69,5 +69,3 @@ Tool classes
 --------------------
 .. autoclass:: prospector.tools.vulture.VultureTool
     :members:
-
-
