@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import re
 import sre_constants
@@ -12,7 +11,7 @@ from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile
 from prospector.tools import DEFAULT_TOOLS
 
 
-class ProspectorConfig(object):
+class ProspectorConfig:
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
     # make this module/class a bit ugly.
@@ -156,7 +155,9 @@ class ProspectorConfig(object):
             sys.exit(1)
         except ProfileNotFound as nfe:
             sys.stderr.write(
-                "Failed to run:\nCould not find profile %s. Search path: %s\n" % (nfe.name, ":".join(nfe.profile_path))
+                "Failed to run:\nCould not find profile {}. Search path: {}\n".format(
+                    nfe.name, ":".join(nfe.profile_path)
+                )
             )
             sys.exit(1)
         else:

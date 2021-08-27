@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Each tool has its own method of ignoring errors and warnings.
 For example, pylint requires a comment of the form
@@ -97,7 +96,7 @@ def get_suppressions(relative_filepaths, root, messages):
             file_contents = encoding.read_py_file(abspath).split("\n")
         except encoding.CouldNotHandleEncoding as err:
             # TODO: this output will break output formats such as JSON
-            warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
+            warnings.warn(f"{err.path}: {err.cause}", ImportWarning)
             continue
 
         ignore_file, ignore_lines = get_noqa_suppressions(file_contents)

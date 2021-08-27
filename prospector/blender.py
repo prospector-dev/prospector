@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # This module contains the logic for "blending" of errors.
 # Since prospector runs multiple tools with overlapping functionality, this
 # module exists to merge together equivalent warnings from different tools for

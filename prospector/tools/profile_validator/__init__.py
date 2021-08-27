@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 import sre_constants
 
@@ -114,7 +113,7 @@ class ProfileValidationTool(ToolBase):
                 if uses not in possible:
                     add_message(
                         CONFIG_INVALID_VALUE,
-                        '"%s" is not valid for "uses", must be one of %s' % (uses, ", ".join(possible)),
+                        '"{}" is not valid for "uses", must be one of {}'.format(uses, ", ".join(possible)),
                         uses,
                     )
 
@@ -163,7 +162,7 @@ class ProfileValidationTool(ToolBase):
                 if code in pyflakes.LEGACY_CODE_MAP:
                     add_message(
                         CONFIG_DEPRECATED_CODE,
-                        "Pyflakes code %s was renamed to %s" % (code, pyflakes.LEGACY_CODE_MAP[code]),
+                        f"Pyflakes code {code} was renamed to {pyflakes.LEGACY_CODE_MAP[code]}",
                         "pyflakes",
                     )
 

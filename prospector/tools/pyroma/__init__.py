@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 import os
 
@@ -53,7 +52,7 @@ PYROMA_TEST_CLASSES = [t.__class__ for t in ratings.ALL_TESTS]
 
 class PyromaTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(PyromaTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ignore_codes = ()
 
     def configure(self, prospector_config, found_files):

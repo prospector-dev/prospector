@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 from pylint.config import OptionsManagerMixIn
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 from frosted.api import check_path
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
@@ -8,7 +5,7 @@ from prospector.tools.base import ToolBase
 __all__ = ("FrostedTool",)
 
 
-class ProspectorReporter(object):
+class ProspectorReporter:
     def __init__(self, ignore=None):
         self._messages = []
         self.ignore = ignore or ()
@@ -58,7 +55,7 @@ class ProspectorReporter(object):
 
 class FrostedTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(FrostedTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ignore_codes = ()
 
     def configure(self, prospector_config, _):

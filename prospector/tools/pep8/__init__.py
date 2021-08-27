@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import os
 import re
 
@@ -22,11 +19,11 @@ __all__ = ("Pep8Tool",)
 
 class ProspectorReport(BaseReport):
     def __init__(self, *args, **kwargs):
-        super(ProspectorReport, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._prospector_messages = []
 
     def error(self, line_number, offset, text, check):
-        code = super(ProspectorReport, self).error(
+        code = super().error(
             line_number,
             offset,
             text,
@@ -72,10 +69,10 @@ class ProspectorStyleGuide(StyleGuide):
         # Override the default reporter with our custom one.
         kwargs["reporter"] = ProspectorReport
 
-        super(ProspectorStyleGuide, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def excluded(self, filename, parent=None):
-        if super(ProspectorStyleGuide, self).excluded(filename, parent):
+        if super().excluded(filename, parent):
             return True
 
         # If the file survived pep8's exclusion rules, check it against
@@ -90,7 +87,7 @@ class ProspectorStyleGuide(StyleGuide):
 
 class Pep8Tool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(Pep8Tool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.checker = None
 
     def configure(self, prospector_config, found_files):

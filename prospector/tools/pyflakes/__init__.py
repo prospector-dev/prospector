@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from pyflakes.api import checkPath
@@ -84,7 +81,7 @@ LEGACY_CODE_MAP = {
 
 class ProspectorReporter(Reporter):
     def __init__(self, ignore=None):
-        super(ProspectorReporter, self).__init__(None, None)
+        super().__init__(None, None)
         self._messages = []
         self.ignore = ignore or ()
 
@@ -144,7 +141,7 @@ class ProspectorReporter(Reporter):
 
 class PyFlakesTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(PyFlakesTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ignore_codes = ()
 
     def configure(self, prospector_config, _):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from prospector.formatters import emacs, grouped, json, pylint, text, vscode, xunit, yaml
 
 __all__ = ("FORMATTERS",)

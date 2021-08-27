@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import os.path
 import sys
 from datetime import datetime
@@ -20,7 +17,7 @@ __all__ = (
 )
 
 
-class Prospector(object):
+class Prospector:
     def __init__(self, config):
         self.config = config
         self.summary = None
@@ -73,13 +70,13 @@ class Prospector(object):
                         loc = Location(self.config.workdir, None, None, None, None)
 
                         if capture.get_hidden_stderr():
-                            msg = "stderr from %s:\n%s" % (
+                            msg = "stderr from {}:\n{}".format(
                                 toolname,
                                 capture.get_hidden_stderr(),
                             )
                             messages.append(Message(toolname, "hidden-output", loc, message=msg))
                         if capture.get_hidden_stdout():
-                            msg = "stdout from %s:\n%s" % (
+                            msg = "stdout from {}:\n{}".format(
                                 toolname,
                                 capture.get_hidden_stdout(),
                             )
@@ -94,7 +91,7 @@ class Prospector(object):
                     raise
                 else:
                     loc = Location(self.config.workdir, None, None, None, None)
-                    msg = "Tool %s failed to run (exception was raised)" % (toolname,)
+                    msg = f"Tool {toolname} failed to run (exception was raised)"
                     message = Message(
                         toolname,
                         "failure",

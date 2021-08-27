@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collections import defaultdict
 
 from prospector.formatters.text import TextFormatter

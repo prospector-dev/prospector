@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import re
 import warnings
@@ -56,7 +55,7 @@ def find_from_path(path):
                 names |= find_from_imports(contents)
             except encoding.CouldNotHandleEncoding as err:
                 # TODO: this output will break output formats such as JSON
-                warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
+                warnings.warn(f"{err.path}: {err.cause}", ImportWarning)
 
         if len(names) == max_possible:
             # don't continue on recursing, there's no point!

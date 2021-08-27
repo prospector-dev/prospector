@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from prospector.formatters.text import TextFormatter
 
 __all__ = ("EmacsFormatter",)

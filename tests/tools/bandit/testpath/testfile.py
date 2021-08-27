@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # flake8: noqa
 def someFunction(user, password="Admin"):
     print("Hi " + user)

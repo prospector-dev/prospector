@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import re
 import sys
@@ -16,5 +15,5 @@ class OutputChoice(Choice):
                 checked_targets[-1] += ":" + target
             else:
                 checked_targets.append(target)
-        validated_format = super(OutputChoice, self).sanitize(output_format)
+        validated_format = super().sanitize(output_format)
         return (validated_format, checked_targets)

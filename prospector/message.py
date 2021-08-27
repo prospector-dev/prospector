@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 import os
 
 
-class Location(object):
+class Location:
     def __init__(self, path, module, function, line, character, absolute_path=True):
         self.path = path
         self._path_is_absolute = absolute_path
@@ -46,7 +45,7 @@ class Location(object):
         return self.path < other.path
 
 
-class Message(object):
+class Message:
     def __init__(self, source, code, location, message):
         self.source = source
         self.code = code
@@ -68,7 +67,7 @@ class Message(object):
         }
 
     def __repr__(self):
-        return "%s-%s" % (self.source, self.code)
+        return f"{self.source}-{self.code}"
 
     def __eq__(self, other):
         if self.location == other.location:

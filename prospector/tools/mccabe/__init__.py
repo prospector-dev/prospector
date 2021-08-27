@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import ast
 
 from mccabe import PathGraphingAstVisitor
@@ -13,7 +10,7 @@ __all__ = ("McCabeTool",)
 
 class McCabeTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(McCabeTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ignore_codes = ()
         self.max_complexity = 10
 

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
@@ -12,7 +9,7 @@ __all__ = ("Pep257Tool",)
 
 class Pep257Tool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(Pep257Tool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._code_files = []
         self.ignore_codes = ()
 

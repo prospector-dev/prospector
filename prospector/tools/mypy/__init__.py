@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from mypy import api
 from prospector.message import Location, Message
 from prospector.tools import ToolBase
@@ -33,7 +32,7 @@ def format_message(message):
 
 class MypyTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(MypyTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.checker = api
         self.options = ["--show-column-numbers", "--no-error-summary"]
 
@@ -75,7 +74,7 @@ class MypyTool(ToolBase):
 
         for list_option in MYPY_OPTIONS:
             for entry in options.get(list_option, []):
-                self.options.append("--%s-%s" % (list_option, entry))
+                self.options.append(f"--{list_option}-{entry}")
 
     def run(self, found_files):
         paths = [path for path in found_files.iter_module_paths()]

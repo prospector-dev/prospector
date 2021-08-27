@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from xml.dom.minidom import Document
 
 from prospector.formatters.base import Formatter
@@ -36,7 +35,7 @@ class XunitFormatter(Formatter):
 
         for message in sorted(self.messages):
             testcase_el = xml_doc.createElement("testcase")
-            testcase_el.setAttribute("name", "%s-%s" % (message.location.path, message.location.line))
+            testcase_el.setAttribute("name", f"{message.location.path}-{message.location.line}")
 
             failure_el = xml_doc.createElement("error")
             failure_el.setAttribute("message", message.message.strip())

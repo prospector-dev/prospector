@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # flake8: noqa
 import setoptconf as soc
 from prospector.__pkginfo__ import __version__
