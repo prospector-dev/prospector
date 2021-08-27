@@ -12,15 +12,22 @@ MYPY_OPTIONS = ["allow", "check", "disallow", "no-check", "no-warn", "warn"]
 def format_message(message):
     try:
         (path, line, char, err_type, err_msg) = message.split(":", 4)
+        line = int(line)
         character = int(char)
     except ValueError:
-        (path, line, err_type, err_msg) = message.split(":", 3)
-        character = None
+        try:
+            (path, line, err_type, err_msg) = message.split(":", 3)
+            line = int(line)
+            character = None
+        except ValueError:
+            (path, err_type, err_msg) = message.split(":", 2)
+            line = 0
+            character = None
     location = Location(
         path=path,
         module=None,
         function=None,
-        line=int(line),
+        line=line,
         character=character,
     )
     return Message(

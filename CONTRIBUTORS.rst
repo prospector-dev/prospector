@@ -27,6 +27,7 @@ Contributors
 * Phil Jones ([@pgjones](https://github.com/pgjones))
 * SergeyKosarchuk ([@SergeyKosarchuk](https://github.com/SergeyKosarchuk))
 * Shachar Ohana ([@shacharoo](https://github.com/shacharoo))
+* Stéphane Brunner ([@sbrunner](https://github.com/sbrunner))
 * Steven Myint ([@myint](https://github.com/myint))
 * Sushobhit ([@sushobhit27](https://github.com/sushobhit27))
 * Yaroslav Kurlaev ([@ykurlaev](https://github.com/ykurlaev))
