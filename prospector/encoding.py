@@ -25,7 +25,8 @@ def read_py_file(filepath):
         raise CouldNotHandleEncoding(filepath, err)
 
     try:
-        return tokenize.open(filepath).read()
+        with tokenize.open(filepath) as f:
+            return f.read()
         # this warning is issued:
         #   (1) if uft-8 is specified, but latin1 is used with something like \x0e9 appearing
         #       (see http://stackoverflow.com/a/5552623)
