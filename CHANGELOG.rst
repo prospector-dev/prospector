@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 1.4.1
+-------------
+
+- [#373](https://github.com/PyCQA/prospector/issues/373) Permits to raise pylint's useless-suppression
+- [#414](https://github.com/PyCQA/prospector/pull/414) Loosen pycodestyle requirement
+- [#408](https://github.com/PyCQA/prospector/pull/408) Fix filenames if they are PosixPath
+- [#412](https://github.com/PyCQA/prospector/pull/412) Fix unclosed file warning
+- [#399](https://github.com/PyCQA/prospector/pull/399) Fix fatal error on running mypy when duplicate module names
+
 Version 1.4.0
 -------------
 
