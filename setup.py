@@ -2,7 +2,6 @@
 # pylint: skip-file
 import codecs
 import os
-import sys
 from distutils.core import setup
 
 from setuptools import find_packages
@@ -10,10 +9,6 @@ from setuptools import find_packages
 with open("prospector/__pkginfo__.py") as f:
     exec(f.read())
 _VERSION = globals()["__version__"]
-
-if sys.version_info < (3, 6):
-    raise Exception("Prospector %s requires Python 3.6 or higher." % _VERSION)
-
 
 _PACKAGES = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
@@ -53,6 +48,7 @@ _CLASSIFIERS = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "License :: OSI Approved :: " "GNU General Public License v2 or later (GPLv2+)",
 ]
 
@@ -97,4 +93,5 @@ setup(
     },
     install_requires=_INSTALL_REQUIRES,
     extras_require=_OPTIONAL,
+    python_requires=">=3.6",
 )
