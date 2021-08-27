@@ -29,6 +29,9 @@ class JsonFormatter(Formatter):
         if profile:
             output["profile"] = self.profile.as_dict()
 
+        for message in self.messages:
+            if not isinstance(message.location.path, str):
+                message.location.path=str(message.location.path)
         if messages:
             output["messages"] = [m.as_dict() for m in self.messages]
 
