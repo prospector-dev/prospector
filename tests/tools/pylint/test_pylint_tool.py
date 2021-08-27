@@ -37,16 +37,16 @@ class TestPylintTool(TestCase):
         messages = pylint_tool.run(found_files)
         self.assertListEqual(messages, [])
 
-    def test_wont_throw_useless_suppression(self):
+    def test_will_throw_useless_suppression(self):
         with patch("os.getcwd", return_value=os.path.realpath("tests/tools/pylint/testpath/")):
             pylint_tool, config = _get_pylint_tool_and_prospector_config(argv_patch=["", "-t", "pylint"])
         root = os.path.join(os.path.dirname(__file__), "testpath", "test_useless_suppression.py")
         found_files = find_python([], [root], explicit_file_mode=True)
         pylint_tool.configure(config, found_files)
         messages = pylint_tool.run(found_files)
-        for message in messages:
-            if message.code == "useless-suppression":
-                self.fail("useless-suppression was thrown")
+        assert any(
+            m.code == "useless-suppression" for m in messages
+        ), "There should be at least one useless suppression"
 
     def test_use_pylint_default_path_finder(self):
         workdir = os.path.realpath("tests/tools/pylint/testpath/absolute-import/")
