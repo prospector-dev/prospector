@@ -20,6 +20,7 @@ repos:
       - id: codespell
         args:
             - --ignore-words-list=nin
+            - --skip=poetry.lock
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.9.2
     hooks:
