@@ -49,9 +49,8 @@ jobs:
         run: |
           python -m venv venv
           . venv/bin/activate
-          python -m pip install -U pip setuptools wheel
-          pip3 install coveralls coverage pre-commit pytest-cov pytest-benchmark
-          pip3 install -e ".["with_everything"]"
+          python -m pip install -U poetry
+          poetry install -E with_everything
       - name: Generate pre-commit restore key
         id: generate-pre-commit-key
         run: >-
@@ -111,7 +110,7 @@ jobs:
       - name: Run formatting check
         run: |
           . venv/bin/activate
-          pip install -e .
+          poetry install -E with_everything
           pre-commit run --all-files
 
   prepare-tests-linux:
@@ -153,8 +152,8 @@ jobs:
         run: |
           python -m venv venv
           . venv/bin/activate
-          python -m pip install -U pip setuptools wheel coveralls coverage pre-commit pytest-cov pytest-benchmark
-          pip3 install -e ".["with_everything"]"
+          python -m pip install -U poetry
+          poetry install -E with_everything
 
   pytest-linux:
     name: Run tests Python ${{ matrix.python-version }} (Linux)
@@ -188,7 +187,8 @@ jobs:
       - name: Run pytest
         run: |
           . venv/bin/activate
-          python -m pip install -U pip setuptools wheel coveralls coverage pre-commit pytest-cov pytest-benchmark
+          python -m pip install -U poetry
+          poetry install
           pytest --benchmark-disable --cov --cov-report= tests/
 
 
@@ -224,7 +224,7 @@ jobs:
       - name: Run nosetests
         run: |
           . venv/bin/activate
-          pip install safety pipenv numpy tzlocal nose coverage coveralls -U
+          pip install -U poetry
           pip freeze | safety check --stdin
           nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/
           mv .coverage .coverage.x
