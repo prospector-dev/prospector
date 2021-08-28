@@ -1,10 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - master
-  pull_request: ~
+on: [push, pull_request]
 
 env:
   CACHE_VERSION: 3
@@ -49,9 +45,8 @@ jobs:
         run: |
           python -m venv venv
           . venv/bin/activate
-          python -m pip install -U pip setuptools wheel
-          pip3 install coveralls coverage pre-commit pytest-cov pytest-benchmark
-          pip3 install -e ".["with_everything"]"
+          python -m pip install --disable-pip-version-check -U pip poetry
+          poetry install -E with_everything
       - name: Generate pre-commit restore key
         id: generate-pre-commit-key
         run: >-
@@ -111,7 +106,8 @@ jobs:
       - name: Run formatting check
         run: |
           . venv/bin/activate
-          pip install -e .
+          python -m pip install --disable-pip-version-check -U pip poetry
+          poetry install -E with_everything
           pre-commit run --all-files
 
   prepare-tests-linux:
@@ -119,7 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, 3.10-dev]
+        python-version: [3.6, 3.7, 3.8, 3.9]
     outputs:
       python-key: ${{ steps.generate-python-key.outputs.key }}
     steps:
@@ -153,8 +149,8 @@ jobs:
         run: |
           python -m venv venv
           . venv/bin/activate
-          python -m pip install -U pip setuptools wheel coveralls coverage pre-commit pytest-cov pytest-benchmark
-          pip3 install -e ".["with_everything"]"
+          python -m pip install --disable-pip-version-check -U pip poetry
+          poetry install -E with_everything
 
   pytest-linux:
     name: Run tests Python ${{ matrix.python-version }} (Linux)
@@ -163,7 +159,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, 3.10-dev]
+        python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
       - name: Check out code from GitHub
         uses: actions/checkout@v2.3.4
@@ -188,7 +184,8 @@ jobs:
       - name: Run pytest
         run: |
           . venv/bin/activate
-          python -m pip install -U pip setuptools wheel coveralls coverage pre-commit pytest-cov pytest-benchmark
+          python -m pip install --disable-pip-version-check -U pip poetry
+          poetry install
           pytest --benchmark-disable --cov --cov-report= tests/
 
 
@@ -224,8 +221,8 @@ jobs:
       - name: Run nosetests
         run: |
           . venv/bin/activate
-          pip install safety pipenv numpy tzlocal nose coverage coveralls -U
-          pip freeze | safety check --stdin
+          python -m pip install --disable-pip-version-check -U pip poetry
+          poetry install
           nosetests -s --with-coverage --cover-inclusive --cover-package=prospector tests/
           mv .coverage .coverage.x
           coverage run --parallel-mode prospector/run.py || true
