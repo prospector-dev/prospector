@@ -22,11 +22,11 @@ jobs:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: Install requirements
         run: |
-          python -m pip install -U pip twine wheel
-          python -m pip install -U "setuptools>=56.0.0"
+          python -m pip install --disable-pip-version-check -U pip twine poetry
       - name: Build distributions
         run: |
-          python setup.py sdist bdist_wheel
+          poetry build -f wheel
+          poetry build -f sdist
       - name: Upload to PyPI
         if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags')
         env:

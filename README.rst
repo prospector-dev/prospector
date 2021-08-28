@@ -40,10 +40,9 @@ the output depending on the libraries your project uses.
 Installation
 ------------
 
-Prospector can be installed using ``pip`` by running the following command::
+Prospector can be installed from PyPI using ``pip`` by running the following command::
 
     pip install prospector
-
 
 Optional dependencies for Prospector, such as ``pyroma`` can also be installed by running::
 
@@ -55,6 +54,14 @@ Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brack
 
 For a list of all of the optional dependencies, see the optional extras section on the ReadTheDocs
 page on `Supported Tools Extras <https://prospector.readthedocs.io/en/latest/supported_tools.html#optional-extras>`_.
+
+For local development, [poetry](https://python-poetry.org/) is used. Check out the code, then run::
+
+    poetry install
+
+And for extras::
+
+    poetry install -E with_everything
 
 For more detailed information on installing the tool, see the
 `installation section <http://prospector.readthedocs.io/en/latest/#installation>`_ of the tool's main page
