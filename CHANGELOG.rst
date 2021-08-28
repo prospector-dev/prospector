@@ -1,10 +1,10 @@
 Changelog
 =========
 
-WIP: Version 1.5.1-dev0
+Version 1.5.1
 -------------
 
-- [#433](https://github.com/PyCQA/prospector/issues/433) Attempted fix of flake8 dependency versioning conflict
+- [#433](https://github.com/PyCQA/prospector/issues/433) Fix of flake8 dependency versioning conflict
 
 Version 1.5.0
 -------------
