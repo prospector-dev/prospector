@@ -832,7 +832,7 @@ with_vulture = ["vulture"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6.1,<4.0"
-content-hash = "93bdbe719f532e821e0b2a86c1e1db08377a9325c7e532adec61afc5caf210b6"
+content-hash = "67ec874aa27f46fbd0fd2f6479c7b21a16759defe4429030acf8b74e453380d1"
 
 [metadata.files]
 astroid = [

@@ -31,3 +31,4 @@ Contributors
 * Steven Myint ([@myint](https://github.com/myint))
 * Sushobhit ([@sushobhit27](https://github.com/sushobhit27))
 * Yaroslav Kurlaev ([@ykurlaev](https://github.com/ykurlaev))
+* Pierre Sassoulas ([@Pierre-Sassoulas](https://github.com/Pierre-Sassoulas))

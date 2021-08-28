@@ -4,7 +4,8 @@ version = "1.5.0.dev2"
 description = ""
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
-               "Carlos Coelho <carlospecter@gmail.com>"]
+               "Carlos Coelho <carlospecter@gmail.com>",
+               "Pierre Sassoulas <pierre.sassoulas@gmail.com>"]
 readme = "README.rst"
 homepage = "http://prospector.readthedocs.io"
 repository = "https://github.com/prospector"
@@ -57,6 +58,7 @@ frosted = {version = "^1.4.1", optional = true}
 vulture = {version = "^1.5", optional = true}
 mypy = {version = "^0.910", optional = true}
 pyroma = {version = "~2.4", optional = true}
+toml = "^0.10.2"
 
 [tool.poetry.extras]
 with_bandit = ["bandit"]
