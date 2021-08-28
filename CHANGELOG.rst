@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.5.0
+-------------
+
+- [#436](https://github.com/PyCQA/prospector/pull/436) Swapped out packaging to use poetry instead of setup.py and setuptools
+
 Version 1.4.1
 -------------
 
