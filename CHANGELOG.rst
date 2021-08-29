@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 1.5.1
+Version 1.5.0.1
 -------------
 
 - [#433](https://github.com/PyCQA/prospector/issues/433) Fix of flake8 dependency versioning conflict
