@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file

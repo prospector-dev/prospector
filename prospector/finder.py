@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 
 from prospector.pathutils import is_virtualenv

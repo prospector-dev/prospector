@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from unittest import SkipTest, TestCase
 
 from prospector.message import Location, Message

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # We are trying to handle pylint changes in their exception classes
 
 

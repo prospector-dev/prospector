@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Each tool has its own method of ignoring errors and warnings.
 For example, pylint requires a comment of the form

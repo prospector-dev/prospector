@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 
 from prospector.suppression import get_suppressions

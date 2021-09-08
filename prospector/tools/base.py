@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class ToolBase(object):
     # This is an 'abstract' base class, used to provide an indication of
     # how to create a new tool class. Therefore, the arguments will be unused,

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from xml.dom.minidom import Document
 
 from prospector.formatters.base import Formatter

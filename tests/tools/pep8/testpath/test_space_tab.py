@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # fmt: off
 # flake8: noqa
 for a in "abc":

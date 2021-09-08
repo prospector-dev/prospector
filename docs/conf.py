@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Prospector documentation build configuration file, created by
 # sphinx-quickstart on Sun Sep 28 11:26:59 2014.

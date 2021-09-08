@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from prospector.formatters.base import Formatter
 
 __all__ = ("TextFormatter",)
