@@ -94,7 +94,10 @@ class Prospector(object):
                     raise
                 else:
                     loc = Location(self.config.workdir, None, None, None, None)
-                    msg = "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)" % (toolname,)
+                    msg = (
+                        "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)"
+                        % (toolname,)
+                    )
                     message = Message(
                         toolname,
                         "failure",
