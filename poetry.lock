@@ -687,15 +687,15 @@ python-versions = "*"
 astroid = ">=1.4"
 
 [[package]]
-name = "setoptconf"
-version = "0.2.0"
+name = "setoptconf-tmp"
+version = "0.3.1"
 description = "A module for retrieving program settings from various sources in a consistant method."
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.extras]
-YAML = ["pyyaml"]
+yaml = ["pyyaml"]
 
 [[package]]
 name = "six"
@@ -856,7 +856,7 @@ with_vulture = ["vulture"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6.1,<4.0"
-content-hash = "8c7cc39dcc5777327fab75f5383e50359afecfdc42f3a5f6405b32c69e16cd35"
+content-hash = "38eb3e00dd1fb565ee8cffa51ede02a1f51ca211d7d27ba562f41b306a959547"
 
 [metadata.files]
 astroid = [
@@ -1227,8 +1227,9 @@ requests = [
 requirements-detector = [
     {file = "requirements-detector-0.7.tar.gz", hash = "sha256:0d1e13e61ed243f9c3c86e6cbb19980bcb3a0e0619cde2ec1f3af70fdbee6f7b"},
 ]
-setoptconf = [
-    {file = "setoptconf-0.2.0.tar.gz", hash = "sha256:5b0b5d8e0077713f5d5152d4f63be6f048d9a1bb66be15d089a11c898c3cf49c"},
+setoptconf-tmp = [
+    {file = "setoptconf-tmp-0.3.1.tar.gz", hash = "sha256:e0480addd11347ba52f762f3c4d8afa3e10ad0affbc53e3ffddc0ca5f27d5778"},
+    {file = "setoptconf_tmp-0.3.1-py3-none-any.whl", hash = "sha256:76035d5cd1593d38b9056ae12d460eca3aaa34ad05c315b69145e138ba80a745"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
