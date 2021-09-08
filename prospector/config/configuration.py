@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa
 import setoptconf as soc
-from prospector.__pkginfo__ import __version__
+import pkg_resources
 from prospector.config.datatype import OutputChoice
 from prospector.formatters import FORMATTERS
 from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 __all__ = ("build_manager",)
+
+_VERSION = pkg_resources.get_distribution("prospector").version
 
 
 def build_manager():
@@ -303,7 +305,7 @@ def build_command_line_source(prog=None, description="Performs static analysis o
 
     return soc.CommandLineSource(
         options=options,
-        version=__version__,
+        version=_VERSION,
         parser_options=parser_options,
         positional=positional,
     )
