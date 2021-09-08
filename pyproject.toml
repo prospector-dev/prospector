@@ -8,7 +8,7 @@ maintainers = ["Carl Crowder <git@carlcrowder.com>",
                "Pierre Sassoulas <pierre.sassoulas@gmail.com>"]
 readme = "README.rst"
 homepage = "http://prospector.readthedocs.io"
-repository = "https://github.com/prospector"
+repository = "https://github.com/PyCQA/prospector"
 keywords = ["pylint", "prospector", "static code analysis"]
 license = "GPLv2"
 classifiers = [
