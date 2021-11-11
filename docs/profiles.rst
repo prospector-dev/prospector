@@ -372,6 +372,8 @@ The available options are:
 +---------+------------------------+----------------------------------------------+
 | mypy    | strict-optional        | Checking of Optional types and None values   |
 +---------+------------------------+----------------------------------------------+
+| mypy    | namespace-packages     | Import discovery uses namespace packages     |
++---------+------------------------+----------------------------------------------+
 | bandit  | config                 | configuration filename                       |
 +---------+------------------------+----------------------------------------------+
 | bandit  | profile                | profile to use                               |
