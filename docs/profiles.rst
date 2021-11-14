@@ -356,7 +356,7 @@ The available options are:
 | mccabe  | max-complexity         | Maximum number of paths allowed in a method  |
 +---------+------------------------+----------------------------------------------+
 | pep8    | max-line-length        | Maximum line length allowed (This option is  |
-|         |                        | overridden by global option max-line-length_) |
+|         |                        | overridden by global option max-line-length_)|
 +---------+------------------------+----------------------------------------------+
 | pylint  | -anything-             | Any of the `pylint options`_                 |
 +---------+------------------------+----------------------------------------------+
@@ -390,7 +390,7 @@ See `bandit options`_ for more details
 
 .. _pylint options: https://pylint.readthedocs.io/en/latest/user_guide/run.html
 .. _bandit options: https://bandit.readthedocs.io/en/latest/config.html
-.. _mypy options: https://https://bandit.readthedocs.io/en/latest/config.html
+.. _mypy options: https://mypy.readthedocs.io/en/stable/command_line.html
 
 
 
