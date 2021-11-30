@@ -1,13 +1,14 @@
-from vulture import Vulture
-from prospector.message import Location, Message
+from prospector.encoding import CouldNotHandleEncoding, read_py_file
+from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
+from vulture import Vulture
 
 
 class ProspectorVulture(Vulture):
-
     def __init__(self, found_files):
-        Vulture.__init__(self, exclude=None, verbose=False)
+        Vulture.__init__(self, verbose=False)
         self._files = found_files
+        self._internal_messages = []
 
     def scavenge(self, _=None):
         # The argument is a list of paths, but we don't care
@@ -15,27 +16,50 @@ class ProspectorVulture(Vulture):
         # argument is here to explicitly acknowledge that we
         # are overriding the Vulture.scavenge method.
         for module in self._files.iter_module_paths():
-            module_string = open(module).read()
+            try:
+                module_string = read_py_file(module)
+            except CouldNotHandleEncoding as err:
+                self._internal_messages.append(
+                    make_tool_error_message(
+                        module,
+                        "vulture",
+                        "V000",
+                        message="Could not handle the encoding of this file: %s" % err.encoding,
+                    )
+                )
+                continue
             self.file = module
-            self.scan(module_string)
+            self.filename = module
+            try:
+                self.scan(module_string, filename=module)
+            except TypeError:
+                self.scan(module_string)
 
     def get_messages(self):
         all_items = (
-            ('unused-function', 'Unused function %s', self.unused_funcs),
-            ('unused-property', 'Unused property %s', self.unused_props),
-            ('unused-variable', 'Unused variable %s', self.unused_vars),
-            ('unused-attribute', 'Unused attribute %s', self.unused_attrs)
+            ("unused-function", "Unused function %s", self.unused_funcs),
+            ("unused-property", "Unused property %s", self.unused_props),
+            ("unused-variable", "Unused variable %s", self.unused_vars),
+            ("unused-attribute", "Unused attribute %s", self.unused_attrs),
         )
 
-        messages = []
+        vulture_messages = []
         for code, template, items in all_items:
             for item in items:
-                loc = Location(item.file, None, None, item.lineno, -1)
+                try:
+                    filename = item.file
+                except AttributeError:
+                    filename = item.filename
+                if hasattr(item, "lineno"):
+                    lineno = item.lineno  # for older versions of vulture
+                else:
+                    lineno = item.first_lineno
+                loc = Location(filename, None, None, lineno, -1)
                 message_text = template % item
-                message = Message('vulture', code, loc, message_text)
-                messages.append(message)
+                message = Message("vulture", code, loc, message_text)
+                vulture_messages.append(message)
 
-        return messages
+        return self._internal_messages + vulture_messages
 
 
 class VultureTool(ToolBase):
@@ -45,11 +69,9 @@ class VultureTool(ToolBase):
         self.ignore_codes = ()
 
     def configure(self, prospector_config, found_files):
-        self.ignore_codes = prospector_config.get_disabled_messages('vulture')
+        self.ignore_codes = prospector_config.get_disabled_messages("vulture")
 
     def run(self, found_files):
         vulture = ProspectorVulture(found_files)
         vulture.scavenge()
-        return [message
-                for message in vulture.get_messages()
-                if message.code not in self.ignore_codes]
+        return [message for message in vulture.get_messages() if message.code not in self.ignore_codes]

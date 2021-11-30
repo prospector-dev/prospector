@@ -1,0 +1,98 @@
+[tool.poetry]
+name = "prospector"
+version = "1.5.2"
+description = ""
+authors = ["Carl Crowder <git@carlcrowder.com>"]
+maintainers = ["Carl Crowder <git@carlcrowder.com>",
+               "Carlos Coelho <carlospecter@gmail.com>",
+               "Pierre Sassoulas <pierre.sassoulas@gmail.com>"]
+readme = "README.rst"
+homepage = "http://prospector.readthedocs.io"
+repository = "https://github.com/PyCQA/prospector"
+keywords = ["pylint", "prospector", "static code analysis"]
+license = "GPLv2"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: Unix",
+    "Topic :: Software Development :: Quality Assurance",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+]
+packages = [
+  { include = "prospector/"}
+]
+include = [
+  "LICENSE",
+  "prospector/blender_combinations.yaml",
+  "prospector/profiles/profiles/*.yaml",
+  "README.rst"
+]
+
+[tool.poetry.scripts]
+prospector = 'prospector.run:main'
+
+[tool.poetry.dependencies]
+python = ">=3.6.1,<4.0"
+pylint = ">=2.8.3,<2.12.0"
+pylint-celery = "0.3"
+pylint-django = "^2.4.4"
+pylint-flask = "0.6"
+pylint-plugin-utils = "^0.6"
+requirements-detector = "^0.7"
+PyYAML = "*"
+mccabe = "^0.6.0"
+pyflakes = ">=2.2.0,<2.4.0"
+pycodestyle = ">=2.6.0,<2.9.0"
+pep8-naming = ">=0.3.3,<=0.10.0"
+pydocstyle = ">=2.0.0"
+dodgy = "^0.2.1"
+toml = "^0.10.2"
+bandit = {version = ">=1.5.1", optional = true}
+frosted = {version = ">=1.4.1", optional = true}
+vulture = {version = ">=1.5", optional = true}
+mypy = {version = ">=0.600", optional = true}
+pyroma = {version = ">=2.4", optional = true}
+setoptconf-tmp = "^0.3.1"
+
+[tool.poetry.extras]
+with_bandit = ["bandit"]
+with_frosted = ["frosted"]
+with_mypy = ["mypy"]
+with_pyroma = ["pyroma"]
+with_vulture = ["vulture"]
+with_everything = ["bandit", "frosted", "mypy", "pyroma", "vulture"]
+
+[tool.poetry.dev-dependencies]
+coveralls = "^3.2.0"
+pytest = "^6.2.4"
+pytest-benchmark = "^3.4.1"
+pytest-cov = "^2.12.1"
+tzlocal = "^3.0"
+nose = "^1.3.7"
+coverage = "^5.5"
+pre-commit = "^2.14.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+    tests/
+)/
+'''
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 120

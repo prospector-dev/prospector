@@ -2,18 +2,15 @@ from collections import defaultdict
 
 from prospector.formatters.text import TextFormatter
 
-
-__all__ = (
-    'GroupedFormatter',
-)
+__all__ = ("GroupedFormatter",)
 
 
 class GroupedFormatter(TextFormatter):
     def render_messages(self):
         output = [
-            'Messages',
-            '========',
-            '',
+            "Messages",
+            "========",
+            "",
         ]
 
         # pylint: disable=unnecessary-lambda
@@ -23,21 +20,22 @@ class GroupedFormatter(TextFormatter):
             groups[message.location.path][message.location.line].append(message)
 
         for filename in sorted(groups.keys()):
-            output.append(filename)
+            output.append(str(filename))
 
             for line in sorted(groups[filename].keys(), key=lambda x: 0 if x is None else int(x)):
-                output.append('  Line: %s' % line)
+                output.append("  Line: %s" % line)
 
                 for message in groups[filename][line]:
                     output.append(
-                        '    %s: %s / %s%s' % (
+                        "    %s: %s / %s%s"
+                        % (
                             message.source,
                             message.code,
                             message.message,
-                            (' (col %s)' % message.location.character) if message.location.character else '',
+                            (" (col %s)" % message.location.character) if message.location.character else "",
                         )
                     )
 
-            output.append('')
+            output.append("")
 
-        return '\n'.join(output)
+        return "\n".join(output)

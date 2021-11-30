@@ -1,11 +1,13 @@
 Command Line Usage
 ==================
 
-.. _issue_16: https://github.com/landscapeio/prospector/issues/16
+.. _issue_16: https://github.com/PyCQA/prospector/issues/16
+.. _vscode_python_plugin: https://marketplace.visualstudio.com/items?itemName=donjayamanne.python
 
 The simplest way to run prospector is from the project root with no arguments. It will try to figure everything else out itself and provide sensible defaults::
 
     prospector
+
 
 You can specify a path to check::
 
@@ -27,7 +29,9 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +-------------+----------------------------------------------------------------------------+
 | Format Name | Notes                                                                      |
 +=============+============================================================================+
-| ``emacs``   | | Support for emacs compilation output mode, see `issue_16`_.                |
+| ``emacs``   | | Support for emacs compilation output mode, see `issue_16`_.              |
++-------------+----------------------------------------------------------------------------+
+| ``vscode``  | | Support for `vscode_python_plugin`_                                      |
 +-------------+----------------------------------------------------------------------------+
 | ``grouped`` | | Similar to ``text``, but groups all message on the same line together    |
 |             | | rather than having a separate entry per message.                         |
@@ -41,32 +45,34 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 | ``json``    | | Produces a structured, parseable output of the messages and summary. See |
 |             | | below for more information about the structure.                          |
 +-------------+----------------------------------------------------------------------------+
-| ``yaml``    | | Same as JSON except produces YAML output.                                  |
+| ``yaml``    | | Same as JSON except produces YAML output.                                |
 +-------------+----------------------------------------------------------------------------+
-| ``text``    | | The default output format, a simple human readable format.                 |
+| ``xunit``   | | Same as JSON except produces xunit compatile XML output.                 |
++-------------+----------------------------------------------------------------------------+
+| ``text``    | | The default output format, a simple human readable format.               |
 +-------------+----------------------------------------------------------------------------+
 
 
 If your code uses frameworks and libraries
 ''''''''''''''''''''''''''''''''''''''''''
 
-Often tools such as pylint find errors in code which is not an error, due to attributes of 
-classes being created at run time by a library or framework used by 
-your project. For example, by default, pylint will generate an error for Django 
-models when accessing ``objects``, as the ``objects`` attribute is not part of the ``Model`` 
-class definition. 
+Often tools such as pylint find errors in code which is not an error, due to attributes of
+classes being created at run time by a library or framework used by
+your project. For example, by default, pylint will generate an error for Django
+models when accessing ``objects``, as the ``objects`` attribute is not part of the ``Model``
+class definition.
 
-Prospector mitigates this by providing an understanding of these frameworks to the underlying 
+Prospector mitigates this by providing an understanding of these frameworks to the underlying
 tools.
 
-Prospector will try to intuit which libraries your project uses by 
-`detecting dependencies <https://github.com/landscapeio/requirements-detector>` 
-and automatically turning on support for the requisite libraries. You can see which adaptors 
+Prospector will try to intuit which libraries your project uses by
+`detecting dependencies <https://github.com/landscapeio/requirements-detector>`
+and automatically turning on support for the requisite libraries. You can see which adaptors
 were run in the metadata section of the report.
 
 If Prospector does not correctly detect your project's dependencies, you can specify them manually from the commandline::
 
-    prospector --uses django celery
+    prospector --uses django --uses celery --uses flask
 
 
 Additionally, if Prospector is automatically detecting a library that you do not in fact use, you can turn off autodetection completely::

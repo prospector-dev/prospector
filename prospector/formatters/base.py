@@ -1,7 +1,4 @@
-
-__all__ = (
-    'Formatter',
-)
+__all__ = ("Formatter",)
 
 
 # pylint: disable=too-few-public-methods

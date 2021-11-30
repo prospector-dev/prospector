@@ -9,10 +9,16 @@ ignore-paths:
   - docs/
 
 frosted:
-  run: true
+  run: false
 
 pyroma:
   run: true
+
+mypy:
+  run: true
+  options:
+    ignore-missing-imports: true
+    follow-imports: skip
 
 pylint:
   disable:

@@ -41,6 +41,8 @@ pylint:
     - W0713
     - property-on-old-class
     - anomalous-backslash-in-string
+    - wrong-import-order
+    - ungrouped-imports
   options:
     max-line-length: 159
 
@@ -69,7 +71,7 @@ pep8:
     - E126
     - E127
     - E128
-    - E133      
+    - E133
     - E201
     - E202
     - E203

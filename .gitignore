@@ -22,6 +22,7 @@ pip-log.txt
 .coverage
 .tox
 nosetests.xml
+.noseids
 
 # Translations
 *.mo
@@ -30,6 +31,34 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.idea
+.vscode
+.vscode-server
+.devcontainer.json
+.vs-liveshare-keychain
+.local
+.gitconfig
+.cache
+.bash_history
 
 # Sphinx
 docs/_build
+
+# Mypy
+.mypy_cache
+
+# emacs
+TAGS
+flycheck*
+
+# local configuration
+.python-version
+.env
+.venv*
+env.txt
+venv
+
+# Pylint
+.pylint.d
+
+pip-wheel-metadata

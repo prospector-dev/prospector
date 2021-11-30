@@ -19,14 +19,16 @@ in the file:
 This module's job is to attempt to collect all of these methods into
 a single coherent list of error suppression locations.
 """
-from collections import defaultdict
 import os
 import re
+import warnings
+from collections import defaultdict
 
+from prospector import encoding
 
-_FLAKE8_IGNORE_FILE = re.compile(r'flake8[:=]\s*noqa', re.IGNORECASE)
-_PEP8_IGNORE_LINE = re.compile(r'#\s+noqa', re.IGNORECASE)
-_PYLINT_SUPPRESSED_MESSAGE = re.compile(r'^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$')
+_FLAKE8_IGNORE_FILE = re.compile(r"flake8[:=]\s*noqa", re.IGNORECASE)
+_PEP8_IGNORE_LINE = re.compile(r"#\s+noqa", re.IGNORECASE)
+_PYLINT_SUPPRESSED_MESSAGE = re.compile(r"^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$")
 
 
 def get_noqa_suppressions(file_contents):
@@ -51,9 +53,9 @@ def get_noqa_suppressions(file_contents):
 
 _PYLINT_EQUIVALENTS = {
     # TODO: blending has this info already?
-    'unused-import': (
-        ('pyflakes', 'FL0001'),
-        ('frosted', 'E101'),
+    "unused-import": (
+        ("pyflakes", "FL0001"),
+        ("frosted", "E101"),
     )
 }
 
@@ -63,15 +65,15 @@ def _parse_pylint_informational(messages):
     ignore_messages = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
-        if message.source == 'pylint':
-            if message.code == 'suppressed-message':
+        if message.source == "pylint":
+            if message.code == "suppressed-message":
                 # this is a message indicating that a message was raised
                 # by pylint but suppressed by configuration in the file
                 match = _PYLINT_SUPPRESSED_MESSAGE.match(message.message)
                 suppressed_code = match.group(1)
                 line_dict = ignore_messages[message.location.path]
                 line_dict[message.location.line].append(suppressed_code)
-            elif message.code == 'file-ignored':
+            elif message.code == "file-ignored":
                 ignore_files.add(message.location.path)
     return ignore_files, ignore_messages
 
@@ -89,8 +91,14 @@ def get_suppressions(relative_filepaths, root, messages):
     # first deal with 'noqa' style messages
     for filepath in relative_filepaths:
         abspath = os.path.join(root, filepath)
-        with open(abspath) as modulefile:
-            file_contents = modulefile.readlines()
+
+        try:
+            file_contents = encoding.read_py_file(abspath).split("\n")
+        except encoding.CouldNotHandleEncoding as err:
+            # TODO: this output will break output formats such as JSON
+            warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
+            continue
+
         ignore_file, ignore_lines = get_noqa_suppressions(file_contents)
         if ignore_file:
             paths_to_ignore.add(filepath)
@@ -102,7 +110,7 @@ def get_suppressions(relative_filepaths, root, messages):
     for filepath, line in pylint_ignore_messages.items():
         for line_number, codes in line.items():
             for code in codes:
-                messages_to_ignore[filepath][line_number].add(('pylint', code))
+                messages_to_ignore[filepath][line_number].add(("pylint", code))
                 if code in _PYLINT_EQUIVALENTS:
                     for equivalent in _PYLINT_EQUIVALENTS[code]:
                         messages_to_ignore[filepath][line_number].add(equivalent)

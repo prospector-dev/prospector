@@ -1,5 +1,7 @@
 import os
 
+from prospector.pathutils import is_virtualenv
+
 
 class SingleFiles(object):
 
@@ -131,38 +133,10 @@ class FoundFiles(object):
             if dirname not in packages:
                 module_list.append(dirname)
 
-        full_list = sorted(set(module_list) | package_list, key=len)
+        full_list = sorted(set(module_list) | package_list | {self.rootpath}, key=len)
         if absolute_paths:
             full_list = [os.path.join(self.rootpath, p).rstrip(os.path.sep) for p in full_list]
         return full_list
-
-
-def is_virtualenv(path):
-    if os.name == 'nt':
-        # Windows!
-        clues = ('Scripts', 'lib', 'include')
-    else:
-        clues = ('bin', 'lib', 'include')
-
-    dircontents = os.listdir(path)
-
-    if not all([clue in dircontents for clue in clues]):
-        # we don't have the 3 directories which would imply
-        # this is a virtualenvironment
-        return False
-
-    if not all([os.path.isdir(os.path.join(path, clue)) for clue in clues]):
-        # some of them are not actually directories
-        return False
-
-    # if we do have all three directories, make sure that it's not
-    # just a coincidence by doing some heuristics on the rest of
-    # the directory
-    if len(dircontents) > 7:
-        # if there are more than 7 things it's probably not a virtualenvironment
-        return False
-
-    return True
 
 
 def _find_paths(ignore, curpath, rootpath):
@@ -170,9 +144,13 @@ def _find_paths(ignore, curpath, rootpath):
 
     for filename in os.listdir(curpath):
         fullpath = os.path.join(curpath, filename)
-        relpath = os.path.relpath(fullpath, rootpath)
+        try:
+            relpath = os.path.relpath(fullpath, rootpath)
+        except ValueError:
+            # relpath breaks on long paths in Windows
+            continue
 
-        if filename.startswith('.') and os.path.isdir(fullpath):
+        if filename.startswith(".") and os.path.isdir(fullpath):
             continue
 
         if os.path.islink(fullpath):
@@ -181,16 +159,25 @@ def _find_paths(ignore, curpath, rootpath):
         ignored = any([m.search(relpath) for m in ignore])
 
         if os.path.isdir(fullpath):
+            split_fullpath = fullpath.split(os.path.sep)
+
+            # node_modules should be ignored
+            if "node_modules" in split_fullpath:
+                continue
+
+            # __pycache__ should also be skipped
+            if "__pycache__" in split_fullpath:
+                continue
 
             # is it probably a virtualenvironment?
-            if is_virtualenv(fullpath):
+            if is_virtualenv(fullpath) or ".tox" in fullpath:
                 continue
 
             # this is a directory
             directories.append((relpath, ignored))
 
             # is it also a package?
-            initpy = os.path.join(fullpath, '__init__.py')
+            initpy = os.path.join(fullpath, "__init__.py")
             if os.path.exists(initpy) and os.path.isfile(initpy):
                 packages.append((relpath, ignored))
 
@@ -203,14 +190,14 @@ def _find_paths(ignore, curpath, rootpath):
 
         else:
             # this is a file, is it a python module?
-            if fullpath.endswith('.py'):
+            if fullpath.endswith(".py"):
                 modules.append((relpath, ignored))
             files.append((relpath, ignored))
 
     return files, modules, packages, directories
 
 
-def find_python(ignores, paths, explicit_file_mode, workdir=None):
+def find_python(ignores, paths, explicit_file_mode, workdir=""):
     """
     Returns a FoundFiles class containing a list of files, packages, directories,
     where files are simply all python (.py) files, packages are directories
@@ -221,5 +208,5 @@ def find_python(ignores, paths, explicit_file_mode, workdir=None):
         return SingleFiles(paths, workdir or os.getcwd())
     else:
         assert len(paths) == 1
-        files, modules, directories, packages = _find_paths(ignores, paths[0], paths[0])
-        return FoundFiles(paths[0], files, modules, directories, packages, ignores)
+        files, modules, directories, packages = _find_paths(ignores, paths[0], workdir)
+        return FoundFiles(workdir, files, modules, directories, packages, ignores)

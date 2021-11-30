@@ -1,3 +1,5 @@
+import os
+
 from prospector.suppression import get_suppressions
 
 
@@ -25,22 +27,27 @@ def filter_messages(relative_filepaths, root, messages):
     filtered = []
     for message in messages:
         # first get rid of the pylint informational messages
-        if message.source == 'pylint' and message.code in ('suppressed-message',):
+        relative_message_path = os.path.relpath(message.location.path)
+
+        if message.source == "pylint" and message.code in (
+            "suppressed-message",
+            "file-ignored",
+        ):
             continue
 
         # some files are skipped entirely by messages
-        if message.location.path in paths_to_ignore:
+        if relative_message_path in paths_to_ignore:
             continue
 
         # some lines are skipped entirely by messages
-        if message.location.path in lines_to_ignore:
-            if message.location.line in lines_to_ignore[message.location.path]:
+        if relative_message_path in lines_to_ignore:
+            if message.location.line in lines_to_ignore[relative_message_path]:
                 continue
 
         # and some lines have only certain messages explicitly ignored
-        if message.location.path in messages_to_ignore:
-            if message.location.line in messages_to_ignore[message.location.path]:
-                if message.code in messages_to_ignore[message.location.path][message.location.line]:
+        if relative_message_path in messages_to_ignore:
+            if message.location.line in messages_to_ignore[relative_message_path]:
+                if message.code in messages_to_ignore[relative_message_path][message.location.line]:
                     continue
 
         # otherwise this message was not filtered

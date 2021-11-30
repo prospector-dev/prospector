@@ -68,12 +68,12 @@ combinations:
         - pep8: E702
         - pylint: multiple-statements
 
-    -   # incorrect indendation
+    -   # incorrect indentation
         - pep257: D207
         - pep8: E111
         - pylint: bad-indentation
 
-    -   # incorrect indendation
+    -   # incorrect indentation
         - pep257: D208
         - pep8: E111
         - pylint: bad-indentation
@@ -106,6 +106,50 @@ combinations:
     -   # redefinition of unused function
         - pyflakes: F811
         - pylint: function-redefined
+
+    -   # f-string is missing placeholders
+        - pylint: f-string-without-interpolation
+        - pyflakes: F541
+
+    -   # Duplicate key in dictionary
+        - pylint: duplicate-key
+        - pyflakes: F601
+
+    -   # More than one starred expression in assignment
+        - pylint: too-many-star-expressions
+        - pyflakes: F622
+
+    -   # Assert called on a tuple
+        - pylint: assert-on-tuple
+        - pyflakes: F631
+
+    -   # 'break' outside loop
+        - pylint: not-in-loop
+        - pyflakes: F701
+
+    -   # 'continue' not properly in loop
+        - pylint: not-in-loop
+        - pyflakes: F702
+
+    -   # 'continue' not supported inside 'finally' clause
+        - pylint: continue-in-finally
+        - pyflakes: F703
+
+    -   # Yield outside function
+        - pylint: yield-outside-function
+        - pyflakes: F704
+
+    -   # Return outside function
+        - pylint: return-outside-function
+        - pyflakes: F706
+
+    -   # default 'except:' must be last
+        - pylint: bad-except-order
+        - pyflakes: F707
+
+    -   # NotImplemented raised - should raise NotImplementedError
+        - pylint: notimplemented-raised
+        - pyflakes: F901
 
     -   # first argument of a classmethod should be named 'cls'
         - pep8: N804
@@ -148,8 +192,9 @@ combinations:
     -   # No exception type(s) specified
         - pylint: bare-except
         - frosted: W101
+        - pep8: E722
 
-    -   # Spaces around keyword/paramater equals
+    -   # Spaces around keyword/parameter equals
         - pep8: E251
         - pylint: bad-whitespace
 
@@ -204,3 +249,6 @@ combinations:
     -
         - pep257: D103
         - pylint: missing-docstring
+    -
+        - pylint: singleton-comparison
+        - pep8: E711

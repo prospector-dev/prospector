@@ -7,12 +7,12 @@
 from collections import defaultdict
 
 import pkg_resources
+
 import yaml
 
-
 __all__ = (
-    'blend',
-    'BLEND_COMBOS',
+    "blend",
+    "BLEND_COMBOS",
 )
 
 
@@ -74,7 +74,7 @@ def blend_line(messages, blend_combos=None):
         for now_used in blend_list[1:]:
             now_used.used = True
 
-    return [m for m in blended if not getattr(m, 'used', False)]
+    return [m for m in blended if not getattr(m, "used", False)]
 
 
 def blend(messages, blend_combos=None):
@@ -98,10 +98,8 @@ def blend(messages, blend_combos=None):
 
 
 def get_default_blend_combinations():
-    combos = yaml.safe_load(
-        pkg_resources.resource_string(__name__, 'blender_combinations.yaml')
-    )
-    combos = combos.get('combinations', [])
+    combos = yaml.safe_load(pkg_resources.resource_string(__name__, "blender_combinations.yaml"))
+    combos = combos.get("combinations", [])
 
     defaults = []
     for combo in combos:

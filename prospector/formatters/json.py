@@ -1,15 +1,11 @@
 from __future__ import absolute_import
 
 import json
-
 from datetime import datetime
 
 from prospector.formatters.base import Formatter
 
-
-__all__ = (
-    'JsonFormatter',
-)
+__all__ = ("JsonFormatter",)
 
 
 # pylint: disable=too-few-public-methods
@@ -27,12 +23,15 @@ class JsonFormatter(Formatter):
                     munged[key] = str(value)
                 else:
                     munged[key] = value
-            output['summary'] = munged
+            output["summary"] = munged
 
         if profile:
-            output['profile'] = self.profile.as_dict()
+            output["profile"] = self.profile.as_dict()
 
+        for message in self.messages:
+            if not isinstance(message.location.path, str):
+                message.location.path = str(message.location.path)
         if messages:
-            output['messages'] = [m.as_dict() for m in self.messages]
+            output["messages"] = [m.as_dict() for m in self.messages]
 
         return json.dumps(output, indent=2)
