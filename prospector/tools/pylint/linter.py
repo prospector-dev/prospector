@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-from pylint.config import OptionsManagerMixIn
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip
 
@@ -20,12 +19,6 @@ class ProspectorLinter(PyLinter):  # pylint: disable=too-many-ancestors,too-many
             self.load_plugin_modules(plugins)
         self.load_config_file()
         return True
-
-    def reset_options(self):
-        # for example, we want to re-initialise the OptionsManagerMixin
-        # to suppress the config error warning
-        # pylint: disable=non-parent-init-called
-        OptionsManagerMixIn.__init__(self, usage=PyLinter.__doc__)
 
     def _expand_files(self, modules):
         expanded = PyLinter._expand_files(self, modules)

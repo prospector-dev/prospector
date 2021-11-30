@@ -1,6 +1,21 @@
 Changelog
 =========
 
+Version 1.5.3dev0
+-------------
+
+- [#465](https://github.com/PyCQA/prospector/issues/465) Remove unnecessary configuration reset to fix pylint>=2.12 compatibility
+
+Version 1.5.2
+-------------
+
+- [#465](https://github.com/PyCQA/prospector/issues/465) Bugfix release to pin pylint<2.12 because prospector's internals were not compatible with it
+
+Version 1.5.1
+-------------
+
+- [refs #438] Promoting pre-release to release as it appears to work
+
 Version 1.5.0.1
 -------------
 

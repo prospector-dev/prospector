@@ -210,7 +210,6 @@ class PylintTool(ToolBase):
                 self._args = linter.load_command_line_configuration(check_paths)
                 config_messages += self._pylintrc_configure(pylintrc, linter)
         if not ext_found:
-            linter.reset_options()
             self._args = linter.load_command_line_configuration(check_paths)
             config_messages = self._prospector_configure(prospector_config, linter)
         return config_messages, configured_by

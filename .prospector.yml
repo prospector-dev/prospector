@@ -11,9 +11,6 @@ ignore-paths:
 frosted:
   run: false
 
-pyroma:
-  run: true
-
 mypy:
   run: true
   options:
