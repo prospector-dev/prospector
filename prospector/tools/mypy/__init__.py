@@ -55,6 +55,7 @@ class MypyTool(ToolBase):
         python_2_mode = options.get("python-2-mode", False)
         python_version = options.get("python-version", None)
         strict_optional = options.get("strict-optional", False)
+        namespace_packages = options.get("namespace-packages", False)
 
         self.options.append("--follow-imports=%s" % follow_imports)
 
@@ -78,6 +79,9 @@ class MypyTool(ToolBase):
 
         if strict_optional:
             self.options.append("--strict-optional")
+
+        if namespace_packages:
+            self.options.append("--namespace-packages")
 
         for list_option in MYPY_OPTIONS:
             for entry in options.get(list_option, []):
