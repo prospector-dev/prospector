@@ -62,3 +62,6 @@ venv
 .pylint.d
 
 pip-wheel-metadata
+
+# local testing for now
+.drone.yml
