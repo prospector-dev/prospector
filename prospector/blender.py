@@ -39,7 +39,7 @@ def blend_line(messages, blend_combos=None):
 
         # note: we use 'found=True' here rather than a simple break/for-else
         # because this allows the same message to be put into more than one
-        # 'bucket'. This means that the same message from pep8 can 'subsume'
+        # 'bucket'. This means that the same message from pycodestyle can 'subsume'
         # two from pylint, for example.
 
         if not found:
@@ -67,7 +67,7 @@ def blend_line(messages, blend_combos=None):
 
         # Some messages from a tool point out an error that in another tool is handled by two
         # different errors or more. For example, pylint emits the same warning (multiple-statements)
-        # for "two statements on a line" separated by a colon and a semi-colon, while pep8 has E701
+        # for "two statements on a line" separated by a colon and a semi-colon, while pycodestyle has E701
         # and E702 for those cases respectively. In this case, the pylint error will not be 'blended' as
         # it will appear in two blend_lists. Therefore we mark anything not taken from the blend list
         # as "consumed" and then filter later, to avoid such cases.

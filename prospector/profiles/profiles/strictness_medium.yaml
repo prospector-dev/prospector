@@ -60,7 +60,7 @@ frosted:
     - E103
     - E306
 
-pep8:
+pycodestyle:
   disable:
     - E111
     - E121
@@ -119,7 +119,7 @@ pyroma:
   disable:
     - PYR04
 
-pep257:
+pydocstyle:
   disable:
     - D100
     - D101

@@ -2,7 +2,7 @@ import json
 import os
 
 import yaml
-from prospector.tools import TOOLS
+from prospector.tools import TOOLS, DEFAULT_TOOLS
 
 BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
 
@@ -59,6 +59,7 @@ class ProspectorProfile(object):
         self.test_warnings = profile_dict.get("test-warnings")
         self.doc_warnings = profile_dict.get("doc-warnings")
         self.member_warnings = profile_dict.get("member-warnings")
+        self.pep8 = profile_dict.get("pep8")
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
@@ -68,7 +69,7 @@ class ProspectorProfile(object):
             conf = {"disable": [], "enable": [], "run": None, "options": {}}
             conf.update(profile_dict.get(tool, {}))
 
-            if self.max_line_length is not None and tool in ("pylint", "pep8"):
+            if self.max_line_length is not None and tool in ("pylint", "pycodestyle"):
                 conf["options"]["max-line-length"] = self.max_line_length
 
             setattr(self, tool, conf)
@@ -79,7 +80,11 @@ class ProspectorProfile(object):
         return list(set(disable) - set(enable))
 
     def is_tool_enabled(self, name):
-        return getattr(self, name).get("run")
+        enabled = getattr(self, name).get("run")
+        if enabled is not None:
+            return enabled
+        # this is not explicitly enabled or disabled, so use the default
+        return name in DEFAULT_TOOLS
 
     def list_profiles(self):
         # this profile is itself included
@@ -100,6 +105,7 @@ class ProspectorProfile(object):
             "strictness": self.strictness,
             "requirements": self.requirements,
             "python-targets": self.python_targets,
+            "pep8": self.pep8,
         }
         for tool in TOOLS.keys():
             out[tool] = getattr(self, tool)
@@ -174,9 +180,8 @@ def _simple_merge_dict(priority, base):
 def _merge_tool_config(priority, base):
     out = dict(base.items())
     for key, value in priority.items():
-        # pep8 has extra 'full' and 'none' options
         # pylint has extra 'load-plugins' option
-        if key in ("run", "full", "none", "load-plugins"):
+        if key in ("run", "load-plugins"):
             out[key] = value
         elif key in ("options",):
             out[key] = _simple_merge_dict(value, base.get(key, {}))
@@ -207,6 +212,7 @@ def _merge_profile_dict(priority, base):
             "output-format",
             "autodetect",
             "max-line-length",
+            "pep8",
         ):
             # some keys are simple values which are overwritten
             out[key] = value
@@ -240,10 +246,10 @@ def _determine_strictness(profile_dict, inherits):
 
 
 def _determine_pep8(profile_dict):
-    pep8 = profile_dict.get("pep8", {})
-    if pep8.get("full", False):
+    pep8 = profile_dict.get("pep8")
+    if pep8 == "full":
         return "full_pep8", True
-    elif pep8.get("none", False):
+    elif pep8 == "none":
         return "no_pep8", True
     return None, False
 

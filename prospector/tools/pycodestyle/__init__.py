@@ -7,16 +7,10 @@ from pep8ext_naming import NamingChecker
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from pycodestyle import PROJECT_CONFIG, BaseReport, StyleGuide, register_check
-
-try:
-    # for pep8 <= 1.5.7
-    from pycodestyle import DEFAULT_CONFIG as USER_CONFIG
-except ImportError:
-    # for pep8 >= 1.6.0
-    from pycodestyle import USER_CONFIG
+from pycodestyle import USER_CONFIG
 
 
-__all__ = ("Pep8Tool",)
+__all__ = ("PycodestyleTool",)
 
 
 class ProspectorReport(BaseReport):
@@ -32,7 +26,7 @@ class ProspectorReport(BaseReport):
             check,
         )
         if code is None:
-            # The error pep8 found is being ignored, let's move on.
+            # The error pycodestyle found is being ignored, let's move on.
             return
         else:
             # Get a clean copy of the message text without the code embedded.
@@ -51,7 +45,8 @@ class ProspectorReport(BaseReport):
             character=(offset + 1),
         )
         message = Message(
-            source="pep8",
+            # TODO: legacy output naming
+            source="pycodestyle",
             code=code,
             location=location,
             message=text,
@@ -77,7 +72,7 @@ class ProspectorStyleGuide(StyleGuide):
         if super(ProspectorStyleGuide, self).excluded(filename, parent):
             return True
 
-        # If the file survived pep8's exclusion rules, check it against
+        # If the file survived pycodestyle's exclusion rules, check it against
         # prospector's patterns.
         fullpath = os.path.join(self._files.rootpath, parent or "", filename)
         if os.path.isdir(fullpath):
@@ -87,9 +82,9 @@ class ProspectorStyleGuide(StyleGuide):
         return fullpath not in self._module_paths
 
 
-class Pep8Tool(ToolBase):
+class PycodestyleTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(Pep8Tool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.checker = None
 
     def configure(self, prospector_config, found_files):
@@ -100,18 +95,19 @@ class Pep8Tool(ToolBase):
         # 'none' means we ignore any external config, so just carry on
         use_config = False
 
-        if prospector_config.use_external_config("pep8"):
+        if prospector_config.use_external_config("pycodestyle"):
             use_config = True
 
             paths = [os.path.join(found_files.rootpath, name) for name in PROJECT_CONFIG]
             paths.append(USER_CONFIG)
-            ext_loc = prospector_config.external_config_location("pep8")
+            ext_loc = prospector_config.external_config_location("pycodestyle")
             if ext_loc is not None:
                 paths = [ext_loc] + paths
 
             for conf_path in paths:
                 if os.path.exists(conf_path) and os.path.isfile(conf_path):
                     # this file exists - but does it have pep8 or pycodestyle config in it?
+                    # TODO: Remove this
                     header = re.compile(r"\[(pep8|pycodestyle)\]")
                     with open(conf_path) as conf_file:
                         if any([header.search(line) for line in conf_file.readlines()]):
@@ -142,19 +138,19 @@ class Pep8Tool(ToolBase):
 
         check_paths = [found_files.to_absolute_path(p) for p in check_paths]
 
-        # Instantiate our custom pep8 checker.
+        # Instantiate our custom pycodestyle checker.
         self.checker = ProspectorStyleGuide(paths=check_paths, found_files=found_files, config_file=external_config)
         if not use_config or external_config is None:
             configured_by = None
             # This means that we don't have existing config to use.
-            # Make sure pep8's code ignores are fully reset to zero before
+            # Make sure pycodestyle's code ignores are fully reset to zero before
             # adding prospector-flavoured configuration.
             # pylint: disable=attribute-defined-outside-init
             self.checker.options.select = ()
-            self.checker.options.ignore = tuple(prospector_config.get_disabled_messages("pep8"))
+            self.checker.options.ignore = tuple(prospector_config.get_disabled_messages("pycodestyle"))
 
-            if "max-line-length" in prospector_config.tool_options("pep8"):
-                self.checker.options.max_line_length = prospector_config.tool_options("pep8")["max-line-length"]
+            if "max-line-length" in prospector_config.tool_options("pycodestyle"):
+                self.checker.options.max_line_length = prospector_config.tool_options("pycodestyle")["max-line-length"]
         else:
             configured_by = "Configuration found at %s" % external_config
 
@@ -171,5 +167,5 @@ class Pep8Tool(ToolBase):
         return report.get_messages()
 
 
-# Load pep8ext_naming into pep8's configuration.
+# Load pep8ext_naming into pycodestyle's configuration.
 register_check(NamingChecker)

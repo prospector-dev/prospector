@@ -41,7 +41,7 @@ class TestProfileParsing(ProfileTestBase):
     def test_disable_tool(self):
         profile = ProspectorProfile.load("pylint_disabled", self._profile_path)
         self.assertFalse(profile.is_tool_enabled("pylint"))
-        self.assertTrue(profile.is_tool_enabled("pep8") is None)
+        self.assertTrue(profile.is_tool_enabled("pycodestyle"))
 
     def test_load_plugins(self):
         profile = ProspectorProfile.load("pylint_load_plugins", self._profile_path)
@@ -63,9 +63,9 @@ class TestProfileInheritance(ProfileTestBase):
         self.assertEqual(["I0002", "I0003", "raw-checker-failed"], disable)
 
     def test_disable_tool_inheritance(self):
-        profile = ProspectorProfile.load("pep8_and_pylint_disabled", self._profile_path)
+        profile = ProspectorProfile.load("pydocstyle_and_pylint_disabled", self._profile_path)
         self.assertFalse(profile.is_tool_enabled("pylint"))
-        self.assertFalse(profile.is_tool_enabled("pep8"))
+        self.assertFalse(profile.is_tool_enabled("pydocstyle"))
 
     def test_precedence(self):
         profile = self._load("precedence")
@@ -91,9 +91,9 @@ class TestProfileInheritance(ProfileTestBase):
             forced_inherits=["doc_warnings", "no_member_warnings"],
         )
         self.assertDictEqual(profile.pylint, high_strictness.pylint)
-        self.assertDictEqual(profile.pep8, high_strictness.pep8)
+        self.assertDictEqual(profile.pycodestyle, high_strictness.pycodestyle)
         self.assertDictEqual(profile.pyflakes, high_strictness.pyflakes)
 
     def test_pep8_inheritance(self):
         profile = self._load("pep8")
-        self.assertTrue(profile.is_tool_enabled("pep8"))
+        self.assertTrue(profile.pep8 == "full")

@@ -1,5 +1,4 @@
 inherits:
   - base
 
-pep8:
-  full: true
+pep8: full
