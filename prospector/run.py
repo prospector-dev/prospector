@@ -63,7 +63,7 @@ class Prospector(object):
 
             try:
                 # Tools can output to stdout/stderr in unexpected places, for example,
-                # pep257 emits warnings about __all__ and as pyroma exec's the setup.py
+                # pydocstyle emits warnings about __all__ and as pyroma exec's the setup.py
                 # file, it will execute any print statements in that, etc etc...
                 with capture_output(hide=not self.config.direct_tool_stdout) as capture:
                     messages += tool.run(found_files)

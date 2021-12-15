@@ -153,7 +153,7 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         },
         "full_pep8": {
             "flags": ["-F", "--full-pep8"],
-            "help": "Enables every PEP8 warning, so that all PEP8 style" " violations will be reported.",
+            "help": "Enables every PEP8 warning, so that all PEP8 style violation will be reported.",
         },
         "max_line_length": {
             "flags": ["--max-line-length"],

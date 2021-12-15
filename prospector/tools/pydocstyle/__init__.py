@@ -4,24 +4,24 @@ from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
 from pydocstyle.checker import AllError
-from pydocstyle.checker import ConventionChecker as PEP257Checker
+from pydocstyle.checker import ConventionChecker
 
-__all__ = ("Pep257Tool",)
+__all__ = ("PydocstyleTool",)
 
 
-class Pep257Tool(ToolBase):
+class PydocstyleTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(Pep257Tool, self).__init__(*args, **kwargs)
+        super(PydocstyleTool, self).__init__(*args, **kwargs)
         self._code_files = []
         self.ignore_codes = ()
 
     def configure(self, prospector_config, found_files):
-        self.ignore_codes = prospector_config.get_disabled_messages("pep257")
+        self.ignore_codes = prospector_config.get_disabled_messages("pydocstyle")
 
     def run(self, found_files):
         messages = []
 
-        checker = PEP257Checker()
+        checker = ConventionChecker()
 
         for code_file in found_files.iter_module_paths():
             try:
@@ -36,7 +36,8 @@ class Pep257Tool(ToolBase):
                         absolute_path=True,
                     )
                     message = Message(
-                        source="pep257",
+                        # TODO: legacy naming for now
+                        source="pydocstyle",
                         code=error.code,
                         location=location,
                         message=error.message.partition(":")[2].strip(),
@@ -46,20 +47,20 @@ class Pep257Tool(ToolBase):
                 messages.append(
                     make_tool_error_message(
                         code_file,
-                        "pep257",
+                        "pydocstyle",
                         "D000",
                         message="Could not handle the encoding of this file: %s" % err.encoding,
                     )
                 )
                 continue
             except AllError as exc:
-                # pep257's Parser.parse_all method raises AllError when an
+                # pydocstyle's Parser.parse_all method raises AllError when an
                 # attempt to analyze the __all__ definition has failed.  This
                 # occurs when __all__ is too complex to be parsed.
                 messages.append(
                     make_tool_error_message(
                         code_file,
-                        "pep257",
+                        "pydocstyle",
                         "D000",
                         line=1,
                         character=0,
