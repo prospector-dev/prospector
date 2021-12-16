@@ -274,6 +274,10 @@ class ProspectorConfig(object):
         return self.config.messages_only
 
     @property
+    def quiet(self):
+        return self.config.quiet
+
+    @property
     def blending(self):
         return self.config.blending
 

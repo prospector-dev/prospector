@@ -137,7 +137,7 @@ class Prospector(object):
             output_format, output_files = report
             self.summary["formatter"] = output_format
             formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
-            if not output_files:
+            if not output_files and not self.config.quiet:
                 self.write_to(formatter, sys.stdout)
             for output_file in output_files:
                 with open(output_file, "w+") as target:

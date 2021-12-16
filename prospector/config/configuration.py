@@ -30,6 +30,7 @@ def build_manager():
 
     manager.add(soc.BooleanSetting("messages_only", default=False))
     manager.add(soc.BooleanSetting("summary_only", default=False))
+    manager.add(soc.BooleanSetting("quiet", default=False))
     manager.add(
         soc.ListSetting(
             "output_format",
@@ -150,6 +151,10 @@ def build_command_line_source(prog=None, description="Performs static analysis o
             "help": "Attempt to warn when code tries to access an attribute of a "
             "class or member of a module which does not exist. This is disabled "
             "by default as it tends to be quite inaccurate.",
+        },
+        "quiet": {
+            "flags": ["-q", "--quiet"],
+            "help": "Run but do not output anything to stdout. Useful to suppress " "output in scripts without sending to a file (via -o)",
         },
         "full_pep8": {
             "flags": ["-F", "--full-pep8"],
