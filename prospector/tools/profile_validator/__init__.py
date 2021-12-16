@@ -46,10 +46,9 @@ class ProfileValidationTool(ToolBase):
 
         self.ignore_codes = prospector_config.get_disabled_messages("profile-validator")
 
-    def tool_names(self):
+    def tool_names(self):  # pylint: disable=no-self-use, import-outside-toplevel, cyclic-import
         # TODO: this is currently a circular import, which is why it is not at the top of
         # the module. However, there's no obvious way to get around this right now...
-        # pylint: disable=cyclic-import
         from prospector.tools import TOOLS
 
         return TOOLS.keys()
@@ -78,7 +77,7 @@ class ProfileValidationTool(ToolBase):
             # this happens if a completely empty profile is found
             add_message(
                 PROFILE_IS_EMPTY,
-                "%s is a completely empty profile" % relative_filepath,
+                f"{relative_filepath} is a completely empty profile",
                 "entire-file",
             )
             return messages
@@ -87,7 +86,7 @@ class ProfileValidationTool(ToolBase):
             if not isinstance(parsed.get(setting, False), bool):
                 add_message(
                     CONFIG_SETTING_MUST_BE_BOOL,
-                    '"%s" should be true or false' % setting,
+                    f'"{setting}" should be true or false',
                     setting,
                 )
 
@@ -126,7 +125,9 @@ class ProfileValidationTool(ToolBase):
             )
 
         if "python-targets" in parsed:
-            python_targets = parsed["python-targets"] if isinstance(parsed["python-targets"], list) else [parsed["python-targets"]]
+            python_targets = (
+                parsed["python-targets"] if isinstance(parsed["python-targets"], list) else [parsed["python-targets"]]
+            )
 
             for target in python_targets:
                 if str(target) not in ("2", "3"):
@@ -146,7 +147,7 @@ class ProfileValidationTool(ToolBase):
             if key not in parsed:
                 continue
             if not isinstance(parsed[key], (tuple, list)):
-                add_message(CONFIG_SETTING_SHOULD_BE_LIST, '"%s" should be a list' % key, key)
+                add_message(CONFIG_SETTING_SHOULD_BE_LIST, f'"{key}" should be a list', key)
 
         for key in parsed.keys():
             if key not in ProfileValidationTool.ALL_SETTINGS and key not in self.tool_names():

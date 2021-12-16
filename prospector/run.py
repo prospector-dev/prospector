@@ -9,7 +9,7 @@ from prospector.exceptions import FatalProspectorException
 from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
-from prospector.tools.utils import capture_output
+from prospector.tools.utils import CaptureOutput
 
 __all__ = (
     "Prospector",
@@ -63,7 +63,7 @@ class Prospector(object):
                 # Tools can output to stdout/stderr in unexpected places, for example,
                 # pydocstyle emits warnings about __all__ and as pyroma exec's the setup.py
                 # file, it will execute any print statements in that, etc etc...
-                with capture_output(hide=not self.config.direct_tool_stdout) as capture:
+                with CaptureOutput(hide=not self.config.direct_tool_stdout) as capture:
                     messages += tool.run(found_files)
 
                     if self.config.include_tool_stdout:
@@ -91,7 +91,10 @@ class Prospector(object):
                     raise
                 else:
                     loc = Location(self.config.workdir, None, None, None, None)
-                    msg = "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)" % (toolname,)
+                    msg = (
+                        "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)"
+                        % (toolname,)
+                    )
                     message = Message(
                         toolname,
                         "failure",

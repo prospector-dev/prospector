@@ -12,13 +12,11 @@ _old = logging.basicConfig
 try:
     logging.basicConfig = lambda **k: None
     from pyroma import projectdata, ratings
-except ImportError:
-    # raise the Exception
-    raise
+
+    # if pyroma doesn't exist, will raise an ImportError and be caught "upstream"
 finally:
     # always restore logging.basicConfig
     logging.basicConfig = _old
-
 
 PYROMA_ALL_CODES = {
     "Name": "PYR01",
@@ -43,16 +41,22 @@ PYROMA_ALL_CODES = {
 }
 
 PYROMA_CODES = {}
-for name, code in PYROMA_ALL_CODES.items():
-    if hasattr(ratings, name):
-        PYROMA_CODES[getattr(ratings, name)] = code
+
+
+def _copy_codes():
+    for name, code in PYROMA_ALL_CODES.items():
+        if hasattr(ratings, name):
+            PYROMA_CODES[getattr(ratings, name)] = code
+
+
+_copy_codes()
 
 PYROMA_TEST_CLASSES = [t.__class__ for t in ratings.ALL_TESTS]
 
 
 class PyromaTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(PyromaTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ignore_codes = ()
 
     def configure(self, prospector_config, found_files):

@@ -10,8 +10,10 @@ class ProspectorVulture(Vulture):
         Vulture.__init__(self, verbose=False)
         self._files = found_files
         self._internal_messages = []
+        self.file = None
+        self.filename = None
 
-    def scavenge(self, _=None):
+    def scavenge(self, _=None, __=None):
         # The argument is a list of paths, but we don't care
         # about that as we use the found_files object. The
         # argument is here to explicitly acknowledge that we
@@ -25,7 +27,7 @@ class ProspectorVulture(Vulture):
                         module,
                         "vulture",
                         "V000",
-                        message="Could not handle the encoding of this file: %s" % err.encoding,
+                        message=f"Could not handle the encoding of this file: {err.encoding}",
                     )
                 )
                 continue

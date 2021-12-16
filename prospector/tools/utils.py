@@ -1,7 +1,7 @@
 import sys
 
 
-class CaptureStream(object):
+class CaptureStream:
     def __init__(self):
         self.contents = ""
 
@@ -15,9 +15,7 @@ class CaptureStream(object):
         pass
 
 
-# The class name here is lowercase as it is a context manager, which
-# typically tend to me lowercase.
-class capture_output(object):  # noqa pylint:disable=invalid-name
+class CaptureOutput:
     def __init__(self, hide):
         self.hide = hide
 
