@@ -1,7 +1,7 @@
 import os
 
 
-def is_virtualenv(path):
+def is_virtualenv(path) -> bool:
     if os.name == "nt":
         # Windows!
         clues = ("Scripts", "lib", "include")

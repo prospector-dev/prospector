@@ -18,7 +18,7 @@ def read_py_file(filepath):
         #   (1) in badly authored files (contains non-utf8 in a comment line)
         #   (2) a coding is specified, but wrong and
         #   (3) no coding is specified, and the default
-        #       'utf8' fails to decode.
+        #       'utf-8' fails to decode.
         #   (4) the encoding specified by a pep263 declaration did not match
         #       with the encoding detected by inspecting the BOM
         raise CouldNotHandleEncoding(filepath, err)
@@ -27,7 +27,7 @@ def read_py_file(filepath):
         with tokenize.open(filepath) as f:
             return f.read()
         # this warning is issued:
-        #   (1) if uft-8 is specified, but latin1 is used with something like \x0e9 appearing
+        #   (1) if utf-8 is specified, but latin1 is used with something like \x0e9 appearing
         #       (see http://stackoverflow.com/a/5552623)
     except UnicodeDecodeError as err:
         raise CouldNotHandleEncoding(filepath, err)

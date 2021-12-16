@@ -64,4 +64,4 @@ venv
 pip-wheel-metadata
 
 # local testing for now
-.drone.yml
+.drone.*

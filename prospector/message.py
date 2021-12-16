@@ -2,7 +2,7 @@ import os
 
 
 class Location(object):
-    def __init__(self, path, module, function, line, character, absolute_path=True):
+    def __init__(self, path: str, module: str, function: str, line: int, character: int, absolute_path: bool = True):
         self.path = path
         self._path_is_absolute = absolute_path
         self.module = module or None
@@ -10,19 +10,19 @@ class Location(object):
         self.line = None if line == -1 else line
         self.character = None if character == -1 else character
 
-    def to_absolute_path(self, root):
+    def to_absolute_path(self, root: str) -> str:  # TODO: use pathlib?
         if self._path_is_absolute:
             return
         self.path = os.path.abspath(os.path.join(root, self.path))
         self._path_is_absolute = True
 
-    def to_relative_path(self, root):
+    def to_relative_path(self, root: str) -> str:
         if not self._path_is_absolute:
             return
         self.path = os.path.relpath(self.path, root)
         self._path_is_absolute = False
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, any]:
         return {
             "path": self.path,
             "module": self.module,
@@ -31,13 +31,13 @@ class Location(object):
             "character": self.character,
         }
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.path, self.line, self.character))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.path == other.path and self.line == other.line and self.character == other.character
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if self.path == other.path:
             if self.line == other.line:
                 return (self.character or -1) < (other.character or -1)
@@ -46,19 +46,19 @@ class Location(object):
 
 
 class Message(object):
-    def __init__(self, source, code, location, message):
+    def __init__(self, source: str, code: str, location: Location, message: str):
         self.source = source
         self.code = code
         self.location = location
         self.message = message
 
-    def to_absolute_path(self, root):
+    def to_absolute_path(self, root: str) -> str:
         self.location.to_absolute_path(root)
 
-    def to_relative_path(self, root):
+    def to_relative_path(self, root: str) -> str:
         self.location.to_relative_path(root)
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, str]:
         return {
             "source": self.source,
             "code": self.code,
@@ -66,21 +66,30 @@ class Message(object):
             "message": self.message,
         }
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s-%s" % (self.source, self.code)
 
-    def __eq__(self, other):
+    def __eq__(self, other: Location) -> bool:
         if self.location == other.location:
             return self.code == other.code
         else:
             return False
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if self.location == other.location:
             return self.code < other.code
         return self.location < other.location
 
 
-def make_tool_error_message(filepath, source, code, message, line=0, character=0, module=None, function=None):
+def make_tool_error_message(
+    filepath: str,
+    source: str,
+    code: str,
+    message: str,
+    line: int = 0,
+    character: int = 0,
+    module: str = None,
+    function: str = None,
+) -> Message:
     location = Location(path=filepath, module=module, function=function, line=line, character=character)
     return Message(source=source, code=code, location=location, message=message)
