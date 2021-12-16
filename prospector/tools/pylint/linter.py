@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip
 

@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from pylint.exceptions import UnknownMessageError
 from pylint.reporters import BaseReporter
 
