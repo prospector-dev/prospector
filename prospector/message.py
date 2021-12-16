@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 
 class Location(object):
@@ -22,7 +23,7 @@ class Location(object):
         self.path = os.path.relpath(self.path, root)
         self._path_is_absolute = False
 
-    def as_dict(self) -> dict[str, any]:
+    def as_dict(self) -> Dict[str, any]:
         return {
             "path": self.path,
             "module": self.module,
@@ -58,7 +59,7 @@ class Message(object):
     def to_relative_path(self, root: str) -> str:
         self.location.to_relative_path(root)
 
-    def as_dict(self) -> dict[str, str]:
+    def as_dict(self) -> Dict[str, str]:
         return {
             "source": self.source,
             "code": self.code,
