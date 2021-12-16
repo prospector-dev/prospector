@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from pyflakes.api import checkPath
 from pyflakes.reporter import Reporter
 

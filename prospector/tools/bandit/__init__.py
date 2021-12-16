@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import os
 
 from bandit.cli.main import _get_profile, _init_extensions

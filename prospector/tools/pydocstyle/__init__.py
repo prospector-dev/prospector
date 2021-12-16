@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from pydocstyle.checker import AllError, ConventionChecker
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file

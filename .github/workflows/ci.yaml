@@ -152,7 +152,7 @@ jobs:
           python -m pip install --disable-pip-version-check -U pip poetry
           poetry install -E with_everything
 
-  pytest-linux:
+  test-linux:
     name: Run tests Python ${{ matrix.python-version }} (Linux)
     runs-on: ubuntu-latest
     needs: prepare-tests-linux
@@ -187,3 +187,9 @@ jobs:
           python -m pip install --disable-pip-version-check -U pip poetry
           poetry install
           pytest --benchmark-disable --cov --cov-report= tests/
+      - name: Check that Prospector can run
+        run: |
+          . venv/bin/activate
+          echo "Checking prospector can run; don't care about messages found, only that it runs successcully"
+          prospector --quiet --zero-exit
+          echo "Prospector ran successfully."
