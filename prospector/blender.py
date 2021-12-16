@@ -7,7 +7,6 @@
 from collections import defaultdict
 
 import pkg_resources
-
 import yaml
 
 __all__ = (

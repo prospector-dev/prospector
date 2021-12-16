@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 
-from prospector.message import Location, Message
-from prospector.tools.base import ToolBase
 from pyflakes.api import checkPath
 from pyflakes.reporter import Reporter
+
+from prospector.message import Location, Message
+from prospector.tools.base import ToolBase
 
 __all__ = ("PyFlakesTool",)
 

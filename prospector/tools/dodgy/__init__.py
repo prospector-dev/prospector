@@ -5,6 +5,7 @@ import os
 import re
 
 from dodgy.checks import check_file_contents
+
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase

@@ -2,7 +2,8 @@ import json
 import os
 
 import yaml
-from prospector.tools import TOOLS, DEFAULT_TOOLS
+
+from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
 
@@ -49,9 +50,7 @@ class ProspectorProfile(object):
         self.output_format = profile_dict.get("output-format")
         self.output_target = profile_dict.get("output-target")
         self.autodetect = profile_dict.get("autodetect")
-        self.uses = [
-            uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery", "flask")
-        ]
+        self.uses = [uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery", "flask")]
         self.max_line_length = profile_dict.get("max-line-length")
 
         # informational shorthands

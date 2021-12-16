@@ -1,6 +1,7 @@
 # flake8: noqa
-import setoptconf as soc
 import pkg_resources
+import setoptconf as soc
+
 from prospector.config.datatype import OutputChoice
 from prospector.formatters import FORMATTERS
 from prospector.tools import DEFAULT_TOOLS, TOOLS
@@ -142,8 +143,7 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         },
         "no_style_warnings": {
             "flags": ["-8", "--no-style-warnings"],
-            "help": "Don't create any warnings about style. This disables the"
-            " PEP8 tool and similar checks for formatting.",
+            "help": "Don't create any warnings about style. This disables the" " PEP8 tool and similar checks for formatting.",
         },
         "member_warnings": {
             "flags": ["-m", "--member-warnings"],
@@ -157,8 +157,7 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         },
         "max_line_length": {
             "flags": ["--max-line-length"],
-            "help": "The maximum line length allowed. This will be set by the strictness if no"
-            " value is explicitly specified",
+            "help": "The maximum line length allowed. This will be set by the strictness if no" " value is explicitly specified",
         },
         "messages_only": {
             "flags": ["-M", "--messages-only"],
@@ -277,8 +276,7 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         },
         "direct-tool-stdout": {
             "flags": ["--direct-tool-stdout"],
-            "help": "Same as --include-tool-stdout, except the output will be printed "
-            "directly rather than shown as a message.",
+            "help": "Same as --include-tool-stdout, except the output will be printed " "directly rather than shown as a message.",
         },
         "path": {
             "flags": ["-p", "--path"],

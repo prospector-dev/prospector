@@ -4,11 +4,10 @@ import os
 import re
 
 from pep8ext_naming import NamingChecker
+from pycodestyle import PROJECT_CONFIG, USER_CONFIG, BaseReport, StyleGuide, register_check
+
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
-from pycodestyle import PROJECT_CONFIG, BaseReport, StyleGuide, register_check
-from pycodestyle import USER_CONFIG
-
 
 __all__ = ("PycodestyleTool",)
 

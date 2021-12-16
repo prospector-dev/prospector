@@ -1,7 +1,8 @@
+from vulture import Vulture
+
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
-from vulture import Vulture
 
 
 class ProspectorVulture(Vulture):

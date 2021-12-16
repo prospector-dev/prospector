@@ -43,9 +43,7 @@ class TestPylintTool(TestCase):
         found_files = find_python([], [root], explicit_file_mode=True)
         pylint_tool.configure(config, found_files)
         messages = pylint_tool.run(found_files)
-        assert any(
-            m.code == "useless-suppression" for m in messages
-        ), "There should be at least one useless suppression"
+        assert any(m.code == "useless-suppression" for m in messages), "There should be at least one useless suppression"
 
     def test_use_pylint_default_path_finder(self):
         workdir = os.path.realpath("tests/tools/pylint/testpath/absolute-import/")
@@ -61,9 +59,7 @@ class TestPylintTool(TestCase):
     def test_use_prospector_default_path_finder(self):
         workdir = "tests/tools/pylint/testpath/absolute-import/"
         with patch("os.getcwd", return_value=os.path.realpath(workdir)):
-            pylint_tool, config = _get_pylint_tool_and_prospector_config(
-                argv_patch=["", "-P", "prospector-default-finder"]
-            )
+            pylint_tool, config = _get_pylint_tool_and_prospector_config(argv_patch=["", "-P", "prospector-default-finder"])
         root = os.path.join(os.path.dirname(__file__), "testpath", "absolute-import", "pkg")
         found_files = find_python([], [root], False)
         pylint_tool.configure(config, found_files)

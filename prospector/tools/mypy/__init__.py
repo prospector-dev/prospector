@@ -1,4 +1,5 @@
 from mypy import api
+
 from prospector.message import Location, Message
 from prospector.tools import ToolBase
 

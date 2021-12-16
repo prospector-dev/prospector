@@ -1,10 +1,10 @@
 from __future__ import absolute_import
 
+from pydocstyle.checker import AllError, ConventionChecker
+
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
-from pydocstyle.checker import AllError
-from pydocstyle.checker import ConventionChecker
 
 __all__ = ("PydocstyleTool",)
 

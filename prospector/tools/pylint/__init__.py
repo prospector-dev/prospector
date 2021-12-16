@@ -3,14 +3,15 @@ import re
 import sys
 from collections import defaultdict
 
+from pylint.config import find_pylintrc
+from pylint.exceptions import UnknownMessageError
+from pylint.lint.run import _cpu_count
+
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.indent_checker import IndentChecker
 from prospector.tools.pylint.linter import ProspectorLinter
-from pylint.config import find_pylintrc
-from pylint.exceptions import UnknownMessageError
-from pylint.lint.run import _cpu_count
 
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import (.*) from wildcard import$")
 
@@ -186,9 +187,7 @@ class PylintTool(ToolBase):
         check_paths = [found_files.to_absolute_path(p) for p in check_paths]
         return check_paths
 
-    def _get_pylint_configuration(
-        self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
-    ):
+    def _get_pylint_configuration(self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options):
         if prospector_config.use_external_config("pylint"):
             # try to find a .pylintrc
             pylintrc = pylint_options.get("config_file")

@@ -6,6 +6,7 @@ from bandit.cli.main import _get_profile, _init_extensions
 from bandit.core.config import BanditConfig
 from bandit.core.constants import RANKING
 from bandit.core.manager import BanditManager
+
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 

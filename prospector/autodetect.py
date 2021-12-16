@@ -2,10 +2,11 @@ import os
 import re
 import warnings
 
-from prospector import encoding
-from prospector.pathutils import is_virtualenv
 from requirements_detector import find_requirements
 from requirements_detector.detect import RequirementsNotFound
+
+from prospector import encoding
+from prospector.pathutils import is_virtualenv
 
 POSSIBLE_LIBRARIES = ("django", "celery", "flask")
 

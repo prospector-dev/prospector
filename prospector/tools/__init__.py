@@ -2,9 +2,9 @@ from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
 from prospector.tools.mccabe import McCabeTool
+from prospector.tools.profile_validator import ProfileValidationTool
 from prospector.tools.pycodestyle import PycodestyleTool
 from prospector.tools.pydocstyle import PydocstyleTool
-from prospector.tools.profile_validator import ProfileValidationTool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 

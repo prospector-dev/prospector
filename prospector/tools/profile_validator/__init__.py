@@ -2,6 +2,7 @@ import re
 import sre_constants
 
 import yaml
+
 from prospector.message import Location, Message
 from prospector.profiles import AUTO_LOADED_PROFILES
 from prospector.tools import ToolBase, pyflakes
@@ -125,9 +126,7 @@ class ProfileValidationTool(ToolBase):
             )
 
         if "python-targets" in parsed:
-            python_targets = (
-                parsed["python-targets"] if isinstance(parsed["python-targets"], list) else [parsed["python-targets"]]
-            )
+            python_targets = parsed["python-targets"] if isinstance(parsed["python-targets"], list) else [parsed["python-targets"]]
 
             for target in python_targets:
                 if str(target) not in ("2", "3"):
