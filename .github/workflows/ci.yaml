@@ -190,6 +190,6 @@ jobs:
       - name: Check that Prospector can run
         run: |
           . venv/bin/activate
-          echo "Checking prospector can run; don't care about messages found, only that it runs successcully"
+          echo "Checking prospector can run; don't care about messages found, only that it runs successfully"
           prospector --quiet --zero-exit
           echo "Prospector ran successfully."

@@ -1,9 +1,9 @@
 import os
-from typing import Dict
+from typing import Dict, Optional, Union
 
 
 class Location(object):
-    def __init__(self, path: str, module: str, function: str, line: int, character: int, absolute_path: bool = True):
+    def __init__(self, path: str, module: Optional[str], function: Optional[str], line: int, character: int, absolute_path: bool = True):
         self.path = path
         self._path_is_absolute = absolute_path
         self.module = module or None
@@ -11,19 +11,19 @@ class Location(object):
         self.line = None if line == -1 else line
         self.character = None if character == -1 else character
 
-    def to_absolute_path(self, root: str) -> str:  # TODO: use pathlib?
+    def to_absolute_path(self, root: str):  # TODO: use pathlib?
         if self._path_is_absolute:
             return
         self.path = os.path.abspath(os.path.join(root, self.path))
         self._path_is_absolute = True
 
-    def to_relative_path(self, root: str) -> str:
+    def to_relative_path(self, root: str):
         if not self._path_is_absolute:
             return
         self.path = os.path.relpath(self.path, root)
         self._path_is_absolute = False
 
-    def as_dict(self) -> Dict[str, any]:
+    def as_dict(self) -> Dict[str, Union[str, int, None]]:
         return {
             "path": self.path,
             "module": self.module,
@@ -35,10 +35,14 @@ class Location(object):
     def __hash__(self) -> int:
         return hash((self.path, self.line, self.character))
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Location):
+            return False
         return self.path == other.path and self.line == other.line and self.character == other.character
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Location):
+            raise ValueError
         if self.path == other.path:
             if self.line == other.line:
                 return (self.character or -1) < (other.character or -1)
@@ -53,13 +57,13 @@ class Message(object):
         self.location = location
         self.message = message
 
-    def to_absolute_path(self, root: str) -> str:
+    def to_absolute_path(self, root: str):
         self.location.to_absolute_path(root)
 
-    def to_relative_path(self, root: str) -> str:
+    def to_relative_path(self, root: str):
         self.location.to_relative_path(root)
 
-    def as_dict(self) -> Dict[str, str]:
+    def as_dict(self) -> Dict[str, Union[str, dict]]:
         return {
             "source": self.source,
             "code": self.code,
@@ -70,7 +74,9 @@ class Message(object):
     def __repr__(self) -> str:
         return "%s-%s" % (self.source, self.code)
 
-    def __eq__(self, other: Location) -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Message):
+            return False
         if self.location == other.location:
             return self.code == other.code
         else:
