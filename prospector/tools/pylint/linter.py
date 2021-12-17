@@ -1,5 +1,5 @@
 from pylint.lint import PyLinter
-from pylint.utils import _splitstrip  # pylint: disable=protected-access
+from pylint.utils import _splitstrip
 
 
 class ProspectorLinter(PyLinter):
