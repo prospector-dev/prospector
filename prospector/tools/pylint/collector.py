@@ -1,4 +1,7 @@
+from typing import List
+
 from pylint.exceptions import UnknownMessageError
+from pylint.message import Message as PylintMessage
 from pylint.reporters import BaseReporter
 
 from prospector.message import Location, Message
@@ -13,11 +16,11 @@ class Collector(BaseReporter):
         self._message_store = message_store
         self._messages = []
 
-    def handle_message(self, msg):
+    def handle_message(self, msg: PylintMessage) -> None:
         location = (msg.abspath, msg.module, msg.obj, msg.line, msg.column)
         self.add_message(msg.msg_id, location, msg.msg)
 
-    def add_message(self, msg_id, location, msg):
+    def add_message(self, msg_id, location, msg) -> None:
         # (* magic is acceptable here)
         loc = Location(*location)
         # At this point pylint will give us the code but we want the
@@ -35,8 +38,8 @@ class Collector(BaseReporter):
         message = Message("pylint", msg_symbol, loc, msg)
         self._messages.append(message)
 
-    def _display(self, layout):
+    def _display(self, layout) -> None:
         pass
 
-    def get_messages(self):
+    def get_messages(self) -> List[Message]:
         return self._messages

@@ -9,6 +9,11 @@ Version 2.0.0 - WIP
 * tidied up warnings
 * removed python2 compat code
 
+* TODO:
+  - EOL planning for v1
+  - click
+  - click_sources
+
 Version 1.5.3 and 1.5.3dev0 and 1.5.3.1
 -------------
 

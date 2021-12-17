@@ -40,6 +40,9 @@ class Location:
             "character": self.character,
         }
 
+    def __repr__(self) -> str:
+        return f"{self.path}:L{self.line}:{self.character}"
+
     def __hash__(self) -> int:
         return hash((self.path, self.line, self.character))
 

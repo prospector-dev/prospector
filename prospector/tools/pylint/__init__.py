@@ -2,6 +2,7 @@ import os
 import re
 import sys
 from collections import defaultdict
+from typing import List
 
 from pylint.config import find_pylintrc
 from pylint.exceptions import UnknownMessageError
@@ -255,10 +256,9 @@ class PylintTool(ToolBase):
         combined = self._combine_w0614(messages)
         return sorted(combined)
 
-    def run(self, found_files):
+    def run(self, found_files) -> List[Message]:
         self._linter.check(self._args)
         sys.path = self._orig_sys_path
 
         messages = self._collector.get_messages()
-        # import pdb; pdb.set_trace()
         return self.combine(messages)

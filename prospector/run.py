@@ -18,7 +18,7 @@ __all__ = (
 
 
 class Prospector:
-    def __init__(self, config):
+    def __init__(self, config: ProspectorConfig):
         self.config = config
         self.summary = None
         self.messages = config.messages
