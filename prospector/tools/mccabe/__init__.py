@@ -11,7 +11,7 @@ __all__ = ("McCabeTool",)
 
 class McCabeTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(McCabeTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ignore_codes = ()
         self.max_complexity = 10
 

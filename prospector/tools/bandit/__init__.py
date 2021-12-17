@@ -11,7 +11,7 @@ from prospector.tools.base import ToolBase
 
 class BanditTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(BanditTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.manager = None
         self.profile = None
         self.config_file = None

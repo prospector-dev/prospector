@@ -2,8 +2,16 @@ import os
 from typing import Dict, Optional, Union
 
 
-class Location(object):
-    def __init__(self, path: str, module: Optional[str], function: Optional[str], line: int, character: int, absolute_path: bool = True):
+class Location:
+    def __init__(
+        self,
+        path: str,
+        module: Optional[str],
+        function: Optional[str],
+        line: int,
+        character: int,
+        absolute_path: bool = True,
+    ):
         self.path = path
         self._path_is_absolute = absolute_path
         self.module = module or None
@@ -50,7 +58,7 @@ class Location(object):
         return self.path < other.path
 
 
-class Message(object):
+class Message:
     def __init__(self, source: str, code: str, location: Location, message: str):
         self.source = source
         self.code = code

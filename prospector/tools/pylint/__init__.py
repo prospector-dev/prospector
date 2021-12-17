@@ -187,7 +187,9 @@ class PylintTool(ToolBase):
         check_paths = [found_files.to_absolute_path(p) for p in check_paths]
         return check_paths
 
-    def _get_pylint_configuration(self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options):
+    def _get_pylint_configuration(
+        self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
+    ):
         if prospector_config.use_external_config("pylint"):
             # try to find a .pylintrc
             pylintrc = pylint_options.get("config_file")
@@ -258,4 +260,5 @@ class PylintTool(ToolBase):
         sys.path = self._orig_sys_path
 
         messages = self._collector.get_messages()
+        # import pdb; pdb.set_trace()
         return self.combine(messages)

@@ -1,3 +1,4 @@
+import codecs
 import os
 import re
 
@@ -12,11 +13,11 @@ __all__ = ("PycodestyleTool",)
 
 class ProspectorReport(BaseReport):
     def __init__(self, *args, **kwargs):
-        super(ProspectorReport, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._prospector_messages = []
 
     def error(self, line_number, offset, text, check):
-        code = super(ProspectorReport, self).error(
+        code = super().error(
             line_number,
             offset,
             text,
@@ -63,10 +64,10 @@ class ProspectorStyleGuide(StyleGuide):
         # Override the default reporter with our custom one.
         kwargs["reporter"] = ProspectorReport
 
-        super(ProspectorStyleGuide, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def excluded(self, filename, parent=None):
-        if super(ProspectorStyleGuide, self).excluded(filename, parent):
+        if super().excluded(filename, parent):
             return True
 
         # If the file survived pycodestyle's exclusion rules, check it against
@@ -106,7 +107,7 @@ class PycodestyleTool(ToolBase):
                     # this file exists - but does it have pep8 or pycodestyle config in it?
                     # TODO: Remove this
                     header = re.compile(r"\[(pep8|pycodestyle)\]")
-                    with open(conf_path) as conf_file:
+                    with codecs.open(conf_path) as conf_file:
                         if any([header.search(line) for line in conf_file.readlines()]):
                             external_config = conf_path
                             break

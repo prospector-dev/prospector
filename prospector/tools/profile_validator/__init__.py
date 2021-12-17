@@ -1,3 +1,4 @@
+import codecs
 import re
 import sre_constants
 
@@ -46,17 +47,19 @@ class ProfileValidationTool(ToolBase):
 
         self.ignore_codes = prospector_config.get_disabled_messages("profile-validator")
 
-    def tool_names(self):  # pylint: disable=no-self-use, import-outside-toplevel, cyclic-import
+    def tool_names(self):  # pylint: disable=no-self-use, cyclic-import
         # TODO: this is currently a circular import, which is why it is not at the top of
         # the module. However, there's no obvious way to get around this right now...
-        from prospector.tools import TOOLS
+        from prospector.tools import TOOLS  # pylint: disable=import-outside-toplevel
 
         return TOOLS.keys()
 
     def validate(self, relative_filepath, absolute_filepath):
+        # pylint: disable=consider-using-f-string, too-many-locals, too-many-branches
+        # TODO: this should be broken down into smaller pieces
         messages = []
 
-        with open(absolute_filepath) as profile_file:
+        with codecs.open(absolute_filepath) as profile_file:
             raw_contents = profile_file.read()
             parsed = yaml.safe_load(raw_contents)
             raw_contents = raw_contents.split("\n")

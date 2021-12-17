@@ -1,12 +1,14 @@
+from abc import ABC, abstractmethod
+
 __all__ = ("Formatter",)
 
 
-# pylint: disable=too-few-public-methods
-class Formatter(object):
+class Formatter(ABC):
     def __init__(self, summary, messages, profile):
         self.summary = summary
         self.messages = messages
         self.profile = profile
 
+    @abstractmethod
     def render(self, summary=True, messages=True, profile=False):
-        pass
+        raise NotImplementedError

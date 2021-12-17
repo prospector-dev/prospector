@@ -51,6 +51,7 @@ class IndentChecker(BaseTokenChecker):
                 line_num += 1
                 line = token[4]
                 if line.startswith("\t"):
+                    self._check_tabs(line)
                     if self.config.indent_strict_spaces:
                         # we have tabs but are configured to only allow spaces
                         self.add_message(

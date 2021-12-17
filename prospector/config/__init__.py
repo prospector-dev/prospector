@@ -11,7 +11,7 @@ from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile
 from prospector.tools import DEFAULT_TOOLS
 
 
-class ProspectorConfig(object):
+class ProspectorConfig:
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
     # make this module/class a bit ugly.
@@ -149,11 +149,14 @@ class ProspectorConfig(object):
             profile = ProspectorProfile.load(profile_name, profile_path, forced_inherits=forced_inherits)
         except CannotParseProfile as cpe:
             sys.stderr.write(
-                "Failed to run:\nCould not parse profile %s as it is not valid YAML\n%s\n" % (cpe.filepath, cpe.get_parse_message())
+                "Failed to run:\nCould not parse profile %s as it is not valid YAML\n%s\n"
+                % (cpe.filepath, cpe.get_parse_message())
             )
             sys.exit(1)
         except ProfileNotFound as nfe:
-            sys.stderr.write("Failed to run:\nCould not find profile %s. Search path: %s\n" % (nfe.name, ":".join(nfe.profile_path)))
+            sys.stderr.write(
+                "Failed to run:\nCould not find profile %s. Search path: %s\n" % (nfe.name, ":".join(nfe.profile_path))
+            )
             sys.exit(1)
         else:
             return profile, strictness

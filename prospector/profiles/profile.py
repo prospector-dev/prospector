@@ -10,7 +10,7 @@ BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "
 
 class ProfileNotFound(Exception):
     def __init__(self, name, profile_path):
-        super(ProfileNotFound, self).__init__()
+        super().__init__()
         self.name = name
         self.profile_path = profile_path
 
@@ -23,7 +23,7 @@ class ProfileNotFound(Exception):
 
 class CannotParseProfile(Exception):
     def __init__(self, filepath, parse_error):
-        super(CannotParseProfile, self).__init__()
+        super().__init__()
         self.filepath = filepath
         self.parse_error = parse_error
 
@@ -38,7 +38,7 @@ class CannotParseProfile(Exception):
         return "Could not parse profile found at %s - it is not valid YAML" % self.filepath
 
 
-class ProspectorProfile(object):
+class ProspectorProfile:
     def __init__(self, name, profile_dict, inherit_order):
         self.name = name
         self.inherit_order = inherit_order
@@ -50,7 +50,9 @@ class ProspectorProfile(object):
         self.output_format = profile_dict.get("output-format")
         self.output_target = profile_dict.get("output-target")
         self.autodetect = profile_dict.get("autodetect")
-        self.uses = [uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery", "flask")]
+        self.uses = [
+            uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery", "flask")
+        ]
         self.max_line_length = profile_dict.get("max-line-length")
 
         # informational shorthands

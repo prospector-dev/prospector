@@ -3,7 +3,7 @@ import os
 from prospector.pathutils import is_virtualenv
 
 
-class SingleFiles(object):
+class SingleFiles:
 
     """
     When prospector is run in 'single file mode' - that is,
@@ -62,7 +62,7 @@ class SingleFiles(object):
         return [self.rootpath] + paths
 
 
-class FoundFiles(object):
+class FoundFiles:
     def __init__(self, rootpath, files, modules, packages, directories, ignores):
         self.rootpath = rootpath
         self._files = files

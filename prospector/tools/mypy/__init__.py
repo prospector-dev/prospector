@@ -40,7 +40,7 @@ def format_message(message):
 
 class MypyTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(MypyTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.checker = api
         self.options = ["--show-column-numbers", "--no-error-summary"]
 
