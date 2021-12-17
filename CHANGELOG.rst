@@ -9,10 +9,11 @@ Version 2.0.0 - WIP
 * tidied up warnings
 * removed python2 compat code
 
-Version 1.5.3 and 1.5.3dev0
+Version 1.5.3 and 1.5.3dev0 and 1.5.3.1
 -------------
 
 - [#465](https://github.com/PyCQA/prospector/issues/465) Remove unnecessary configuration reset to fix pylint>=2.12 compatibility
+- Version 1.5.3.1 was needed to unpin the pylint dependency to actually use the fix for compatibility.
 
 Version 1.5.2
 -------------
