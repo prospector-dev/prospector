@@ -49,7 +49,6 @@ class PylintTool(ToolBase):
         for msg_id in prospector_config.get_disabled_messages("pylint"):
             try:
                 linter.disable(msg_id)
-            # pylint: disable=pointless-except
             except UnknownMessageError:
                 # If the msg_id doesn't exist in PyLint any more,
                 # don't worry about it.

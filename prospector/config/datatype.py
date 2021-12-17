@@ -10,10 +10,10 @@ class OutputChoice(Choice):
         parsed = re.split(r"[;:]", value)
         output_format, output_targets = parsed[0], parsed[1:]
         checked_targets = []
-        for i, target in enumerate(output_targets):
+        for target in output_targets:
             if sys.platform.startswith("win") and target.startswith((os.path.sep, os.path.altsep)):
                 checked_targets[-1] += ":" + target
             else:
                 checked_targets.append(target)
         validated_format = super().sanitize(output_format)
-        return (validated_format, checked_targets)
+        return validated_format, checked_targets

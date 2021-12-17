@@ -23,13 +23,19 @@ pylint:
     - too-few-public-methods
     - missing-docstring
     - star-args
+    - consider-using-f-string
+    - too-many-branches
+    - too-many-locals
+    - too-many-arguments
+    - too-many-instance-attributes
+    - too-many-statements
 
-pep8:
+pycodestyle:
   full: true
   disable:
     - E126
 
-pep257:
+pydocstyle:
   disable:
     - D100
     - D101

@@ -1,3 +1,4 @@
+import codecs
 import json
 import os
 
@@ -66,7 +67,7 @@ class ProspectorProfile:
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
         self.python_targets = _ensure_list(profile_dict.get("python-targets", []))
 
-        for tool in TOOLS.keys():
+        for tool in TOOLS:
             conf = {"disable": [], "enable": [], "run": None, "options": {}}
             conf.update(profile_dict.get(tool, {}))
 
@@ -108,7 +109,7 @@ class ProspectorProfile:
             "python-targets": self.python_targets,
             "pep8": self.pep8,
         }
-        for tool in TOOLS.keys():
+        for tool in TOOLS:
             out[tool] = getattr(self, tool)
         return out
 
@@ -159,11 +160,11 @@ def _load_content(name_or_path, profile_path):
         if filename is None:
             raise ProfileNotFound(name_or_path, profile_path)
 
-    with open(filename) as fct:
+    with codecs.open(filename) as fct:
         try:
             return yaml.safe_load(fct) or {}
         except yaml.parser.ParserError as parse_error:
-            raise CannotParseProfile(filename, parse_error)
+            raise CannotParseProfile(filename, parse_error) from parse_error
 
 
 def _ensure_list(value):
@@ -228,7 +229,7 @@ def _merge_profile_dict(priority, base):
         ):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
-        elif key in TOOLS.keys():
+        elif key in TOOLS:
             # this is tool config!
             out[key] = _merge_tool_config(value, base.get(key, {}))
 
@@ -250,7 +251,7 @@ def _determine_pep8(profile_dict):
     pep8 = profile_dict.get("pep8")
     if pep8 == "full":
         return "full_pep8", True
-    elif pep8 == "none":
+    if pep8 == "none":
         return "no_pep8", True
     return None, False
 

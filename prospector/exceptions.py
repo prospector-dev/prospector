@@ -11,4 +11,5 @@ class FatalProspectorException(Exception):
     # (see also the --die-on-tool-error flag)
 
     def __init__(self, message):
+        super().__init__(message)
         self.message = message

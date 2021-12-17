@@ -55,7 +55,7 @@ class ProfileValidationTool(ToolBase):
         return TOOLS.keys()
 
     def validate(self, relative_filepath, absolute_filepath):
-        # pylint: disable=consider-using-f-string, too-many-locals, too-many-branches
+        # pylint: disable=too-many-locals, too-many-branches
         # TODO: this should be broken down into smaller pieces
         messages = []
 

@@ -85,8 +85,6 @@ def autodetect_libraries(path):
 
     try:
         libraries = find_from_requirements(path)
-
-    # pylint: disable=pointless-except
     except RequirementsNotFound:
         pass
 

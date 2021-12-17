@@ -1,3 +1,4 @@
+import codecs
 import os.path
 import sys
 from datetime import datetime
@@ -89,19 +90,19 @@ class Prospector:
             except Exception:  # pylint: disable=broad-except
                 if self.config.die_on_tool_error:
                     raise
-                else:
-                    loc = Location(self.config.workdir, None, None, None, None)
-                    msg = (
-                        "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)"
-                        % (toolname,)
-                    )
-                    message = Message(
-                        toolname,
-                        "failure",
-                        loc,
-                        message=msg,
-                    )
-                    messages.append(message)
+
+                loc = Location(self.config.workdir, None, None, None, None)
+                msg = (
+                    "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)"
+                    % (toolname,)
+                )
+                message = Message(
+                    toolname,
+                    "failure",
+                    loc,
+                    message=msg,
+                )
+                messages.append(message)
 
         messages = self.process_messages(found_files, messages)
 
@@ -141,7 +142,7 @@ class Prospector:
             if not output_files and not self.config.quiet:
                 self.write_to(formatter, sys.stdout)
             for output_file in output_files:
-                with open(output_file, "w+") as target:
+                with codecs.open(output_file, "w+") as target:
                     self.write_to(formatter, target)
 
     def write_to(self, formatter, target):
@@ -171,7 +172,7 @@ def main():
     config = ProspectorConfig()
 
     paths = config.paths
-    if len(paths) > 1 and not all([os.path.isfile(path) for path in paths]):
+    if len(paths) > 1 and not all(os.path.isfile(path) for path in paths):
         sys.stderr.write("\nIn multi-path mode, all inputs must be files, " "not directories.\n\n")
         get_parser().print_usage()
         sys.exit(2)
