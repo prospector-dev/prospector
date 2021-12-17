@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 2.0.0 - WIP
+-------------
+
+* fixed pep8 (#222)
+* added type hints
+* tidied up warnings
+* removed python2 compat code
+
 Version 1.5.3 and 1.5.3dev0
 -------------
 

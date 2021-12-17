@@ -16,6 +16,10 @@ def module_from_path(path):
 
 
 class DodgyTool(ToolBase):
+    def configure(self, prospector_config, found_files):
+        # empty: just implementing to satisfy the ABC contract
+        pass
+
     def run(self, found_files):
 
         warnings = []
