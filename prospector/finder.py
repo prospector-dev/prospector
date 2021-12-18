@@ -4,7 +4,7 @@ from typing import Callable, Iterable, Iterator, List
 
 from prospector.pathutils import is_python_module, is_python_package, is_virtualenv
 
-_SKIP_DIRECTORIES = (".git", ".tox", ".mypy_cache", ".pytest_cache", ".venv", "dist", "__pycache__")
+_SKIP_DIRECTORIES = (".git", ".tox", ".mypy_cache", ".pytest_cache", ".venv", "__pycache__", "node_modules")
 
 
 class FileFinder:

@@ -39,17 +39,16 @@ class Prospector:
         summary.update(self.config.get_summary_information())
 
         paths = [Path(p) for p in self.config.paths]
-        workdir = Path.cwd()
 
         def _ignores(path: Path):
             for ignore in self.config.ignores:
-                if path != workdir:
-                    path = path.absolute().relative_to(workdir)
+                if path != self.config.workdir:
+                    path = path.absolute().relative_to(self.config.workdir)
                 if ignore.match(str(path)):
                     return True
             return False
 
-        found_files = FileFinder(*paths, exclusion_filters=[_ignores], workdir=workdir)
+        found_files = FileFinder(*paths, exclusion_filters=[_ignores], workdir=self.config.workdir)
 
         # Run the tools
         messages = []

@@ -2,6 +2,7 @@ import os
 import re
 import sre_constants
 import sys
+from pathlib import Path
 
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
@@ -24,7 +25,7 @@ class ProspectorConfig:
 
         self.paths = self._get_work_path(self.config, self.arguments)
         self.explicit_file_mode = all(map(os.path.isfile, self.paths))
-        self.workdir = os.getcwd()
+        self.workdir = Path.cwd()
 
         self.profile, self.strictness = self._get_profile(self.workdir, self.config)
         self.libraries = self._find_used_libraries(self.config, self.profile)
