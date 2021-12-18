@@ -10,10 +10,12 @@ This is mostly a "tidying up" release.
 **New**:
 
 * Added a `--quiet` command line option to suppress all output. Useful if you just want to know the exit code of prospector for scripting.
+* Removed `frosted <https://github.com/timothycrosley/deprecated.frosted>`_ - it has been deprecated and unnecessary for a long time. The original reason for it was that flake8 was not being maintained, but that is no longer true, and frosted is not updated now.
 
 **Fixes**:
 
 * Tools `pep8` and `pep257` have been renamed to `pycodestyle` and `pydocstyle` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_. Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration.
+* Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
 **Tidying up**
 
@@ -25,6 +27,7 @@ These are all internal prospector code quality improvements.
 * Fixed lots of warnings raised by prospector when running prospector on itself...
 * Removed some old python2 compatibility code which is no longer needed now python2 is not supported at all
 * Fixed hyperlink formatting in this CHANGELOG to be RST (was never updated after converting from markdown)
+* Replaced `os.path` with `pathlib.Path` everywhere in prospector internals, to improve and simplify finding files to inspect. Theoretically this behaves in the same way as far as the user will see (please open a ticket if you notice anything obviously different)
 
 **TODO**:
 

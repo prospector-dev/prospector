@@ -2,8 +2,8 @@ import os
 from unittest import TestCase
 from unittest.mock import patch
 
+from prospector._finder import find_python
 from prospector.config import ProspectorConfig
-from prospector.finder import find_python
 from prospector.tools.bandit import BanditTool
 
 

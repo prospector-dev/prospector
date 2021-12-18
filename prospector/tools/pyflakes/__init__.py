@@ -152,7 +152,7 @@ class PyFlakesTool(ToolBase):
 
     def run(self, found_files):
         reporter = ProspectorReporter(ignore=self.ignore_codes)
-        for filepath in found_files.iter_module_paths():
-            checkPath(filepath, reporter)
+        for filepath in found_files.python_modules:
+            checkPath(str(filepath.absolute()), reporter)
 
         return reporter.get_messages()

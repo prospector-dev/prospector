@@ -1,4 +1,14 @@
 import os
+from pathlib import Path
+
+
+def is_python_package(path: Path) -> bool:
+    return path.is_dir() and (path / "__init__.py").exists()
+
+
+def is_python_module(path: Path) -> bool:
+    # TODO: is this too simple?
+    return path.suffix == ".py"
 
 
 def is_virtualenv(path) -> bool:

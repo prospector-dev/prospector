@@ -1,5 +1,4 @@
 import logging
-import os
 
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
@@ -64,8 +63,8 @@ class PyromaTool(ToolBase):
 
     def run(self, found_files):
         messages = []
-        for module in found_files.iter_module_paths(include_ignored=True):
-            dirname, filename = os.path.split(module)
+        for module in found_files.python_modules:
+            dirname, filename = str(module.parent.absolute()), module.name
             if filename != "setup.py":
                 continue
 

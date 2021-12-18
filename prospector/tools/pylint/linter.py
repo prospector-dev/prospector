@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip
 
@@ -19,8 +21,11 @@ class ProspectorLinter(PyLinter):
 
     def _expand_files(self, modules):
         expanded = super()._expand_files(modules)
-        filtered = []
+        filtered = {}
         for module in expanded:
-            if self._files.check_module(module["path"]):
-                filtered.append(module)
-        return filtered
+            # need to de-duplicate, as pylint also walks directories given to it, so it will find
+            # files that prospector has already provided and end up checking it more than once
+            if not self._files.is_excluded(Path(module["path"])):
+                # if the key exists, just overwrite it with the same value, so we don't need an extra if statement
+                filtered[module["path"]] = module
+        return filtered.values()

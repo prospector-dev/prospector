@@ -43,7 +43,6 @@ TOOLS = {
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
     "profile-validator": ProfileValidationTool,
-    "frosted": _optional_tool("frosted"),
     "vulture": _optional_tool("vulture"),
     "pyroma": _optional_tool("pyroma"),
     "mypy": _optional_tool("mypy"),

@@ -1,9 +1,10 @@
-import codecs
 import re
 import sre_constants
+from pathlib import Path
 
 import yaml
 
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.profiles import AUTO_LOADED_PROFILES
 from prospector.tools import ToolBase, pyflakes
@@ -54,12 +55,12 @@ class ProfileValidationTool(ToolBase):
 
         return TOOLS.keys()
 
-    def validate(self, relative_filepath, absolute_filepath):
+    def validate(self, filepath: Path):
         # pylint: disable=too-many-locals, too-many-branches
         # TODO: this should be broken down into smaller pieces
         messages = []
 
-        with codecs.open(absolute_filepath) as profile_file:
+        with filepath.open() as profile_file:
             raw_contents = profile_file.read()
             parsed = yaml.safe_load(raw_contents)
             raw_contents = raw_contents.split("\n")
@@ -72,7 +73,7 @@ class ProfileValidationTool(ToolBase):
                 if setting in fileline:
                     line = number + 1
                     break
-            location = Location(relative_filepath, None, None, line, 0, False)
+            location = Location(filepath, None, None, line, 0, False)
             message = Message("profile-validator", code, location, message)
             messages.append(message)
 
@@ -80,7 +81,7 @@ class ProfileValidationTool(ToolBase):
             # this happens if a completely empty profile is found
             add_message(
                 PROFILE_IS_EMPTY,
-                f"{relative_filepath} is a completely empty profile",
+                f"{filepath} is a completely empty profile",
                 "entire-file",
             )
             return messages
@@ -171,13 +172,12 @@ class ProfileValidationTool(ToolBase):
 
         return messages
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder):
         messages = []
-        for rel_filepath in found_files.iter_file_paths(abspath=False, include_ignored=True):
+        for filepath in found_files.files:
             for possible in self.to_check:
-                if rel_filepath == possible:
-                    abs_filepath = found_files.to_absolute_path(rel_filepath)
-                    messages += self.validate(rel_filepath, abs_filepath)
+                if filepath == possible:
+                    messages += self.validate(filepath)
                     break
 
         return messages

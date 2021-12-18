@@ -1,9 +1,10 @@
 output-format: grouped
 
 strictness: veryhigh
-doc-warnings: true
-test-warnings: false
+doc-warnings: no
+test-warnings: no
 max-line-length: 120
+pep8: full
 
 ignore-paths:
   - docs/
@@ -24,14 +25,8 @@ pylint:
     - missing-docstring
     - star-args
     - consider-using-f-string
-    - too-many-branches
-    - too-many-locals
-    - too-many-arguments
-    - too-many-instance-attributes
-    - too-many-statements
 
 pycodestyle:
-  full: true
   disable:
     - E126
 

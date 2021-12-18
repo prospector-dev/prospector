@@ -1,4 +1,5 @@
 import tokenize
+from pathlib import Path
 
 
 class CouldNotHandleEncoding(Exception):
@@ -8,11 +9,11 @@ class CouldNotHandleEncoding(Exception):
         self.cause = cause
 
 
-def read_py_file(filepath):
+def read_py_file(filepath: Path):
     # see https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding
     # first just see if the file is properly encoded
     try:
-        with open(filepath, "rb") as pyfile:
+        with filepath.open("rb") as pyfile:
             tokenize.detect_encoding(pyfile.readline)
     except SyntaxError as err:
         # this warning is issued:

@@ -1,39 +1,31 @@
-import os
+from pathlib import Path
 from typing import Dict, Optional, Union
 
 
 class Location:
     def __init__(
-        self,
-        path: str,
-        module: Optional[str],
-        function: Optional[str],
-        line: int,
-        character: int,
-        absolute_path: bool = True,
+        self, path: Union[Path, str], module: Optional[str], function: Optional[str], line: int, character: int
     ):
-        self.path = path
-        self._path_is_absolute = absolute_path
+        if isinstance(path, Path):
+            self.path = path
+        elif isinstance(path, str):
+            self.path = Path(path)
+        else:
+            raise ValueError
         self.module = module or None
         self.function = function or None
         self.line = None if line == -1 else line
         self.character = None if character == -1 else character
 
-    def to_absolute_path(self, root: str):  # TODO: use pathlib?
-        if self._path_is_absolute:
-            return
-        self.path = os.path.abspath(os.path.join(root, self.path))
-        self._path_is_absolute = True
+    def absolute_path(self):
+        return self.path.absolute()
 
-    def to_relative_path(self, root: str):
-        if not self._path_is_absolute:
-            return
-        self.path = os.path.relpath(self.path, root)
-        self._path_is_absolute = False
+    def relative_path(self, root: Path):
+        return self.path.relative_to(root)
 
     def as_dict(self) -> Dict[str, Union[str, int, None]]:
         return {
-            "path": self.path,
+            "path": self.path.absolute(),
             "module": self.module,
             "function": self.function,
             "line": self.line,
@@ -68,12 +60,6 @@ class Message:
         self.location = location
         self.message = message
 
-    def to_absolute_path(self, root: str):
-        self.location.to_absolute_path(root)
-
-    def to_relative_path(self, root: str):
-        self.location.to_relative_path(root)
-
     def as_dict(self) -> Dict[str, Union[str, dict]]:
         return {
             "source": self.source,
@@ -99,7 +85,7 @@ class Message:
 
 
 def make_tool_error_message(
-    filepath: str,
+    filepath: Union[Path, str],
     source: str,
     code: str,
     message: str,

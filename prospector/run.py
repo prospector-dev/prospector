@@ -2,12 +2,13 @@ import codecs
 import os.path
 import sys
 from datetime import datetime
+from pathlib import Path
 
 from prospector import blender, postfilter, tools
 from prospector.config import ProspectorConfig
 from prospector.config import configuration as cfg
 from prospector.exceptions import FatalProspectorException
-from prospector.finder import find_python
+from prospector.finder import FileFinder
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
 from prospector.tools.utils import CaptureOutput
@@ -25,16 +26,10 @@ class Prospector:
         self.messages = config.messages
 
     def process_messages(self, found_files, messages):
-        for message in messages:
-            if self.config.absolute_paths:
-                message.to_absolute_path(self.config.workdir)
-            else:
-                message.to_relative_path(self.config.workdir)
         if self.config.blending:
             messages = blender.blend(messages)
 
-        filepaths = found_files.iter_module_paths(abspath=False)
-        return postfilter.filter_messages(filepaths, self.config.workdir, messages)
+        return postfilter.filter_messages(found_files.python_modules, messages)
 
     def execute(self):
 
@@ -43,12 +38,18 @@ class Prospector:
         }
         summary.update(self.config.get_summary_information())
 
-        found_files = find_python(
-            self.config.ignores,
-            self.config.paths,
-            self.config.explicit_file_mode,
-            self.config.workdir,
-        )
+        paths = [Path(p) for p in self.config.paths]
+        workdir = Path.cwd()
+
+        def _ignores(path: Path):
+            for ignore in self.config.ignores:
+                if path != workdir:
+                    path = path.absolute().relative_to(workdir)
+                if ignore.match(str(path)):
+                    return True
+            return False
+
+        found_files = FileFinder(*paths, exclusion_filters=[_ignores], workdir=workdir)
 
         # Run the tools
         messages = []

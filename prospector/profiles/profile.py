@@ -90,7 +90,7 @@ class ProspectorProfile:
 
     def list_profiles(self):
         # this profile is itself included
-        return self.inherit_order
+        return [str(profile) for profile in self.inherit_order]
 
     def as_dict(self):
         out = {

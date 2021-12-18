@@ -110,9 +110,9 @@ class PylintTool(ToolBase):
     def configure(self, prospector_config, found_files):
 
         config_messages = []
-        extra_sys_path = found_files.get_minimal_syspath()
+        extra_sys_path = []  # found_files.get_minimal_syspath()
 
-        check_paths = self._get_pylint_check_paths(found_files)
+        check_paths = found_files.python_packages + found_files.python_modules
 
         pylint_options = prospector_config.tool_options("pylint")
         self._set_path_finder(extra_sys_path, pylint_options)
@@ -161,32 +161,6 @@ class PylintTool(ToolBase):
             # does not appear first in the path
             sys.path = list(extra_sys_path) + sys.path
 
-    def _get_pylint_check_paths(self, found_files):
-        # create a list of packages, but don't include packages which are
-        # subpackages of others as checks will be duplicated
-        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
-        packages.sort(key=len)
-        check_paths = set()
-        for package in packages:
-            package_path = os.path.join(*package)
-            if len(package) == 1:
-                check_paths.add(package_path)
-                continue
-            for i in range(1, len(package)):
-                if os.path.join(*package[:-i]) in check_paths:
-                    break
-            else:
-                check_paths.add(package_path)
-        for filepath in found_files.iter_module_paths(abspath=False):
-            package = os.path.dirname(filepath).split(os.path.sep)
-            for i in range(0, len(package)):
-                if os.path.join(*package[: i + 1]) in check_paths:
-                    break
-            else:
-                check_paths.add(filepath)
-        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
-        return check_paths
-
     def _get_pylint_configuration(
         self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
     ):
@@ -208,10 +182,10 @@ class PylintTool(ToolBase):
                 configured_by = pylintrc
                 ext_found = True
 
-                self._args = linter.load_command_line_configuration(check_paths)
+                self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
                 config_messages += self._pylintrc_configure(pylintrc, linter)
         if not ext_found:
-            self._args = linter.load_command_line_configuration(check_paths)
+            self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
             config_messages = self._prospector_configure(prospector_config, linter)
         return config_messages, configured_by
 

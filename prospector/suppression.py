@@ -19,10 +19,10 @@ in the file:
 This module's job is to attempt to collect all of these methods into
 a single coherent list of error suppression locations.
 """
-import os
 import re
 import warnings
 from collections import defaultdict
+from pathlib import Path
 
 from prospector import encoding
 
@@ -78,7 +78,7 @@ def _parse_pylint_informational(messages):
     return ignore_files, ignore_messages
 
 
-def get_suppressions(relative_filepaths, root, messages):
+def get_suppressions(filepaths: Path, messages):
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
@@ -89,11 +89,9 @@ def get_suppressions(relative_filepaths, root, messages):
     messages_to_ignore = defaultdict(lambda: defaultdict(set))
 
     # first deal with 'noqa' style messages
-    for filepath in relative_filepaths:
-        abspath = os.path.join(root, filepath)
-
+    for filepath in filepaths:
         try:
-            file_contents = encoding.read_py_file(abspath).split("\n")
+            file_contents = encoding.read_py_file(filepath).split("\n")
         except encoding.CouldNotHandleEncoding as err:
             # TODO: this output will break output formats such as JSON
             warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)

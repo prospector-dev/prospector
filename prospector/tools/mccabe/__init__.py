@@ -25,7 +25,7 @@ class McCabeTool(ToolBase):
     def run(self, found_files):
         messages = []
 
-        for code_file in found_files.iter_module_paths():
+        for code_file in found_files.python_modules:
             try:
                 contents = read_py_file(code_file)
                 tree = ast.parse(
@@ -65,12 +65,7 @@ class McCabeTool(ToolBase):
                 complexity = graph.complexity()
                 if complexity > self.max_complexity:
                     location = Location(
-                        path=code_file,
-                        module=None,
-                        function=graph.entity,
-                        line=graph.lineno,
-                        character=0,
-                        absolute_path=True,
+                        path=code_file, module=None, function=graph.entity, line=graph.lineno, character=0
                     )
                     message = Message(
                         source="mccabe",
