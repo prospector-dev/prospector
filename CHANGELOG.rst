@@ -2,10 +2,10 @@
 Changelog
 #########
 
-Version 1.6.0 - WIP
+Version 2.0.0 - WIP
 -------------
 
-This is mostly a "tidying up" release.
+This is mostly a "tidying up" release but some things have changed which may cause differences to output, hence the bump of the major version.
 
 **New**:
 
@@ -17,9 +17,9 @@ This is mostly a "tidying up" release.
 * Tools `pep8` and `pep257` have been renamed to `pycodestyle` and `pydocstyle` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_. Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration.
 * Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
-**Tidying up**
+**Tidying up internals**
 
-These are all internal prospector code quality improvements.
+These are all internal prospector code quality improvements. Ideally, they should not be noticed by anybody as they are internal refactorings.
 
 * `#467 <https://github.com/PyCQA/prospector/issues/467>`_ - Removed nosetests, as nose is not compatible with Python 3.10 yet and the pytest tests were already doing the same thing
 * Tidied up the tox testing
