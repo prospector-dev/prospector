@@ -7,6 +7,17 @@ _TEST_DATA = Path(__file__).parent / "testdata"
 
 
 class TestFileFinder(TestCase):
+    def test_workdir_is_dir(self):
+        """
+        Verify that the workdir argument is only allowed to be a directory
+        """
+        # throws no exception:
+        FileFinder(_TEST_DATA, workdir=_TEST_DATA)
+        # throws exception when workdir is not a directory
+        self.assertRaises(ValueError, FileFinder, _TEST_DATA, workdir=Path(__file__))
+        self.assertRaises(ValueError, FileFinder, _TEST_DATA, workdir=Path("wobblewoblblelalala"))
+        self.assertRaises(ValueError, FileFinder, _TEST_DATA, workdir="/tmp")
+
     def test_python_in_normal_dir(self):
         """
         This test is to find packages and files when given a directory which

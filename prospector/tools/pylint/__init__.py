@@ -2,12 +2,14 @@ import os
 import re
 import sys
 from collections import defaultdict
+from pathlib import Path
 from typing import List
 
 from pylint.config import find_pylintrc
 from pylint.exceptions import UnknownMessageError
 from pylint.lint.run import _cpu_count
 
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
@@ -107,10 +109,10 @@ class PylintTool(ToolBase):
                     errors.append(self._error_message(pylintrc, "Could not load plugin %s" % plugin))
         return errors
 
-    def configure(self, prospector_config, found_files):
+    def configure(self, prospector_config, found_files: FileFinder):
 
         config_messages = []
-        extra_sys_path = []  # found_files.get_minimal_syspath()
+        extra_sys_path = found_files.make_syspath()
 
         check_paths = found_files.python_packages + found_files.python_modules
 
@@ -148,7 +150,7 @@ class PylintTool(ToolBase):
         self._linter = linter
         return configured_by, config_messages
 
-    def _set_path_finder(self, extra_sys_path, pylint_options):
+    def _set_path_finder(self, extra_sys_path: List[Path], pylint_options):
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path
         if not pylint_options.get("use_pylint_default_path_finder"):
@@ -159,7 +161,7 @@ class PylintTool(ToolBase):
             # checkout, but 'requests' is already installed system wide, pylint
             # will discover the system-wide modules first if the local checkout
             # does not appear first in the path
-            sys.path = list(extra_sys_path) + sys.path
+            sys.path = [path.absolute() for path in extra_sys_path] + sys.path
 
     def _get_pylint_configuration(
         self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options

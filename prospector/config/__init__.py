@@ -136,7 +136,7 @@ class ProspectorConfig:
         #   * a directory called .prospector in the check path
         #   * the check path
         #   * prospector provided profiles
-        profile_path = config.profile_path
+        profile_path = [Path(path).absolute() for path in config.profile_path]
 
         prospector_dir = os.path.join(path, ".prospector")
         if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
@@ -156,7 +156,8 @@ class ProspectorConfig:
             sys.exit(1)
         except ProfileNotFound as nfe:
             sys.stderr.write(
-                "Failed to run:\nCould not find profile %s. Search path: %s\n" % (nfe.name, ":".join(nfe.profile_path))
+                "Failed to run:\nCould not find profile %s. Search path: %s\n"
+                % (nfe.name, ":".join(map(str, nfe.profile_path)))
             )
             sys.exit(1)
         else:

@@ -4,6 +4,7 @@ from pathlib import Path
 from dodgy.checks import check_file_contents
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
@@ -18,11 +19,11 @@ class DodgyTool(ToolBase):
         # empty: just implementing to satisfy the ABC contract
         pass
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder):
 
         warnings = []
         for filepath in found_files.files:
-            mimetype = mimetypes.guess_type(filepath)
+            mimetype = mimetypes.guess_type(filepath.absolute())
             if mimetype[0] is None or not mimetype[0].startswith("text/") or mimetype[1] is not None:
                 continue
             try:

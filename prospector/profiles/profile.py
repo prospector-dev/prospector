@@ -18,7 +18,7 @@ class ProfileNotFound(Exception):
     def __repr__(self):
         return "Could not find profile %s; searched in %s" % (
             self.name,
-            ":".join(self.profile_path),
+            ":".join(map(str, self.profile_path)),
         )
 
 

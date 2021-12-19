@@ -1,4 +1,11 @@
-from functools import cached_property
+try:
+    from functools import cached_property
+except ImportError:
+    # Python < 3.8  :-(
+    # so this will just have to be slower by a tiny bit for people on old pythons
+    # (rather than memoizing everything ourselves)
+    cached_property = property
+
 from pathlib import Path
 from typing import Callable, Iterable, Iterator, List
 
@@ -26,12 +33,14 @@ class FileFinder:
             the path is excluded.
         """
         self.workdir = workdir or Path.cwd()
+        if not isinstance(self.workdir, Path):
+            raise ValueError(f"Workdir {self.workdir} is not a Path object")
+        if not self.workdir.is_dir() or not self.workdir.exists():
+            raise ValueError(f"Cannot set workdir to {self.workdir} - it is not a directory")
+
         self._provided_files = []
         self._provided_dirs = []
         self._exclusion_filters = exclusion_filters or []
-
-        if exclusion_filters is not None:
-            self._exclusion_filters += exclusion_filters
 
         for path in provided_paths:
             if not path.exists():
@@ -40,6 +49,14 @@ class FileFinder:
                 self._provided_files.append(path)
             if path.is_dir():
                 self._provided_dirs.append(path)
+
+    def make_syspath(self) -> List[Path]:
+        paths = {self.workdir}
+        for path in self._provided_dirs:
+            paths.add(path)
+        for module in self.python_modules:
+            paths.add(module.parent)
+        return paths
 
     def is_excluded(self, path: Path) -> bool:
         # we always want to ignore some things
@@ -67,19 +84,6 @@ class FileFinder:
                 yield from self._walk(path)
             else:
                 yield path
-
-    #
-    # def make_syspath(self) -> List[Path]:
-    #     """
-    #     Given the files that have been discovered, create a syspath which will allow all modules
-    #     found to be imported.
-    #
-    #     :return: A list of directories or files to ensure are included in the system path
-    #     """
-    #     directories = set()
-    #     for module in self.modules:
-    #         directories.add(module.parent)
-    #     return list[directories]
 
     @cached_property
     def files(self) -> List[Path]:
