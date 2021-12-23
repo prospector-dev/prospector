@@ -41,4 +41,3 @@ Prospector targets Python 3.6, 3.7, 3.8 and 3.9. You can use `tox`_ to test this
 and all tests are run on `travis-ci.org`_.
 
 .. _tox: https://tox.readthedocs.io/en/latest/
-.. _travis-ci.org: https://travis-ci.org/PyCQA/prospector
