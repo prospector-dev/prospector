@@ -38,6 +38,6 @@ handling the output of other tools. However, please do run them before submittin
     nosetests tests/
 
 Prospector targets Python 3.6, 3.7, 3.8 and 3.9. You can use `tox`_ to test this locally,
-and all tests are run on `travis-ci.org`_.
+and all tests are run with Github Actions.
 
 .. _tox: https://tox.readthedocs.io/en/latest/
