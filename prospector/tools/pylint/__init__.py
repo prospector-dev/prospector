@@ -161,7 +161,7 @@ class PylintTool(ToolBase):
             # checkout, but 'requests' is already installed system wide, pylint
             # will discover the system-wide modules first if the local checkout
             # does not appear first in the path
-            sys.path = [path.absolute() for path in extra_sys_path] + sys.path
+            sys.path = [str(path.absolute()) for path in extra_sys_path] + sys.path
 
     def _get_pylint_configuration(
         self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options

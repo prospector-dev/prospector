@@ -23,6 +23,7 @@ import re
 import warnings
 from collections import defaultdict
 from pathlib import Path
+from typing import List
 
 from prospector import encoding
 
@@ -78,7 +79,7 @@ def _parse_pylint_informational(messages):
     return ignore_files, ignore_messages
 
 
-def get_suppressions(filepaths: Path, messages):
+def get_suppressions(filepaths: List[Path], messages):
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
