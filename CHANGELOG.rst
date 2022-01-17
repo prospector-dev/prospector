@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.6.0
+-------------
+
+- [#478](https://github.com/PyCQA/prospector/issues/478) Fixed incompatible version specification of pylint-plugin-utils. This
+  now requires pylint-django of at least 2.5.
+
+*note* This release drops support for python `3.6.1`
+
 Version 1.5.3 and 1.5.3dev0 and 1.5.3.1
 -------------
 
