@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prospector"
-version = "1.5.3.1"
+version = "1.5.4"
 description = ""
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
@@ -43,7 +43,7 @@ pylint = ">=2.8.3"
 pylint-celery = "0.3"
 pylint-django = "^2.4.4"
 pylint-flask = "0.6"
-pylint-plugin-utils = "^0.6"
+pylint-plugin-utils = "^0.7"
 requirements-detector = "^0.7"
 PyYAML = "*"
 mccabe = "^0.6.0"
