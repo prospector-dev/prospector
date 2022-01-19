@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.6.1
+-------------
+
+- [#454](https://github.com/PyCQA/prospector/issues/454) Update pyflakes to 2.*
+
 Version 1.6.0
 -------------
 
