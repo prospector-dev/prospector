@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prospector"
-version = "1.6.0alpha"
+version = "1.7.0alpha"
 description = ""
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
@@ -38,16 +38,16 @@ include = [
 prospector = 'prospector.run:main'
 
 [tool.poetry.dependencies]
-python = ">=3.6.1,<4.0"
+python = ">=3.6.2,<4.0"
 pylint = ">=2.8.3"
 pylint-celery = "0.3"
-pylint-django = "^2.4.4"
+pylint-django = "~2.5"
+pylint-plugin-utils = "~0.7"
 pylint-flask = "0.6"
-pylint-plugin-utils = "^0.6"
 requirements-detector = "^0.7"
 PyYAML = "*"
 mccabe = "^0.6.0"
-pyflakes = ">=2.2.0,<2.4.0"
+pyflakes = ">=2.2.0,<3.*"
 pycodestyle = ">=2.6.0,<2.9.0"
 pep8-naming = ">=0.3.3,<=0.10.0"
 pydocstyle = ">=2.0.0"

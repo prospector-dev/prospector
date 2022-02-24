@@ -384,6 +384,7 @@ The available options are:
 +---------+------------------------+----------------------------------------------+
 
 See `mypy options`_ for more details
+
 See `bandit options`_ for more details
 
 
