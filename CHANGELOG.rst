@@ -2,8 +2,7 @@
 Changelog
 #########
 
-Version 2.0.0 - WIP
--------------
+Version 1.7.0 - WIP
 
 This is mostly a "tidying up" release but some things have changed which may cause differences to output, hence the bump of the major version.
 
@@ -33,6 +32,19 @@ These are all internal prospector code quality improvements. Ideally, they shoul
 
 * "legacy" mode for outputting pep8 or pycodestyle to prevent output being different if given a flag
 * conversion tool for old profiles to new profiles
+
+Version 1.6.1
+-------------
+
+- [#454](https://github.com/PyCQA/prospector/issues/454) Update pyflakes to 2.*
+
+Version 1.6.0
+-------------
+
+- [#478](https://github.com/PyCQA/prospector/issues/478) Fixed incompatible version specification of pylint-plugin-utils. This
+  now requires pylint-django of at least 2.5.
+
+*note* This release drops support for python `3.6.1`
 
 Version 1.5.3 and 1.5.3dev0 and 1.5.3.1
 -------------
