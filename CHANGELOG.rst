@@ -2,7 +2,7 @@
 Changelog
 #########
 
-Version 1.7.0 - WIP
+Version 1.7.0
 -------------
 
 This is mostly a "tidying up" release.
