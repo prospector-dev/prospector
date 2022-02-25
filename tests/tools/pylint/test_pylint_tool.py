@@ -1,10 +1,13 @@
 import os
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
 
 from prospector.config import ProspectorConfig
 from prospector.finder import find_python
 from prospector.tools.pylint import PylintTool
+
+THIS_DIR = Path(__file__).parent
 
 
 def _get_pylint_tool_and_prospector_config(argv_patch=None):
@@ -17,6 +20,29 @@ def _get_pylint_tool_and_prospector_config(argv_patch=None):
 
 
 class TestPylintTool(TestCase):
+    def test_pylint_config(self):
+        """Verifies that prospector will configure pylint with any pylint-specific configuration if found"""
+
+        def _has_message(msg_list, code):
+            return any([message.code == code and message.source == "pylint" for message in msg_list])
+
+        for config_type in ("pylintrc", "pylintrc2", "pyproject", "setup.cfg", "multiple"):
+            root = THIS_DIR / "pylint_configs" / config_type
+
+            with patch("os.getcwd", return_value=root.absolute()):
+                pylint_tool, config = _get_pylint_tool_and_prospector_config()
+            self.assertEqual(Path(config.workdir).absolute(), root.absolute())
+
+            found_files = find_python([], [str(root)], explicit_file_mode=False, workdir=str(root))
+            pylint_tool.configure(config, found_files)
+
+            messages = pylint_tool.run(found_files)
+            self.assertTrue(_has_message(messages, "line-too-long"), msg=config_type)
+            if config_type == "multiple":
+                self.assertTrue(_has_message(messages, "pylint-disallowed_name"), msg=config_type)
+            else:
+                self.assertFalse(_has_message(messages, "pylint-disallowed_name"), msg=config_type)
+
     def test_absolute_path_is_computed_correctly(self):
         pylint_tool, config = _get_pylint_tool_and_prospector_config()
         root = os.path.join(os.path.dirname(__file__), "testpath", "test.py")
@@ -56,7 +82,7 @@ class TestPylintTool(TestCase):
         found_files = find_python([], [root], False, workdir)
         pylint_tool.configure(config, found_files)
         messages = pylint_tool.run(found_files)
-        self.assertListEqual(messages, [])
+        self.assertEqual(messages[0].code, "no-name-in-module")
 
     def test_use_prospector_default_path_finder(self):
         workdir = "tests/tools/pylint/testpath/absolute-import/"
