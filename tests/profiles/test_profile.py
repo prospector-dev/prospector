@@ -96,4 +96,4 @@ class TestProfileInheritance(ProfileTestBase):
 
     def test_pycodestyle_inheritance(self):
         profile = self._load("pep8")
-        self.assertTrue(profile.pep8 == "full")
+        self.assertTrue(profile.full_pep8)
