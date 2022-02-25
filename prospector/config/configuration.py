@@ -4,7 +4,7 @@ import setoptconf as soc
 
 from prospector.config.datatype import OutputChoice
 from prospector.formatters import FORMATTERS
-from prospector.tools import DEFAULT_TOOLS, TOOLS, DEPRECATED_TOOL_NAMES
+from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES, TOOLS
 
 __all__ = ("build_manager",)
 
@@ -145,7 +145,7 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         },
         "legacy_tool_names": {
             "flags": ["--legacy-tool-names"],
-            "help": "Output deprecated names for tools (pep8, pep257) instead of updated names (pycodestyle, pydocstyle)"
+            "help": "Output deprecated names for tools (pep8, pep257) instead of updated names (pycodestyle, pydocstyle)",
         },
         "no_style_warnings": {
             "flags": ["-8", "--no-style-warnings"],

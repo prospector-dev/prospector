@@ -2,7 +2,6 @@ import os
 import re
 import sre_constants
 import sys
-
 from typing import List
 
 from prospector import tools

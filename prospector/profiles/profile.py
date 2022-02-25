@@ -68,7 +68,19 @@ class ProspectorProfile:
 
         for tool in TOOLS.keys():
             conf = {"disable": [], "enable": [], "run": None, "options": {}}
-            conf.update(profile_dict.get(tool, {}))
+            if tool == "pep8":  # bit janky (TODO)
+                if "pep8" not in profile_dict:
+                    conf["pep8"] = {}
+                else:
+                    pep8conf = profile_dict["pep8"]
+                    if type(pep8conf) is dict:
+                        conf["pep8"] = pep8conf
+                    elif pep8conf == "full":
+                        conf["pep8"] = {"full": True}
+                    elif pep8conf == "none":
+                        conf["pep8"] = {}
+            else:
+                conf.update(profile_dict.get(tool, {}))
 
             if self.max_line_length is not None and tool in ("pylint", "pycodestyle"):
                 conf["options"]["max-line-length"] = self.max_line_length

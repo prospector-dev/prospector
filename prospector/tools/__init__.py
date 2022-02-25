@@ -43,7 +43,7 @@ TOOLS = {
     "pep8": PycodestyleTool,  # TODO: remove this eventually (name is deprecated)
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
-    "pep257": PydocstyleTool,  # TODO: remove this eventually (name is deprecated), lookup is needed for command-line config
+    "pep257": PydocstyleTool,  # TODO: remove this eventually (name is deprecated)
     "profile-validator": ProfileValidationTool,
     "frosted": _optional_tool("frosted"),
     "vulture": _optional_tool("vulture"),
@@ -63,8 +63,4 @@ DEFAULT_TOOLS = (
     "profile-validator",
 )
 
-DEPRECATED_TOOL_NAMES = {
-    'pep8': "pycodestyle",
-    'pep257': "pydocstyle"
-}
-
+DEPRECATED_TOOL_NAMES = {"pep8": "pycodestyle", "pep257": "pydocstyle"}

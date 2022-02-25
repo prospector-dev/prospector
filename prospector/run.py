@@ -1,7 +1,7 @@
 import os.path
 import sys
-from datetime import datetime
 import warnings
+from datetime import datetime
 
 from prospector import blender, postfilter, tools
 from prospector.config import ProspectorConfig
@@ -10,9 +10,8 @@ from prospector.exceptions import FatalProspectorException
 from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
-from prospector.tools.utils import CaptureOutput
 from prospector.tools import DEPRECATED_TOOL_NAMES
-
+from prospector.tools.utils import CaptureOutput
 
 __all__ = (
     "Prospector",
@@ -68,10 +67,14 @@ class Prospector:
         for deprecated_name in deprecated_names:
             loc = Location(self.config.workdir, None, None, None, None)
             new_name = DEPRECATED_TOOL_NAMES[deprecated_name]
-            msg = f"Tool {deprecated_name} has been renamed to {new_name}. The old name {deprecated_name} is now deprecated and will be removed in Prospector 2.0. Please update your prospector configuration."
+            msg = (
+                f"Tool {deprecated_name} has been renamed to {new_name}. "
+                f"The old name {deprecated_name} is now deprecated and will be removed in Prospector 2.0. "
+                f"Please update your prospector configuration."
+            )
 
             message = Message(
-                'prospector',
+                "prospector",
                 "Deprecation",
                 loc,
                 message=msg,
