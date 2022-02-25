@@ -10,6 +10,7 @@ This is mostly a "tidying up" release.
 **New**:
 
 * Added a `--quiet` command line option to suppress all output. Useful if you just want to know the exit code of prospector for scripting.
+* Removed the prospector "indent checker" since this is now no longer in pylint `#482 <https://github.com/PyCQA/prospector/issues/482>_`
 
 **Fixes**:
 

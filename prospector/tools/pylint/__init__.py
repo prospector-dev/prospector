@@ -11,7 +11,6 @@ from pylint.lint.run import _cpu_count
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
-from prospector.tools.pylint.indent_checker import IndentChecker
 from prospector.tools.pylint.linter import ProspectorLinter
 
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import (.*) from wildcard import$")
@@ -74,13 +73,6 @@ class PylintTool(ToolBase):
         linter.enable("file-ignored")  # notification about disabling an entire file
         linter.enable("suppressed-message")  # notification about a message being suppressed
         linter.disable("deprecated-pragma")  # notification about use of deprecated 'pragma' option
-
-        # disable the 'mixed indentation' warning, since it actually will only
-        # allow the indentation specified in the pylint configuration file; we
-        # replace it instead with our own version which is more lenient and
-        # configurable
-        indent_checker = IndentChecker(linter)
-        linter.register_checker(indent_checker)
 
         max_line_length = prospector_config.max_line_length
         for checker in linter.get_checkers():
