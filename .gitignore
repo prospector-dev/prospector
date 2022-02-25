@@ -45,8 +45,9 @@ nosetests.xml
 # Sphinx
 docs/_build
 
-# Mypy
+# testing/linting
 .mypy_cache
+.pytest_cache
 
 # emacs
 TAGS

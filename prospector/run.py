@@ -1,6 +1,7 @@
 import os.path
 import sys
 from datetime import datetime
+import warnings
 
 from prospector import blender, postfilter, tools
 from prospector.config import ProspectorConfig
@@ -10,6 +11,8 @@ from prospector.finder import find_python
 from prospector.formatters import FORMATTERS
 from prospector.message import Location, Message
 from prospector.tools.utils import CaptureOutput
+from prospector.tools import DEPRECATED_TOOL_NAMES
+
 
 __all__ = (
     "Prospector",
@@ -32,10 +35,20 @@ class Prospector:
         if self.config.blending:
             messages = blender.blend(messages)
 
+        if self.config.legacy_tool_names:
+            updated = []
+            new_names = {v: k for k, v in DEPRECATED_TOOL_NAMES.items()}
+            for msg in messages:
+                msg.source = new_names.get(msg.source, msg.source)
+                updated.append(msg)
+            messages = updated
+
         filepaths = found_files.iter_module_paths(abspath=False)
         return postfilter.filter_messages(filepaths, self.config.workdir, messages)
 
     def execute(self):
+
+        deprecated_names = self.config.replace_deprecated_tool_names()
 
         summary = {
             "started": datetime.now(),
@@ -49,8 +62,24 @@ class Prospector:
             self.config.workdir,
         )
 
-        # Run the tools
         messages = []
+
+        # see if any old tool names are run
+        for deprecated_name in deprecated_names:
+            loc = Location(self.config.workdir, None, None, None, None)
+            new_name = DEPRECATED_TOOL_NAMES[deprecated_name]
+            msg = f"Tool {deprecated_name} has been renamed to {new_name}. The old name {deprecated_name} is now deprecated and will be removed in Prospector 2.0. Please update your prospector configuration."
+
+            message = Message(
+                'prospector',
+                "Deprecation",
+                loc,
+                message=msg,
+            )
+            messages.append(message)
+            warnings.warn(msg, category=DeprecationWarning)
+
+        # Run the tools
         for tool in self.config.get_tools(found_files):
             for name, cls in tools.TOOLS.items():
                 if cls == tool.__class__:
