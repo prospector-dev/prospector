@@ -35,14 +35,14 @@ Tool classes
 .. autoclass:: prospector.tools.mypy.MypyTool
     :members:
 
-:class:`Pep8Tool`
+:class:`PycodestyleTool`
 -------------------
-.. autoclass:: prospector.tools.pep8.Pep8Tool
+.. autoclass:: prospector.tools.pycodestyle.PycodestyleTool
     :members:
 
-:class:`Pep257Tool`
+:class:`PydocstyleTool`
 -------------------
-.. autoclass:: prospector.tools.pep257.Pep257Tool
+.. autoclass:: prospector.tools.pydocstyle.PydocstyleTool
     :members:
 
 :class:`ProfileValidationTool`

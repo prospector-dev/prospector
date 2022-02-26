@@ -8,9 +8,9 @@ Enabling or Disabling Tools
 
 Prospector will run with defaults enabled and optional extras disabled unless configured otherwise.
 
-To specify an exact list of tools to run, for example, only pylint and pep8::
+To specify an exact list of tools to run, for example, only pylint and pydocstyle::
 
-    prospector --tool pylint --tool pep8
+    prospector --tool pylint --tool pydocstyle
 
 Note that this command line option will override values set in :doc:`profiles<profiles>`.
 
@@ -32,10 +32,10 @@ Pylint is the most comprehensive static analysis tool for Python. It is extremel
 and is the source of most messages that prospector outputs.
 
 
-`Pep8 <https://pep8.readthedocs.io/>`_
+`pycodestyle <https://pycodestyle.pycqa.org/en/latest/>`_
 ```````````````````````````````````````````````````
 
-Pep8 is a simple tool to warn about violations of the
+pycodestyle is a simple tool to warn about violations of the
 `PEP8 style guide <https://www.python.org/dev/peps/pep-0008/>`_. It produces
 messages for any divergence from the style guide.
 
@@ -78,7 +78,7 @@ Dodgy is a very simple tool designed to find 'dodgy' things which should
 not be in a public project, such as secret keys, passwords, AWS tokens or
 source control diffs.
 
-`Pydocstyle / Pep257 <https://github.com/PyCQA/pydocstyle>`_
+`Pydocstyle <https://github.com/PyCQA/pydocstyle>`_
 ````````````````````````````````````````````````````````````
 
 Pydocstyle is a simple tool to warn about violations of the
@@ -92,8 +92,6 @@ exactly as ``pydocstyle`` expects it.
 
 It will not run by default, and must be enabled explicitly (via ``--with-tool pep257``
 or in a :doc:`profile <profiles>`) or implicitly (using the ``--doc-warnings`` flag).
-
-.. Note:: Pep257 is the name used for this tool from now on this documentation
 
 
 `Profile-validator`

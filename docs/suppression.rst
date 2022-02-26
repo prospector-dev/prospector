@@ -37,6 +37,6 @@ prospector::
 ``# noqa``
 ----------
 
-A comment of ``noqa`` is used by `pep8` and `pyflakes` when ignoring all errors on a certain
+A comment of ``noqa`` is used by `pycodestyle` and `pyflakes` when ignoring all errors on a certain
 line. If Prospector encounters a ``# noqa`` comment it will suppress any error from any tool
 including ``pylint`` and others such as ``dodgy``.
