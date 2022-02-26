@@ -13,7 +13,7 @@ from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.linter import ProspectorLinter
 
-_UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import (.*) from wildcard import$")
+_UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
 
 class PylintTool(ToolBase):
