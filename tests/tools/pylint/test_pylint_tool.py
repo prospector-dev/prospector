@@ -46,10 +46,10 @@ class TestPylintTool(TestCase):
 
     def test_absolute_path_is_computed_correctly(self):
         pylint_tool, config = _get_pylint_tool_and_prospector_config()
-        root = os.path.join(os.path.dirname(__file__), "testpath", "test.py")
+        root = os.path.join(os.path.dirname(__file__), "testpath", "testfile.py")
         root_sep_split = root.split(os.path.sep)
         root_os_split = os.path.split(root)
-        found_files = _get_test_files("testpath/test.py")
+        found_files = _get_test_files("testpath/testfile.py")
         pylint_tool.configure(config, found_files)
         self.assertNotEqual(pylint_tool._args, [os.path.join(*root_sep_split)])
         self.assertEqual(pylint_tool._args, [os.path.join(*root_os_split)])
