@@ -11,15 +11,19 @@ Version 1.8.0 - WIP
 
 * Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
-
-Version 1.7.1 - WIP
+Version 1.7.1
 -------------
+
+Lots of smaller bugfixes.
 
 **Fixes**:
 
 * Prospector now configures pylint using settings found in `pyproject.toml` or `setup.cfg`, not only `.pylintrc` - `#485 <https://github.com/PyCQA/prospector/issues/485>_`
-* Fixed `--no-style-warnings` command line argument no longer warning after renaming `pep8` to `pycodestyle`  - `#488 <https://github.com/PyCQA/prospector/issues/488>_`
-
+* Fixed `--no-style-warnings` command line argument no longer warning after renaming `pep8` to `pycodestyle` - `#488 <https://github.com/PyCQA/prospector/issues/488>_`
+* Documentation is building again - `#473 <https://github.com/PyCQA/prospector/issues/473>_`
+* `--with-tool` flag now respects - but overrides - tools disabled in profiles - `#447 <https://github.com/PyCQA/prospector/issues/447>_`
+* Fixed crash with merging multiple import warnings - `#477 <https://github.com/PyCQA/prospector/issues/477>_`
+* Fixed segfault when analysing code using cartopy - `#403 <https://github.com/PyCQA/prospector/issues/403>_`
 
 Version 1.7.0
 -------------

@@ -214,13 +214,15 @@ class ProspectorConfig:
             if tool in to_run:
                 to_run.remove(tool)
 
-        if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
-            for tool in tools.TOOLS.keys():
-                enabled = profile.is_tool_enabled(tool)
-                if enabled is None:
-                    enabled = tool in DEFAULT_TOOLS
-                if tool in to_run and not enabled:
-                    to_run.remove(tool)
+        # if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
+        for tool in tools.TOOLS.keys():
+            enabled = profile.is_tool_enabled(tool)
+            if enabled is None:
+                enabled = tool in DEFAULT_TOOLS
+            if tool in to_run and not enabled and tool not in config.with_tools and tool not in (config.tools or []):
+                # if this is not enabled in a profile but is asked for in a command line arg, we keep it, otherwise
+                # remove it from the list to run
+                to_run.remove(tool)
 
         return sorted(list(to_run))
 
