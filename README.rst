@@ -7,9 +7,6 @@ prospector
 .. image:: https://travis-ci.org/PyCQA/prospector.svg?branch=master
    :target: https://travis-ci.org/PyCQA/prospector
    :alt: Build Status
-.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/landscapeio/prospector/master
-   :alt: Code Health
 .. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
    :target: https://coveralls.io/r/PyCQA/prospector
    :alt: Test Coverage

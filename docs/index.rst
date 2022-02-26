@@ -13,9 +13,6 @@ About
 .. image:: https://travis-ci.org/PyCQA/prospector.png?branch=master
    :target: https://travis-ci.org/PyCQA/prospector
    :alt: Build Status
-.. image:: https://landscape.io/github/landscapeio/prospector/master/landscape.png?style=flat
-   :target: https://landscape.io/github/landscapeio/prospector/master
-   :alt: Code Health
 .. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
    :target: https://coveralls.io/r/PyCQA/prospector
    :alt: Test Coverage
@@ -23,7 +20,7 @@ About
 
 Prospector is a tool to analyse Python code and output information about errors, potential problems, convention violations and complexity.
 
-It brings together the functionality of other Python analysis tools such as `Pylint`_, `pep8`_, and `McCabe complexity`_.
+It brings together the functionality of other Python analysis tools such as `Pylint`_, `pycodestyle`_, and `McCabe complexity`_.
 See the :doc:`Supported Tools<supported_tools>` section for a complete list of default and optional extra tools.
 
 The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other
@@ -33,7 +30,7 @@ hopefully will provide a good starting point and will be useful straight away,
 and adapts the output depending on the libraries your project uses.
 
 .. _pylint: https://pylint.readthedocs.io/
-.. _pep8: https://pep8.readthedocs.io/
+.. _pycodestyle: https://pycodestyle.pycqa.org/
 .. _McCabe complexity: https://pypi.python.org/pypi/mccabe
 
 
