@@ -8,7 +8,9 @@ Version 1.7.1 - WIP
 **Fixes**:
 
 * Prospector now configures pylint using settings found in `pyproject.toml` or `setup.cfg`, not only `.pylintrc` - `#485 <https://github.com/PyCQA/prospector/issues/485>_`
-* Fixed `--no-style-warnings` command line argument no longer warning after renaming `pep8` to `pycodestyle`  - `#488 <https://github.com/PyCQA/prospector/issues/488>_`
+* Fixed `--no-style-warnings` command line argument no longer warning after renaming `pep8` to `pycodestyle` - `#488 <https://github.com/PyCQA/prospector/issues/488>_`
+* Documentation is building again - `#473 <https://github.com/PyCQA/prospector/issues/473>_`
+* `--with-tool` flag now respects - but overrides - tools disabled in profiles - `#447 <https://github.com/PyCQA/prospector/issues/447>_`
 
 
 Version 1.7.0
