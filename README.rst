@@ -11,7 +11,7 @@ prospector
    :target: https://coveralls.io/r/PyCQA/prospector
    :alt: Test Coverage
 .. image:: https://readthedocs.org/projects/prospector/badge/?version=latest
-   :target: http://prospector.readthedocs.io/
+   :target: https://prospector.readthedocs.io/
    :alt: Documentation
 
 
