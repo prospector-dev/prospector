@@ -119,16 +119,6 @@ class PylintTool(ToolBase):
             check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
         )
 
-        # Pylint 1.4 introduced the idea of explicitly specifying which
-        # C-extensions to load. This is because doing so allows them to
-        # execute any code whatsoever, which is considered to be unsafe.
-        # The following option turns off this, allowing any extension to
-        # load again, since any setup.py can execute arbitrary code and
-        # the safety gained through this approach seems minimal. Leaving
-        # it on means that the inference engine cannot do much inference
-        # on modules with C-extensions which is a bit useless.
-        linter.set_option("unsafe-load-any-extension", True)
-
         # we don't want similarity reports right now
         linter.disable("similarities")
 
