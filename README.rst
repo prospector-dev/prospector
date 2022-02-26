@@ -22,10 +22,10 @@ Prospector is a tool to analyse Python code and output information about
 errors, potential problems, convention violations and complexity.
 
 It brings together the functionality of other Python analysis tools such as
-`Pylint <http://docs.pylint.org/>`_,
-`pep8 <http://pep8.readthedocs.org/en/latest/>`_,
+`Pylint <https://docs.pylint.org/>`_,
+`pycodestyle <https://pycodestyle.pycqa.org/>`_,
 and `McCabe complexity <https://pypi.python.org/pypi/mccabe>`_.
-See the `Supported Tools <http://prospector.readthedocs.io/en/latest/supported_tools.html>`_
+See the `Supported Tools <https://prospector.readthedocs.io/en/latest/supported_tools.html>`_
 documentation section for a complete list.
 
 The primary aim of Prospector is to be useful 'out of the box'. A common complaint of other
@@ -61,13 +61,13 @@ And for extras::
     poetry install -E with_everything
 
 For more detailed information on installing the tool, see the
-`installation section <http://prospector.readthedocs.io/en/latest/#installation>`_ of the tool's main page
+`installation section <https://prospector.readthedocs.io/en/latest/#installation>`_ of the tool's main page
 on ReadTheDocs.
 
 Documentation
 -------------
 
-Full `documentation is available at ReadTheDocs <http://prospector.readthedocs.io>`_.
+Full `documentation is available at ReadTheDocs <https://prospector.readthedocs.io>`_.
 
 Usage
 -----
@@ -99,7 +99,7 @@ Profiles
 
 Prospector is configurable using "profiles". These are composable YAML files with directives to
 disable or enable tools or messages. For more information, read
-`the documentation about profiles <http://prospector.readthedocs.io/en/latest/profiles.html>`_.
+`the documentation about profiles <https://prospector.readthedocs.io/en/latest/profiles.html>`_.
 
 If your code uses frameworks and libraries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -148,7 +148,7 @@ text to your repositories' ``.pre-commit-config.yaml``::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.5.3.1 # The version of Prospector to use, if not 'master' for latest
+        rev: 1.7.1 # The version of Prospector to use, if not 'master' for latest
         hooks:
         -   id: prospector
 
