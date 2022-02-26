@@ -12,5 +12,9 @@ pylint:
     - C0323
     - C0324
 
-pydocstyle:
+pycodestyle:
+  run: false
+
+# TODO: remove this in prospector 2.0 - here for legacy backwards compat
+pep8:
   run: false
