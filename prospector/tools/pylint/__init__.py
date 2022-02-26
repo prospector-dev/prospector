@@ -192,9 +192,11 @@ class PylintTool(ToolBase):
             if pylintrc is None:
                 pylintrc = find_pylintrc()
             if pylintrc is None:
-                pylintrc_path = os.path.join(prospector_config.workdir, ".pylintrc")
-                if os.path.exists(pylintrc_path):
-                    pylintrc = pylintrc_path
+                for possible in (".pylintrc", "pylintrc", "pyproject.toml", "setup.cfg"):
+                    pylintrc_path = os.path.join(prospector_config.workdir, possible)
+                    if os.path.exists(pylintrc_path):
+                        pylintrc = pylintrc_path
+                        break
 
             if pylintrc is not None:
                 # load it!
