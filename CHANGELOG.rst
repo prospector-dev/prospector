@@ -2,10 +2,10 @@
 Changelog
 #########
 
-Version 1.7.1 - WIP
+Version 1.7.1
 -------------
 
-Lots of smaller bugfixes, new and old bugs.
+Lots of smaller bugfixes.
 
 **Fixes**:
 
