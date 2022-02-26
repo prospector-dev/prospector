@@ -4,7 +4,7 @@ import setoptconf as soc
 
 from prospector.config.datatype import OutputChoice
 from prospector.formatters import FORMATTERS
-from prospector.tools import DEFAULT_TOOLS, TOOLS
+from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES, TOOLS
 
 __all__ = ("build_manager",)
 
@@ -61,6 +61,7 @@ def build_manager():
     manager.add(soc.BooleanSetting("show_profile", default=False))
 
     manager.add(soc.BooleanSetting("no_external_config", default=False))
+    manager.add(soc.BooleanSetting("legacy_tool_names", default=False))
     manager.add(soc.StringSetting("pylint_config_file", default=None))
 
     manager.add(soc.StringSetting("path", default=None))
@@ -141,6 +142,10 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         "test_warnings": {
             "flags": ["-T", "--test-warnings"],
             "help": "Also check test modules and packages.",
+        },
+        "legacy_tool_names": {
+            "flags": ["--legacy-tool-names"],
+            "help": "Output deprecated names for tools (pep8, pep257) instead of updated names (pycodestyle, pydocstyle)",
         },
         "no_style_warnings": {
             "flags": ["-8", "--no-style-warnings"],

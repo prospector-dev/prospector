@@ -40,8 +40,10 @@ TOOLS = {
     "mccabe": McCabeTool,
     "pyflakes": PyFlakesTool,
     "pycodestyle": PycodestyleTool,
+    "pep8": PycodestyleTool,  # TODO: remove this eventually (name is deprecated)
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
+    "pep257": PydocstyleTool,  # TODO: remove this eventually (name is deprecated)
     "profile-validator": ProfileValidationTool,
     "vulture": _optional_tool("vulture"),
     "pyroma": _optional_tool("pyroma"),
@@ -59,3 +61,5 @@ DEFAULT_TOOLS = (
     "pydocstyle",
     "profile-validator",
 )
+
+DEPRECATED_TOOL_NAMES = {"pep8": "pycodestyle", "pep257": "pydocstyle"}

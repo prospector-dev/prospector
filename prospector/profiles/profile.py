@@ -61,7 +61,6 @@ class ProspectorProfile:
         self.test_warnings = profile_dict.get("test-warnings")
         self.doc_warnings = profile_dict.get("doc-warnings")
         self.member_warnings = profile_dict.get("member-warnings")
-        self.pep8 = profile_dict.get("pep8")
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
@@ -69,12 +68,24 @@ class ProspectorProfile:
 
         for tool in TOOLS:
             conf = {"disable": [], "enable": [], "run": None, "options": {}}
-            conf.update(profile_dict.get(tool, {}))
+            if tool == "pep8":
+                pep8dict = profile_dict.get(tool, {})
+                if pep8dict == "none":
+                    pep8dict = {}
+                elif pep8dict == "full":
+                    pep8dict = {"full": True, "run": True}
+                conf.update(pep8dict)
+            else:
+                conf.update(profile_dict.get(tool, {}))
 
             if self.max_line_length is not None and tool in ("pylint", "pycodestyle"):
                 conf["options"]["max-line-length"] = self.max_line_length
 
             setattr(self, tool, conf)
+
+    @property
+    def full_pep8(self):
+        return self.pep8.get("full", False)
 
     def get_disabled_messages(self, tool_name):
         disable = getattr(self, tool_name)["disable"]
@@ -107,7 +118,6 @@ class ProspectorProfile:
             "strictness": self.strictness,
             "requirements": self.requirements,
             "python-targets": self.python_targets,
-            "pep8": self.pep8,
         }
         for tool in TOOLS:
             out[tool] = getattr(self, tool)

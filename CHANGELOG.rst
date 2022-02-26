@@ -2,19 +2,41 @@
 Changelog
 #########
 
-Version 1.7.0 - WIP
+Version 1.8.0 - WIP
+-------------
+
+* Removed `frosted <https://github.com/timothycrosley/deprecated.frosted>`_ - it has been deprecated and unnecessary for a long time. The original reason for it was that flake8 was not being maintained, but that is no longer true, and frosted is not updated now.
+
+**Fixes**:
+
+* Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
+
+
+Version 1.7.1 - WIP
+-------------
+
+**Fixes**:
+
+* Prospector now configures pylint using settings found in `pyproject.toml` or `setup.cfg`, not only `.pylintrc` - `#485 <https://github.com/PyCQA/prospector/issues/485>_`
+* Fixed `--no-style-warnings` command line argument no longer warning after renaming `pep8` to `pycodestyle`  - `#488 <https://github.com/PyCQA/prospector/issues/488>_`
+
+
+Version 1.7.0
+-------------
 
 This is mostly a "tidying up" release but some things have changed which may cause differences to output, hence the bump of the major version.
 
 **New**:
 
 * Added a `--quiet` command line option to suppress all output. Useful if you just want to know the exit code of prospector for scripting.
-* Removed `frosted <https://github.com/timothycrosley/deprecated.frosted>`_ - it has been deprecated and unnecessary for a long time. The original reason for it was that flake8 was not being maintained, but that is no longer true, and frosted is not updated now.
+* Removed the prospector "indent checker" since this is now no longer in pylint `#482 <https://github.com/PyCQA/prospector/issues/482>_`
 
 **Fixes**:
 
-* Tools `pep8` and `pep257` have been renamed to `pycodestyle` and `pydocstyle` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_. Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration.
-* Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
+**Deprecation warning:**
+* Tools `pep8` and `pep257` have been renamed to `pycodestyle` and `pydocstyle` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_.
+Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration. The old names will still work, but this legacy behaviour will be removed in prospector 2.0
+* There is now a `--legacy-tool-names` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.o
 
 **Tidying up internals**
 
@@ -28,10 +50,6 @@ These are all internal prospector code quality improvements. Ideally, they shoul
 * Fixed hyperlink formatting in this CHANGELOG to be RST (was never updated after converting from markdown)
 * Replaced `os.path` with `pathlib.Path` everywhere in prospector internals, to improve and simplify finding files to inspect. Theoretically this behaves in the same way as far as the user will see (please open a ticket if you notice anything obviously different)
 
-**TODO**:
-
-* "legacy" mode for outputting pep8 or pycodestyle to prevent output being different if given a flag
-* conversion tool for old profiles to new profiles
 
 Version 1.6.1
 -------------

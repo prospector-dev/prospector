@@ -14,7 +14,9 @@
 # import os
 # import sys
 
-from prospector.__pkginfo__ import __version__ as version
+import pkg_resources
+
+version = pkg_resources.get_distribution("prospector").version
 
 release = ".".join(version.split(".")[:2])
 

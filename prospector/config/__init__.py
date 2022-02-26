@@ -3,13 +3,14 @@ import re
 import sre_constants
 import sys
 from pathlib import Path
+from typing import List
 
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
 from prospector.profiles import AUTO_LOADED_PROFILES
 from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile, ProfileNotFound, ProspectorProfile
-from prospector.tools import DEFAULT_TOOLS
+from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES
 
 
 class ProspectorConfig:
@@ -52,6 +53,20 @@ class ProspectorConfig:
             self.messages += messages
             runners.append(tool)
         return runners
+
+    def replace_deprecated_tool_names(self) -> List[str]:
+        # pep8 was renamed pycodestyle ; pep257 was renamed pydocstyle
+        # for backwards compatibility, these have been deprecated but will remain until prospector v2
+        deprecated_found = []
+        replaced = []
+        for tool_name in self.tools_to_run:
+            if tool_name in DEPRECATED_TOOL_NAMES:
+                replaced.append(DEPRECATED_TOOL_NAMES[tool_name])
+                deprecated_found.append(tool_name)
+            else:
+                replaced.append(tool_name)
+        self.tools_to_run = replaced
+        return deprecated_found
 
     def get_output_report(self):
         # Get the output formatter
@@ -305,3 +320,7 @@ class ProspectorConfig:
     @property
     def show_profile(self):
         return self.config.show_profile
+
+    @property
+    def legacy_tool_names(self) -> bool:
+        return self.config.legacy_tool_names

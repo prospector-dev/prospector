@@ -94,6 +94,6 @@ class TestProfileInheritance(ProfileTestBase):
         self.assertDictEqual(profile.pycodestyle, high_strictness.pycodestyle)
         self.assertDictEqual(profile.pyflakes, high_strictness.pyflakes)
 
-    def test_pep8_inheritance(self):
+    def test_pycodestyle_inheritance(self):
         profile = self._load("pep8")
-        self.assertTrue(profile.pep8 == "full")
+        self.assertTrue(profile.full_pep8)
