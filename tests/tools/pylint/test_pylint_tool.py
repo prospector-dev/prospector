@@ -26,7 +26,7 @@ class TestPylintTool(TestCase):
         def _has_message(msg_list, code):
             return any([message.code == code and message.source == "pylint" for message in msg_list])
 
-        for config_type in ("pylintrc", "pylintrc2", "pyproject", "setup.cfg", "multiple"):
+        for config_type in ("pylintrc", "pylintrc2", "pyproject", "setup.cfg"):
             root = THIS_DIR / "pylint_configs" / config_type
 
             with patch("os.getcwd", return_value=root.absolute()):
@@ -38,10 +38,6 @@ class TestPylintTool(TestCase):
 
             messages = pylint_tool.run(found_files)
             self.assertTrue(_has_message(messages, "line-too-long"), msg=config_type)
-            if config_type == "multiple":
-                self.assertTrue(_has_message(messages, "pylint-disallowed_name"), msg=config_type)
-            else:
-                self.assertFalse(_has_message(messages, "pylint-disallowed_name"), msg=config_type)
 
     def test_absolute_path_is_computed_correctly(self):
         pylint_tool, config = _get_pylint_tool_and_prospector_config()
