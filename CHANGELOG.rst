@@ -5,7 +5,7 @@ Changelog
 Version 1.7.3 - WIP
 -------------
 
-The war on bugs continues.
+The war on bugs.
 
 **Fixes**:
 
@@ -13,6 +13,7 @@ The war on bugs continues.
 `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_)
 * Fixed that some pylint documentation warning messages were not correctly included in the list of documentation warnings to squash if doc warnings are not desired.
 * Fixed the exit code for prospector - it was always ``0`` after the move to using poetry for packaging instead of ``1`` if errors were found (unless ``--zero-exit``) was used. This now exits with the correct code based on the documented (and previous) behaviour.
+* Fix that ``pep8`` would overwrite instead of inherit from previous ``pycodestyle`` blocks, same with pep257 - `#491 <https://github.com/PyCQA/prospector/issues/491#issuecomment-1053539711>`_
 
 
 Version 1.7.2
