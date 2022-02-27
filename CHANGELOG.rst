@@ -2,6 +2,15 @@
 Changelog
 #########
 
+Version 1.7.2 - WIP
+-------------
+
+More bugfixes!
+
+**Fixes**:
+
+* Fix that `pep8` and `pep257` sections were renamed but the old deprecated values were not properly used to configure `pycodestyle` and `pydocstyle` - `#491 <https://github.com/PyCQA/prospector/issues/491>_`
+
 Version 1.7.1
 -------------
 
