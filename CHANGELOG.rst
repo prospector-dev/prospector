@@ -2,7 +2,7 @@
 Changelog
 #########
 
-Version 1.7.2 - WIP
+Version 1.7.2
 -------------
 
 More bugfixes!

@@ -148,7 +148,7 @@ text to your repositories' ``.pre-commit-config.yaml``::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.7.1 # The version of Prospector to use, if not 'master' for latest
+        rev: 1.7.2 # The version of Prospector to use, if not 'master' for latest
         hooks:
         -   id: prospector
 
