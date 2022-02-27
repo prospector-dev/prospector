@@ -40,7 +40,9 @@ This is mostly a "tidying up" release.
 `Deprecation warning:`
 
 * Tools ``pep8`` and ``pep257`` have been renamed to ``pycodestyle`` and ``pydocstyle`` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_.
+
 Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration. The old names will still work, but this legacy behaviour will be removed in prospector 2.0
+
 * There is now a ``--legacy-tool-names`` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.o
 
 **Tidying up**
