@@ -28,10 +28,12 @@ class TestToolRenaming(TestCase):
 
         assert profile.is_tool_enabled("pydocstyle")
         assert profile.is_tool_enabled("pycodestyle")
-        assert "D401" not in profile.pydocstyle["disable"]
         assert "D401" in profile.pydocstyle["enable"]
+        assert "D401" not in profile.pydocstyle["disable"]
 
         assert "E266" not in profile.pycodestyle["disable"]
+
+        assert 120 == profile.pycodestyle["options"]["max-line-length"]
 
     def test_new_inherits_from_old(self):
         """
@@ -45,6 +47,8 @@ class TestToolRenaming(TestCase):
         assert "D401" in profile.pydocstyle["enable"]
 
         assert "E266" not in profile.pycodestyle["disable"]
+
+        assert 140 == profile.pycodestyle["options"]["max-line-length"]
 
     def test_legacy_names_equivalent(self):
         """

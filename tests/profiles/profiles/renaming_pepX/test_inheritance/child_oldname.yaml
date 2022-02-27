@@ -1,5 +1,5 @@
 inherits:
-  - base_oldname.yaml
+  - base_newname.yaml
 
 pep257:
   enable:

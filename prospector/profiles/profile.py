@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 import yaml
 
 from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
-from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES, TOOLS
+from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
 
@@ -35,31 +35,6 @@ class ProspectorProfile:
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
-
-        # for now we check for configuration for deprecated names too
-        # note: put the deprecated ones first, so that they are overwritten by the new
-        # names later if both names are specified
-
-        def _legacy_merge(newname: str, oldname: str):
-            existing_conf = profile_dict.get(newname, {})
-            # if there is any existing config, from this profile or
-            # a parent, merge the old config into it
-            profile_dict[newname] = _merge_tool_config(existing_conf, profile_dict[oldname])
-            del profile_dict[oldname]
-
-        # pep8 is tricky as it's overloaded as a tool configuration and a shorthand
-        # first, is this the short "pep8: full" version or a configuration of the
-        # pycodestyle tool using the old name?
-        pep8conf = profile_dict.get("pep8", None)
-        if type(pep8conf) is dict:
-            # if not a dict, there is no pep8 section, nothing to do - or
-            # this is a shorthand, it will be handled by _determine_pep8 below
-            # if it is a dict, copy it in
-            _legacy_merge("pycodestyle", "pep8")
-
-        pep257conf = profile_dict.get("pep257", None)
-        if pep257conf is not None:
-            _legacy_merge("pydocstyle", "pep257")
 
         for tool in TOOLS.keys():
             tool_conf = profile_dict.get(tool, {})
@@ -177,12 +152,16 @@ def _simple_merge_dict(priority, base):
 
 def _merge_tool_config(priority, base):
     out = dict(base.items())
-    for key, value in priority.items():
-        # pylint has extra 'load-plugins' option
-        if key in ("run", "load-plugins"):
+
+    # add options that are missing, but keep existing options from the priority dictionary
+    # TODO: write a unit test for this :-|
+    out["options"] = _simple_merge_dict(priority.get("options", {}), base.get("options", {}))
+
+    # copy in some basic pieces
+    for key in ("run", "load-plugins"):
+        value = priority.get(key, base.get(key))
+        if value is not None:
             out[key] = value
-        elif key in ("options",):
-            out[key] = _simple_merge_dict(value, base.get(key, {}))
 
     # anything enabled in the 'priority' dict is removed
     # from 'disabled' in the base dict and vice versa
@@ -225,7 +204,7 @@ def _merge_profile_dict(priority, base):
         ):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
-        elif key in TOOLS.keys() or key in DEPRECATED_TOOL_NAMES.keys():
+        elif key in TOOLS.keys():
             # this is tool config!
             out[key] = _merge_tool_config(value, base.get(key, {}))
 
@@ -351,6 +330,49 @@ def _load_and_merge(
     return merged, inherit_list
 
 
+def _transform_legacy(profile_dict):
+    """
+    After pep8 was renamed to pycodestyle, this pre-filter just moves profile
+    config blocks using the old name to use the new name, merging if both are
+    specified.
+
+    Same for pep257->pydocstyle
+    """
+    out = {}
+
+    # copy in existing pep8/pep257 using new names to start
+    if "pycodestyle" in profile_dict:
+        out["pycodestyle"] = profile_dict["pycodestyle"]
+    if "pydocstyle" in profile_dict:
+        out["pydocstyle"] = profile_dict["pydocstyle"]
+
+    # pep8 is tricky as it's overloaded as a tool configuration and a shorthand
+    # first, is this the short "pep8: full" version or a configuration of the
+    # pycodestyle tool using the old name?
+    if "pep8" in profile_dict:
+        pep8conf = profile_dict["pep8"]
+        if type(pep8conf) is dict:
+            # merge in with existing config if there is any
+            out["pycodestyle"] = _simple_merge_dict(out.get("pycodestyle", {}), pep8conf)
+        else:
+            # otherwise it's shortform, just copy it in directly
+            out["pep8"] = pep8conf
+        del profile_dict["pep8"]
+
+    if "pep257" in profile_dict:
+        out["pydocstyle"] = _simple_merge_dict(out.get("pydocstyle", {}), profile_dict["pep257"])
+        del profile_dict["pep257"]
+
+    # now just copy the rest in
+    for key, value in profile_dict.items():
+        if key in ("pycodestyle", "pydocstyle"):
+            # already handled these
+            continue
+        out[key] = value
+
+    return out
+
+
 def _load_profile(
     name_or_path,
     profile_path,
@@ -361,6 +383,8 @@ def _load_profile(
 ):
     # recursively get the contents of the basic profile and those it inherits from
     base_contents = _load_content(name_or_path, profile_path)
+
+    base_contents = _transform_legacy(base_contents)
 
     inherit_order = [name_or_path]
     shorthands_found = shorthands_found or set()

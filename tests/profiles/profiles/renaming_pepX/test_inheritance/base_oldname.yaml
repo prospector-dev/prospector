@@ -9,3 +9,5 @@ pep8:
   run: false
   disable:
     - E266
+  options:
+    max-line-length: 140
