@@ -34,6 +34,6 @@ class PermissionMissing(Exception):
             f"The current user {os.getlogin()} does not have permission to open "
             f"{what}. Either fix permissions or tell prospector to skip it "
             f"by adding this path to `--ignore-paths` on the commandline "
-            f"or in `ignore-paths` in the prospector profile (see {docs_url}"
+            f"or in `ignore-paths` in the prospector profile (see {docs_url})"
         )
         super().__init__(error_msg)

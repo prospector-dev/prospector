@@ -9,9 +9,8 @@ More bugfixes!
 
 **Fixes**:
 
-* Fix that `pep8` and `pep257` sections were renamed but the old deprecated values were not properly used to configure `pycodestyle` and `pydocstyle` - `#491 <https://github.com/PyCQA/prospector/issues/491>_`
-* Better handling for when the user running prospector is not able to read a file or directory - `#271 <https://github.com/PyCQA/prospector/issues/271>_` and `#487 <https://github.com/PyCQA/prospector/issues/487>_`
-
+* Fix that ``pep8`` and ``pep257`` sections were renamed but the old deprecated values were not properly used to configure ``pycodestyle`` and ``pydocstyle`` - `#491 <https://github.com/PyCQA/prospector/issues/491>`_
+* Better handling for when the user running prospector is not able to read a file or directory - `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_
 Version 1.7.1
 -------------
 
@@ -19,12 +18,12 @@ Lots of smaller bugfixes.
 
 **Fixes**:
 
-* Prospector now configures pylint using settings found in `pyproject.toml` or `setup.cfg`, not only `.pylintrc` - `#485 <https://github.com/PyCQA/prospector/issues/485>_`
-* Fixed `--no-style-warnings` command line argument no longer warning after renaming `pep8` to `pycodestyle` - `#488 <https://github.com/PyCQA/prospector/issues/488>_`
-* Documentation is building again - `#473 <https://github.com/PyCQA/prospector/issues/473>_`
-* `--with-tool` flag now respects - but overrides - tools disabled in profiles - `#447 <https://github.com/PyCQA/prospector/issues/447>_`
-* Fixed crash with merging multiple import warnings - `#477 <https://github.com/PyCQA/prospector/issues/477>_`
-* Fixed segfault when analysing code using cartopy - `#403 <https://github.com/PyCQA/prospector/issues/403>_`
+* Prospector now configures pylint using settings found in ``pyproject.toml`` or ``setup.cfg``, not only ``.pylintrc`` - `#485 <https://github.com/PyCQA/prospector/issues/485>`_
+* Fixed ``--no-style-warnings`` command line argument no longer warning after renaming ``pep8`` to ``pycodestyle`` - `#488 <https://github.com/PyCQA/prospector/issues/488>`_
+* Documentation is building again - `#473 <https://github.com/PyCQA/prospector/issues/473>`_
+* ``--with-tool`` flag now respects - but overrides - tools disabled in profiles - `#447 <https://github.com/PyCQA/prospector/issues/447>`_
+* Fixed crash with merging multiple import warnings - `#477 <https://github.com/PyCQA/prospector/issues/477>`_
+* Fixed segfault when analysing code using cartopy - `#403 <https://github.com/PyCQA/prospector/issues/403>`_
 
 Version 1.7.0
 -------------
@@ -33,15 +32,15 @@ This is mostly a "tidying up" release.
 
 **New**:
 
-* Added a `--quiet` command line option to suppress all output. Useful if you just want to know the exit code of prospector for scripting.
-* Removed the prospector "indent checker" since this is now no longer in pylint `#482 <https://github.com/PyCQA/prospector/issues/482>_`
+* Added a ``--quiet`` command line option to suppress all output. Useful if you just want to know the exit code of prospector for scripting.
+* Removed the prospector "indent checker" since this is now no longer in pylint `#482 <https://github.com/PyCQA/prospector/issues/482>`_
 
 **Fixes**:
 
 **Deprecation warning:**
-* Tools `pep8` and `pep257` have been renamed to `pycodestyle` and `pydocstyle` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_.
+* Tools ``pep8`` and ``pep257`` have been renamed to ``pycodestyle`` and ``pydocstyle`` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_.
 Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration. The old names will still work, but this legacy behaviour will be removed in prospector 2.0
-* There is now a `--legacy-tool-names` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.o
+* There is now a ``--legacy-tool-names`` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.o
 
 **Tidying up**
 
@@ -66,7 +65,7 @@ Version 1.6.0
 - [#478](https://github.com/PyCQA/prospector/issues/478) Fixed incompatible version specification of pylint-plugin-utils. This
   now requires pylint-django of at least 2.5.
 
-*note* This release drops support for python `3.6.1`
+*note* This release drops support for python ``3.6.1``
 
 Version 1.5.3 and 1.5.3dev0 and 1.5.3.1
 -------------
