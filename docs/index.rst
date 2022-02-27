@@ -50,7 +50,9 @@ For example to install an optional tool such as ``pyroma``::
     pip install prospector[with_pyroma]
 
 
-.. Note:: Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped::
+.. Note::
+
+   Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped::
 
        pip install prospector\[with_pyroma\]
 

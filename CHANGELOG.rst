@@ -3,7 +3,7 @@ Changelog
 #########
 
 Version 1.7.3 - WIP
--------------
+-------------------
 
 The war on bugs.
 
@@ -12,7 +12,7 @@ The war on bugs.
 * Autodetect now does not die if a user does not have permissions (related to `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_)
 * Fixed that some pylint documentation warning messages were not correctly included in the list of documentation warnings to squash if doc warnings are not desired.
 * Fixed the exit code for prospector - it was always ``0`` after the move to using poetry for packaging instead of ``1`` if errors were found (unless ``--zero-exit``) was used. This now exits with the correct code based on the documented (and previous) behaviour.
-* Fix that ``pep8`` would overwrite instead of inherit from previous ``pycodestyle`` blocks, same with pep257 - `#491 <https://github.com/PyCQA/prospector/issues/491#issuecomment-1053539711>`_
+* Fix that ``pep8`` would overwrite instead of inherit from previous ``pycodestyle`` blocks, same with pep257 - `#491 (comment) <https://github.com/PyCQA/prospector/issues/491#issuecomment-1053539711>`_
 
 
 Version 1.7.2
@@ -86,7 +86,7 @@ Version 1.6.0
 *note* This release drops support for python ``3.6.1``
 
 Version 1.5.3 and 1.5.3dev0 and 1.5.3.1
--------------
+---------------------------------------
 
 - `#465 <https://github.com/PyCQA/prospector/issues/465>`_ Remove unnecessary configuration reset to fix pylint>=2.12 compatibility
 - Version 1.5.3.1 was needed to unpin the pylint dependency to actually use the fix for compatibility.
@@ -99,10 +99,10 @@ Version 1.5.2
 Version 1.5.1
 -------------
 
-- `#436 <https://github.com/PyCQA/prospector/issues/438>`_ Promoting pre-release to release as it appears to work
+- `#438 <https://github.com/PyCQA/prospector/issues/438>`_ Promoting pre-release to release as it appears to work
 
 Version 1.5.0.1
--------------
+---------------
 
 - `#433 <https://github.com/PyCQA/prospector/issues/433>`_ Attempted fix of flake8 dependency versioning conflict
 
