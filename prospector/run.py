@@ -216,15 +216,15 @@ def main():
     if config.exit_with_zero_on_success():
         # if we ran successfully, and the user wants us to, then we'll
         # exit cleanly
-        return 0
+        sys.exit(0)
 
     # otherwise, finding messages is grounds for exiting with an error
     # code, to make it easier for bash scripts and similar situations
-    # to know if there any errors have been found.
+    # to know if any errors have been found.
     if len(prospector.get_messages()) > 0:
-        return 1
-    return 0
+        sys.exit(1)
+    sys.exit(0)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

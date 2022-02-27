@@ -5,12 +5,14 @@ Changelog
 Version 1.7.3 - WIP
 -------------
 
-The war on bugs continues. Just say no to bugs!
+The war on bugs continues.
 
 **Fixes**:
+
 * Autodetect now does not die if a user does not have permissions (related to
 `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_)
 * Fixed that some pylint documentation warning messages were not correctly included in the list of documentation warnings to squash if doc warnings are not desired.
+* Fixed the exit code for prospector - it was always ``0`` after the move to using poetry for packaging instead of ``1`` if errors were found (unless ``--zero-exit``) was used. This now exits with the correct code based on the documented (and previous) behaviour.
 
 
 Version 1.7.2
@@ -22,6 +24,8 @@ More bugfixes!
 
 * Fix that ``pep8`` and ``pep257`` sections were renamed but the old deprecated values were not properly used to configure ``pycodestyle`` and ``pydocstyle`` - `#491 <https://github.com/PyCQA/prospector/issues/491>`_
 * Better handling for when the user running prospector is not able to read a file or directory - `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_
+
+
 Version 1.7.1
 -------------
 
@@ -54,7 +58,7 @@ This is mostly a "tidying up" release.
 
 Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration. The old names will still work, but this legacy behaviour will be removed in prospector 2.0
 
-* There is now a ``--legacy-tool-names`` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.o
+* There is now a ``--legacy-tool-names`` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.0
 
 **Tidying up**
 
