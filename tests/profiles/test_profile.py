@@ -15,7 +15,37 @@ class ProfileTestBase(TestCase):
         ]
 
 
-class TestProfileParsing(ProfileTestBase):
+class TestToolRenaming(TestCase):
+    def setUp(self) -> None:
+        self._profile_path = [
+            str(THIS_DIR / "profiles/renaming_pepX/test_inheritance"),
+            str(THIS_DIR / "profiles/renaming_pepX"),
+            str(THIS_DIR / "../../prospector/profiles/profiles"),
+        ]
+
+    def test_old_inherits_from_new(self):
+        profile = ProspectorProfile.load("child_oldname.yaml", self._profile_path, allow_shorthand=False)
+
+        assert profile.is_tool_enabled("pydocstyle")
+        assert profile.is_tool_enabled("pycodestyle")
+        assert "D401" not in profile.pydocstyle["disable"]
+        assert "D401" in profile.pydocstyle["enable"]
+
+        assert "E266" not in profile.pycodestyle["disable"]
+
+    def test_new_inherits_from_old(self):
+        """
+        Ensure that `pep8` can inherit from a `pycodecstyle` block and vice versa
+        """
+        profile = ProspectorProfile.load("child_newname.yaml", self._profile_path, allow_shorthand=False)
+
+        assert profile.is_tool_enabled("pydocstyle")
+        assert profile.is_tool_enabled("pycodestyle")
+        assert "D401" not in profile.pydocstyle["disable"]
+        assert "D401" in profile.pydocstyle["enable"]
+
+        assert "E266" not in profile.pycodestyle["disable"]
+
     def test_legacy_names_equivalent(self):
         """
         'pep8' tool was renamed to pycodestyle, 'pep257' tool was renamed to pydocstyle
@@ -50,6 +80,8 @@ class TestProfileParsing(ProfileTestBase):
         self.assertTrue(profile.is_tool_enabled("pycodestyle"))
         self.assertEqual(profile.pycodestyle["options"]["max-line-length"], 120)
 
+
+class TestProfileParsing(ProfileTestBase):
     def test_empty_disable_list(self):
         """
         This test verifies that a profile can still be loaded if it contains

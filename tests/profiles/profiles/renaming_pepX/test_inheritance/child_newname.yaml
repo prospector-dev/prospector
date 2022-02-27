@@ -1,0 +1,11 @@
+inherits:
+  - base_oldname.yaml
+
+pep8: full
+
+pydocstyle:
+  enable:
+    - D401
+
+pycodestyle:
+  run: true

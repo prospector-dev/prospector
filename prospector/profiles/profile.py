@@ -4,39 +4,10 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
+from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES, TOOLS
 
 BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
-
-
-class ProfileNotFound(Exception):
-    def __init__(self, name, profile_path):
-        super().__init__()
-        self.name = name
-        self.profile_path = profile_path
-
-    def __repr__(self):
-        return "Could not find profile %s; searched in %s" % (
-            self.name,
-            ":".join(self.profile_path),
-        )
-
-
-class CannotParseProfile(Exception):
-    def __init__(self, filepath, parse_error):
-        super().__init__()
-        self.filepath = filepath
-        self.parse_error = parse_error
-
-    def get_parse_message(self):
-        return "%s\n  on line %s : char %s" % (
-            self.parse_error.problem,
-            self.parse_error.problem_mark.line,
-            self.parse_error.problem_mark.column,
-        )
-
-    def __repr__(self):
-        return "Could not parse profile found at %s - it is not valid YAML" % self.filepath
 
 
 class ProspectorProfile:
@@ -69,6 +40,13 @@ class ProspectorProfile:
         # note: put the deprecated ones first, so that they are overwritten by the new
         # names later if both names are specified
 
+        def _legacy_merge(newname: str, oldname: str):
+            existing_conf = profile_dict.get(newname, {})
+            # if there is any existing config, from this profile or
+            # a parent, merge the old config into it
+            profile_dict[newname] = _merge_tool_config(existing_conf, profile_dict[oldname])
+            del profile_dict[oldname]
+
         # pep8 is tricky as it's overloaded as a tool configuration and a shorthand
         # first, is this the short "pep8: full" version or a configuration of the
         # pycodestyle tool using the old name?
@@ -76,15 +54,12 @@ class ProspectorProfile:
         if type(pep8conf) is dict:
             # if not a dict, there is no pep8 section, nothing to do - or
             # this is a shorthand, it will be handled by _determine_pep8 below
-            profile_dict["pycodestyle"] = profile_dict["pep8"]
-            # note: if a profile contains both, the pep8 will overwrite the pycodestyle values
-            # this will be raised as an error in profilevalidator
-            del profile_dict["pep8"]
+            # if it is a dict, copy it in
+            _legacy_merge("pycodestyle", "pep8")
 
         pep257conf = profile_dict.get("pep257", None)
         if pep257conf is not None:
-            profile_dict["pydocstyle"] = profile_dict["pep257"]
-            del profile_dict["pep257"]
+            _legacy_merge("pydocstyle", "pep257")
 
         for tool in TOOLS.keys():
             tool_conf = profile_dict.get(tool, {})
