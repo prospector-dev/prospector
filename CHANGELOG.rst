@@ -10,6 +10,7 @@ More bugfixes!
 **Fixes**:
 
 * Fix that `pep8` and `pep257` sections were renamed but the old deprecated values were not properly used to configure `pycodestyle` and `pydocstyle` - `#491 <https://github.com/PyCQA/prospector/issues/491>_`
+* Better handling for when the user running prospector is not able to read a file or directory - `#271 <https://github.com/PyCQA/prospector/issues/271>_` and `#487 <https://github.com/PyCQA/prospector/issues/487>_`
 
 Version 1.7.1
 -------------

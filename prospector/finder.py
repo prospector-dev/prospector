@@ -1,5 +1,6 @@
 import os
 
+from prospector.exceptions import PermissionMissing
 from prospector.pathutils import is_virtualenv
 
 
@@ -182,11 +183,16 @@ def _find_paths(ignore, curpath, rootpath):
                 packages.append((relpath, ignored))
 
             # do the same for this directory
-            recurse = _find_paths(ignore, os.path.join(curpath, filename), rootpath)
-            files += recurse[0]
-            modules += recurse[1]
-            packages += recurse[2]
-            directories += recurse[3]
+            dirpath = os.path.join(curpath, filename)
+            try:
+                recurse = _find_paths(ignore, dirpath, rootpath)
+                files += recurse[0]
+                modules += recurse[1]
+                packages += recurse[2]
+                directories += recurse[3]
+            except PermissionError as err:
+                if not ignored:
+                    raise PermissionMissing(dirpath) from err
 
         else:
             # this is a file, is it a python module?

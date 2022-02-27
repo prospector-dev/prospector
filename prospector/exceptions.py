@@ -1,3 +1,6 @@
+import os
+
+
 class FatalProspectorException(Exception):
 
     """
@@ -12,3 +15,25 @@ class FatalProspectorException(Exception):
 
     def __init__(self, message):
         self.message = message
+
+
+class CouldNotHandleEncoding(Exception):
+    def __init__(self, path, cause):
+        self.path = path
+        self.cause = cause
+
+
+class PermissionMissing(Exception):
+    def __init__(self, path):
+        docs_url = "https://prospector.landscape.io/en/master/profiles.html#ignoring-paths-and-patterns"
+        if os.path.isdir(path):
+            what = f"directory {path}"
+        else:
+            what = f"the file {path}"
+        error_msg = (
+            f"The current user {os.getlogin()} does not have permission to open "
+            f"{what}. Either fix permissions or tell prospector to skip it "
+            f"by adding this path to `--ignore-paths` on the commandline "
+            f"or in `ignore-paths` in the prospector profile (see {docs_url}"
+        )
+        super().__init__(error_msg)
