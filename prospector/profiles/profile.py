@@ -1,9 +1,10 @@
 import json
 import os
+from typing import Any, Dict, List, Tuple
 
 import yaml
 
-from prospector.tools import DEFAULT_TOOLS, TOOLS
+from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES, TOOLS
 
 BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
 
@@ -39,7 +40,7 @@ class CannotParseProfile(Exception):
 
 
 class ProspectorProfile:
-    def __init__(self, name, profile_dict, inherit_order):
+    def __init__(self, name: str, profile_dict: Dict[str, Any], inherit_order: List[str]):
         self.name = name
         self.inherit_order = inherit_order
 
@@ -63,28 +64,40 @@ class ProspectorProfile:
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
-        self.python_targets = _ensure_list(profile_dict.get("python-targets", []))
+
+        # for now we check for configuration for deprecated names too
+        # note: put the deprecated ones first, so that they are overwritten by the new
+        # names later if both names are specified
+
+        # pep8 is tricky as it's overloaded as a tool configuration and a shorthand
+        # first, is this the short "pep8: full" version or a configuration of the
+        # pycodestyle tool using the old name?
+        pep8conf = profile_dict.get("pep8", None)
+        if type(pep8conf) is dict:
+            # if not a dict, there is no pep8 section, nothing to do - or
+            # this is a shorthand, it will be handled by _determine_pep8 below
+            profile_dict["pycodestyle"] = profile_dict["pep8"]
+            # note: if a profile contains both, the pep8 will overwrite the pycodestyle values
+            # this will be raised as an error in profilevalidator
+            del profile_dict["pep8"]
+
+        pep257conf = profile_dict.get("pep257", None)
+        if pep257conf is not None:
+            profile_dict["pydocstyle"] = profile_dict["pep257"]
+            del profile_dict["pep257"]
 
         for tool in TOOLS.keys():
+            tool_conf = profile_dict.get(tool, {})
+
+            # set the defaults for everything
             conf = {"disable": [], "enable": [], "run": None, "options": {}}
-            if tool == "pep8":
-                pep8dict = profile_dict.get(tool, {})
-                if pep8dict == "none":
-                    pep8dict = {}
-                elif pep8dict == "full":
-                    pep8dict = {"full": True, "run": True}
-                conf.update(pep8dict)
-            else:
-                conf.update(profile_dict.get(tool, {}))
+            # use the "old" tool name
+            conf.update(tool_conf)
 
             if self.max_line_length is not None and tool in ("pylint", "pycodestyle"):
                 conf["options"]["max-line-length"] = self.max_line_length
 
             setattr(self, tool, conf)
-
-    @property
-    def full_pep8(self):
-        return self.pep8.get("full", False)
 
     def get_disabled_messages(self, tool_name):
         disable = getattr(self, tool_name)["disable"]
@@ -116,7 +129,6 @@ class ProspectorProfile:
             "test-warnings": self.test_warnings,
             "strictness": self.strictness,
             "requirements": self.requirements,
-            "python-targets": self.python_targets,
         }
         for tool in TOOLS.keys():
             out[tool] = getattr(self, tool)
@@ -238,7 +250,7 @@ def _merge_profile_dict(priority, base):
         ):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
-        elif key in TOOLS.keys():
+        elif key in TOOLS.keys() or key in DEPRECATED_TOOL_NAMES.keys():
             # this is tool config!
             out[key] = _merge_tool_config(value, base.get(key, {}))
 
@@ -262,6 +274,8 @@ def _determine_pep8(profile_dict):
         return "full_pep8", True
     elif pep8 == "none":
         return "no_pep8", True
+    elif type(pep8) is dict and pep8.get("full", False):
+        return "full_pep8", True
     return None, False
 
 
@@ -320,7 +334,10 @@ def _append_profiles(name, profile_path, data, inherit_list, allow_shorthand=Fal
     return data, inherit_list
 
 
-def _load_and_merge(name_or_path, profile_path, allow_shorthand=True, forced_inherits=None):
+def _load_and_merge(
+    name_or_path, profile_path, allow_shorthand: bool = True, forced_inherits: List[str] = None
+) -> Tuple[Dict[str, Any], List[str]]:
+
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
         name_or_path,

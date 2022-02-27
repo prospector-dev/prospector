@@ -1,0 +1,7 @@
+pep8:
+  run: true
+  options:
+    max-line-length: 120
+
+pep257:
+  run: true

@@ -1,5 +1,5 @@
 inherits:
   - pylint_disabled
 
-pycodestyle:
+pydocstyle:
   run: false

@@ -1,0 +1,8 @@
+inherits:
+ - base
+
+pydocstyle:
+  run: yes
+
+pylint:
+  run: no

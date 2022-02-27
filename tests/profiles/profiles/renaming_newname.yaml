@@ -1,0 +1,7 @@
+pycodestyle:
+  run: true
+  options:
+    max-line-length: 120
+
+pydocstyle:
+  run: true

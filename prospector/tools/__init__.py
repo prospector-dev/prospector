@@ -40,10 +40,8 @@ TOOLS = {
     "mccabe": McCabeTool,
     "pyflakes": PyFlakesTool,
     "pycodestyle": PycodestyleTool,
-    "pep8": PycodestyleTool,  # TODO: remove this eventually (name is deprecated)
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
-    "pep257": PydocstyleTool,  # TODO: remove this eventually (name is deprecated)
     "profile-validator": ProfileValidationTool,
     "frosted": _optional_tool("frosted"),
     "vulture": _optional_tool("vulture"),
