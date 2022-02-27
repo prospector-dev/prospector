@@ -50,8 +50,7 @@ For example to install an optional tool such as ``pyroma``::
     pip install prospector[with_pyroma]
 
 
-.. Note:: Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped
-   ::
+.. Note:: Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped::
 
        pip install prospector\[with_pyroma\]
 
@@ -65,9 +64,6 @@ For example to install mypy and bandit::
 And to install all optional extra tools at the same time, install prospector using the ``with_everything`` option::
 
     pip install prospector[with_everything]
-
-
-
 
 
 For best results, you should install prospector to the same place as your project and its dependencies. That is,
