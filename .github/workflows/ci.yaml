@@ -187,13 +187,13 @@ jobs:
           python -m pip install --disable-pip-version-check -U pip poetry
           poetry install
           pytest --benchmark-disable --cov --cov-report= tests/
-      - name: Report coverage
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          . venv/bin/activate
-          coveralls --service=github
+#      - name: Report coverage
+#        env:
+#          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          . venv/bin/activate
+#          coveralls --service=github
       - name: Check that Prospector can run
         run: |
           . venv/bin/activate
