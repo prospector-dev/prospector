@@ -6,6 +6,7 @@ from requirements_detector import find_requirements
 from requirements_detector.detect import RequirementsNotFound
 
 from prospector import encoding
+from prospector.exceptions import PermissionMissing
 from prospector.pathutils import is_virtualenv
 
 POSSIBLE_LIBRARIES = ("django", "celery", "flask")
@@ -44,7 +45,12 @@ def find_from_path(path):
     names = set()
     max_possible = len(POSSIBLE_LIBRARIES)
 
-    for item in os.listdir(path):
+    try:
+        dirlist = os.listdir(path)
+    except PermissionError as err:
+        raise PermissionMissing(path) from err
+
+    for item in dirlist:
         item_path = os.path.abspath(os.path.join(path, item))
         if os.path.isdir(item_path):
             if is_virtualenv(item_path):

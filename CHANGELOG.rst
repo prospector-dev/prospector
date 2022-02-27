@@ -2,6 +2,17 @@
 Changelog
 #########
 
+Version 1.7.3 - WIP
+-------------
+
+The war on bugs continues. Just say no to bugs!
+
+**Fixes**:
+* Autodetect now does not die if a user does not have permissions (related to
+`#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_)
+* Fixed that some pylint documentation warning messages were not correctly included in the list of documentation warnings to squash if doc warnings are not desired.
+
+
 Version 1.7.2
 -------------
 

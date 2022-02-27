@@ -7,6 +7,9 @@ pylint:
   disable:
     - empty-docstring
     - missing-docstring
+    - missing-module-docstring
+    - missing-function-docstring
+    - missing-class-docstring
 
 frosted:
   disable:
