@@ -75,13 +75,12 @@ These are all internal prospector code quality improvements.
 Version 1.6.1
 -------------
 
-- [#454](https://github.com/PyCQA/prospector/issues/454) Update pyflakes to 2.*
+- Update pyflakes to 2.* `#454 <https://github.com/PyCQA/prospector/issues/454)>`_
 
 Version 1.6.0
 -------------
 
-- [#478](https://github.com/PyCQA/prospector/issues/478) Fixed incompatible version specification of pylint-plugin-utils. This
-  now requires pylint-django of at least 2.5.
+- Fixed incompatible version specification of pylint-plugin-utils. This now requires pylint-django of at least 2.5. `#478 <https://github.com/PyCQA/prospector/issues/478>`_
 
 *note* This release drops support for python ``3.6.1``
 
@@ -555,14 +554,14 @@ Version 0.4.1
 Version 0.4
 ---------------
 * Added a changelog
-* Added support for the [dodgy](https://github.com/landscapeio/dodgy) codebase checker
-* Added support for pep8 (thanks to [Jason Simeone](https://github.com/jayclassless))
-* Added support for pyflakes (thanks to [Jason Simeone](https://github.com/jayclassless))
-* Added support for mccabe (thanks to [Jason Simeone](https://github.com/jayclassless))
+* Added support for the `dodgy <https://github.com/landscapeio/dodgy>`_ codebase checker
+* Added support for pep8 (thanks to `Jason Simeone <https://github.com/jayclassless>`_)
+* Added support for pyflakes (thanks to `Jason Simeone <https://github.com/jayclassless>`_)
+* Added support for mccabe (thanks to `Jason Simeone <https://github.com/jayclassless>`_)
 * Replaced Pylint W0312 with a custom checker. This means that warnings are only generated for inconsistent indentation characters, rather than warning if spaces were not used.
 * Some messages will now be combined if Pylint generates multiple warnings per line for what is the same cause. For example, 'unused import from wildcard import' messages are now combined rather than having one message per unused import from that line.
 * Messages from multiple tools will be merged if they represent the same problem.
 * Tool failure no longer kills the Prospector process but adds a message instead.
 * Tools can be enabled or disabled from profiles.
-* All style warnings can be suppressed using the `--no-style-warnings` command line switch.
-* Uses a newer version of [pylint-django](https://github.com/landscapeio/pylint-django) for improved analysis of Django-based code.
+* All style warnings can be suppressed using the ``--no-style-warnings`` command line switch.
+* Uses a newer version of `pylint-django <https://github.com/landscapeio/pylint-django>`_ for improved analysis of Django-based code.
