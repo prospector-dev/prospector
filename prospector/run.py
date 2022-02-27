@@ -13,11 +13,6 @@ from prospector.message import Location, Message
 from prospector.tools import DEPRECATED_TOOL_NAMES
 from prospector.tools.utils import CaptureOutput
 
-__all__ = (
-    "Prospector",
-    "main",
-)
-
 
 class Prospector:
     def __init__(self, config: ProspectorConfig):
@@ -118,9 +113,9 @@ class Prospector:
                 sys.stderr.write(fatal.message)
                 sys.exit(2)
 
-            except Exception:  # pylint: disable=broad-except
+            except Exception as ex:
                 if self.config.die_on_tool_error:
-                    raise
+                    raise FatalProspectorException from ex
                 else:
                     loc = Location(self.config.workdir, None, None, None, None)
                     msg = (
