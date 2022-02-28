@@ -91,6 +91,8 @@ This will output a list of messages pointing out potential problems or errors, f
 
 Read about the full list of options in the :doc:`usage <usage>` page.
 
+It is also possible to use prospector as a :doc:`pre-commit hook <pre-commit>`.
+
 
 Behaviour
 ---------
@@ -144,6 +146,12 @@ There is more detail about profiles and how to use them on
 :doc:`the profiles documentation <profiles>` page.
 
 
+Pre-commit Hook
+```````````````
+
+Prospector can be configured as a `pre-commit <https://pre-commit.com>`_ hook.
+
+For more information see :doc:`the pre-commit documentation <pre-commit>`.
 
 
 License

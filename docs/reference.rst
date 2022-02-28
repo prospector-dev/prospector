@@ -36,12 +36,12 @@ Tool classes
     :members:
 
 :class:`PycodestyleTool`
--------------------
+------------------------
 .. autoclass:: prospector.tools.pycodestyle.PycodestyleTool
     :members:
 
 :class:`PydocstyleTool`
--------------------
+-----------------------
 .. autoclass:: prospector.tools.pydocstyle.PydocstyleTool
     :members:
 

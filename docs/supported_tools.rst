@@ -33,7 +33,7 @@ and is the source of most messages that prospector outputs.
 
 
 `pycodestyle <https://pycodestyle.pycqa.org/en/latest/>`_
-```````````````````````````````````````````````````
+`````````````````````````````````````````````````````````
 
 pycodestyle is a simple tool to warn about violations of the
 `PEP8 style guide <https://www.python.org/dev/peps/pep-0008/>`_. It produces
@@ -79,7 +79,7 @@ not be in a public project, such as secret keys, passwords, AWS tokens or
 source control diffs.
 
 `Pydocstyle <https://github.com/PyCQA/pydocstyle>`_
-````````````````````````````````````````````````````````````
+```````````````````````````````````````````````````
 
 Pydocstyle is a simple tool to warn about violations of the
 `PEP257 Docstring Conventions <http://legacy.python.org/dev/peps/pep-0257/>`_.
@@ -113,7 +113,7 @@ They are also not installed by default. The instructions for installing each too
 section below. For more detailed information on installing, see :doc:`install section<index>`.
 
 `Pyroma <https://github.com/regebro/pyroma>`_
-````````````````````````````````````````````````
+`````````````````````````````````````````````
 Pyroma is a tool to check your `setup.py` to ensure it is following best practices
 of the Python packaging ecosystem. It will warn you if you are missing any package
 metadata which would improve the quality of your package. This is recommended if you
@@ -126,7 +126,7 @@ To install and use::
 
 
 `Vulture <https://github.com/jendrikseipp/vulture>`_
-```````````````````````````````````````````````````````
+````````````````````````````````````````````````````
 
 Vulture finds unused classes, functions and variables in your code. This could
 be useful if your project is an application rather than a library, however, if
@@ -153,7 +153,7 @@ To install and use::
 
 
 `Mypy <https://github.com/python/mypy>`_
-``````````````````````````````````````````````````````
+````````````````````````````````````````
 Mypy is an experimental optional static type checker for Python that aims to combine
 the benefits of dynamic (or "duck") typing and static typing. Mypy combines the
 expressive power and convenience of Python with a powerful type system and
@@ -167,7 +167,7 @@ To install and use::
 
 
 `Bandit <https://github.com/PyCQA/bandit>`_
-``````````````````````````````````````````````````````
+```````````````````````````````````````````
 Bandit finds common security issues in Python code.
 
 To install and use::
