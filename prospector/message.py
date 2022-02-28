@@ -90,8 +90,7 @@ class Message:
             return False
         if self.location == other.location:
             return self.code == other.code
-        else:
-            return False
+        return False
 
     def __lt__(self, other) -> bool:
         if self.location == other.location:

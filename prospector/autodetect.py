@@ -43,7 +43,6 @@ def find_from_imports(file_contents):
 
 def find_from_path(path):
     names = set()
-    max_possible = len(POSSIBLE_LIBRARIES)
 
     try:
         dirlist = os.listdir(path)
@@ -64,7 +63,7 @@ def find_from_path(path):
                 # TODO: this output will break output formats such as JSON
                 warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
 
-        if len(names) == max_possible:
+        if len(names) == len(POSSIBLE_LIBRARIES):
             # don't continue on recursing, there's no point!
             break
 
@@ -91,8 +90,6 @@ def autodetect_libraries(path):
 
     try:
         libraries = find_from_requirements(path)
-
-    # pylint: disable=pointless-except
     except RequirementsNotFound:
         pass
 

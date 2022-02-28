@@ -14,12 +14,12 @@ def is_virtualenv(path) -> bool:
         # listdir failed, probably due to path length issues in windows
         return False
 
-    if not all([clue in dircontents for clue in clues]):
+    if not all(clue in dircontents for clue in clues):
         # we don't have the 3 directories which would imply
         # this is a virtualenvironment
         return False
 
-    if not all([os.path.isdir(os.path.join(path, clue)) for clue in clues]):
+    if not all(os.path.isdir(os.path.join(path, clue)) for clue in clues):
         # some of them are not actually directories
         return False
 

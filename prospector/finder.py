@@ -157,7 +157,7 @@ def _find_paths(ignore, curpath, rootpath):
         if os.path.islink(fullpath):
             continue
 
-        ignored = any([m.search(relpath) for m in ignore])
+        ignored = any(m.search(relpath) for m in ignore)
 
         if os.path.isdir(fullpath):
             split_fullpath = fullpath.split(os.path.sep)
@@ -212,7 +212,7 @@ def find_python(ignores, paths, explicit_file_mode, workdir=""):
     """
     if explicit_file_mode:
         return SingleFiles(paths, workdir or os.getcwd())
-    else:
-        assert len(paths) == 1
-        files, modules, directories, packages = _find_paths(ignores, paths[0], workdir)
-        return FoundFiles(workdir, files, modules, directories, packages, ignores)
+
+    assert len(paths) == 1
+    files, modules, directories, packages = _find_paths(ignores, paths[0], workdir)
+    return FoundFiles(workdir, files, modules, directories, packages, ignores)
