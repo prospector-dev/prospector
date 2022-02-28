@@ -27,7 +27,7 @@ To add command-line arguments to the pre-commit hook config file::
         hooks:
         -   id: prospector
             args:
-            -   --summary-only
+            - --summary-only
 
 
 Optional Tools
@@ -44,8 +44,7 @@ them to the hook configuration like so::
         hooks:
         -   id: prospector
             additional_requirements:
-            -   bandit
-            -   mypy
+            - ".[with_mypy,with_bandit]"
 
 This is equivalent to running::
 

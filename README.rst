@@ -161,8 +161,7 @@ them to the hook configuration like so::
         hooks:
         -   id: prospector
             additional_requirements:
-            -   bandit
-            -   mypy
+            - ".[with_mypy,with_bandit]"
 
 For prospector options which affect display only - those which are not configurable using a profile - these can be
 added as command line arguments to the hook. For example::
@@ -173,8 +172,7 @@ added as command line arguments to the hook. For example::
         hooks:
         -   id: prospector
             additional_requirements:
-            -   bandit
-            -   mypy
+            - ".[with_mypy,with_bandit]"
             args:
             -   --summary-only
             -   --zero-exit
