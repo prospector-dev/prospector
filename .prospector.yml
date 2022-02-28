@@ -19,10 +19,10 @@ mypy:
 
 pylint:
   disable:
-    - bad-builtin
     - too-few-public-methods
     - missing-docstring
     - star-args
+    - consider-using-f-string
 
 pep8: full
 

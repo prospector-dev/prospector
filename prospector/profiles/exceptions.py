@@ -1,5 +1,6 @@
 class ProfileNotFound(Exception):
     def __init__(self, name, profile_path):
+        super().__init__()
         self.name = name
         self.profile_path = profile_path
 
@@ -12,6 +13,7 @@ class ProfileNotFound(Exception):
 
 class CannotParseProfile(Exception):
     def __init__(self, filepath, parse_error):
+        super().__init__()
         self.filepath = filepath
         self.parse_error = parse_error
 
