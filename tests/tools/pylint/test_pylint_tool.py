@@ -78,7 +78,7 @@ class TestPylintTool(TestCase):
         found_files = find_python([], [root], False, workdir)
         pylint_tool.configure(config, found_files)
         messages = pylint_tool.run(found_files)
-        self.assertEqual(messages[0].code, "no-name-in-module")
+        self.assertEqual(messages, [])
 
     def test_use_prospector_default_path_finder(self):
         workdir = "tests/tools/pylint/testpath/absolute-import/"
