@@ -24,12 +24,13 @@ pylint:
     - missing-docstring
     - star-args
 
-pep8:
-  full: true
+pep8: full
+
+pycodestyle:
   disable:
     - E126
 
-pep257:
+pydocstyle:
   disable:
     - D100
     - D101
