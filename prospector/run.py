@@ -15,11 +15,6 @@ from prospector.message import Location, Message
 from prospector.tools import DEPRECATED_TOOL_NAMES
 from prospector.tools.utils import CaptureOutput
 
-__all__ = (
-    "Prospector",
-    "main",
-)
-
 
 class Prospector:
     def __init__(self, config: ProspectorConfig):
@@ -119,22 +114,22 @@ class Prospector:
                 sys.stderr.write(fatal.message)
                 sys.exit(2)
 
-            except Exception:  # pylint: disable=broad-except
+            except Exception as ex:
                 if self.config.die_on_tool_error:
-                    raise
-
-                loc = Location(self.config.workdir, None, None, None, None)
-                msg = (
-                    "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)"
-                    % (toolname,)
-                )
-                message = Message(
-                    toolname,
-                    "failure",
-                    loc,
-                    message=msg,
-                )
-                messages.append(message)
+                    raise FatalProspectorException from ex
+                else:
+                    loc = Location(self.config.workdir, None, None, None, None)
+                    msg = (
+                        "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)"
+                        % (toolname,)
+                    )
+                    message = Message(
+                        toolname,
+                        "failure",
+                        loc,
+                        message=msg,
+                    )
+                    messages.append(message)
 
         messages = self.process_messages(found_files, messages)
 
@@ -217,15 +212,15 @@ def main():
     if config.exit_with_zero_on_success():
         # if we ran successfully, and the user wants us to, then we'll
         # exit cleanly
-        return 0
+        sys.exit(0)
 
     # otherwise, finding messages is grounds for exiting with an error
     # code, to make it easier for bash scripts and similar situations
-    # to know if there any errors have been found.
+    # to know if any errors have been found.
     if len(prospector.get_messages()) > 0:
-        return 1
-    return 0
+        sys.exit(1)
+    sys.exit(0)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

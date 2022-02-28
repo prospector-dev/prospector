@@ -1,20 +1,88 @@
 import os
+from pathlib import Path
 from unittest import TestCase
 
 from prospector.profiles.profile import ProspectorProfile
+
+THIS_DIR = Path(__file__).parent
 
 
 class ProfileTestBase(TestCase):
     def setUp(self):
         self._profile_path = [
-            os.path.join(os.path.dirname(__file__), "profiles"),
-            os.path.join(os.path.dirname(__file__), "../../prospector/profiles/profiles"),
+            str(THIS_DIR / "profiles"),
+            str(THIS_DIR / "../../prospector/profiles/profiles"),
         ]
 
-    def _file_content(self, name):
-        path = os.path.join(self._profile_path, name)
-        with open(path) as f:
-            return f.read()
+
+class TestToolRenaming(TestCase):
+    def setUp(self) -> None:
+        self._profile_path = [
+            str(THIS_DIR / "profiles/renaming_pepX/test_inheritance"),
+            str(THIS_DIR / "profiles/renaming_pepX"),
+            str(THIS_DIR / "../../prospector/profiles/profiles"),
+        ]
+
+    def test_old_inherits_from_new(self):
+        profile = ProspectorProfile.load("child_oldname.yaml", self._profile_path, allow_shorthand=False)
+
+        assert profile.is_tool_enabled("pydocstyle")
+        assert profile.is_tool_enabled("pycodestyle")
+        assert "D401" in profile.pydocstyle["enable"]
+        assert "D401" not in profile.pydocstyle["disable"]
+
+        assert "E266" not in profile.pycodestyle["disable"]
+
+        assert 120 == profile.pycodestyle["options"]["max-line-length"]
+
+    def test_new_inherits_from_old(self):
+        """
+        Ensure that `pep8` can inherit from a `pycodecstyle` block and vice versa
+        """
+        profile = ProspectorProfile.load("child_newname.yaml", self._profile_path, allow_shorthand=False)
+
+        assert profile.is_tool_enabled("pydocstyle")
+        assert profile.is_tool_enabled("pycodestyle")
+        assert "D401" not in profile.pydocstyle["disable"]
+        assert "D401" in profile.pydocstyle["enable"]
+
+        assert "E266" not in profile.pycodestyle["disable"]
+
+        assert 140 == profile.pycodestyle["options"]["max-line-length"]
+
+    def test_legacy_names_equivalent(self):
+        """
+        'pep8' tool was renamed to pycodestyle, 'pep257' tool was renamed to pydocstyle
+
+        This test is to ensure that, for backwards compatibility until it is removed in prospector 2.0,
+        that the old names and the new names are equivalent in profiles
+        """
+        profile_old = ProspectorProfile.load("renaming_oldname", self._profile_path, allow_shorthand=False)
+        profile_new = ProspectorProfile.load("renaming_newname", self._profile_path, allow_shorthand=False)
+
+        # do they serialise to the same thing?
+        for tool in ("pycodestyle", "pydocstyle"):
+            old_dict = profile_old.as_dict()[tool]
+            new_dict = profile_new.as_dict()[tool]
+            self.assertListEqual(sorted(old_dict["disable"]), sorted(new_dict["disable"]))
+            self.assertListEqual(sorted(old_dict["enable"]), sorted(new_dict["enable"]))
+        self.assertDictEqual(profile_old.as_dict(), profile_new.as_dict())
+
+        # do they have the same settings for everything?
+        for prof in (profile_old, profile_new):
+            self.assertTrue(prof.is_tool_enabled("pycodestyle"))
+            self.assertTrue(prof.is_tool_enabled("pydocstyle"))
+            self.assertEqual(prof.pycodestyle["options"]["max-line-length"], 120)
+
+    def test_pep8_shorthand_with_newname(self):
+        """
+        'pep8' is still a valid entry in the profile but in the future, only as a shorthand ("pep8: full")
+        however for now, it also has to be able to configure pycodestyle
+        """
+        profile = ProspectorProfile.load("pep8_shorthand_pycodestyle", self._profile_path, allow_shorthand=True)
+        self.assertTrue("full_pep8" in profile.inherit_order)
+        self.assertTrue(profile.is_tool_enabled("pycodestyle"))
+        self.assertEqual(profile.pycodestyle["options"]["max-line-length"], 120)
 
 
 class TestProfileParsing(ProfileTestBase):
@@ -94,6 +162,11 @@ class TestProfileInheritance(ProfileTestBase):
         self.assertDictEqual(profile.pycodestyle, high_strictness.pycodestyle)
         self.assertDictEqual(profile.pyflakes, high_strictness.pyflakes)
 
+    def test_tool_enabled(self):
+        profile = self._load("tool_enabled")
+        self.assertTrue(profile.is_tool_enabled("pydocstyle"))
+        self.assertFalse(profile.is_tool_enabled("pylint"))
+
     def test_pycodestyle_inheritance(self):
         profile = self._load("pep8")
-        self.assertTrue(profile.full_pep8)
+        self.assertTrue("full_pep8" in profile.inherit_order)

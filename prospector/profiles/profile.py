@@ -1,46 +1,18 @@
 import codecs
 import json
 import os
+from typing import Any, Dict, List, Tuple
 
 import yaml
 
+from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
 
 
-class ProfileNotFound(Exception):
-    def __init__(self, name, profile_path):
-        super().__init__()
-        self.name = name
-        self.profile_path = profile_path
-
-    def __repr__(self):
-        return "Could not find profile %s; searched in %s" % (
-            self.name,
-            ":".join(map(str, self.profile_path)),
-        )
-
-
-class CannotParseProfile(Exception):
-    def __init__(self, filepath, parse_error):
-        super().__init__()
-        self.filepath = filepath
-        self.parse_error = parse_error
-
-    def get_parse_message(self):
-        return "%s\n  on line %s : char %s" % (
-            self.parse_error.problem,
-            self.parse_error.problem_mark.line,
-            self.parse_error.problem_mark.column,
-        )
-
-    def __repr__(self):
-        return "Could not parse profile found at %s - it is not valid YAML" % self.filepath
-
-
 class ProspectorProfile:
-    def __init__(self, name, profile_dict, inherit_order):
+    def __init__(self, name: str, profile_dict: Dict[str, Any], inherit_order: List[str]):
         self.name = name
         self.inherit_order = inherit_order
 
@@ -64,28 +36,19 @@ class ProspectorProfile:
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
-        self.python_targets = _ensure_list(profile_dict.get("python-targets", []))
 
-        for tool in TOOLS:
+        for tool in TOOLS.keys():
+            tool_conf = profile_dict.get(tool, {})
+
+            # set the defaults for everything
             conf = {"disable": [], "enable": [], "run": None, "options": {}}
-            if tool == "pep8":
-                pep8dict = profile_dict.get(tool, {})
-                if pep8dict == "none":
-                    pep8dict = {}
-                elif pep8dict == "full":
-                    pep8dict = {"full": True, "run": True}
-                conf.update(pep8dict)
-            else:
-                conf.update(profile_dict.get(tool, {}))
+            # use the "old" tool name
+            conf.update(tool_conf)
 
             if self.max_line_length is not None and tool in ("pylint", "pycodestyle"):
                 conf["options"]["max-line-length"] = self.max_line_length
 
             setattr(self, tool, conf)
-
-    @property
-    def full_pep8(self):
-        return self.pep8.get("full", False)
 
     def get_disabled_messages(self, tool_name):
         disable = getattr(self, tool_name)["disable"]
@@ -117,7 +80,6 @@ class ProspectorProfile:
             "test-warnings": self.test_warnings,
             "strictness": self.strictness,
             "requirements": self.requirements,
-            "python-targets": self.python_targets,
         }
         for tool in TOOLS:
             out[tool] = getattr(self, tool)
@@ -191,12 +153,16 @@ def _simple_merge_dict(priority, base):
 
 def _merge_tool_config(priority, base):
     out = dict(base.items())
-    for key, value in priority.items():
-        # pylint has extra 'load-plugins' option
-        if key in ("run", "load-plugins"):
+
+    # add options that are missing, but keep existing options from the priority dictionary
+    # TODO: write a unit test for this :-|
+    out["options"] = _simple_merge_dict(priority.get("options", {}), base.get("options", {}))
+
+    # copy in some basic pieces
+    for key in ("run", "load-plugins"):
+        value = priority.get(key, base.get(key))
+        if value is not None:
             out[key] = value
-        elif key in ("options",):
-            out[key] = _simple_merge_dict(value, base.get(key, {}))
 
     # anything enabled in the 'priority' dict is removed
     # from 'disabled' in the base dict and vice versa
@@ -263,6 +229,8 @@ def _determine_pep8(profile_dict):
         return "full_pep8", True
     if pep8 == "none":
         return "no_pep8", True
+    elif type(pep8) is dict and pep8.get("full", False):
+        return "full_pep8", True
     return None, False
 
 
@@ -321,7 +289,10 @@ def _append_profiles(name, profile_path, data, inherit_list, allow_shorthand=Fal
     return data, inherit_list
 
 
-def _load_and_merge(name_or_path, profile_path, allow_shorthand=True, forced_inherits=None):
+def _load_and_merge(
+    name_or_path, profile_path, allow_shorthand: bool = True, forced_inherits: List[str] = None
+) -> Tuple[Dict[str, Any], List[str]]:
+
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
         name_or_path,
@@ -360,6 +331,49 @@ def _load_and_merge(name_or_path, profile_path, allow_shorthand=True, forced_inh
     return merged, inherit_list
 
 
+def _transform_legacy(profile_dict):
+    """
+    After pep8 was renamed to pycodestyle, this pre-filter just moves profile
+    config blocks using the old name to use the new name, merging if both are
+    specified.
+
+    Same for pep257->pydocstyle
+    """
+    out = {}
+
+    # copy in existing pep8/pep257 using new names to start
+    if "pycodestyle" in profile_dict:
+        out["pycodestyle"] = profile_dict["pycodestyle"]
+    if "pydocstyle" in profile_dict:
+        out["pydocstyle"] = profile_dict["pydocstyle"]
+
+    # pep8 is tricky as it's overloaded as a tool configuration and a shorthand
+    # first, is this the short "pep8: full" version or a configuration of the
+    # pycodestyle tool using the old name?
+    if "pep8" in profile_dict:
+        pep8conf = profile_dict["pep8"]
+        if type(pep8conf) is dict:
+            # merge in with existing config if there is any
+            out["pycodestyle"] = _simple_merge_dict(out.get("pycodestyle", {}), pep8conf)
+        else:
+            # otherwise it's shortform, just copy it in directly
+            out["pep8"] = pep8conf
+        del profile_dict["pep8"]
+
+    if "pep257" in profile_dict:
+        out["pydocstyle"] = _simple_merge_dict(out.get("pydocstyle", {}), profile_dict["pep257"])
+        del profile_dict["pep257"]
+
+    # now just copy the rest in
+    for key, value in profile_dict.items():
+        if key in ("pycodestyle", "pydocstyle"):
+            # already handled these
+            continue
+        out[key] = value
+
+    return out
+
+
 def _load_profile(
     name_or_path,
     profile_path,
@@ -370,6 +384,8 @@ def _load_profile(
 ):
     # recursively get the contents of the basic profile and those it inherits from
     base_contents = _load_content(name_or_path, profile_path)
+
+    base_contents = _transform_legacy(base_contents)
 
     inherit_order = [name_or_path]
     shorthands_found = shorthands_found or set()

@@ -6,9 +6,11 @@ except ImportError:
     # (rather than memoizing everything ourselves)
     cached_property = property
 
+
 from pathlib import Path
 from typing import Callable, Iterable, Iterator, List
 
+from prospector.exceptions import PermissionMissing
 from prospector.pathutils import is_python_module, is_python_package, is_virtualenv
 
 _SKIP_DIRECTORIES = (".git", ".tox", ".mypy_cache", ".pytest_cache", ".venv", "__pycache__", "node_modules")
@@ -132,8 +134,11 @@ class FileFinder:
         """
         dirs = set()
         for directory in self._provided_dirs:
-            for obj in self._walk(directory):
-                if obj.is_dir():
-                    dirs.add(obj)
+            try:
+                for obj in self._walk(directory):
+                    if obj.is_dir():
+                        dirs.add(obj)
+            except PermissionError as err:
+                raise PermissionMissing(obj) from err
 
         return self._filter(dirs)

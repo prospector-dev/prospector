@@ -1,12 +1,7 @@
 import tokenize
 from pathlib import Path
 
-
-class CouldNotHandleEncoding(Exception):
-    def __init__(self, path, cause):
-        super().__init__(message=path)
-        self.path = path
-        self.cause = cause
+from prospector.exceptions import CouldNotHandleEncoding, PermissionMissing
 
 
 def read_py_file(filepath: Path):
@@ -15,6 +10,9 @@ def read_py_file(filepath: Path):
     try:
         with filepath.open("rb") as pyfile:
             tokenize.detect_encoding(pyfile.readline)
+    except PermissionError as err:
+        raise PermissionMissing(filepath) from err
+
     except SyntaxError as err:
         # this warning is issued:
         #   (1) in badly authored files (contains non-utf8 in a comment line)

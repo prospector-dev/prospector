@@ -11,6 +11,34 @@ Version 1.8.0 - WIP
 
 * Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
+
+Version 1.7.3
+-------------
+
+The war on bugs.
+
+**Fixes**:
+
+* Autodetect now does not die if a user does not have permissions (related to `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_)
+* Fixed that some pylint documentation warning messages were not correctly included in the list of documentation warnings to squash if doc warnings are not desired.
+* Fixed the exit code for prospector - it was always ``0`` after the move to using poetry for packaging instead of ``1`` if errors were found (unless ``--zero-exit``) was used. This now exits with the correct code based on the documented (and previous) behaviour.
+* Fix that ``pep8`` would overwrite instead of inherit from previous ``pycodestyle`` blocks, same with pep257 - `#491 (comment) <https://github.com/PyCQA/prospector/issues/491#issuecomment-1053539711>`_
+* Fix the pre-commit hook, as it could not run without being installed ``[with_everything]``, due to the "NotAvailableTool" class not properly implementing the abstract base class.
+* Improved documentation about the pre-commit hook as well to clarify its use better - `#484 <https://github.com/PyCQA/prospector/issues/484>`_
+
+
+Version 1.7.2
+-------------
+
+More bugfixes!
+
+**Fixes**:
+
+* Fix that ``pep8`` and ``pep257`` sections were renamed but the old deprecated values were not properly used to configure ``pycodestyle`` and ``pydocstyle`` - `#491 <https://github.com/PyCQA/prospector/issues/491>`_
+* Better handling for when the user running prospector is not able to read a file or directory - `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_
+
+>>>>>>> master
+
 Version 1.7.1
 -------------
 
@@ -18,12 +46,12 @@ Lots of smaller bugfixes.
 
 **Fixes**:
 
-* Prospector now configures pylint using settings found in `pyproject.toml` or `setup.cfg`, not only `.pylintrc` - `#485 <https://github.com/PyCQA/prospector/issues/485>_`
-* Fixed `--no-style-warnings` command line argument no longer warning after renaming `pep8` to `pycodestyle` - `#488 <https://github.com/PyCQA/prospector/issues/488>_`
-* Documentation is building again - `#473 <https://github.com/PyCQA/prospector/issues/473>_`
-* `--with-tool` flag now respects - but overrides - tools disabled in profiles - `#447 <https://github.com/PyCQA/prospector/issues/447>_`
-* Fixed crash with merging multiple import warnings - `#477 <https://github.com/PyCQA/prospector/issues/477>_`
-* Fixed segfault when analysing code using cartopy - `#403 <https://github.com/PyCQA/prospector/issues/403>_`
+* Prospector now configures pylint using settings found in ``pyproject.toml`` or ``setup.cfg``, not only ``.pylintrc`` - `#485 <https://github.com/PyCQA/prospector/issues/485>`_
+* Fixed ``--no-style-warnings`` command line argument no longer warning after renaming ``pep8`` to ``pycodestyle`` - `#488 <https://github.com/PyCQA/prospector/issues/488>`_
+* Documentation is building again - `#473 <https://github.com/PyCQA/prospector/issues/473>`_
+* ``--with-tool`` flag now respects - but overrides - tools disabled in profiles - `#447 <https://github.com/PyCQA/prospector/issues/447>`_
+* Fixed crash with merging multiple import warnings - `#477 <https://github.com/PyCQA/prospector/issues/477>`_
+* Fixed segfault when analysing code using cartopy - `#403 <https://github.com/PyCQA/prospector/issues/403>`_
 
 Version 1.7.0
 -------------
@@ -32,15 +60,18 @@ This is mostly a "tidying up" release but some things have changed which may cau
 
 **New**:
 
-* Added a `--quiet` command line option to suppress all output. Useful if you just want to know the exit code of prospector for scripting.
-* Removed the prospector "indent checker" since this is now no longer in pylint `#482 <https://github.com/PyCQA/prospector/issues/482>_`
+* Added a ``--quiet`` command line option to suppress all output. Useful if you just want to know the exit code of prospector for scripting.
+* Removed the prospector "indent checker" since this is now no longer in pylint `#482 <https://github.com/PyCQA/prospector/issues/482>`_
 
 **Fixes**:
 
-**Deprecation warning:**
-* Tools `pep8` and `pep257` have been renamed to `pycodestyle` and `pydocstyle` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_.
+`Deprecation warning:`
+
+* Tools ``pep8`` and ``pep257`` have been renamed to ``pycodestyle`` and ``pydocstyle`` respectively. This is because the tools themselves were renamed years ago - See `#222 <https://github.com/PyCQA/prospector/issues/222>`_.
+
 Note that this means that prospector profiles and message output uses this new name instead of the old name, so you will need to update your configuration. The old names will still work, but this legacy behaviour will be removed in prospector 2.0
-* There is now a `--legacy-tool-names` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.o
+
+* There is now a ``--legacy-tool-names`` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.0
 
 **Tidying up internals**
 
@@ -58,18 +89,17 @@ These are all internal prospector code quality improvements. Ideally, they shoul
 Version 1.6.1
 -------------
 
-- [#454](https://github.com/PyCQA/prospector/issues/454) Update pyflakes to 2.*
+- Update pyflakes to 2.* `#454 <https://github.com/PyCQA/prospector/issues/454)>`_
 
 Version 1.6.0
 -------------
 
-- [#478](https://github.com/PyCQA/prospector/issues/478) Fixed incompatible version specification of pylint-plugin-utils. This
-  now requires pylint-django of at least 2.5.
+- Fixed incompatible version specification of pylint-plugin-utils. This now requires pylint-django of at least 2.5. `#478 <https://github.com/PyCQA/prospector/issues/478>`_
 
-*note* This release drops support for python `3.6.1`
+*note* This release drops support for python ``3.6.1``
 
 Version 1.5.3 and 1.5.3dev0 and 1.5.3.1
--------------
+---------------------------------------
 
 - `#465 <https://github.com/PyCQA/prospector/issues/465>`_ Remove unnecessary configuration reset to fix pylint>=2.12 compatibility
 - Version 1.5.3.1 was needed to unpin the pylint dependency to actually use the fix for compatibility.
@@ -82,10 +112,10 @@ Version 1.5.2
 Version 1.5.1
 -------------
 
-- `#436 <https://github.com/PyCQA/prospector/issues/438>`_ Promoting pre-release to release as it appears to work
+- `#438 <https://github.com/PyCQA/prospector/issues/438>`_ Promoting pre-release to release as it appears to work
 
 Version 1.5.0.1
--------------
+---------------
 
 - `#433 <https://github.com/PyCQA/prospector/issues/433>`_ Attempted fix of flake8 dependency versioning conflict
 
@@ -308,13 +338,13 @@ Version 0.11
 * Compatibility fixes to work with pylint>=1.5
 * McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)
 * Autodetect of libraries will now not search inside virtualenvironments
-* `#142 <https://github.com/PyCQA/prospector/pull/142/>`_ better installation documentation in README (thanks [@ExcaliburZero](https://github.com/ExcaliburZero))
-* `#141 <https://github.com/PyCQA/prospector/issues/141/>`_ profile-validator no longer complains about member-warnings (thanks [@alefteris](https://github.com/alefteris))
-* `#140 <https://github.com/PyCQA/prospector/pull/140/>`_ emacs formatter includes character position (thanks [@philroberts](https://github.com/philroberts))
-* `#138 <https://github.com/PyCQA/prospector/pull/138/>`_ docs fixed for 'output-format' profile option (thanks [@faulkner](https://github.com/faulkner))
-* `#137 <https://github.com/PyCQA/prospector/pull/137/>`_ fixed various formatting issues in docs (thanks [@danstender](https://github.com/danstender))
+* `#142 <https://github.com/PyCQA/prospector/pull/142/>`_ better installation documentation in README (thanks `@ExcaliburZero <https://github.com/ExcaliburZero>`_)
+* `#141 <https://github.com/PyCQA/prospector/issues/141/>`_ profile-validator no longer complains about member-warnings (thanks `@alefteris <https://github.com/alefteris>`_)
+* `#140 <https://github.com/PyCQA/prospector/pull/140/>`_ emacs formatter includes character position (thanks `@philroberts <https://github.com/philroberts>`_)
+* `#138 <https://github.com/PyCQA/prospector/pull/138/>`_ docs fixed for 'output-format' profile option (thanks `@faulkner <https://github.com/faulkner>`_)
+* `#137 <https://github.com/PyCQA/prospector/pull/137/>`_ fixed various formatting issues in docs (thanks `@danstender <https://github.com/danstender>`_)
 * `#132 <https://github.com/PyCQA/prospector/issues/132/>`_ Added support for custom flask linting thanks to the awesome [pylint-flask](https://github.com/jschaf/pylint-flask) plugin by [jschaf](https://github.com/jschaf)
-* `#131 <https://github.com/PyCQA/prospector/pull/131/>`_, `#134 <https://github.com/PyCQA/prospector/pull/134/>`_ Custom pylint plugins are now loaded from existing .pylintrc files if present (thanks [@kaidokert](https://github.com/kaidokert) and [@antoviaque](https://github.com/antoviaque))
+* `#131 <https://github.com/PyCQA/prospector/pull/131/>`_, `#134 <https://github.com/PyCQA/prospector/pull/134/>`_ Custom pylint plugins are now loaded from existing .pylintrc files if present (thanks `@kaidokert <https://github.com/kaidokert>`_ and `@antoviaque <https://github.com/antoviaque>`_)
 
 Version 0.10.2
 ---------------
@@ -401,14 +431,14 @@ Version 0.8.3
 Version 0.8.2
 ---------------
 * Version loading in setup.py no longer imports the prospector module (which could lead to various weirdnesses when installing on different platforms)
-* `#82 <https://github.com/PyCQA/prospector/issues/82/>`_ resolves regression in adapter library detection raising, ``ValueError: too many values to unpack``. provided by [@jquast](https://github.com/jquast)
-* `#83 <https://github.com/PyCQA/prospector/issues/83/>`_ resolves regression when adapter library detects django, ``TypeError: '_sre.SRE_Pattern' object is not iterable``. provided by [@jquast](https://github.com/jquast)
+* `#82 <https://github.com/PyCQA/prospector/issues/82/>`_ resolves regression in adapter library detection raising, ``ValueError: too many values to unpack``. provided by `@jquast <https://github.com/jquast>`_
+* `#83 <https://github.com/PyCQA/prospector/issues/83/>`_ resolves regression when adapter library detects django, ``TypeError: '_sre.SRE_Pattern' object is not iterable``. provided by `@jquast <https://github.com/jquast>`_
 
 Version 0.8.1
 ---------------
 * Strictness now also changes which pep257 messages are output
 * pep257 and vulture messages are now combined and 'blended' with other tools
-* `#80 <https://github.com/PyCQA/prospector/issues/80/>`_ Fix for Python3 issue when detecting libraries, provided by [@smspillaz](https://github.com/smspillaz)
+* `#80 <https://github.com/PyCQA/prospector/issues/80/>`_ Fix for Python3 issue when detecting libraries, provided by `@smspillaz <https://github.com/smspillaz>`_
 
 Version 0.8
 ---------------
@@ -538,14 +568,14 @@ Version 0.4.1
 Version 0.4
 ---------------
 * Added a changelog
-* Added support for the [dodgy](https://github.com/landscapeio/dodgy) codebase checker
-* Added support for pep8 (thanks to [Jason Simeone](https://github.com/jayclassless))
-* Added support for pyflakes (thanks to [Jason Simeone](https://github.com/jayclassless))
-* Added support for mccabe (thanks to [Jason Simeone](https://github.com/jayclassless))
+* Added support for the `dodgy <https://github.com/landscapeio/dodgy>`_ codebase checker
+* Added support for pep8 (thanks to `Jason Simeone <https://github.com/jayclassless>`_)
+* Added support for pyflakes (thanks to `Jason Simeone <https://github.com/jayclassless>`_)
+* Added support for mccabe (thanks to `Jason Simeone <https://github.com/jayclassless>`_)
 * Replaced Pylint W0312 with a custom checker. This means that warnings are only generated for inconsistent indentation characters, rather than warning if spaces were not used.
 * Some messages will now be combined if Pylint generates multiple warnings per line for what is the same cause. For example, 'unused import from wildcard import' messages are now combined rather than having one message per unused import from that line.
 * Messages from multiple tools will be merged if they represent the same problem.
 * Tool failure no longer kills the Prospector process but adds a message instead.
 * Tools can be enabled or disabled from profiles.
-* All style warnings can be suppressed using the `--no-style-warnings` command line switch.
-* Uses a newer version of [pylint-django](https://github.com/landscapeio/pylint-django) for improved analysis of Django-based code.
+* All style warnings can be suppressed using the ``--no-style-warnings`` command line switch.
+* Uses a newer version of `pylint-django <https://github.com/landscapeio/pylint-django>`_ for improved analysis of Django-based code.

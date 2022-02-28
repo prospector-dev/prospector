@@ -50,8 +50,9 @@ For example to install an optional tool such as ``pyroma``::
     pip install prospector[with_pyroma]
 
 
-.. Note:: Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped
-   ::
+.. Note::
+
+   Some shells (such as ``Zsh``, the default shell of macOS Catalina) require brackets to be escaped::
 
        pip install prospector\[with_pyroma\]
 
@@ -65,9 +66,6 @@ For example to install mypy and bandit::
 And to install all optional extra tools at the same time, install prospector using the ``with_everything`` option::
 
     pip install prospector[with_everything]
-
-
-
 
 
 For best results, you should install prospector to the same place as your project and its dependencies. That is,
@@ -92,6 +90,8 @@ This will output a list of messages pointing out potential problems or errors, f
         Abstract class is only referenced 1 times
 
 Read about the full list of options in the :doc:`usage <usage>` page.
+
+It is also possible to use prospector as a :doc:`pre-commit hook <pre-commit>`.
 
 
 Behaviour
@@ -146,6 +146,12 @@ There is more detail about profiles and how to use them on
 :doc:`the profiles documentation <profiles>` page.
 
 
+Pre-commit Hook
+```````````````
+
+Prospector can be configured as a `pre-commit <https://pre-commit.com>`_ hook.
+
+For more information see :doc:`the pre-commit documentation <pre-commit>`.
 
 
 License

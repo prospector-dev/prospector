@@ -1,0 +1,13 @@
+
+pydocstyle:
+  run: true
+  disable:
+    - D400
+    - D401
+
+pycodestyle:
+  run: true
+  disable:
+    - E266
+  options:
+    max-line-length: 120

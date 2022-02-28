@@ -1,0 +1,5 @@
+pydocstyle:
+  run: no
+
+pylint:
+  run: yes

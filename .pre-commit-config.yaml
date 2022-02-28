@@ -23,6 +23,15 @@ repos:
         args:
             - --ignore-words-list=nin
             - --skip=poetry.lock
+-   repo: https://github.com/PyCQA/prospector
+    rev: master
+    hooks:
+    -       id: prospector
+            additional_dependencies:
+                - mypy
+            args:
+                - --summary-only
+                - --zero-exit
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
@@ -30,7 +39,7 @@ repos:
         args:
         -    --max-line-length=120
 -   repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.9.3
+    rev: v5.10.1
     hooks:
     -   id: isort
         args: ["--profile", "black", "--filter-files"]

@@ -11,6 +11,7 @@ Contents
    profiles
    suppression
    supported_tools
+   pre-commit
    contrib
 
 

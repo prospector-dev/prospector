@@ -7,6 +7,7 @@ from requirements_detector import find_requirements
 from requirements_detector.detect import RequirementsNotFound
 
 from prospector import encoding
+from prospector.exceptions import PermissionMissing
 from prospector.pathutils import is_virtualenv
 
 POSSIBLE_LIBRARIES = ("django", "celery", "flask")
@@ -45,22 +46,25 @@ def find_from_path(path: Path):
     names = set()
     max_possible = len(POSSIBLE_LIBRARIES)
 
-    for item in path.iterdir():
-        if item.is_dir():
-            if is_virtualenv(item):
-                continue
-            names |= find_from_path(item)
-        elif not item.is_symlink() and item.suffix == ".py":
-            try:
-                contents = encoding.read_py_file(item)
-                names |= find_from_imports(contents)
-            except encoding.CouldNotHandleEncoding as err:
-                # TODO: this output will break output formats such as JSON
-                warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
+    try:
+        for item in path.iterdir():
+            if item.is_dir():
+                if is_virtualenv(item):
+                    continue
+                names |= find_from_path(item)
+            elif not item.is_symlink() and item.suffix == ".py":
+                try:
+                    contents = encoding.read_py_file(item)
+                    names |= find_from_imports(contents)
+                except encoding.CouldNotHandleEncoding as err:
+                    # TODO: this output will break output formats such as JSON
+                    warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
 
-        if len(names) == max_possible:
-            # don't continue on recursing, there's no point!
-            break
+            if len(names) == max_possible:
+                # don't continue on recursing, there's no point!
+                break
+    except PermissionError as err:
+        raise PermissionMissing(path) from err
 
     return names
 

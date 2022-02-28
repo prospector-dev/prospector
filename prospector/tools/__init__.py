@@ -11,6 +11,9 @@ from prospector.tools.pylint import PylintTool
 
 def _tool_not_available(name, install_option_name):
     class NotAvailableTool(ToolBase):
+        def configure(self, prospector_config, found_files):
+            pass
+
         def run(self, _):
             raise FatalProspectorException(
                 "\nCannot run tool %s as support was not installed.\n"
@@ -40,10 +43,8 @@ TOOLS = {
     "mccabe": McCabeTool,
     "pyflakes": PyFlakesTool,
     "pycodestyle": PycodestyleTool,
-    "pep8": PycodestyleTool,  # TODO: remove this eventually (name is deprecated)
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
-    "pep257": PydocstyleTool,  # TODO: remove this eventually (name is deprecated)
     "profile-validator": ProfileValidationTool,
     "vulture": _optional_tool("vulture"),
     "pyroma": _optional_tool("pyroma"),
