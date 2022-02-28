@@ -153,7 +153,7 @@ text to your repositories' ``.pre-commit-config.yaml``::
         -   id: prospector
 
 This only installs base prospector - if you also use optional tools, for example bandit or mypy, then you can add
-them to the hook configuration like so:
+them to the hook configuration like so::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
@@ -165,7 +165,7 @@ them to the hook configuration like so:
             -   mypy
 
 For prospector options which affect display only - those which are not configurable using a profile - these can be
-added as command line arguments to the hook. For example:
+added as command line arguments to the hook. For example::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
