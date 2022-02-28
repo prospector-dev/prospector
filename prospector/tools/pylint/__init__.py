@@ -29,7 +29,6 @@ class PylintTool(ToolBase):
 
     def _prospector_configure(self, prospector_config, linter):
         errors = []
-        linter.load_default_plugins()
 
         if "django" in prospector_config.libraries:
             linter.load_plugin_modules(["pylint_django"])
@@ -90,7 +89,6 @@ class PylintTool(ToolBase):
 
     def _pylintrc_configure(self, pylintrc, linter):
         errors = []
-        linter.load_default_plugins()
         are_plugins_loaded = linter.config_from_file(pylintrc)
         if not are_plugins_loaded and hasattr(linter.config, "load_plugins"):
             for plugin in linter.config.load_plugins:
@@ -102,7 +100,6 @@ class PylintTool(ToolBase):
 
     def configure(self, prospector_config, found_files):
 
-        config_messages = []
         extra_sys_path = found_files.get_minimal_syspath()
 
         check_paths = self._get_pylint_check_paths(found_files)
@@ -112,11 +109,8 @@ class PylintTool(ToolBase):
 
         linter = ProspectorLinter(found_files)
 
-        ext_found = False
-        configured_by = None
-
         config_messages, configured_by = self._get_pylint_configuration(
-            check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
+            check_paths, linter, prospector_config, pylint_options
         )
 
         # we don't want similarity reports right now
@@ -170,9 +164,13 @@ class PylintTool(ToolBase):
         check_paths = [found_files.to_absolute_path(p) for p in check_paths]
         return check_paths
 
-    def _get_pylint_configuration(
-        self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
-    ):
+    def _get_pylint_configuration(self, check_paths, linter, prospector_config, pylint_options):
+        self._args = linter.load_command_line_configuration(check_paths)
+        linter.load_default_plugins()
+
+        config_messages = self._prospector_configure(prospector_config, linter)
+        configured_by = None
+
         if prospector_config.use_external_config("pylint"):
             # try to find a .pylintrc
             pylintrc = pylint_options.get("config_file")
@@ -191,13 +189,8 @@ class PylintTool(ToolBase):
             if pylintrc is not None:
                 # load it!
                 configured_by = pylintrc
-                ext_found = True
-
-                self._args = linter.load_command_line_configuration(check_paths)
                 config_messages += self._pylintrc_configure(pylintrc, linter)
-        if not ext_found:
-            self._args = linter.load_command_line_configuration(check_paths)
-            config_messages = self._prospector_configure(prospector_config, linter)
+
         return config_messages, configured_by
 
     def _combine_w0614(self, messages):

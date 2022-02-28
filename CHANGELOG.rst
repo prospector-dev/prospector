@@ -1,7 +1,20 @@
 #########
 Changelog
 #########
- this here
+
+Version 1.7.4
+-------------
+
+Mea culpa release
+
+**Fix**
+
+The effort to allow pylint configuration in ``pyproject.toml`` to be used as an external config source (issue here <https://github.com/PyCQA/prospector/issues/485>)`_ had the unintended side effect where any project using poetry would now use that configuration and thus would ignore the pylint configuration in the profile. This was true even if the ``pyproject.toml`` had no pylint directives in it.
+
+The behaviour has now been fixed where pylint will be configured using configuration from the profile *first* and then if any additional settings are found in a ``pylintrc`` or ``pyproject.toml`` or ``setup.cfg`` then these will override the profile configuration, instead of replacing it entirely.
+
+This also has the benefit of fixing `#277 <https://github.com/PyCQA/prospector/issues/227>`_.
+
 Version 1.7.3
 -------------
 
