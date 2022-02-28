@@ -20,23 +20,33 @@ CONFIG_DEPRECATED_SETTING = "deprecated"
 CONFIG_DEPRECATED_CODE = "deprecated-tool-code"
 
 
+def _tool_names(with_deprecated: bool = True):
+    # TODO: this is currently a circular import, which is why it is not at the top of
+    #       the module. However, there's no obvious way to get around this right now...
+    from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS  # pylint: disable=import-outside-toplevel
+
+    tools = list(TOOLS.keys())
+    if with_deprecated:
+        tools += DEPRECATED_TOOL_NAMES.keys()
+    return tools
+
+
 class ProfileValidationTool(ToolBase):
 
     LIST_SETTINGS = ("inherits", "uses", "ignore", "ignore-paths", "ignore-patterns")
-    ALL_SETTINGS = LIST_SETTINGS + (
+    BOOL_SETTINGS = ("doc-warnings", "test-warnings", "autodetect")
+    OTHER_SETTINGS = (
         "strictness",
-        "autodetect",
         "max-line-length",
         "output-format",
         "output-target",
-        "doc-warnings",
-        "test-warnings",
         "member-warnings",
+        "pep8",
         # bit of a grim hack; prospector does not use the following but Landscape does:
         # TODO: think of a better way to avoid Landscape-specific config leaking into prospector
-        "requirements",
         "python-targets",
     )
+    ALL_SETTINGS = LIST_SETTINGS + BOOL_SETTINGS + OTHER_SETTINGS
 
     def __init__(self):
         self.to_check = set(AUTO_LOADED_PROFILES)
@@ -48,14 +58,7 @@ class ProfileValidationTool(ToolBase):
 
         self.ignore_codes = prospector_config.get_disabled_messages("profile-validator")
 
-    def tool_names(self):  # pylint: disable=no-self-use, cyclic-import
-        # TODO: this is currently a circular import, which is why it is not at the top of
-        # the module. However, there's no obvious way to get around this right now...
-        from prospector.tools import TOOLS  # pylint: disable=import-outside-toplevel
-
-        return TOOLS.keys()
-
-    def validate(self, filepath: Path):
+    def validate(self, filepath: Path):  # noqa
         # pylint: disable=too-many-locals, too-many-branches
         # TODO: this should be broken down into smaller pieces
         messages = []
@@ -86,7 +89,7 @@ class ProfileValidationTool(ToolBase):
             )
             return messages
 
-        for setting in ("doc-warnings", "test-warnings", "autodetect"):
+        for setting in ProfileValidationTool.BOOL_SETTINGS:
             if not isinstance(parsed.get(setting, False), bool):
                 add_message(
                     CONFIG_SETTING_MUST_BE_BOOL,
@@ -104,9 +107,10 @@ class ProfileValidationTool(ToolBase):
         if "strictness" in parsed:
             possible = ("veryhigh", "high", "medium", "low", "verylow", "none")
             if parsed["strictness"] not in possible:
+                _joined = ", ".join(possible)
                 add_message(
                     CONFIG_INVALID_VALUE,
-                    '"strictness" must be one of %s' % ", ".join(possible),
+                    f'"strictness" must be one of {_joined}',
                     "strictness",
                 )
 
@@ -115,9 +119,10 @@ class ProfileValidationTool(ToolBase):
             parsed_list = parsed["uses"] if isinstance(parsed["uses"], list) else [parsed["uses"]]
             for uses in parsed_list:
                 if uses not in possible:
+                    _joined = ", ".join(possible)
                     add_message(
                         CONFIG_INVALID_VALUE,
-                        '"%s" is not valid for "uses", must be one of %s' % (uses, ", ".join(possible)),
+                        f'"{uses}" is not valid for "uses", must be one of {_joined}',
                         uses,
                     )
 
@@ -137,7 +142,7 @@ class ProfileValidationTool(ToolBase):
                 if str(target) not in ("2", "3"):
                     add_message(
                         CONFIG_INVALID_VALUE,
-                        '"%s" is not valid for "python-targets", must be either 2 or 3' % target,
+                        f'"{target}" is not valid for "python-targets", must be either 2 or 3',
                         str(target),
                     )
 
@@ -154,19 +159,43 @@ class ProfileValidationTool(ToolBase):
                 add_message(CONFIG_SETTING_SHOULD_BE_LIST, f'"{key}" should be a list', key)
 
         for key in parsed.keys():
-            if key not in ProfileValidationTool.ALL_SETTINGS and key not in self.tool_names():
+            if key not in ProfileValidationTool.ALL_SETTINGS and key not in _tool_names():
                 add_message(
                     CONFIG_UNKNOWN_SETTING,
-                    '"%s" is not a valid prospector setting' % key,
+                    f'"{key}" is not a valid prospector setting',
                     key,
+                )
+
+        if "pep257" in parsed:
+            add_message(
+                CONFIG_DEPRECATED_CODE,
+                "pep257 tool has been renamed to 'pydocstyle'. " "The name pep257 will be removed in prospector 2.0+.",
+                "pep257",
+            )
+
+        if "pep8" in parsed:
+            pep8val = parsed["pep8"]
+            if isinstance(pep8val, dict):
+                add_message(
+                    CONFIG_DEPRECATED_CODE,
+                    "pep8 tool has been renamed to 'pycodestyle'. "
+                    "Using pep8 to configure the tool will be removed in prospector 2.0+.",
+                    "pep8",
+                )
+            elif pep8val not in ("full", "none"):
+                add_message(
+                    CONFIG_UNKNOWN_SETTING,
+                    f"{pep8val} is not a valid setting for pep8 - must be either 'full' or 'none'",
+                    "pep8",
                 )
 
         if "pyflakes" in parsed:
             for code in parsed["pyflakes"].get("enable", []) + parsed["pyflakes"].get("disable", []):
                 if code in pyflakes.LEGACY_CODE_MAP:
+                    _legacy = pyflakes.LEGACY_CODE_MAP[code]
                     add_message(
                         CONFIG_DEPRECATED_CODE,
-                        "Pyflakes code %s was renamed to %s" % (code, pyflakes.LEGACY_CODE_MAP[code]),
+                        f"Pyflakes {code} was renamed to {_legacy}",
                         "pyflakes",
                     )
 

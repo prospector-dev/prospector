@@ -58,7 +58,7 @@ class MypyTool(ToolBase):
         strict_optional = options.get("strict-optional", False)
         namespace_packages = options.get("namespace-packages", False)
 
-        self.options.append("--follow-imports=%s" % follow_imports)
+        self.options.append(f"--follow-imports={follow_imports}")
 
         if strict:
             self.options.append("--strict")
@@ -70,13 +70,13 @@ class MypyTool(ToolBase):
             self.options.append("--implict-optional")
 
         if platform:
-            self.options.append("--platform %s" % platform)
+            self.options.append(f"--platform {platform}")
 
         if python_2_mode:
             self.options.append("--py2")
 
         if python_version:
-            self.options.append("--python-version %s" % python_version)
+            self.options.append(f"--python-version {python_version}")
 
         if strict_optional:
             self.options.append("--strict-optional")
@@ -86,7 +86,7 @@ class MypyTool(ToolBase):
 
         for list_option in MYPY_OPTIONS:
             for entry in options.get(list_option, []):
-                self.options.append("--%s-%s" % (list_option, entry))
+                self.options.append(f"--{list_option}-{entry}")
 
     def run(self, found_files):
         paths = [str(path) for path in found_files.python_modules]

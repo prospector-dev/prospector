@@ -38,7 +38,7 @@ class McCabeTool(ToolBase):
                         code_file,
                         "mccabe",
                         "MC0000",
-                        message="Could not handle the encoding of this file: %s" % err.encoding,
+                        message=f"Could not handle the encoding of this file: {err.encoding}",
                     )
                 )
                 continue
@@ -71,11 +71,7 @@ class McCabeTool(ToolBase):
                         source="mccabe",
                         code="MC0001",
                         location=location,
-                        message="%s is too complex (%s)"
-                        % (
-                            graph.entity,
-                            complexity,
-                        ),
+                        message=f"{graph.entity} is too complex ({complexity})",
                     )
                     messages.append(message)
 

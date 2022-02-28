@@ -31,7 +31,6 @@ class PylintTool(ToolBase):
 
     def _prospector_configure(self, prospector_config, linter):
         errors = []
-        linter.load_default_plugins()
 
         if "django" in prospector_config.libraries:
             linter.load_plugin_modules(["pylint_django"])
@@ -45,7 +44,7 @@ class PylintTool(ToolBase):
             try:
                 linter.load_plugin_modules([plugin])
             except ImportError:
-                errors.append(self._error_message(profile_path, "Could not load plugin %s" % plugin))
+                errors.append(self._error_message(profile_path, f"Could not load plugin {plugin}"))
 
         for msg_id in prospector_config.get_disabled_messages("pylint"):
             try:
@@ -91,20 +90,18 @@ class PylintTool(ToolBase):
 
     def _pylintrc_configure(self, pylintrc, linter):
         errors = []
-        linter.load_default_plugins()
         are_plugins_loaded = linter.config_from_file(pylintrc)
         if not are_plugins_loaded and hasattr(linter.config, "load_plugins"):
             for plugin in linter.config.load_plugins:
                 try:
                     linter.load_plugin_modules([plugin])
                 except ImportError:
-                    errors.append(self._error_message(pylintrc, "Could not load plugin %s" % plugin))
+                    errors.append(self._error_message(pylintrc, f"Could not load plugin {plugin}"))
         return errors
 
     def configure(self, prospector_config, found_files: FileFinder):
 
-        config_messages = []
-        extra_sys_path = found_files.make_syspath()
+        extra_sys_path = found_files.get_minimal_syspath()
 
         check_paths = found_files.python_packages + found_files.python_modules
 
@@ -113,11 +110,8 @@ class PylintTool(ToolBase):
 
         linter = ProspectorLinter(found_files)
 
-        ext_found = False
-        configured_by = None
-
         config_messages, configured_by = self._get_pylint_configuration(
-            check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
+            check_paths, linter, prospector_config, pylint_options
         )
 
         # we don't want similarity reports right now
@@ -145,20 +139,23 @@ class PylintTool(ToolBase):
             # does not appear first in the path
             sys.path = [str(path.absolute()) for path in extra_sys_path] + sys.path
 
-    def _get_pylint_configuration(
-        self, check_paths, config_messages, configured_by, ext_found, linter, prospector_config, pylint_options
-    ):
+    def _get_pylint_configuration(self, check_paths, linter, prospector_config, pylint_options):
+        self._args = linter.load_command_line_configuration(check_paths)
+        linter.load_default_plugins()
+
+        config_messages = self._prospector_configure(prospector_config, linter)
+        configured_by = None
+
         if prospector_config.use_external_config("pylint"):
             # try to find a .pylintrc
             pylintrc = pylint_options.get("config_file")
             external_config = prospector_config.external_config_location("pylint")
-            if pylintrc is None or external_config:
-                pylintrc = external_config
-            if pylintrc is None:
-                pylintrc = find_pylintrc()
-            if pylintrc is None:
+            pylintrc = pylintrc or external_config or find_pylintrc()
+            if pylintrc is None:  # nothing explicitly configured
                 for possible in (".pylintrc", "pylintrc", "pyproject.toml", "setup.cfg"):
                     pylintrc_path = os.path.join(prospector_config.workdir, possible)
+                    # TODO: pyproject and setup.cfg might not actually have any pylint config
+                    #       in, they should be skipped in that case
                     if os.path.exists(pylintrc_path):
                         pylintrc = pylintrc_path
                         break
@@ -166,13 +163,8 @@ class PylintTool(ToolBase):
             if pylintrc is not None:
                 # load it!
                 configured_by = pylintrc
-                ext_found = True
-
-                self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
                 config_messages += self._pylintrc_configure(pylintrc, linter)
-        if not ext_found:
-            self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
-            config_messages = self._prospector_configure(prospector_config, linter)
+
         return config_messages, configured_by
 
     def _combine_w0614(self, messages):

@@ -20,7 +20,6 @@ mypy:
 
 pylint:
   disable:
-    - bad-builtin
     - too-few-public-methods
     - missing-docstring
     - star-args
@@ -31,11 +30,13 @@ pycodestyle:
     - E126
 
 pydocstyle:
+  run: false
   disable:
     - D100
     - D101
     - D102
     - D103
+    - D107
     - D205
     - D400
     - D401

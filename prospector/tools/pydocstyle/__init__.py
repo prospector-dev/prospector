@@ -28,7 +28,6 @@ class PydocstyleTool(ToolBase):
 
                     location = Location(path=code_file, module=None, function="", line=error.line, character=0)
                     message = Message(
-                        # TODO: legacy naming for now
                         source="pydocstyle",
                         code=error.code,
                         location=location,
@@ -41,7 +40,7 @@ class PydocstyleTool(ToolBase):
                         code_file,
                         "pydocstyle",
                         "D000",
-                        message="Could not handle the encoding of this file: %s" % err.path,
+                        message=f"Could not handle the encoding of this file: {err.encoding}",
                     )
                 )
                 continue

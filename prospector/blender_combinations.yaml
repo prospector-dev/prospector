@@ -233,6 +233,9 @@ combinations:
     -   # too complex
         - mccabe: MC0001
         - pylint: too-many-branches
+    -
+        - mccabe: MC0001
+        - pylint: too-many-statements
 
     -   # pep257 takes preference over pylint documentation warnings
         - pep257: D100

@@ -12,6 +12,33 @@ Version 1.8.0 - WIP
 * Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
 
+Version 1.7.5 - WIP
+-------------
+
+Just say no to bugs.
+
+**Fixes**:
+
+* Stopped the ProfileValidator tool raising errors about ``pep8`` and ``pep257`` sections being unknown. Instead, they raise deprecated warnings.
+* Blending works again - for example, pylint and pycodestyle errors representing the same thing are combined. After renaming pep8 to pycodestyle, this only worked when using legacy names.
+
+**Tidyup**:
+
+* Lots of warnings fixed from running prospector on itself
+
+Version 1.7.4
+-------------
+
+Mea culpa release
+
+**Fix**
+
+The effort to allow pylint configuration in ``pyproject.toml`` to be used as an external config source (`issue here <https://github.com/PyCQA/prospector/issues/485>)`_ had the unintended side effect where any project using poetry would now use that configuration and thus would ignore the pylint configuration in the profile. This was true even if the ``pyproject.toml`` had no pylint directives in it.
+
+The behaviour has now been fixed where pylint will be configured using configuration from the profile *first* and then if any additional settings are found in a ``pylintrc`` or ``pyproject.toml`` or ``setup.cfg`` then these will override the profile configuration, instead of replacing it entirely.
+
+This also has the benefit of fixing `#227 <https://github.com/PyCQA/prospector/issues/227>`_.
+
 Version 1.7.3
 -------------
 
@@ -36,8 +63,6 @@ More bugfixes!
 
 * Fix that ``pep8`` and ``pep257`` sections were renamed but the old deprecated values were not properly used to configure ``pycodestyle`` and ``pydocstyle`` - `#491 <https://github.com/PyCQA/prospector/issues/491>`_
 * Better handling for when the user running prospector is not able to read a file or directory - `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_
-
->>>>>>> master
 
 Version 1.7.1
 -------------

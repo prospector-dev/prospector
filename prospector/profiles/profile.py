@@ -229,7 +229,7 @@ def _determine_pep8(profile_dict):
         return "full_pep8", True
     if pep8 == "none":
         return "no_pep8", True
-    elif type(pep8) is dict and pep8.get("full", False):
+    elif isinstance(pep8, dict) and pep8.get("full", False):
         return "full_pep8", True
     return None, False
 
@@ -352,7 +352,7 @@ def _transform_legacy(profile_dict):
     # pycodestyle tool using the old name?
     if "pep8" in profile_dict:
         pep8conf = profile_dict["pep8"]
-        if type(pep8conf) is dict:
+        if isinstance(pep8conf, dict):
             # merge in with existing config if there is any
             out["pycodestyle"] = _simple_merge_dict(out.get("pycodestyle", {}), pep8conf)
         else:
