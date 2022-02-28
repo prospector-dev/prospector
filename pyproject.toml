@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prospector"
-version = "1.7.4"
+version = "1.7.5dev"
 description = ""
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
