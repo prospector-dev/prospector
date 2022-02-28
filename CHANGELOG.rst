@@ -14,7 +14,7 @@ The war on bugs.
 * Fixed the exit code for prospector - it was always ``0`` after the move to using poetry for packaging instead of ``1`` if errors were found (unless ``--zero-exit``) was used. This now exits with the correct code based on the documented (and previous) behaviour.
 * Fix that ``pep8`` would overwrite instead of inherit from previous ``pycodestyle`` blocks, same with pep257 - `#491 (comment) <https://github.com/PyCQA/prospector/issues/491#issuecomment-1053539711>`_
 * Fix the pre-commit hook, as it could not run without being installed ``[with_everything]``, due to the "NotAvailableTool" class not properly implementing the abstract base class.
-
+* Improved documentation about the pre-commit hook as well to clarify its use better - `#484 <https://github.com/PyCQA/prospector/issues/484>`_
 
 
 Version 1.7.2
