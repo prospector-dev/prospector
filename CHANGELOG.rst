@@ -2,8 +2,8 @@
 Changelog
 #########
 
-Version 1.7.3 - WIP
--------------------
+Version 1.7.3
+-------------
 
 The war on bugs.
 
