@@ -7,6 +7,9 @@ Version 1.7.5 - WIP
 
 Just say no to bugs.
 
+**New**:
+* Profile inheritance is now optional - appending a profile name with a ``?`` means that if it is not found, prospector will simply continue. `Read the documentation here <https://prospector.landscape.io/en/master/profiles.html#inheritance>`_. Closes `#161 <https://github.com/PyCQA/prospector/issues/161>`_
+
 **Fixes**:
 
 * Stopped the ProfileValidator tool raising errors about ``pep8`` and ``pep257`` sections being unknown. Instead, they raise deprecated warnings.

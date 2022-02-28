@@ -216,6 +216,17 @@ overwritten - so essentially, the ``ignore`` section will accumulate.
 
 The profile named in the ``inherits`` section must be on the :ref:`profile path <profile_path>`.
 
+Inheritance can also be optional - for example, if each developer might have a local prospector configuration
+but that's not guaranteed, then you can inherit from a profile with the ``?`` suffix and if it is not present,
+prospector will simply carry on. For example::
+
+    inherits:
+        - project_config
+        - local_config?
+
+In this case, if a developer has a local profile called 'local_config' it would append to the project-wide configuration,
+but if they don't, prospector won't error with a ``ProfileNotFound`` exception.
+
 Note that when using profiles, prospector does not automatically configure ``strictness``.
 The assumption is that if you provide a profile, you provide all the information about which
 messages to turn on or off. To keep the strictness functionality, simply inherit from the

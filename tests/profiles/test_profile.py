@@ -5,14 +5,27 @@ from unittest import TestCase
 from prospector.profiles.profile import ProspectorProfile
 
 THIS_DIR = Path(__file__).parent
+BUILTIN_PROFILES = THIS_DIR / "../../prospector/profiles/profiles"
 
 
 class ProfileTestBase(TestCase):
     def setUp(self):
-        self._profile_path = [
-            str(THIS_DIR / "profiles"),
-            str(THIS_DIR / "../../prospector/profiles/profiles"),
-        ]
+        self._profile_path = [str(THIS_DIR / "profiles"), str(BUILTIN_PROFILES)]
+
+
+class TestOptionalProfiles(TestCase):
+    def setUp(self) -> None:
+        self._profile_path = [str(THIS_DIR / "profiles/test_optional"), str(BUILTIN_PROFILES)]
+
+    def test_optional_missing(self):
+        # just load it without an exception to verify that a missing inherits works fine
+        profile = ProspectorProfile.load("optional_missing", self._profile_path)
+        self.assertTrue(profile.is_tool_enabled("dodgy"))
+
+    def test_optional_present(self):
+        # just load it without an exception to verify that a missing inherits works fine
+        profile = ProspectorProfile.load("optional_present", self._profile_path)
+        self.assertFalse(profile.is_tool_enabled("dodgy"))
 
 
 class TestToolRenaming(TestCase):
@@ -20,7 +33,7 @@ class TestToolRenaming(TestCase):
         self._profile_path = [
             str(THIS_DIR / "profiles/renaming_pepX/test_inheritance"),
             str(THIS_DIR / "profiles/renaming_pepX"),
-            str(THIS_DIR / "../../prospector/profiles/profiles"),
+            str(BUILTIN_PROFILES),
         ]
 
     def test_old_inherits_from_new(self):
