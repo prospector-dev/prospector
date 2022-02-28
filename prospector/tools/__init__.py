@@ -11,6 +11,9 @@ from prospector.tools.pylint import PylintTool
 
 def _tool_not_available(name, install_option_name):
     class NotAvailableTool(ToolBase):
+        def configure(self, prospector_config, found_files):
+            pass
+
         def run(self, _):
             raise FatalProspectorException(
                 "\nCannot run tool %s as support was not installed.\n"

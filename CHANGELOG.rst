@@ -13,6 +13,8 @@ The war on bugs.
 * Fixed that some pylint documentation warning messages were not correctly included in the list of documentation warnings to squash if doc warnings are not desired.
 * Fixed the exit code for prospector - it was always ``0`` after the move to using poetry for packaging instead of ``1`` if errors were found (unless ``--zero-exit``) was used. This now exits with the correct code based on the documented (and previous) behaviour.
 * Fix that ``pep8`` would overwrite instead of inherit from previous ``pycodestyle`` blocks, same with pep257 - `#491 (comment) <https://github.com/PyCQA/prospector/issues/491#issuecomment-1053539711>`_
+* Fix the pre-commit hook, as it could not run without being installed ``[with_everything]``, due to the "NotAvailableTool" class not properly implementing the abstract base class.
+
 
 
 Version 1.7.2
@@ -324,13 +326,13 @@ Version 0.11
 * Compatibility fixes to work with pylint>=1.5
 * McCabe tool now reports correct line and character number for syntax errors (and therefore gets blended if pylint etc detects such an error)
 * Autodetect of libraries will now not search inside virtualenvironments
-* `#142 <https://github.com/PyCQA/prospector/pull/142/>`_ better installation documentation in README (thanks [@ExcaliburZero](https://github.com/ExcaliburZero))
-* `#141 <https://github.com/PyCQA/prospector/issues/141/>`_ profile-validator no longer complains about member-warnings (thanks [@alefteris](https://github.com/alefteris))
-* `#140 <https://github.com/PyCQA/prospector/pull/140/>`_ emacs formatter includes character position (thanks [@philroberts](https://github.com/philroberts))
-* `#138 <https://github.com/PyCQA/prospector/pull/138/>`_ docs fixed for 'output-format' profile option (thanks [@faulkner](https://github.com/faulkner))
-* `#137 <https://github.com/PyCQA/prospector/pull/137/>`_ fixed various formatting issues in docs (thanks [@danstender](https://github.com/danstender))
+* `#142 <https://github.com/PyCQA/prospector/pull/142/>`_ better installation documentation in README (thanks `@ExcaliburZero <https://github.com/ExcaliburZero>`_)
+* `#141 <https://github.com/PyCQA/prospector/issues/141/>`_ profile-validator no longer complains about member-warnings (thanks `@alefteris <https://github.com/alefteris>`_)
+* `#140 <https://github.com/PyCQA/prospector/pull/140/>`_ emacs formatter includes character position (thanks `@philroberts <https://github.com/philroberts>`_)
+* `#138 <https://github.com/PyCQA/prospector/pull/138/>`_ docs fixed for 'output-format' profile option (thanks `@faulkner <https://github.com/faulkner>`_)
+* `#137 <https://github.com/PyCQA/prospector/pull/137/>`_ fixed various formatting issues in docs (thanks `@danstender <https://github.com/danstender>`_)
 * `#132 <https://github.com/PyCQA/prospector/issues/132/>`_ Added support for custom flask linting thanks to the awesome [pylint-flask](https://github.com/jschaf/pylint-flask) plugin by [jschaf](https://github.com/jschaf)
-* `#131 <https://github.com/PyCQA/prospector/pull/131/>`_, `#134 <https://github.com/PyCQA/prospector/pull/134/>`_ Custom pylint plugins are now loaded from existing .pylintrc files if present (thanks [@kaidokert](https://github.com/kaidokert) and [@antoviaque](https://github.com/antoviaque))
+* `#131 <https://github.com/PyCQA/prospector/pull/131/>`_, `#134 <https://github.com/PyCQA/prospector/pull/134/>`_ Custom pylint plugins are now loaded from existing .pylintrc files if present (thanks `@kaidokert <https://github.com/kaidokert>`_ and `@antoviaque <https://github.com/antoviaque>`_)
 
 Version 0.10.2
 ---------------
@@ -417,14 +419,14 @@ Version 0.8.3
 Version 0.8.2
 ---------------
 * Version loading in setup.py no longer imports the prospector module (which could lead to various weirdnesses when installing on different platforms)
-* `#82 <https://github.com/PyCQA/prospector/issues/82/>`_ resolves regression in adapter library detection raising, ``ValueError: too many values to unpack``. provided by [@jquast](https://github.com/jquast)
-* `#83 <https://github.com/PyCQA/prospector/issues/83/>`_ resolves regression when adapter library detects django, ``TypeError: '_sre.SRE_Pattern' object is not iterable``. provided by [@jquast](https://github.com/jquast)
+* `#82 <https://github.com/PyCQA/prospector/issues/82/>`_ resolves regression in adapter library detection raising, ``ValueError: too many values to unpack``. provided by `@jquast <https://github.com/jquast>`_
+* `#83 <https://github.com/PyCQA/prospector/issues/83/>`_ resolves regression when adapter library detects django, ``TypeError: '_sre.SRE_Pattern' object is not iterable``. provided by `@jquast <https://github.com/jquast>`_
 
 Version 0.8.1
 ---------------
 * Strictness now also changes which pep257 messages are output
 * pep257 and vulture messages are now combined and 'blended' with other tools
-* `#80 <https://github.com/PyCQA/prospector/issues/80/>`_ Fix for Python3 issue when detecting libraries, provided by [@smspillaz](https://github.com/smspillaz)
+* `#80 <https://github.com/PyCQA/prospector/issues/80/>`_ Fix for Python3 issue when detecting libraries, provided by `@smspillaz <https://github.com/smspillaz>`_
 
 Version 0.8
 ---------------
