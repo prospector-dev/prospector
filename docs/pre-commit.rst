@@ -7,7 +7,7 @@ text to your repositories' ``.pre-commit-config.yaml``::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.7.3 # The version of Prospector to use, if not 'master' for latest
+        rev: 1.7.5 # The version of Prospector to use, if not 'master' for latest
         hooks:
         -   id: prospector
 
@@ -23,7 +23,7 @@ To add command-line arguments to the pre-commit hook config file::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.7.3
+        rev: 1.7.5
         hooks:
         -   id: prospector
             args:
@@ -40,7 +40,7 @@ them to the hook configuration like so::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.7.3
+        rev: 1.7.5
         hooks:
         -   id: prospector
             additional_requirements:

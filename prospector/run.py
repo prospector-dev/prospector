@@ -97,38 +97,32 @@ class Prospector:
                         loc = Location(self.config.workdir, None, None, None, None)
 
                         if capture.get_hidden_stderr():
-                            msg = "stderr from %s:\n%s" % (
-                                toolname,
-                                capture.get_hidden_stderr(),
-                            )
+                            msg = f"stderr from {toolname}:\n{capture.get_hidden_stderr()}"
                             messages.append(Message(toolname, "hidden-output", loc, message=msg))
                         if capture.get_hidden_stdout():
-                            msg = "stdout from %s:\n%s" % (
-                                toolname,
-                                capture.get_hidden_stdout(),
-                            )
+                            msg = f"stdout from {toolname}:\n{capture.get_hidden_stdout()}"
                             messages.append(Message(toolname, "hidden-output", loc, message=msg))
 
             except FatalProspectorException as fatal:
                 sys.stderr.write(fatal.message)
                 sys.exit(2)
 
-            except Exception as ex:
+            except Exception as ex:  # pylint:disable=broad-except
                 if self.config.die_on_tool_error:
                     raise FatalProspectorException from ex
-                else:
-                    loc = Location(self.config.workdir, None, None, None, None)
-                    msg = (
-                        "Tool %s failed to run (exception was raised, re-run prospector with -X to see the stacktrace)"
-                        % (toolname,)
-                    )
-                    message = Message(
-                        toolname,
-                        "failure",
-                        loc,
-                        message=msg,
-                    )
-                    messages.append(message)
+
+                loc = Location(self.config.workdir, None, None, None, None)
+                msg = (
+                    f"Tool {toolname} failed to run "
+                    f"(exception was raised, re-run prospector with -X to see the stacktrace)"
+                )
+                message = Message(
+                    toolname,
+                    "failure",
+                    loc,
+                    message=msg,
+                )
+                messages.append(message)
 
         messages = self.process_messages(found_files, messages)
 
@@ -198,7 +192,7 @@ def main():
     config = ProspectorConfig()
 
     paths = config.paths
-    if len(paths) > 1 and not all([os.path.isfile(path) for path in paths]):
+    if len(paths) > 1 and not all(os.path.isfile(path) for path in paths):
         sys.stderr.write("\nIn multi-path mode, all inputs must be files, " "not directories.\n\n")
         get_parser().print_usage()
         sys.exit(2)

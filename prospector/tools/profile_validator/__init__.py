@@ -34,7 +34,7 @@ class ProfileValidationTool(ToolBase):
 
     LIST_SETTINGS = ("inherits", "uses", "ignore", "ignore-paths", "ignore-patterns")
     BOOL_SETTINGS = ("doc-warnings", "test-warnings", "autodetect")
-    ALL_SETTINGS = LIST_SETTINGS + (
+    OTHER_SETTINGS = (
         "strictness",
         "max-line-length",
         "output-format",
@@ -45,6 +45,7 @@ class ProfileValidationTool(ToolBase):
         # TODO: think of a better way to avoid Landscape-specific config leaking into prospector
         "python-targets",
     )
+    ALL_SETTINGS = LIST_SETTINGS + BOOL_SETTINGS + OTHER_SETTINGS
 
     def __init__(self):
         self.to_check = set(AUTO_LOADED_PROFILES)

@@ -2,7 +2,7 @@
 Changelog
 #########
 
-Version 1.7.5
+Version 1.7.5 - WIP
 -------------
 
 Just say no to bugs.
@@ -10,6 +10,7 @@ Just say no to bugs.
 **Fixes**:
 
 * Stopped the ProfileValidator tool raising errors about ``pep8`` and ``pep257`` sections being unknown. Instead, they raise deprecated warnings.
+* Blending works again - for example, pylint and pycodestyle errors representing the same thing are combined. After renaming pep8 to pycodestyle, this only worked when using legacy names.
 
 **Tidyup**:
 
