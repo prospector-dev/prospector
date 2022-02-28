@@ -26,9 +26,9 @@ class ProspectorReport(BaseReport):
         if code is None:
             # The error pycodestyle found is being ignored, let's move on.
             return
-        else:
-            # Get a clean copy of the message text without the code embedded.
-            text = text[5:]
+
+        # Get a clean copy of the message text without the code embedded.
+        text = text[5:]
 
         # mixed indentation (E101) is a file global message
         if code == "E101":

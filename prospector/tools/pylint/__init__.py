@@ -42,12 +42,11 @@ class PylintTool(ToolBase):
             try:
                 linter.load_plugin_modules([plugin])
             except ImportError:
-                errors.append(self._error_message(profile_path, "Could not load plugin %s" % plugin))
+                errors.append(self._error_message(profile_path, f"Could not load plugin {plugin}"))
 
         for msg_id in prospector_config.get_disabled_messages("pylint"):
             try:
                 linter.disable(msg_id)
-            # pylint: disable=pointless-except
             except UnknownMessageError:
                 # If the msg_id doesn't exist in PyLint any more,
                 # don't worry about it.
@@ -95,7 +94,7 @@ class PylintTool(ToolBase):
                 try:
                     linter.load_plugin_modules([plugin])
                 except ImportError:
-                    errors.append(self._error_message(pylintrc, "Could not load plugin %s" % plugin))
+                    errors.append(self._error_message(pylintrc, f"Could not load plugin {plugin}"))
         return errors
 
     def configure(self, prospector_config, found_files):
@@ -175,13 +174,12 @@ class PylintTool(ToolBase):
             # try to find a .pylintrc
             pylintrc = pylint_options.get("config_file")
             external_config = prospector_config.external_config_location("pylint")
-            if pylintrc is None or external_config:
-                pylintrc = external_config
-            if pylintrc is None:
-                pylintrc = find_pylintrc()
-            if pylintrc is None:
+            pylintrc = pylintrc or external_config or find_pylintrc()
+            if pylintrc is None:  # nothing explicitly configured
                 for possible in (".pylintrc", "pylintrc", "pyproject.toml", "setup.cfg"):
                     pylintrc_path = os.path.join(prospector_config.workdir, possible)
+                    # TODO: pyproject and setup.cfg might not actually have any pylint config
+                    #       in, they should be skipped in that case
                     if os.path.exists(pylintrc_path):
                         pylintrc = pylintrc_path
                         break

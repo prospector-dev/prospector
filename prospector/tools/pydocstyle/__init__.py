@@ -9,7 +9,7 @@ __all__ = ("PydocstyleTool",)
 
 class PydocstyleTool(ToolBase):
     def __init__(self, *args, **kwargs):
-        super(PydocstyleTool, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._code_files = []
         self.ignore_codes = ()
 
@@ -34,7 +34,6 @@ class PydocstyleTool(ToolBase):
                         absolute_path=True,
                     )
                     message = Message(
-                        # TODO: legacy naming for now
                         source="pydocstyle",
                         code=error.code,
                         location=location,
@@ -47,7 +46,7 @@ class PydocstyleTool(ToolBase):
                         code_file,
                         "pydocstyle",
                         "D000",
-                        message="Could not handle the encoding of this file: %s" % err.encoding,
+                        message=f"Could not handle the encoding of this file: {err.encoding}",
                     )
                 )
                 continue
