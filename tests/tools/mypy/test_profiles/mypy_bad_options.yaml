@@ -1,0 +1,5 @@
+
+mypy:
+  run: yes
+  options:
+    warn-unreachable: true

@@ -5,8 +5,20 @@ from prospector.tools import ToolBase
 
 __all__ = ("MypyTool",)
 
+from prospector.tools.exceptions import BadToolConfig
 
-MYPY_OPTIONS = ["allow", "check", "disallow", "no-check", "no-warn", "warn"]
+LIST_OPTIONS = ["allow", "check", "disallow", "no-check", "no-warn", "warn"]
+VALID_OPTIONS = LIST_OPTIONS + [
+    "strict",
+    "follow-imports",
+    "ignore-missing-imports",
+    "implicit-optional",
+    "strict-optional",
+    "platform",
+    "python-2-mode",
+    "python-version",
+    "namespace-packages",
+]
 
 
 def format_message(message):
@@ -47,6 +59,13 @@ class MypyTool(ToolBase):
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options("mypy")
 
+        for option_key in options.keys():
+            if option_key not in VALID_OPTIONS:
+                url = "https://github.com/PyCQA/prospector/blob/master/prospector/tools/mypy/__init__.py"
+                raise BadToolConfig(
+                    "mypy", f"Option {option_key} is not valid. " f"See the list of possible options: {url}"
+                )
+
         strict = options.get("strict", False)
 
         follow_imports = options.get("follow-imports", "normal")
@@ -84,7 +103,7 @@ class MypyTool(ToolBase):
         if namespace_packages:
             self.options.append("--namespace-packages")
 
-        for list_option in MYPY_OPTIONS:
+        for list_option in LIST_OPTIONS:
             for entry in options.get(list_option, []):
                 self.options.append(f"--{list_option}-{entry}")
 
