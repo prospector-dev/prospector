@@ -77,6 +77,7 @@ tzlocal = "^3.0"
 coverage = "^5.5"
 pre-commit = "^2.14.0"
 tox = "^3.24.5"
+twine = "^3.8.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
