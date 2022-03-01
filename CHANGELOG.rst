@@ -2,6 +2,13 @@
 Changelog
 #########
 
+Version 1.7.6 - WIP
+-------------
+
+It's a bugs life.
+
+
+
 Version 1.7.5
 -------------
 
