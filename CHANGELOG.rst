@@ -2,7 +2,7 @@
 Changelog
 #########
 
-Version 1.7.5 - WIP
+Version 1.7.5
 -------------
 
 Just say no to bugs.
