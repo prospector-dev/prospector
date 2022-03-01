@@ -26,7 +26,7 @@ class FileFinder:
     is basically to know which files to pass to which tools to be inspected.
     """
 
-    def __init__(self, *provided_paths: Path, workdir: Path = None, exclusion_filters: Iterable[Callable] = None):
+    def __init__(self, *provided_paths: List[Path], workdir: Path = None, exclusion_filters: Iterable[Callable] = None):
         """
         :param provided_paths:
             A list of Path objects to search for files and modules - can be either directories or files

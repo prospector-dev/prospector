@@ -12,15 +12,20 @@ Version 1.8.0 - WIP
 * Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
 
-Version 1.7.5 - WIP
--------------
+Version 1.7.5
+=======
 
 Just say no to bugs.
+
+**New**:
+
+* Profile inheritance is now optional - appending a profile name with a ``?`` means that if it is not found, prospector will simply continue. `Read the documentation here <https://prospector.landscape.io/en/master/profiles.html#inheritance>`_. Closes `#161 <https://github.com/PyCQA/prospector/issues/161>`_
 
 **Fixes**:
 
 * Stopped the ProfileValidator tool raising errors about ``pep8`` and ``pep257`` sections being unknown. Instead, they raise deprecated warnings.
 * Blending works again - for example, pylint and pycodestyle errors representing the same thing are combined. After renaming pep8 to pycodestyle, this only worked when using legacy names.
+* Unrecognised Mypy options now raise an exception instead of silently carrying on - `#455 <https://github.com/PyCQA/prospector/issues/455>`_
 
 **Tidyup**:
 
@@ -33,7 +38,7 @@ Mea culpa release
 
 **Fix**
 
-The effort to allow pylint configuration in ``pyproject.toml`` to be used as an external config source (`issue here <https://github.com/PyCQA/prospector/issues/485>)`_ had the unintended side effect where any project using poetry would now use that configuration and thus would ignore the pylint configuration in the profile. This was true even if the ``pyproject.toml`` had no pylint directives in it.
+The effort to allow pylint configuration in ``pyproject.toml`` to be used as an external config source (`issue here <https://github.com/PyCQA/prospector/issues/485>`_) had the unintended side effect where any project using poetry would now use that configuration and thus would ignore the pylint configuration in the profile. This was true even if the ``pyproject.toml`` had no pylint directives in it.
 
 The behaviour has now been fixed where pylint will be configured using configuration from the profile *first* and then if any additional settings are found in a ``pylintrc`` or ``pyproject.toml`` or ``setup.cfg`` then these will override the profile configuration, instead of replacing it entirely.
 

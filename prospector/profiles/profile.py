@@ -110,6 +110,11 @@ def _is_valid_extension(filename):
 
 def _load_content(name_or_path, profile_path):
     filename = None
+    optional = False
+
+    if isinstance(name_or_path, str) and name_or_path.endswith("?"):
+        optional = True
+        name_or_path = name_or_path[:-1]
 
     if _is_valid_extension(name_or_path):
         for path in profile_path:
@@ -118,9 +123,6 @@ def _load_content(name_or_path, profile_path):
                 # this is a full path that we can load
                 filename = filepath
                 break
-
-        if filename is None:
-            raise ProfileNotFound(name_or_path, profile_path)
     else:
         for path in profile_path:
             for ext in ("yml", "yaml"):
@@ -129,8 +131,10 @@ def _load_content(name_or_path, profile_path):
                     filename = filepath
                     break
 
-        if filename is None:
-            raise ProfileNotFound(name_or_path, profile_path)
+    if filename is None:
+        if optional:
+            return {}
+        raise ProfileNotFound(name_or_path, profile_path)
 
     with codecs.open(filename) as fct:
         try:

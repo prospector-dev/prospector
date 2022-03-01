@@ -101,7 +101,7 @@ class PylintTool(ToolBase):
 
     def configure(self, prospector_config, found_files: FileFinder):
 
-        extra_sys_path = found_files.get_minimal_syspath()
+        extra_sys_path = found_files.make_syspath()
 
         check_paths = found_files.python_packages + found_files.python_modules
 
@@ -139,8 +139,8 @@ class PylintTool(ToolBase):
             # does not appear first in the path
             sys.path = [str(path.absolute()) for path in extra_sys_path] + sys.path
 
-    def _get_pylint_configuration(self, check_paths, linter, prospector_config, pylint_options):
-        self._args = linter.load_command_line_configuration(check_paths)
+    def _get_pylint_configuration(self, check_paths: List[Path], linter, prospector_config, pylint_options):
+        self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
         linter.load_default_plugins()
 
         config_messages = self._prospector_configure(prospector_config, linter)

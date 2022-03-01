@@ -44,7 +44,6 @@ def find_from_imports(file_contents):
 
 def find_from_path(path: Path):
     names = set()
-    max_possible = len(POSSIBLE_LIBRARIES)
 
     try:
         for item in path.iterdir():
@@ -60,7 +59,7 @@ def find_from_path(path: Path):
                     # TODO: this output will break output formats such as JSON
                     warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
 
-            if len(names) == max_possible:
+            if len(names) == len(POSSIBLE_LIBRARIES):
                 # don't continue on recursing, there's no point!
                 break
     except PermissionError as err:
