@@ -8,6 +8,7 @@ Version 1.7.5 - WIP
 Just say no to bugs.
 
 **New**:
+
 * Profile inheritance is now optional - appending a profile name with a ``?`` means that if it is not found, prospector will simply continue. `Read the documentation here <https://prospector.landscape.io/en/master/profiles.html#inheritance>`_. Closes `#161 <https://github.com/PyCQA/prospector/issues/161>`_
 
 **Fixes**:
@@ -26,7 +27,7 @@ Mea culpa release
 
 **Fix**
 
-The effort to allow pylint configuration in ``pyproject.toml`` to be used as an external config source (`issue here <https://github.com/PyCQA/prospector/issues/485>)`_ had the unintended side effect where any project using poetry would now use that configuration and thus would ignore the pylint configuration in the profile. This was true even if the ``pyproject.toml`` had no pylint directives in it.
+The effort to allow pylint configuration in ``pyproject.toml`` to be used as an external config source (`issue here <https://github.com/PyCQA/prospector/issues/485>`_) had the unintended side effect where any project using poetry would now use that configuration and thus would ignore the pylint configuration in the profile. This was true even if the ``pyproject.toml`` had no pylint directives in it.
 
 The behaviour has now been fixed where pylint will be configured using configuration from the profile *first* and then if any additional settings are found in a ``pylintrc`` or ``pyproject.toml`` or ``setup.cfg`` then these will override the profile configuration, instead of replacing it entirely.
 
