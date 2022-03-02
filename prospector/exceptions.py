@@ -21,6 +21,7 @@ class FatalProspectorException(Exception):
 
 class CouldNotHandleEncoding(Exception):
     def __init__(self, path: Path, cause: Exception):
+        super().__init__()
         self.path = path
         self.cause = cause
 

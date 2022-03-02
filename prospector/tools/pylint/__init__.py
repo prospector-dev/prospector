@@ -137,7 +137,33 @@ class PylintTool(ToolBase):
             # checkout, but 'requests' is already installed system wide, pylint
             # will discover the system-wide modules first if the local checkout
             # does not appear first in the path
-            sys.path = [str(path.absolute()) for path in extra_sys_path] + sys.path
+            sys.path = list(set([str(path.absolute()) for path in extra_sys_path] + sys.path))
+
+    def _get_pylint_check_paths(self, found_files):
+        # create a list of packages, but don't include packages which are
+        # subpackages of others as checks will be duplicated
+        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
+        packages.sort(key=len)
+        check_paths = set()
+        for package in packages:
+            package_path = os.path.join(*package)
+            if len(package) == 1:
+                check_paths.add(package_path)
+                continue
+            for i in range(1, len(package)):
+                if os.path.join(*package[:-i]) in check_paths:
+                    break
+            else:
+                check_paths.add(package_path)
+        for filepath in found_files.iter_module_paths(abspath=False):
+            package = os.path.dirname(filepath).split(os.path.sep)
+            for i in range(0, len(package)):
+                if os.path.join(*package[: i + 1]) in check_paths:
+                    break
+            else:
+                check_paths.add(filepath)
+        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
+        return check_paths
 
     def _get_pylint_configuration(self, check_paths: List[Path], linter, prospector_config, pylint_options):
         self._args = linter.load_command_line_configuration(str(path) for path in check_paths)

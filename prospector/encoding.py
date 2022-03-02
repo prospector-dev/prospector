@@ -8,8 +8,8 @@ def read_py_file(filepath: Path):
     # see https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding
     # first just see if the file is properly encoded
     try:
-        with filepath.open("rb") as pyfile:
-            tokenize.detect_encoding(pyfile.readline)
+        with open(filepath, "rb") as file_:
+            tokenize.detect_encoding(file_.readline)
     except PermissionError as err:
         raise PermissionMissing(filepath) from err
 
@@ -24,8 +24,8 @@ def read_py_file(filepath: Path):
         raise CouldNotHandleEncoding(filepath, err) from err
 
     try:
-        with tokenize.open(filepath) as pyfile:
-            return pyfile.read()
+        with tokenize.open(filepath) as file_:
+            return file_.read()
         # this warning is issued:
         #   (1) if utf-8 is specified, but latin1 is used with something like \x0e9 appearing
         #       (see http://stackoverflow.com/a/5552623)

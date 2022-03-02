@@ -37,7 +37,7 @@ class ProspectorProfile:
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
 
-        for tool in TOOLS.keys():
+        for tool in TOOLS:
             tool_conf = profile_dict.get(tool, {})
 
             # set the defaults for everything
@@ -234,7 +234,7 @@ def _determine_pep8(profile_dict):
     if pep8 == "none":
         return "no_pep8", True
     elif isinstance(pep8, dict) and pep8.get("full", False):
-        return "full_pep8", True
+        return "full_pep8", False
     return None, False
 
 
