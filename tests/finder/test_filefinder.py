@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from prospector.finder import FileFinder
 
-_TEST_DATA = Path(__file__).parent / "testdata"
+from .utils import TEST_DATA
 
 
 class TestFileFinder(TestCase):
@@ -12,18 +12,18 @@ class TestFileFinder(TestCase):
         Verify that the workdir argument is only allowed to be a directory
         """
         # throws no exception:
-        FileFinder(_TEST_DATA, workdir=_TEST_DATA)
+        FileFinder(TEST_DATA, workdir=TEST_DATA)
         # throws exception when workdir is not a directory
-        self.assertRaises(ValueError, FileFinder, _TEST_DATA, workdir=Path(__file__))
-        self.assertRaises(ValueError, FileFinder, _TEST_DATA, workdir=Path("wobblewoblblelalala"))
-        self.assertRaises(ValueError, FileFinder, _TEST_DATA, workdir="/tmp")
+        self.assertRaises(ValueError, FileFinder, TEST_DATA, workdir=Path(__file__))
+        self.assertRaises(ValueError, FileFinder, TEST_DATA, workdir=Path("wobblewoblblelalala"))
+        self.assertRaises(ValueError, FileFinder, TEST_DATA, workdir="/tmp")
 
     def test_python_in_normal_dir(self):
         """
         This test is to find packages and files when given a directory which
         is not itself a python module but contains python modules
         """
-        finder = FileFinder(_TEST_DATA / "test1" / "somedir")
+        finder = FileFinder(TEST_DATA / "test1" / "somedir")
 
         found = list(finder.python_modules)
         self.assertEqual(1, len(found))
@@ -35,7 +35,7 @@ class TestFileFinder(TestCase):
         Tests a non-module directory containing python modules finds all modules and
         files correctly
         """
-        finder = FileFinder(_TEST_DATA / "test3")
+        finder = FileFinder(TEST_DATA / "test3")
 
         self.assertEqual(4, len(finder.files))
         self.assertEqual(4, len(finder.python_modules))
@@ -45,22 +45,22 @@ class TestFileFinder(TestCase):
         """
         Checks that packages are found correctly and all - including subpackages if asked - are listed
         """
-        finder = FileFinder(_TEST_DATA / "test2")
+        finder = FileFinder(TEST_DATA / "test2")
         self.assertEqual(2, len(finder.python_packages))
 
-        finder = FileFinder(_TEST_DATA / "test3")
+        finder = FileFinder(TEST_DATA / "test3")
         self.assertEqual(4, len(finder.python_packages))
 
-        finder = FileFinder(_TEST_DATA / "test4")
+        finder = FileFinder(TEST_DATA / "test4")
         self.assertEqual(3, len(finder.python_packages))
 
     def test_subdirectories_omitted_if_parent_excluded(self):
         """
         Verifies that if the directory "b" in "a/b/c/d" is ignored, then so are all children
         """
-        finder = FileFinder(_TEST_DATA / "filter_test", exclusion_filters=[lambda p: p.name == "ignore_me"])
+        finder = FileFinder(TEST_DATA / "filter_test", exclusion_filters=[lambda p: p.name == "ignore_me"])
         self.assertEqual(1, len(finder.python_modules))
-        lvl2 = _TEST_DATA / "filter_test/ignore_me/level2"
+        lvl2 = TEST_DATA / "filter_test/ignore_me/level2"
         self.assertNotIn(lvl2, finder.directories)
         self.assertNotIn(lvl2, finder.python_modules)
 
@@ -69,15 +69,15 @@ class TestFileFinder(TestCase):
         Simple test to validate args/kwargs are working as expected
         """
         search = (
-            _TEST_DATA / "test1",
-            _TEST_DATA / "test3",
-            _TEST_DATA / "test3",
+            TEST_DATA / "test1",
+            TEST_DATA / "test3",
+            TEST_DATA / "test3",
         )
         finder = FileFinder(*search)
         self.assertIsNotNone(finder.workdir)
 
-        finder = FileFinder(*search, workdir=_TEST_DATA)
-        self.assertEqual(_TEST_DATA, finder.workdir)
+        finder = FileFinder(*search, workdir=TEST_DATA)
+        self.assertEqual(TEST_DATA, finder.workdir)
 
     def test_multiple_search_directories(self):
         """
@@ -85,9 +85,9 @@ class TestFileFinder(TestCase):
         and checks there are no duplicates
         """
         search = (
-            _TEST_DATA / "test1",
-            _TEST_DATA / "test3",
-            _TEST_DATA / "test3",
+            TEST_DATA / "test1",
+            TEST_DATA / "test3",
+            TEST_DATA / "test3",
         )
         finder = FileFinder(*search)
 
@@ -108,14 +108,14 @@ class TestFileFinder(TestCase):
         """
         Checks that the finder can cleanly handle being given paths that do not exist
         """
-        self.assertRaises(FileNotFoundError, FileFinder, _TEST_DATA / "does_not_exist")
+        self.assertRaises(FileNotFoundError, FileFinder, TEST_DATA / "does_not_exist")
 
     def test_exclusion_filters(self):
         """
         Checks that paths excluded by filters are not returned in lists
         """
         # exclude everything
-        finder = FileFinder(_TEST_DATA, exclusion_filters=[lambda _: True])
+        finder = FileFinder(TEST_DATA, exclusion_filters=[lambda _: True])
 
         self.assertEqual(0, len(finder.files))
         self.assertEqual(0, len(finder.python_modules))
@@ -123,11 +123,11 @@ class TestFileFinder(TestCase):
         self.assertEqual(0, len(finder.directories))
 
         # exclude anything under 'package1'
-        pkg1 = Path(_TEST_DATA / "test1" / "package1")
+        pkg1 = Path(TEST_DATA / "test1" / "package1")
 
         def exclude(p: Path):
             return "package1" in p.parts
 
-        finder = FileFinder(_TEST_DATA / "test1", exclusion_filters=[exclude])
+        finder = FileFinder(TEST_DATA / "test1", exclusion_filters=[exclude])
         modules = finder.python_modules
         self.assertNotIn(pkg1, modules)
