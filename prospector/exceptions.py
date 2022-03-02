@@ -14,11 +14,12 @@ class FatalProspectorException(Exception):
     # (see also the --die-on-tool-error flag)
 
     def __init__(self, message):
-        self.message = message
+        super().__init__(message)
 
 
 class CouldNotHandleEncoding(Exception):
     def __init__(self, path, cause):
+        super().__init__()
         self.path = path
         self.cause = cause
 

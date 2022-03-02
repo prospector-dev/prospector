@@ -1,3 +1,4 @@
+import codecs
 import json
 import os
 from typing import Any, Dict, List, Tuple
@@ -36,7 +37,7 @@ class ProspectorProfile:
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
 
-        for tool in TOOLS.keys():
+        for tool in TOOLS:
             tool_conf = profile_dict.get(tool, {})
 
             # set the defaults for everything
@@ -80,7 +81,7 @@ class ProspectorProfile:
             "strictness": self.strictness,
             "requirements": self.requirements,
         }
-        for tool in TOOLS.keys():
+        for tool in TOOLS:
             out[tool] = getattr(self, tool)
         return out
 
@@ -135,11 +136,11 @@ def _load_content(name_or_path, profile_path):
             return {}
         raise ProfileNotFound(name_or_path, profile_path)
 
-    with open(filename) as fct:
+    with codecs.open(filename) as fct:
         try:
             return yaml.safe_load(fct) or {}
         except yaml.parser.ParserError as parse_error:
-            raise CannotParseProfile(filename, parse_error)
+            raise CannotParseProfile(filename, parse_error) from parse_error
 
 
 def _ensure_list(value):
@@ -208,7 +209,7 @@ def _merge_profile_dict(priority, base):
         ):
             # some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
-        elif key in TOOLS.keys():
+        elif key in TOOLS:
             # this is tool config!
             out[key] = _merge_tool_config(value, base.get(key, {}))
 
@@ -233,7 +234,7 @@ def _determine_pep8(profile_dict):
     elif pep8 == "none":
         return "no_pep8", True
     elif isinstance(pep8, dict) and pep8.get("full", False):
-        return "full_pep8", True
+        return "full_pep8", False
     return None, False
 
 
