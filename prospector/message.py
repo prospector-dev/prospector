@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 
 class Location:
@@ -17,13 +17,13 @@ class Location:
         self.line = None if line == -1 else line
         self.character = None if character == -1 else character
 
-    def absolute_path(self):
+    def absolute_path(self) -> Path:
         return self.path.absolute()
 
-    def relative_path(self, root: Path):
+    def relative_path(self, root: Path) -> Path:
         return self.path.relative_to(root)
 
-    def as_dict(self) -> Dict[str, Union[str, int, None]]:
+    def as_dict(self) -> Dict[str, Any]:
         return {
             "path": self.path.absolute(),
             "module": self.module,

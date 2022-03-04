@@ -40,7 +40,7 @@ class PydocstyleTool(ToolBase):
                         code_file,
                         "pydocstyle",
                         "D000",
-                        message=f"Could not handle the encoding of this file: {err.encoding}",
+                        message=f"Could not handle the encoding of this file: {err.__cause__}",
                     )
                 )
                 continue

@@ -23,9 +23,10 @@ import re
 import warnings
 from collections import defaultdict
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 from prospector import encoding
+from prospector.message import Message
 
 _FLAKE8_IGNORE_FILE = re.compile(r"flake8[:=]\s*noqa", re.IGNORECASE)
 _PEP8_IGNORE_LINE = re.compile(r"#\s+noqa", re.IGNORECASE)
@@ -61,9 +62,9 @@ _PYLINT_EQUIVALENTS = {
 }
 
 
-def _parse_pylint_informational(messages):
+def _parse_pylint_informational(messages: List[Message]):
     ignore_files = set()
-    ignore_messages = defaultdict(lambda: defaultdict(list))
+    ignore_messages: Dict[Path, Dict[int, List]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
         if message.source == "pylint":
@@ -86,8 +87,8 @@ def get_suppressions(filepaths: List[Path], messages):
     and a map of filepath -> line-number -> codes to ignore
     """
     paths_to_ignore = set()
-    lines_to_ignore = defaultdict(set)
-    messages_to_ignore = defaultdict(lambda: defaultdict(set))
+    lines_to_ignore: Dict[Path, set] = defaultdict(set)
+    messages_to_ignore: Dict[Path, dict] = defaultdict(lambda: defaultdict(set))
 
     # first deal with 'noqa' style messages
     for filepath in filepaths:

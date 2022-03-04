@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import List
 
 from pylint.exceptions import UnknownMessageError
 from pylint.message import Message as PylintMessage
@@ -17,25 +17,21 @@ class Collector(BaseReporter):
         self._messages = []
 
     def handle_message(self, msg: PylintMessage) -> None:
-        location = (msg.abspath, msg.module, msg.obj, msg.line, msg.column)
-        self.add_message(msg.msg_id, location, msg.msg)
+        loc = Location(msg.abspath, msg.module, msg.obj, msg.line, msg.column)
 
-    def add_message(self, msg_id: str, location: Tuple[Union[int, str]], msg: Message) -> None:
-        # (* magic is acceptable here)
-        loc = Location(*location)
         # At this point pylint will give us the code but we want the
         # more user-friendly symbol
         try:
-            msg_data = self._message_store.get_message_definitions(msg_id)
+            msg_data = self._message_store.get_message_definitions(msg.msg_id)
         except UnknownMessageError:
             # this shouldn't happen, as all pylint errors should be
             # in the message store, but just in case we'll fall back
             # to using the code.
-            msg_symbol = msg_id
+            msg_symbol = msg.msg_id
         else:
             msg_symbol = msg_data[0].symbol
 
-        message = Message("pylint", msg_symbol, loc, msg)
+        message = Message("pylint", msg_symbol, loc, msg.msg)
         self._messages.append(message)
 
     def _display(self, layout) -> None:

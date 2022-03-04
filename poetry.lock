@@ -237,17 +237,6 @@ python-versions = "*"
 flake8 = "*"
 
 [[package]]
-name = "frosted"
-version = "1.4.1"
-description = "A passive Python syntax checker"
-category = "main"
-optional = true
-python-versions = "*"
-
-[package.dependencies]
-pies = ">=2.6.0"
-
-[[package]]
 name = "gitdb"
 version = "4.0.9"
 description = "Git Object Database"
@@ -451,14 +440,6 @@ python-versions = "*"
 
 [package.dependencies]
 flake8-polyfill = ">=1.0.2,<2"
-
-[[package]]
-name = "pies"
-version = "2.6.7"
-description = "The simplest way to write one program that runs on both Python 2 and Python 3."
-category = "main"
-optional = true
-python-versions = "*"
 
 [[package]]
 name = "pkginfo"
@@ -960,6 +941,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "types-setuptools"
+version = "57.4.9"
+description = "Typing stubs for setuptools"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.1.1"
 description = "Backported and Experimental Type Hints for Python 3.6+"
@@ -1064,8 +1053,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 
 [extras]
 with_bandit = ["bandit"]
-with_everything = ["bandit", "frosted", "mypy", "pyroma", "vulture"]
-with_frosted = ["frosted"]
+with_everything = ["bandit", "mypy", "pyroma", "vulture"]
 with_mypy = ["mypy"]
 with_pyroma = ["pyroma"]
 with_vulture = ["vulture"]
@@ -1073,7 +1061,7 @@ with_vulture = ["vulture"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6.2,<4.0"
-content-hash = "373aa0ef9c789dcb6d69ae4722424234dbdd92eeb4ea2d45d1d2cbfbcd83a214"
+content-hash = "c9094bf799d60937b8f96e7c9ced3faef969e9dd7a51f35e0a12025dbd72529f"
 
 [metadata.files]
 astroid = [
@@ -1289,10 +1277,6 @@ flake8-polyfill = [
     {file = "flake8-polyfill-1.0.2.tar.gz", hash = "sha256:e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"},
     {file = "flake8_polyfill-1.0.2-py2.py3-none-any.whl", hash = "sha256:12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9"},
 ]
-frosted = [
-    {file = "frosted-1.4.1-py2.py3-none-any.whl", hash = "sha256:c6a30ad502ea373f6fe4cafbcd896ece66948406b04365d14a3eb764cc529b07"},
-    {file = "frosted-1.4.1.tar.gz", hash = "sha256:d1e5d2b43a064b33c289b9a986a7425fd9a36bed8f519ca430ac7a0915e32b51"},
-]
 gitdb = [
     {file = "gitdb-4.0.9-py3-none-any.whl", hash = "sha256:8033ad4e853066ba6ca92050b9df2f89301b8fc8bf7e9324d412a63f8bf1a8fd"},
     {file = "gitdb-4.0.9.tar.gz", hash = "sha256:bac2fd45c0a1c9cf619e63a90d62bdc63892ef92387424b855792a6cabe789aa"},
@@ -1417,10 +1401,6 @@ pbr = [
 pep8-naming = [
     {file = "pep8-naming-0.10.0.tar.gz", hash = "sha256:f3b4a5f9dd72b991bf7d8e2a341d2e1aa3a884a769b5aaac4f56825c1763bf3a"},
     {file = "pep8_naming-0.10.0-py2.py3-none-any.whl", hash = "sha256:5d9f1056cb9427ce344e98d1a7f5665710e2f20f748438e308995852cfa24164"},
-]
-pies = [
-    {file = "pies-2.6.7-py2.py3-none-any.whl", hash = "sha256:79a652dddc64c6fa42c7dfe9686ae7b1d856391094b873e2f52fcd0bd662c102"},
-    {file = "pies-2.6.7.tar.gz", hash = "sha256:e8a76923ce0e0f605240901983fe492814a65d3d803efe3013a0e1815b75e4e9"},
 ]
 pkginfo = [
     {file = "pkginfo-1.8.2-py2.py3-none-any.whl", hash = "sha256:c24c487c6a7f72c66e816ab1796b96ac6c3d14d49338293d2141664330b55ffc"},
@@ -1634,6 +1614,10 @@ typed-ast = [
 types-pyyaml = [
     {file = "types-PyYAML-6.0.4.tar.gz", hash = "sha256:6252f62d785e730e454dfa0c9f0fb99d8dae254c5c3c686903cf878ea27c04b7"},
     {file = "types_PyYAML-6.0.4-py3-none-any.whl", hash = "sha256:693b01c713464a6851f36ff41077f8adbc6e355eda929addfb4a97208aea9b4b"},
+]
+types-setuptools = [
+    {file = "types-setuptools-57.4.9.tar.gz", hash = "sha256:536ef74744f8e1e4be4fc719887f886e74e4cf3c792b4a06984320be4df450b5"},
+    {file = "types_setuptools-57.4.9-py3-none-any.whl", hash = "sha256:948dc6863373750e2cd0b223a84f1fb608414cde5e55cf38ea657b93aeb411d2"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
