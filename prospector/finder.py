@@ -1,12 +1,3 @@
-try:
-    from functools import cached_property
-except ImportError:
-    # Python < 3.8  :-(
-    # so this will just have to be slower by a tiny bit for people on old pythons
-    # (rather than memoizing everything ourselves)
-    cached_property = property
-
-
 from pathlib import Path
 from typing import Callable, Iterable, Iterator, List
 
@@ -58,13 +49,13 @@ class FileFinder:
             paths.add(path)
         for module in self.python_modules:
             paths.add(module.parent)
-        return paths
+        return sorted(paths)
 
     def is_excluded(self, path: Path) -> bool:
         filters = [
             # we always want to ignore some things
             lambda _path: _path.is_dir() and _path.name in _SKIP_DIRECTORIES,
-            lambda _path: is_virtualenv(_path),
+            is_virtualenv,
         ] + self._exclusion_filters
 
         return any(filt(path) for filt in filters)
@@ -84,7 +75,7 @@ class FileFinder:
             else:
                 yield path
 
-    @cached_property
+    @property
     def files(self) -> List[Path]:
         """
         List every individual file found from the given configuration.
@@ -102,7 +93,7 @@ class FileFinder:
 
         return self._filter(files)
 
-    @cached_property
+    @property
     def python_packages(self) -> List[Path]:
         """
         Lists every directory found in the given configuration which is a python module (that is,
@@ -112,7 +103,7 @@ class FileFinder:
         """
         return self._filter(d for d in self.directories if is_python_package(d))
 
-    @cached_property
+    @property
     def python_modules(self) -> List[Path]:
         """
         Lists every directory found in the given configuration which is a python module (that is,
@@ -122,7 +113,7 @@ class FileFinder:
         """
         return self._filter(f for f in self.files if is_python_module(f))
 
-    @cached_property
+    @property
     def directories(self) -> List[Path]:
         """
         Lists every directory found from the given configuration, regardless of its contents.

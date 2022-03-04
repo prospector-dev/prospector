@@ -108,7 +108,7 @@ class PycodestyleTool(ToolBase):
                     # TODO: Remove this
                     header = re.compile(r"\[(pep8|pycodestyle)\]")
                     with codecs.open(conf_path) as conf_file:
-                        if any([header.search(line) for line in conf_file.readlines()]):
+                        if any(header.search(line) for line in conf_file.readlines()):
                             external_config = conf_path
                             break
 
@@ -124,7 +124,6 @@ class PycodestyleTool(ToolBase):
             # This means that we don't have existing config to use.
             # Make sure pycodestyle's code ignores are fully reset to zero before
             # adding prospector-flavoured configuration.
-            # pylint: disable=attribute-defined-outside-init
             self.checker.options.select = ()
             self.checker.options.ignore = tuple(prospector_config.get_disabled_messages("pycodestyle"))
 

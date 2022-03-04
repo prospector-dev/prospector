@@ -106,7 +106,6 @@ class PylintTool(ToolBase):
     def configure(self, prospector_config, found_files: FileFinder):
 
         extra_sys_path = found_files.make_syspath()
-
         check_paths = self._get_pylint_check_paths(found_files)
 
         pylint_options = prospector_config.tool_options("pylint")
@@ -134,22 +133,16 @@ class PylintTool(ToolBase):
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path
         if not pylint_options.get("use_pylint_default_path_finder"):
-            # note: we prepend, so that modules are preferentially found in the
-            # path given as an argument. This prevents problems where we are
-            # checking a module which is already on sys.path before this
-            # manipulation - for example, if we are checking 'requests' in a local
-            # checkout, but 'requests' is already installed system wide, pylint
-            # will discover the system-wide modules first if the local checkout
-            # does not appear first in the path
-            sys.path = list(set([str(path.absolute()) for path in extra_sys_path] + sys.path))
+            sys.path = sys.path + [str(path.absolute()) for path in extra_sys_path]
 
-    def _get_pylint_check_paths(self, found_files: FileFinder):  # TODO: convert to Path instead of str
+    def _get_pylint_check_paths(self, found_files: FileFinder) -> List[Path]:
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
         check_paths = set()
 
         modules = found_files.python_modules
         packages = found_files.python_packages
+        packages.sort(key=lambda p: len(str(p)))
 
         # don't add modules that are in known packages
         for module in modules:
@@ -160,7 +153,6 @@ class PylintTool(ToolBase):
                 check_paths.add(module)
 
         # sort from earlier packages first...
-        packages.sort(key=lambda p: len(str(p)))
         for idx, package in enumerate(packages):
             # yuck o(n2) but... temporary
             for prev_pkg in packages[:idx]:
@@ -171,8 +163,8 @@ class PylintTool(ToolBase):
                 # we should care about this one
                 check_paths.add(package)
 
-        check_paths = [str(p) for p in check_paths]
-        return check_paths
+        # need to sort to make sure multiple runs are deterministic
+        return sorted(check_paths)
 
     def _get_pylint_configuration(
         self, check_paths: List[Path], linter: ProspectorLinter, prospector_config, pylint_options

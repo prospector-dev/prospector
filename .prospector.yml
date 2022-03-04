@@ -19,11 +19,22 @@ mypy:
     follow-imports: skip
 
 pylint:
+  options:
+    extension-pkg-allow-list: mypy
   disable:
     - too-few-public-methods
     - missing-docstring
     - star-args
     - consider-using-f-string
+    - too-many-locals  # TODO: clean up these complexity problems
+    - too-many-branches
+    - too-many-arguments
+    - too-many-instance-attributes
+    - too-many-function-args
+    - too-many-statements
+
+mccabe:
+  run: false
 
 pycodestyle:
   disable:

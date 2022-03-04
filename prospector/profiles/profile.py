@@ -233,7 +233,7 @@ def _determine_pep8(profile_dict):
         return "full_pep8", True
     if pep8 == "none":
         return "no_pep8", True
-    elif isinstance(pep8, dict) and pep8.get("full", False):
+    if isinstance(pep8, dict) and pep8.get("full", False):
         return "full_pep8", False
     return None, False
 

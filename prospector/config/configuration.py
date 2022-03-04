@@ -4,7 +4,7 @@ import setoptconf as soc
 
 from prospector.config.datatype import OutputChoice
 from prospector.formatters import FORMATTERS
-from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES, TOOLS
+from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 __all__ = ("build_manager",)
 
@@ -145,7 +145,8 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         },
         "legacy_tool_names": {
             "flags": ["--legacy-tool-names"],
-            "help": "Output deprecated names for tools (pep8, pep257) instead of updated names (pycodestyle, pydocstyle)",
+            "help": "Output deprecated names for tools (pep8, pep257) "
+            "instead of updated names (pycodestyle, pydocstyle)",
         },
         "no_style_warnings": {
             "flags": ["-8", "--no-style-warnings"],
@@ -182,7 +183,8 @@ def build_command_line_source(prog=None, description="Performs static analysis o
         },
         "output_format": {
             "flags": ["-o", "--output-format"],
-            "help": "The output format. Valid values are: %s. This will output to stdout by default, however a target file can be used instead by adding :path-to-output-file, eg, -o json:output.json"
+            "help": "The output format. Valid values are: %s. This will output to stdout by default, "
+            "however a target file can be used instead by adding :path-to-output-file, eg, -o json:output.json"
             % (", ".join(sorted(FORMATTERS.keys())),),
         },
         "absolute_paths": {

@@ -199,7 +199,7 @@ class ProspectorConfig:
             # tools, so we use the defaults
             to_run = set(DEFAULT_TOOLS)
             # we can also use any that the profiles dictate
-            for tool in tools.TOOLS.keys():
+            for tool in tools.TOOLS:
                 if profile.is_tool_enabled(tool):
                     to_run.add(tool)
         else:
@@ -215,7 +215,7 @@ class ProspectorConfig:
                 to_run.remove(tool)
 
         # if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
-        for tool in tools.TOOLS.keys():
+        for tool in tools.TOOLS:
             enabled = profile.is_tool_enabled(tool)
             if enabled is None:
                 enabled = tool in DEFAULT_TOOLS
