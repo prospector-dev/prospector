@@ -2,11 +2,15 @@
 Changelog
 #########
 
-Version 1.7.6 - WIP
+Version 1.7.6
 -------------
 
 It's a bugs life.
 
+**Fixes**:
+
+* Fixed a problem where pylint was reporting the same message multiple times, because it was given a path to the file multiple times
+* The blending fix mentioned in the 1.7.5 release was actually not checked in by accident, this is there now.
 
 
 Version 1.7.5

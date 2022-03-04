@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Tuple
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -10,7 +11,7 @@ from prospector.tools.pylint import PylintTool
 THIS_DIR = Path(__file__).parent
 
 
-def _get_pylint_tool_and_prospector_config(argv_patch=None):
+def _get_pylint_tool_and_prospector_config(argv_patch=None) -> Tuple[PylintTool, ProspectorConfig]:
     if argv_patch is None:
         argv_patch = [""]
     with patch("sys.argv", argv_patch):
@@ -20,6 +21,18 @@ def _get_pylint_tool_and_prospector_config(argv_patch=None):
 
 
 class TestPylintTool(TestCase):
+    def test_no_duplicates_in_checkpath(self):
+        """
+        This checks that the pylint tool will not generate a list of packages and subpackages -
+        if there is a hierarchy there is no need to duplicate sub-packages in the list to be checked
+        """
+        root = THIS_DIR / "duplicates_test"
+        files = find_python([], [str(root)], explicit_file_mode=False)
+        tool, config = _get_pylint_tool_and_prospector_config()
+        check_paths = tool._get_pylint_check_paths(files)
+        assert len(check_paths) == 1
+        assert [str(Path(p).relative_to(root)) for p in check_paths] == ["pkg1"]
+
     def test_pylint_config(self):
         """Verifies that prospector will configure pylint with any pylint-specific configuration if found"""
 

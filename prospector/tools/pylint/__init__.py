@@ -2,6 +2,7 @@ import os
 import re
 import sys
 from collections import defaultdict
+from pathlib import Path
 from typing import List
 
 from pylint.config import find_pylintrc
@@ -140,27 +141,33 @@ class PylintTool(ToolBase):
     def _get_pylint_check_paths(self, found_files):
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
-        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
-        packages.sort(key=len)
         check_paths = set()
-        for package in packages:
-            package_path = os.path.join(*package)
-            if len(package) == 1:
-                check_paths.add(package_path)
-                continue
-            for i in range(1, len(package)):
-                if os.path.join(*package[:-i]) in check_paths:
+
+        # TODO: removing this janky str->Path->str stuff in 1.8, but for now...
+        packages = [Path(p).absolute() for p in found_files.iter_package_paths(abspath=True)]
+        modules = [Path(p).absolute() for p in found_files.iter_module_paths(abspath=True)]
+
+        # don't add modules that are in known packages
+        for module in modules:
+            for package in packages:
+                if module.is_relative_to(package):
                     break
             else:
-                check_paths.add(package_path)
-        for filepath in found_files.iter_module_paths(abspath=False):
-            package = os.path.dirname(filepath).split(os.path.sep)
-            for i in range(0, len(package)):
-                if os.path.join(*package[: i + 1]) in check_paths:
+                check_paths.add(module)
+
+        # sort from earlier packages first...
+        packages.sort(key=lambda p: len(str(p)))
+        for idx, package in enumerate(packages):
+            # yuck o(n2) but... temporary
+            for prev_pkg in packages[:idx]:
+                if package.is_relative_to(prev_pkg):
+                    # this is a sub-package of a package we know about
                     break
             else:
-                check_paths.add(filepath)
-        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
+                # we should care about this one
+                check_paths.add(package)
+
+        check_paths = [str(p) for p in check_paths]
         return check_paths
 
     def _get_pylint_configuration(self, check_paths, linter, prospector_config, pylint_options):

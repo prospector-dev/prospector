@@ -1,33 +1,33 @@
 import os
+from pathlib import Path
 from unittest import TestCase
 
 from prospector.finder import find_python
 from prospector.pathutils import is_virtualenv
 
-
-class TestDataMixin:
-    def _assert_find_files(self, name, expected, explicit_file_mode=False):
-        root = os.path.join(os.path.dirname(__file__), "testdata", name)
-        files = find_python([], [root], explicit_file_mode=explicit_file_mode)
-
-        expected = [os.path.relpath(os.path.join(root, e).rstrip(os.path.sep)) for e in expected]
-        expected.append(files.rootpath)
-        actual = files.get_minimal_syspath()
-
-        expected.sort(key=lambda x: len(x))
-
-        self.assertEqual(actual, expected)
+_TEST_DIR = Path(__file__).parent / "testdata"
 
 
-class TestSysPath(TestDataMixin, TestCase):
-    def test1(self):
-        self._assert_find_files("test1", ["", "somedir"])
+def _assert_find_files(name, expected, explicit_file_mode=False):
+    root = _TEST_DIR / name
+    files = find_python([], [str(root)], explicit_file_mode=explicit_file_mode)
 
-    def test2(self):
-        self._assert_find_files("test2", [""])
+    expected = [os.path.relpath(os.path.join(str(root), e).rstrip(os.path.sep)) for e in expected]
+    expected.append(files.rootpath)
+    actual = files.get_minimal_syspath()
 
-    def test3(self):
-        self._assert_find_files("test3", ["package"])
+    expected.sort(key=lambda x: len(x))
+    assert actual == expected
+
+
+def test_sys_path():
+    _assert_find_files("test1", ["", "somedir"])
+    _assert_find_files("test2", [""])
+    _assert_find_files("test3", ["package"])
+
+
+def test_skip_node_modules():
+    _assert_find_files("test_node_modules", ["module1"])
 
 
 class TestVirtualenvDetection(TestCase):
@@ -50,8 +50,3 @@ class TestVirtualenvDetection(TestCase):
         path.append("long_path_not_a_venv_long_path_not_a_v")
         path = os.path.join(*path)
         self.assertFalse(is_virtualenv(path))
-
-
-class TestNodeModulesDetection(TestDataMixin, TestCase):
-    def test_skip_node_modules(self):
-        self._assert_find_files("test_node_modules", ["module1"])
