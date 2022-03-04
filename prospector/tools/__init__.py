@@ -1,8 +1,9 @@
+import importlib
+
 from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
 from prospector.tools.mccabe import McCabeTool
-from prospector.tools.profile_validator import ProfileValidationTool
 from prospector.tools.pycodestyle import PycodestyleTool
 from prospector.tools.pydocstyle import PydocstyleTool
 from prospector.tools.pyflakes import PyFlakesTool
@@ -38,6 +39,11 @@ def _optional_tool(name, package_name=None, tool_class_name=None, install_option
     return tool_class
 
 
+def _profile_validator_tool():
+    mdl = importlib.import_module("prospector.tools.profile_validator")
+    return mdl.ProfileValidationTool
+
+
 TOOLS = {
     "dodgy": DodgyTool,
     "mccabe": McCabeTool,
@@ -45,7 +51,7 @@ TOOLS = {
     "pycodestyle": PycodestyleTool,
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
-    "profile-validator": ProfileValidationTool,
+    "profile-validator": _profile_validator_tool(),
     "vulture": _optional_tool("vulture"),
     "pyroma": _optional_tool("pyroma"),
     "mypy": _optional_tool("mypy"),

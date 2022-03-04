@@ -19,6 +19,8 @@ CONFIG_INVALID_REGEXP = "invalid-regexp"
 CONFIG_DEPRECATED_SETTING = "deprecated"
 CONFIG_DEPRECATED_CODE = "deprecated-tool-code"
 
+__all__ = ("ProfileValidationTool",)
+
 
 def _tool_names(with_deprecated: bool = True):
     # TODO: this is currently a circular import, which is why it is not at the top of

@@ -27,11 +27,10 @@ repos:
     rev: 1.7.4
     hooks:
     -       id: prospector
-            additional_dependencies:
-                - ".[with_mypy]"
             args:
-                - --summary-only
-                - --zero-exit
+                # can't use mypy as it'll complain about not having correct types-* dependencies
+                # when installed into the pre-commit virtualenv
+                - --without-tool=mypy
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:

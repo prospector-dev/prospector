@@ -23,7 +23,7 @@ import re
 import warnings
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import List
 
 from prospector import encoding
 from prospector.exceptions import FatalProspectorException
@@ -65,7 +65,7 @@ _PYLINT_EQUIVALENTS = {
 
 def _parse_pylint_informational(messages: List[Message]):
     ignore_files = set()
-    ignore_messages: Dict[Path, Dict[Any[int, None], List]] = defaultdict(lambda: defaultdict(list))
+    ignore_messages: dict = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
         if message.source == "pylint":
