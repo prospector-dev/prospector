@@ -24,8 +24,8 @@ class ProspectorConfig:
     def __init__(self):
         self.config, self.arguments = self._configure_prospector()
 
-        self.paths = self._get_work_path(self.config, self.arguments)
-        self.explicit_file_mode = all(map(os.path.isfile, self.paths))
+        self.paths = [Path(p) for p in self._get_work_path(self.config, self.arguments)]
+        self.explicit_file_mode = all(p.is_file for p in self.paths)
         self.workdir = Path.cwd()
 
         self.profile, self.strictness = self._get_profile(self.workdir, self.config)

@@ -29,7 +29,7 @@ class PylintTool(ToolBase):
         self._collector = self._linter = None
         self._orig_sys_path = []
 
-    def _prospector_configure(self, prospector_config, linter):
+    def _prospector_configure(self, prospector_config, linter: ProspectorLinter):
         errors = []
 
         if "django" in prospector_config.libraries:
@@ -165,7 +165,9 @@ class PylintTool(ToolBase):
         check_paths = [found_files.to_absolute_path(p) for p in check_paths]
         return check_paths
 
-    def _get_pylint_configuration(self, check_paths: List[Path], linter, prospector_config, pylint_options):
+    def _get_pylint_configuration(
+        self, check_paths: List[Path], linter: ProspectorLinter, prospector_config, pylint_options
+    ):
         self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
         linter.load_default_plugins()
 

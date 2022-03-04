@@ -37,7 +37,8 @@ repos:
     hooks:
     -   id: flake8
         args:
-        -    --max-line-length=120
+        - --max-line-length=120
+        - --exclude='testdata'
 -   repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
