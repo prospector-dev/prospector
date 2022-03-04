@@ -26,6 +26,16 @@ def _get_test_files(*names: str, workdir: Path = None):
 
 
 class TestPylintTool(TestCase):
+    def test_checkpath_includes_no_init_modules(self):
+        """
+        If a subdirectory of a package has a .py file but no __init__.py it should still be included
+        """
+        files = _get_test_files("test_no_init_found")
+        tool, config = _get_pylint_tool_and_prospector_config()
+        check_paths = tool._get_pylint_check_paths(files)
+        assert len(check_paths) == 2
+        assert sorted([Path(p).name for p in check_paths]) == ["file3.py", "test_no_init_found"]
+
     def test_no_duplicates_in_checkpath(self):
         """
         This checks that the pylint tool will not generate a list of packages and subpackages -

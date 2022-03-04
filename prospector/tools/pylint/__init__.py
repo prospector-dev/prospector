@@ -18,15 +18,8 @@ from prospector.tools.pylint.linter import ProspectorLinter
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
 
-def _is_relative_to(subpath: Path, path: Path) -> bool:
-    if hasattr(path, "is_relative_to"):
-        return subpath.is_relative_to(path)
-    # is_relative_to was added in python 3.9; fall back for < 3.9 versions:
-    try:
-        subpath.relative_to(path)
-        return True
-    except ValueError:
-        return False
+def _is_in_dir(subpath: Path, path: Path) -> bool:
+    return subpath.parent == path
 
 
 class PylintTool(ToolBase):
@@ -114,7 +107,7 @@ class PylintTool(ToolBase):
 
         extra_sys_path = found_files.make_syspath()
 
-        check_paths = found_files.python_packages + found_files.python_modules
+        check_paths = self._get_pylint_check_paths(found_files)
 
         pylint_options = prospector_config.tool_options("pylint")
         self._set_path_finder(extra_sys_path, pylint_options)
@@ -150,7 +143,7 @@ class PylintTool(ToolBase):
             # does not appear first in the path
             sys.path = list(set([str(path.absolute()) for path in extra_sys_path] + sys.path))
 
-    def _get_pylint_check_paths(self, found_files: FileFinder):
+    def _get_pylint_check_paths(self, found_files: FileFinder):  # TODO: convert to Path instead of str
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
         check_paths = set()
@@ -161,7 +154,7 @@ class PylintTool(ToolBase):
         # don't add modules that are in known packages
         for module in modules:
             for package in packages:
-                if _is_relative_to(module, package):
+                if _is_in_dir(module, package):
                     break
             else:
                 check_paths.add(module)
@@ -171,7 +164,7 @@ class PylintTool(ToolBase):
         for idx, package in enumerate(packages):
             # yuck o(n2) but... temporary
             for prev_pkg in packages[:idx]:
-                if _is_relative_to(package, prev_pkg):
+                if _is_in_dir(package, prev_pkg):
                     # this is a sub-package of a package we know about
                     break
             else:
