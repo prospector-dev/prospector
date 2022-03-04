@@ -17,6 +17,17 @@ from prospector.tools.pylint.linter import ProspectorLinter
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
 
+def _is_relative_to(subpath: Path, path: Path) -> bool:
+    if hasattr(path, "is_relative_to"):
+        return subpath.is_relative_to(path)
+    # is_relative_to was added in python 3.9; fall back for < 3.9 versions:
+    try:
+        subpath.relative_to(path)
+        return True
+    except ValueError:
+        return False
+
+
 class PylintTool(ToolBase):
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
@@ -150,7 +161,7 @@ class PylintTool(ToolBase):
         # don't add modules that are in known packages
         for module in modules:
             for package in packages:
-                if module.is_relative_to(package):
+                if _is_relative_to(module, package):
                     break
             else:
                 check_paths.add(module)
@@ -160,7 +171,7 @@ class PylintTool(ToolBase):
         for idx, package in enumerate(packages):
             # yuck o(n2) but... temporary
             for prev_pkg in packages[:idx]:
-                if package.is_relative_to(prev_pkg):
+                if _is_relative_to(package, prev_pkg):
                     # this is a sub-package of a package we know about
                     break
             else:
