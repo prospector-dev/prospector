@@ -57,7 +57,7 @@ class TestPylintTool(TestCase):
         for config_type in ("pylintrc", "pylintrc2", "pyproject", "setup.cfg"):
             root = THIS_DIR / "pylint_configs" / config_type
 
-            with patch("os.getcwd", return_value=root.absolute()):
+            with patch("pathlib.Path.cwd", return_value=root.absolute()):
                 pylint_tool, config = _get_pylint_tool_and_prospector_config()
             self.assertEqual(Path(config.workdir).absolute(), root.absolute())
 

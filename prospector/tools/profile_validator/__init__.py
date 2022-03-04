@@ -7,7 +7,7 @@ import yaml
 from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.tools import ToolBase, pyflakes
+from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS, ToolBase, pyflakes
 
 PROFILE_IS_EMPTY = "profile-is-empty"
 CONFIG_SETTING_SHOULD_BE_LIST = "should-be-list"
@@ -23,11 +23,7 @@ __all__ = ("ProfileValidationTool",)
 
 
 def _tool_names(with_deprecated: bool = True):
-    # TODO: this is currently a circular import, which is why it is not at the top of
-    #       the module. However, there's no obvious way to get around this right now...
-    from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS  # pylint: disable=import-outside-toplevel
-
-    tools = list(TOOLS.keys())
+    tools = list(TOOLS)
     if with_deprecated:
         tools += DEPRECATED_TOOL_NAMES.keys()
     return tools

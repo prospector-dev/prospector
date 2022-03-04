@@ -19,25 +19,26 @@ repos:
 -   repo: https://github.com/codespell-project/codespell
     rev: v2.1.0
     hooks:
-      - id: codespell
+    -   id: codespell
         args:
             - --ignore-words-list=nin
             - --skip=poetry.lock
 -   repo: https://github.com/PyCQA/prospector
     rev: 1.7.4
     hooks:
-    -       id: prospector
-            args:
-                # can't use mypy as it'll complain about not having correct types-* dependencies
-                # when installed into the pre-commit virtualenv
-                - --without-tool=mypy
+    -   id: prospector
+        args:
+            # can't use mypy as it'll complain about not having correct types-* dependencies
+            # when installed into the pre-commit virtualenv
+            - --without-tool=mypy
+            - --zero-exit
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
     -   id: flake8
         args:
-        - --max-line-length=120
-        - --exclude='testdata'
+        -   --max-line-length=120
+        -   --exclude='testdata'
 -   repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:

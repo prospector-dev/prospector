@@ -12,13 +12,19 @@ from prospector.tools.pylint import PylintTool
 
 def _tool_not_available(name, install_option_name):
     class NotAvailableTool(ToolBase):
+        """
+        Dummy tool class to return when a particular dependency is not found (such as mypy, or bandit)
+        for an optional tool. This does not error immediately since the tool is optional, but rather
+        if the user tries to run prospector and specifies using the tool at which point an error is raised.
+        """
+
         def configure(self, prospector_config, found_files):
             pass
 
         def run(self, _):
             raise FatalProspectorException(
-                "\nCannot run tool %s as support was not installed.\n"
-                "Please install by running 'pip install prospector[%s]'\n\n" % (name, install_option_name)
+                f"\nCannot run tool {name} as support was not installed.\n"
+                f"Please install by running 'pip install prospector[{install_option_name}]'\n\n"
             )
 
     return NotAvailableTool
@@ -26,8 +32,8 @@ def _tool_not_available(name, install_option_name):
 
 def _optional_tool(name, package_name=None, tool_class_name=None, install_option_name=None):
     package_name = "prospector.tools.%s" % (package_name or name)
-    tool_class_name = tool_class_name or "%sTool" % name.title()
-    install_option_name = install_option_name or ("with_%s" % name)
+    tool_class_name = tool_class_name or f"{name.title()}Tool"
+    install_option_name = install_option_name or f"with_{name}"
 
     try:
         tool_package = __import__(package_name, fromlist=[tool_class_name])
@@ -39,9 +45,10 @@ def _optional_tool(name, package_name=None, tool_class_name=None, install_option
     return tool_class
 
 
-def _profile_validator_tool():
+def _profile_validator_tool(*args, **kwargs):
+    # bit of a hack to avoid a cyclic import...
     mdl = importlib.import_module("prospector.tools.profile_validator")
-    return mdl.ProfileValidationTool
+    return mdl.ProfileValidationTool(*args, **kwargs)
 
 
 TOOLS = {
@@ -51,7 +58,7 @@ TOOLS = {
     "pycodestyle": PycodestyleTool,
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
-    "profile-validator": _profile_validator_tool(),
+    "profile-validator": _profile_validator_tool,
     "vulture": _optional_tool("vulture"),
     "pyroma": _optional_tool("pyroma"),
     "mypy": _optional_tool("mypy"),

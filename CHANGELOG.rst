@@ -4,11 +4,13 @@ Changelog
 
 Version 1.8.0 - WIP
 -------------
-
+TODO: put this back until 2.0
 * Removed `frosted <https://github.com/timothycrosley/deprecated.frosted>`_ - it has been deprecated and unnecessary for a long time. The original reason for it was that flake8 was not being maintained, but that is no longer true, and frosted is not updated now.
 
+* Prospector now runs on itself without generating errors after all linting warnings were fixed
+
 **Fixes**:
-* Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
+* Finding paths and files to check has been replaced with a new version using ``pathlib`` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
 
 Version 1.7.6
