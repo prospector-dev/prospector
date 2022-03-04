@@ -61,16 +61,13 @@ class FileFinder:
         return paths
 
     def is_excluded(self, path: Path) -> bool:
-        # we always want to ignore some things
         filters = [
-            lambda path: path.is_dir() and path.name in _SKIP_DIRECTORIES,
-            lambda path: is_virtualenv(path),
+            # we always want to ignore some things
+            lambda _path: _path.is_dir() and _path.name in _SKIP_DIRECTORIES,
+            lambda _path: is_virtualenv(_path),
         ] + self._exclusion_filters
 
-        for filt in filters:
-            if filt(path):
-                return True
-        return False
+        return any(filt(path) for filt in filters)
 
     def _filter(self, paths: Iterable[Path]) -> List[Path]:
         return [path for path in paths if not self.is_excluded(path)]

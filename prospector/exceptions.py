@@ -20,10 +20,9 @@ class FatalProspectorException(Exception):
 
 
 class CouldNotHandleEncoding(Exception):
-    def __init__(self, path: Path, cause: Exception):
+    def __init__(self, path: Path):
         super().__init__()
         self.path = path
-        self.cause = cause
 
 
 class PermissionMissing(Exception):

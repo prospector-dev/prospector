@@ -1,10 +1,11 @@
 import tokenize
 from pathlib import Path
+from typing import AnyStr
 
 from prospector.exceptions import CouldNotHandleEncoding, PermissionMissing
 
 
-def read_py_file(filepath: Path):
+def read_py_file(filepath: Path) -> AnyStr:
     # see https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding
     # first just see if the file is properly encoded
     try:
