@@ -8,12 +8,22 @@ Version 1.8.0 - WIP
 * Removed `frosted <https://github.com/timothycrosley/deprecated.frosted>`_ - it has been deprecated and unnecessary for a long time. The original reason for it was that flake8 was not being maintained, but that is no longer true, and frosted is not updated now.
 
 **Fixes**:
-
 * Finding paths and files to check has been replaced with a new version using `pathlib` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
 
+Version 1.7.6
+-------------
+
+It's a bugs life.
+
+**Fixes**:
+
+* Fixed a problem where pylint was reporting the same message multiple times, because it was given a path to the file multiple times
+* The blending fix mentioned in the 1.7.5 release was actually not checked in by accident, this is there now.
+
+
 Version 1.7.5
-=======
+-------------
 
 Just say no to bugs.
 

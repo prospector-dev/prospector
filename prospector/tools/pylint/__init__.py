@@ -18,6 +18,17 @@ from prospector.tools.pylint.linter import ProspectorLinter
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
 
+def _is_relative_to(subpath: Path, path: Path) -> bool:
+    if hasattr(path, "is_relative_to"):
+        return subpath.is_relative_to(path)
+    # is_relative_to was added in python 3.9; fall back for < 3.9 versions:
+    try:
+        subpath.relative_to(path)
+        return True
+    except ValueError:
+        return False
+
+
 class PylintTool(ToolBase):
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
@@ -139,30 +150,35 @@ class PylintTool(ToolBase):
             # does not appear first in the path
             sys.path = list(set([str(path.absolute()) for path in extra_sys_path] + sys.path))
 
-    def _get_pylint_check_paths(self, found_files):
+    def _get_pylint_check_paths(self, found_files: FileFinder):
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
-        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
-        packages.sort(key=len)
         check_paths = set()
-        for package in packages:
-            package_path = os.path.join(*package)
-            if len(package) == 1:
-                check_paths.add(package_path)
-                continue
-            for i in range(1, len(package)):
-                if os.path.join(*package[:-i]) in check_paths:
+
+        modules = found_files.python_modules
+        packages = found_files.python_packages
+
+        # don't add modules that are in known packages
+        for module in modules:
+            for package in packages:
+                if _is_relative_to(module, package):
                     break
             else:
-                check_paths.add(package_path)
-        for filepath in found_files.iter_module_paths(abspath=False):
-            package = os.path.dirname(filepath).split(os.path.sep)
-            for i in range(0, len(package)):
-                if os.path.join(*package[: i + 1]) in check_paths:
+                check_paths.add(module)
+
+        # sort from earlier packages first...
+        packages.sort(key=lambda p: len(str(p)))
+        for idx, package in enumerate(packages):
+            # yuck o(n2) but... temporary
+            for prev_pkg in packages[:idx]:
+                if _is_relative_to(package, prev_pkg):
+                    # this is a sub-package of a package we know about
                     break
             else:
-                check_paths.add(filepath)
-        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
+                # we should care about this one
+                check_paths.add(package)
+
+        check_paths = [str(p) for p in check_paths]
         return check_paths
 
     def _get_pylint_configuration(

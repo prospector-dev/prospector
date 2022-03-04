@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple, Union
 
 from pylint.exceptions import UnknownMessageError
 from pylint.message import Message as PylintMessage
@@ -20,7 +20,7 @@ class Collector(BaseReporter):
         location = (msg.abspath, msg.module, msg.obj, msg.line, msg.column)
         self.add_message(msg.msg_id, location, msg.msg)
 
-    def add_message(self, msg_id, location, msg) -> None:
+    def add_message(self, msg_id: str, location: Tuple[Union[int, str]], msg: Message) -> None:
         # (* magic is acceptable here)
         loc = Location(*location)
         # At this point pylint will give us the code but we want the
