@@ -33,7 +33,7 @@ class FileFinder:
 
         self._provided_files = []
         self._provided_dirs = []
-        self._exclusion_filters = exclusion_filters or []
+        self._exclusion_filters = list(exclusion_filters or [])
 
         for path in provided_paths:
             if not path.exists():

@@ -1,11 +1,13 @@
 import tokenize
 from pathlib import Path
-from typing import AnyStr
 
 from prospector.exceptions import CouldNotHandleEncoding, PermissionMissing
 
+# note: annotating return type with AnyStr does not work here for reasons I can't be bothered to work out
+#       mypy complains with 'Incompatible return value type (got "str", expected "bytes")'
 
-def read_py_file(filepath: Path) -> AnyStr:
+
+def read_py_file(filepath: Path):
     # see https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding
     # first just see if the file is properly encoded
     try:

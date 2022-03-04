@@ -105,9 +105,9 @@ class ProfileValidationTool(ToolBase):
             )
 
         if "strictness" in parsed:
-            possible = ("veryhigh", "high", "medium", "low", "verylow", "none")
-            if parsed["strictness"] not in possible:
-                _joined = ", ".join(possible)
+            possible_strictness = ("veryhigh", "high", "medium", "low", "verylow", "none")
+            if parsed["strictness"] not in possible_strictness:
+                _joined = ", ".join(possible_strictness)
                 add_message(
                     CONFIG_INVALID_VALUE,
                     f'"strictness" must be one of {_joined}',
@@ -115,11 +115,11 @@ class ProfileValidationTool(ToolBase):
                 )
 
         if "uses" in parsed:
-            possible = ("django", "celery", "flask")
+            possible_libs = ("django", "celery", "flask")
             parsed_list = parsed["uses"] if isinstance(parsed["uses"], list) else [parsed["uses"]]
             for uses in parsed_list:
-                if uses not in possible:
-                    _joined = ", ".join(possible)
+                if uses not in possible_libs:
+                    _joined = ", ".join(possible_libs)
                     add_message(
                         CONFIG_INVALID_VALUE,
                         f'"{uses}" is not valid for "uses", must be one of {_joined}',

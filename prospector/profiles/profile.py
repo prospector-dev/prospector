@@ -181,7 +181,7 @@ def _merge_tool_config(priority, base):
     return out
 
 
-def _merge_profile_dict(priority, base):
+def _merge_profile_dict(priority: dict, base: dict) -> dict:
     # copy the base dict into our output
     out = dict(base.items())
 
@@ -327,7 +327,7 @@ def _load_and_merge(
     # top of the inheritance tree to the bottom). This means that the lower down
     # values overwrite those from above, meaning that the initially provided profile
     # has precedence.
-    merged = {}
+    merged: dict = {}
     for name in inherit_list[::-1]:
         priority = data[name]
         merged = _merge_profile_dict(priority, merged)
