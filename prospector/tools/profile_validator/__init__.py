@@ -64,9 +64,9 @@ class ProfileValidationTool(ToolBase):
         messages = []
 
         with filepath.open() as profile_file:
-            raw_contents = profile_file.read()
-            parsed = yaml.safe_load(raw_contents)
-            raw_contents = raw_contents.split("\n")
+            _file_contents = profile_file.read()
+            parsed = yaml.safe_load(_file_contents)
+            raw_contents = _file_contents.split("\n")
 
         def add_message(code, message, setting):
             if code in self.ignore_codes:

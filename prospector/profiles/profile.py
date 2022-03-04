@@ -41,7 +41,7 @@ class ProspectorProfile:
             tool_conf = profile_dict.get(tool, {})
 
             # set the defaults for everything
-            conf = {"disable": [], "enable": [], "run": None, "options": {}}
+            conf: Dict[str, Any] = {"disable": [], "enable": [], "run": None, "options": {}}
             # use the "old" tool name
             conf.update(tool_conf)
 
