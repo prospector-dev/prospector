@@ -43,7 +43,7 @@ them to the hook configuration like so::
         rev: 1.7.5
         hooks:
         -   id: prospector
-            additional_requirements:
+            additional_dependencies:
             - ".[with_mypy,with_bandit]"
 
 This is equivalent to running::
