@@ -11,7 +11,7 @@ class XunitFormatter(Formatter):
     to use Xunit and prospector itself.
     """
 
-    def render(self, summary=True, messages=True, profile=False):
+    def render(self, summary=True, messages=True, profile=False, paths_relative_to=None):
         xml_doc = Document()
 
         testsuite_el = xml_doc.createElement("testsuite")
@@ -41,8 +41,13 @@ class XunitFormatter(Formatter):
             failure_el.setAttribute("message", message.message.strip())
             failure_el.setAttribute("type", "%s Error" % message.source)
             template = "%(path)s:%(line)s: [%(code)s(%(source)s), %(function)s] %(message)s"
+            message_path = (
+                message.location.absolute_path()
+                if paths_relative_to is None
+                else message.location.relative_path(paths_relative_to)
+            )
             cdata = template % {
-                "path": message.location.path,
+                "path": message_path,
                 "line": message.location.line,
                 "source": message.source,
                 "code": message.code,

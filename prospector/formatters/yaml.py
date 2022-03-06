@@ -7,7 +7,7 @@ __all__ = ("YamlFormatter",)
 
 # pylint: disable=too-few-public-methods
 class YamlFormatter(Formatter):
-    def render(self, summary=True, messages=True, profile=False):
+    def render(self, summary=True, messages=True, profile=False, paths_relative_to=None):
         output = {}
 
         if summary:
@@ -17,7 +17,7 @@ class YamlFormatter(Formatter):
             output["profile"] = self.profile.as_dict()
 
         if messages:
-            output["messages"] = [m.as_dict() for m in self.messages]
+            output["messages"] = [self._message_to_dict(m, paths_relative_to) for m in self.messages]
 
         return yaml.safe_dump(
             output,

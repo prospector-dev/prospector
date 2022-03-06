@@ -10,7 +10,7 @@ class VSCodeFormatter(Formatter):
     This formatter outputs messages in the same way as vscode prospector linter expects.
     """
 
-    def render(self, summary=True, messages=True, profile=False):
+    def render(self, summary=True, messages=True, profile=False, paths_relative_to=None):
         # this formatter will always ignore the summary and profile
         cur_loc = None
         output = []
@@ -19,7 +19,7 @@ class VSCodeFormatter(Formatter):
 
             if cur_loc != message.location.path:
                 cur_loc = message.location.path
-                module_name = message.location.path.replace(os.path.sep, ".")
+                module_name = str(message.location.path).replace(os.path.sep, ".")
                 module_name = re.sub(r"(\.__init__)?\.py$", "", module_name)
 
                 header = "************* Module %s" % module_name
