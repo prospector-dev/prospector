@@ -59,26 +59,22 @@ class TestBlendLine(TestCase):
         self._do_test((), ())
 
 
-class TestBlend(TestCase):
+def test_multiple_lines():
+    def _msg(source, code, line_number):
+        loc = Location("path.py", "path", None, line_number, 0)
+        return Message(source, code, loc, "Test Message")
 
-    BLEND = ((("s1", "s1c001"), ("s2", "s2c101")),)
+    messages = [
+        _msg("s1", "s1c001", 4),
+        _msg("s2", "s2c001", 6),
+        _msg("s2", "s2c101", 4),
+        _msg("s1", "s1c001", 6),
+    ]
 
-    def test_multiple_lines(self):
-        def _msg(source, code, line_number):
-            loc = Location("path.py", "path", None, line_number, 0)
-            return Message(source, code, loc, "Test Message")
+    result = blender.blend(messages, ((("s1", "s1c001"), ("s2", "s2c101")),))
+    result = [(msg.source, msg.code, msg.location.line) for msg in result]
+    result = set(result)
 
-        messages = [
-            _msg("s1", "s1c001", 4),
-            _msg("s2", "s2c001", 6),
-            _msg("s2", "s2c101", 4),
-            _msg("s1", "s1c001", 6),
-        ]
+    expected = set((("s1", "s1c001", 4), ("s1", "s1c001", 6), ("s2", "s2c001", 6)))
 
-        result = blender.blend(messages, TestBlend.BLEND)
-        result = [(msg.source, msg.code, msg.location.line) for msg in result]
-        result = set(result)
-
-        expected = set((("s1", "s1c001", 4), ("s1", "s1c001", 6), ("s2", "s2c001", 6)))
-
-        self.assertEqual(expected, result)
+    assert expected == result
