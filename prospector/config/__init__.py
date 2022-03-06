@@ -21,12 +21,12 @@ class ProspectorConfig:
     # is a config object and its sole purpose is to hold many properties!
     # pylint:disable=no-self-use,too-many-instance-attributes
 
-    def __init__(self):
+    def __init__(self, workdir: Path = None):
         self.config, self.arguments = self._configure_prospector()
 
         self.paths = [Path(p) for p in self._get_work_path(self.config, self.arguments)]
         self.explicit_file_mode = all(p.is_file for p in self.paths)
-        self.workdir = Path.cwd()
+        self.workdir = workdir or Path.cwd()
 
         self.profile, self.strictness = self._get_profile(self.workdir, self.config)
         self.libraries = self._find_used_libraries(self.config, self.profile)

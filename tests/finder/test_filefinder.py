@@ -7,17 +7,6 @@ from .utils import TEST_DATA
 
 
 class TestFileFinder(TestCase):
-    def test_workdir_is_dir(self):
-        """
-        Verify that the workdir argument is only allowed to be a directory
-        """
-        # throws no exception:
-        FileFinder(TEST_DATA, workdir=TEST_DATA)
-        # throws exception when workdir is not a directory
-        self.assertRaises(ValueError, FileFinder, TEST_DATA, workdir=Path(__file__))
-        self.assertRaises(ValueError, FileFinder, TEST_DATA, workdir=Path("wobblewoblblelalala"))
-        self.assertRaises(ValueError, FileFinder, TEST_DATA, workdir="/tmp")
-
     def test_python_in_normal_dir(self):
         """
         This test is to find packages and files when given a directory which
@@ -38,8 +27,13 @@ class TestFileFinder(TestCase):
         finder = FileFinder(TEST_DATA / "test3")
 
         self.assertEqual(4, len(finder.files))
+        self.assertTrue(all(p.is_absolute() for p in finder.files))
+
         self.assertEqual(4, len(finder.python_modules))
+        self.assertTrue(all(p.is_absolute() for p in finder.python_modules))
+
         self.assertEqual(4, len(finder.python_packages))
+        self.assertTrue(all(p.is_absolute() for p in finder.python_packages))
 
     def test_package_finder(self):
         """
@@ -63,21 +57,6 @@ class TestFileFinder(TestCase):
         lvl2 = TEST_DATA / "filter_test/ignore_me/level2"
         self.assertNotIn(lvl2, finder.directories)
         self.assertNotIn(lvl2, finder.python_modules)
-
-    def test_workdir_set(self):
-        """
-        Simple test to validate args/kwargs are working as expected
-        """
-        search = (
-            TEST_DATA / "test1",
-            TEST_DATA / "test3",
-            TEST_DATA / "test3",
-        )
-        finder = FileFinder(*search)
-        self.assertIsNotNone(finder.workdir)
-
-        finder = FileFinder(*search, workdir=TEST_DATA)
-        self.assertEqual(TEST_DATA, finder.workdir)
 
     def test_multiple_search_directories(self):
         """

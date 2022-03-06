@@ -20,9 +20,9 @@ def _get_pylint_tool_and_prospector_config(argv_patch=None) -> Tuple[PylintTool,
     return pylint_tool, config
 
 
-def _get_test_files(*names: str, workdir: Path = None):
+def _get_test_files(*names: str):
     paths = [THIS_DIR / name for name in names]
-    return FileFinder(*paths, workdir=workdir)
+    return FileFinder(*paths)
 
 
 class TestPylintTool(TestCase):

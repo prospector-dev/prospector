@@ -17,7 +17,7 @@ class FileFinder:
     is basically to know which files to pass to which tools to be inspected.
     """
 
-    def __init__(self, *provided_paths: Path, workdir: Path = None, exclusion_filters: Iterable[Callable] = None):
+    def __init__(self, *provided_paths: Path, exclusion_filters: Iterable[Callable] = None):
         """
         :param provided_paths:
             A list of Path objects to search for files and modules - can be either directories or files
@@ -25,12 +25,6 @@ class FileFinder:
             An optional list of filters. All paths will be checked against this list - if any return True,
             the path is excluded.
         """
-        self.workdir = workdir or Path.cwd()
-        if not isinstance(self.workdir, Path):
-            raise ValueError(f"Workdir {self.workdir} is not a Path object")
-        if not self.workdir.is_dir() or not self.workdir.exists():
-            raise ValueError(f"Cannot set workdir to {self.workdir} - it is not a directory")
-
         self._provided_files = []
         self._provided_dirs = []
         self._exclusion_filters = list(exclusion_filters or [])
@@ -38,13 +32,16 @@ class FileFinder:
         for path in provided_paths:
             if not path.exists():
                 raise FileNotFoundError(path)
+            # ensure all paths from now one are absolute paths; they can be converted
+            # to relative paths for output purposes later
+            path = path.absolute()
             if path.is_file():
                 self._provided_files.append(path)
             if path.is_dir():
                 self._provided_dirs.append(path)
 
     def make_syspath(self) -> List[Path]:
-        paths = {self.workdir}
+        paths = set()
         for path in self._provided_dirs:
             paths.add(path)
         for module in self.python_modules:

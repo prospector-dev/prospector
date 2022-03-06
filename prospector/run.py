@@ -55,7 +55,7 @@ class Prospector:
                     return True
             return False
 
-        found_files = FileFinder(*paths, exclusion_filters=[_ignores], workdir=self.config.workdir)
+        found_files = FileFinder(*paths, exclusion_filters=[_ignores])
 
         messages = []
 
