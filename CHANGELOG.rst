@@ -2,6 +2,14 @@
 Changelog
 #########
 
+Version 1.7.7
+-------------
+
+**Fixes**:
+
+* Restored ``__main__.py`` so that prospector could be run as a module, ie ``python -m prospector`` - `#497 <https://github.com/PyCQA/prospector/pull/497>`_
+
+
 Version 1.7.6
 -------------
 
