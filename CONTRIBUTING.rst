@@ -7,7 +7,7 @@ All contributions are very welcome! You can contribute in many ways:
 
 * Report bugs on the GitHub `issue tracker`_.
 
-* Submit pull requests on the GitHub `repository`_. Ideally make a pull request to the *develop* branch, as I prefer to keep the master branch the same as the most recent release on PyPI. If you do this, be sure to add yourself to the CONTRIBUTORS.md file too!
+* Submit pull requests on the GitHub `repository`_. Ideally make a pull request to the *develop* branch, as I prefer to keep the master branch the same as the most recent release on PyPI. If you do this, be sure to add yourself to the CONTRIBUTORS.rst file too!
 
 .. _python code quality: https://mail.python.org/mailman/listinfo/code-quality
 .. _issue tracker: https://github.com/PyCQA/prospector/issues
