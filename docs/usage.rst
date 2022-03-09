@@ -20,6 +20,9 @@ And you can specify a list of python modules::
 
 See below for :ref:`a complete list of options and flags<full_options>`. You can also run ``prospector --help`` for a full list of options and their effects.
 
+Alternatively, prospector can be executed as a module::
+
+    python3 -m prospector <args>
 
 Output Format
 '''''''''''''
