@@ -23,6 +23,7 @@ Contributors
 * Kristian Glass (`@doismellburning <https://github.com/doismellburning>`_)
 * Luke Hinds (`@lukehinds <https://github.com/lukehinds>`_)
 * Matt Seymour (`@mattseymour <https://github.com/mattseymour>`_)
+* Michael Tinsley (`@michaeltinsley <https://github.com/michaeltinsley>`_)
 * Phil Frost (`@bitglue <https://github.com/bitglue>`_)
 * Phil Jones (`@pgjones <https://github.com/pgjones>`_)
 * Pierre Sassoulas (`@Pierre-Sassoulas <https://github.com/Pierre-Sassoulas>`_)
