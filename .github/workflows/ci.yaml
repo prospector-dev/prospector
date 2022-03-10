@@ -192,6 +192,7 @@ jobs:
           . venv/bin/activate
           echo "Checking prospector can run; don't care about messages found, only that it runs successfully"
           prospector --quiet --zero-exit
+          python -m prospector --quiet --zero-exit
           echo "Prospector ran successfully."
       - name: Build and validate packages
         run: |

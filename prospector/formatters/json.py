@@ -8,7 +8,7 @@ __all__ = ("JsonFormatter",)
 
 # pylint: disable=too-few-public-methods
 class JsonFormatter(Formatter):
-    def render(self, summary=True, messages=True, profile=False, paths_relative_to=None):
+    def render(self, summary=True, messages=True, profile=False):
         output = {}
 
         if summary:
@@ -27,6 +27,6 @@ class JsonFormatter(Formatter):
             output["profile"] = self.profile.as_dict()
 
         if messages:
-            output["messages"] = [self._message_to_dict(m, paths_relative_to) for m in self.messages]
+            output["messages"] = [self._message_to_dict(m) for m in self.messages]
 
         return json.dumps(output, indent=2)

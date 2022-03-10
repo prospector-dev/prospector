@@ -159,7 +159,8 @@ class Prospector:
         for report in output_reports:
             output_format, output_files = report
             self.summary["formatter"] = output_format
-            formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
+            relative_to = None if self.config.absolute_paths else self.config.workdir
+            formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile, relative_to)
             if not output_files and not self.config.quiet:
                 self.write_to(formatter, sys.stdout)
             for output_file in output_files:
@@ -172,7 +173,7 @@ class Prospector:
             formatter.render(
                 summary=not self.config.messages_only,
                 messages=not self.config.summary_only,
-                profile=self.config.show_profile,
+                profile=self.config.show_profile
             )
         )
         target.write("\n")

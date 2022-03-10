@@ -24,7 +24,7 @@ class ProspectorConfig:
     def __init__(self, workdir: Path = None):
         self.config, self.arguments = self._configure_prospector()
 
-        self.paths = [Path(p) for p in self._get_work_path(self.config, self.arguments)]
+        self.paths = self._get_work_path(self.config, self.arguments)
         self.explicit_file_mode = all(p.is_file for p in self.paths)
         self.workdir = workdir or Path.cwd()
 
@@ -87,14 +87,14 @@ class ProspectorConfig:
         config = mgr.retrieve(*cfg.build_default_sources())
         return config, mgr.arguments
 
-    def _get_work_path(self, config, arguments):
+    def _get_work_path(self, config, arguments) -> List[Path]:
         # Figure out what paths we're prospecting
         if config["path"]:
-            paths = [self.config["path"]]
+            paths = [Path(self.config["path"])]
         elif arguments["checkpath"]:
-            paths = arguments["checkpath"]
+            paths = [Path(p) for p in arguments["checkpath"]]
         else:
-            paths = [os.getcwd()]
+            paths = [Path.cwd()]
         return paths
 
     def _get_profile(self, path, config):

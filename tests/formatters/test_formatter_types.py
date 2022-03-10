@@ -13,8 +13,9 @@ def _simple_profile() -> ProspectorProfile:
     return ProspectorProfile(name="horse", profile_dict={}, inherit_order=["horse"])
 
 
-def test_formatter_types(_simple_profile):
-    summary = {
+@pytest.fixture
+def _simple_summary() -> dict:
+    return {
         "started": datetime.datetime(2014, 1, 1),
         "completed": datetime.datetime(2014, 1, 1),
         "message_count": 0,
@@ -25,12 +26,14 @@ def test_formatter_types(_simple_profile):
         "tools": [],
     }
 
+
+def test_formatter_types(_simple_summary, _simple_profile):
     for formatter_name, formatter in FORMATTERS.items():
-        formatter_instance = formatter(summary, [], _simple_profile)
+        formatter_instance = formatter(_simple_summary, [], _simple_profile)
         assert isinstance(formatter_instance.render(True, True, False), str)
 
 
-def test_formatters_render(_simple_profile):
+def test_formatters_render(_simple_summary, _simple_profile):
     """
     Basic test to ensure that formatters can at least render messages without erroring
     """
@@ -43,5 +46,5 @@ def test_formatters_render(_simple_profile):
                 "testing formatters work",
             )
         ]
-        formatter_instance = formatter({}, messages, _simple_profile)
+        formatter_instance = formatter(_simple_summary, messages, _simple_profile)
         formatter_instance.render(True, True, False)

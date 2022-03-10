@@ -16,7 +16,7 @@ class GroupedFormatter(TextFormatter):
         groups = defaultdict(lambda: defaultdict(list))
 
         for message in self.messages:
-            groups[message.location.path][message.location.line].append(message)
+            groups[self._make_path(message.location.path)][message.location.line].append(message)
 
         for filename in sorted(groups.keys()):
             output.append(str(filename))
