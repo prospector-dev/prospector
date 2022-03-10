@@ -173,7 +173,7 @@ class Prospector:
             formatter.render(
                 summary=not self.config.messages_only,
                 messages=not self.config.summary_only,
-                profile=self.config.show_profile
+                profile=self.config.show_profile,
             )
         )
         target.write("\n")

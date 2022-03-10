@@ -25,7 +25,6 @@ class Formatter(ABC):
             path = path.relative_to(self.paths_relative_to)
         return str(path)
 
-
     def _message_to_dict(self, message: Message) -> dict:
         loc = {
             "path": self._make_path(message.location.path),
