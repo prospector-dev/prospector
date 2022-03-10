@@ -13,6 +13,7 @@ TODO: put this back until 2.0
 * Finding paths and files to check has been replaced with a new version using ``pathlib`` - this should not result in any changes, except fixing an issue where `pylint` and `pydocstyle` were inspecting the same file or directory twice sometimes. However it may cause slightly different orders or reduce these duplicate warnings.
 
 
+
 Version 1.7.6
 -------------
 
