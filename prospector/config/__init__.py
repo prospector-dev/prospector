@@ -3,11 +3,12 @@ import re
 import sre_constants
 import sys
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.config import configuration as cfg
+from prospector.message import Message
 from prospector.profiles import AUTO_LOADED_PROFILES
 from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile, ProfileNotFound, ProspectorProfile
 from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES
@@ -32,8 +33,8 @@ class ProspectorConfig:
         self.libraries = self._find_used_libraries(self.config, self.profile)
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
-        self.configured_by = {}
-        self.messages = []
+        self.configured_by: Dict[str, str] = {}
+        self.messages: List[Message] = []
 
     def get_tools(self, found_files):
         self.configured_by = {}
@@ -95,7 +96,7 @@ class ProspectorConfig:
             paths = [Path(p) for p in arguments["checkpath"]]
         else:
             paths = [Path.cwd()]
-        return paths
+        return [p.resolve() for p in paths]
 
     def _get_profile(self, path, config):
         # Use the specified profiles

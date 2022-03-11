@@ -30,3 +30,31 @@ def test_total_errors():
     for file in workdir.rglob("*.py"):
         del message_locs[file]
     assert len(message_locs) == 0
+
+
+def test_relative_path_specified():
+    """
+    This test was to fix `prospector .` returning different results to `prospector ../prospector`
+    (when running inside the prospector checkout
+    """
+    root = TEST_DATA / "relative_specified"
+    with patch("os.getcwd", new=lambda: str(root.absolute())):
+        with patch("sys.argv", ["prospector"]):
+            config1 = ProspectorConfig()
+            found_files1 = FileFinder(*config1.paths)
+
+        with patch("sys.argv", ["prospector", "../relative_specified"]):
+            config2 = ProspectorConfig()
+            found_files2 = FileFinder(*config1.paths)
+
+        with patch("sys.argv", ["prospector", "."]):
+            config3 = ProspectorConfig()
+            found_files3 = FileFinder(*config1.paths)
+
+    assert root == config2.workdir == config1.workdir == config3.workdir
+    assert config1.paths == config2.paths == config3.paths
+
+    assert found_files3.files == found_files2.files == found_files1.files
+    assert found_files3.python_modules == found_files2.python_modules == found_files1.python_modules
+    assert found_files3.python_packages == found_files2.python_packages == found_files1.python_packages
+    assert found_files3.directories == found_files2.directories == found_files1.directories

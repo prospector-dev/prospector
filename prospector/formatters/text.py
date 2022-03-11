@@ -47,7 +47,6 @@ class TextFormatter(Formatter):
 
         return "\n".join(output)
 
-    # pylint: disable=no-self-use
     def render_message(self, message):
         output = []
 
