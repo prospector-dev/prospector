@@ -24,14 +24,14 @@ repos:
             - --ignore-words-list=nin
             - --skip=poetry.lock
 -   repo: https://github.com/PyCQA/prospector
-    rev: 1.7.6
+    rev: 6ee6cd97b78ebdd8d131ae601c422471cd3a3fd2
     hooks:
     -   id: prospector
-        args:
-            # can't use mypy as it'll complain about not having correct types-* dependencies
-            # when installed into the pre-commit virtualenv
-            - --without-tool=mypy
-            - --zero-exit
+        additional_dependencies:
+            - '.[with_everything]'
+            # the following are needed to run mypy successfully in the pre-commit virtualenv
+            - types-setuptools
+            - types-PyYAML
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
