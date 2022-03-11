@@ -31,6 +31,7 @@ repos:
             # can't use mypy as it'll complain about not having correct types-* dependencies
             # when installed into the pre-commit virtualenv
             - --without-tool=mypy
+            - --zero-exit
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
