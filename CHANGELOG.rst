@@ -2,8 +2,10 @@
 Changelog
 #########
 
-Version 1.8.0 - WIP
--------------
+Version 1.8.0 rc0
+-----------------
+
+This is currently still a pre-release.
 
 ** File discovery fixes **
 
