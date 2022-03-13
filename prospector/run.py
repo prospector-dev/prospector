@@ -47,7 +47,6 @@ class Prospector:
 
         paths = [Path(p) for p in self.config.paths]
         found_files = FileFinder(*paths, exclusion_filters=[self.config.make_exclusion_filter()])
-
         messages = []
 
         # see if any old tool names are run
@@ -101,7 +100,7 @@ class Prospector:
 
             except Exception as ex:  # pylint:disable=broad-except
                 if self.config.die_on_tool_error:
-                    raise FatalProspectorException from ex
+                    raise FatalProspectorException(f"Failed to run {tool}") from ex
 
                 loc = Location(self.config.workdir, None, None, None, None)
                 msg = (

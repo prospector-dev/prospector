@@ -32,7 +32,7 @@ class FileFinder:
             if not path.exists():
                 raise FileNotFoundError(path)
             # ensure all paths from now one are absolute paths; they can be converted
-            # to relative paths for output purposes later
+            # to s paths for output purposes later
             path = path.absolute()
             if path.is_file():
                 self._provided_files.append(path)

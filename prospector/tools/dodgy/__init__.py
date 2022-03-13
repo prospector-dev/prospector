@@ -23,7 +23,7 @@ class DodgyTool(ToolBase):
 
         warnings = []
         for filepath in found_files.files:
-            mimetype = mimetypes.guess_type(filepath.absolute())
+            mimetype = mimetypes.guess_type(str(filepath.absolute()))
             if mimetype[0] is None or not mimetype[0].startswith("text/") or mimetype[1] is not None:
                 continue
             try:

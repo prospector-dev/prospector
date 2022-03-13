@@ -1,7 +1,8 @@
+import codecs
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 import yaml
 
@@ -108,8 +109,8 @@ def _is_valid_extension(filename):
     return ext in (".yml", ".yaml")
 
 
-def _load_content(name_or_path: str, profile_path: List[Path]):
-    filename: Optional[Path] = None
+def _load_content(name_or_path, profile_path):
+    filename = None
     optional = False
 
     if isinstance(name_or_path, str) and name_or_path.endswith("?"):
@@ -118,16 +119,16 @@ def _load_content(name_or_path: str, profile_path: List[Path]):
 
     if _is_valid_extension(name_or_path):
         for path in profile_path:
-            filepath = path / name_or_path
-            if filepath.exists():
+            filepath = os.path.join(path, name_or_path)
+            if os.path.exists(filepath):
                 # this is a full path that we can load
                 filename = filepath
                 break
     else:
         for path in profile_path:
             for ext in ("yml", "yaml"):
-                filepath = path / f"{name_or_path}.{ext}"
-                if filepath.exists():
+                filepath = os.path.join(path, "%s.%s" % (name_or_path, ext))
+                if os.path.exists(filepath):
                     filename = filepath
                     break
 
@@ -136,7 +137,7 @@ def _load_content(name_or_path: str, profile_path: List[Path]):
             return {}
         raise ProfileNotFound(name_or_path, profile_path)
 
-    with filename.open("r") as fct:
+    with codecs.open(filename) as fct:
         try:
             return yaml.safe_load(fct) or {}
         except yaml.parser.ParserError as parse_error:
