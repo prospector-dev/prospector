@@ -1,10 +1,10 @@
 import re
 from pathlib import Path
 
-from prospector.finder import FileFinder
-from ..utils import patch_execution
-
 from prospector.config import ProspectorConfig
+from prospector.finder import FileFinder
+
+from ..utils import patch_execution
 
 
 def test_relative_ignores():
@@ -12,7 +12,7 @@ def test_relative_ignores():
     Tests that if 'ignore-paths: something' is set, then it is ignored; that
     is, paths relative to the working directory should be ignored too
     """
-    workdir = Path(__file__).parent / 'testdata/test_relative_ignores'
+    workdir = Path(__file__).parent / "testdata/test_relative_ignores"
     with patch_execution(workdir, "-P", "profile_relative_ignores.yml"):
         config = ProspectorConfig()
         files = FileFinder(*config.paths, exclusion_filters=[config.make_exclusion_filter()])

@@ -3,7 +3,8 @@ from pathlib import Path
 from prospector.config import ProspectorConfig
 from prospector.finder import FileFinder
 from prospector.tools.pyroma import PyromaTool
-from ...utils import patch_cwd, patch_cli
+
+from ...utils import patch_cli, patch_cwd
 
 
 def test_forced_include():
@@ -16,11 +17,11 @@ def test_forced_include():
 
     see https://github.com/PyCQA/prospector/pull/106
     """
-    test_data = Path(__file__).parent / 'testdata'
+    test_data = Path(__file__).parent / "testdata"
 
     with patch_cwd(test_data):
         # can't use the patch_execution shortcut due to pyroma playing with things itself too
-        with patch_cli('prospector', '--profile', 'test-pyroma-profile.yml'):
+        with patch_cli("prospector", "--profile", "test-pyroma-profile.yml"):
             config = ProspectorConfig()
             files = FileFinder(*config.paths, exclusion_filters=[config.make_exclusion_filter()])
             # this should not return the root setup.py by default (using the strictness profile)
@@ -34,9 +35,6 @@ def test_forced_include():
 
         # this should still find errors in the setup.py, but not any of the others
         assert len(messages) == 8
-        allowed = (
-                test_data / 'setup.py',
-                test_data / 'pkg1/this_one_is_fine/setup.py'
-        )
+        allowed = (test_data / "setup.py", test_data / "pkg1/this_one_is_fine/setup.py")
         for message in messages:
             assert message.location.path in allowed

@@ -16,9 +16,9 @@ def patch_cwd(set_cwd: Path):
     # for python 3.10+, they return different things if only one is patched; therefore,
     # for this test to work in all python versions prospector supports, both need to
     # be patched (or, an "if python version" statement but it's easier to just patch both)
-    with patch("pathlib.Path.cwd", new=lambda: set_cwd), \
-         patch("os.getcwd", new=lambda: str(set_cwd.absolute())), \
-         patch("os.curdir", new=str(set_cwd.absolute())):
+    with patch("pathlib.Path.cwd", new=lambda: set_cwd), patch("os.getcwd", new=lambda: str(set_cwd.absolute())), patch(
+        "os.curdir", new=str(set_cwd.absolute())
+    ):
         yield
 
 
@@ -31,7 +31,7 @@ def patch_execution(set_cwd: Path = None, *args: List[str]):
     :param set_cwd:  Simulate changing directory into the given directory
     :param args:  Any additional command-line arguments to pass to prospector
     """
-    args = ('prospector',) + args
+    args = ("prospector",) + args
     with patch_cli(*args):
         if set_cwd:
             with patch_cwd(set_cwd):

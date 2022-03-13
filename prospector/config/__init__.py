@@ -3,7 +3,7 @@ import re
 import sre_constants
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
@@ -20,7 +20,7 @@ class ProspectorConfig:
     # make this module/class a bit ugly.
     # Also the 'too many instance attributes' warning is ignored, as this
     # is a config object and its sole purpose is to hold many properties!
-    # pylint:disable=no-self-use,too-many-instance-attributes
+    # pylint:disable=no-self-use,too-many-instance-attributes,too-many-public-methods
 
     def __init__(self, workdir: Path = None):
         self.config, self.arguments = self._configure_prospector()
@@ -42,6 +42,7 @@ class ProspectorConfig:
                 if ignore.match(str(path)):
                     return True
             return False
+
         return _filter
 
     def get_tools(self, found_files):
@@ -115,7 +116,7 @@ class ProspectorConfig:
 
         # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml' or equivalent landscape config
         # file then we'll include that
-        profile_name = None
+        profile_name: Union[None, str, Path] = None
         if not profile_provided:
             for possible_profile in AUTO_LOADED_PROFILES:
                 prospector_yaml = os.path.join(workdir, possible_profile)
@@ -162,7 +163,7 @@ class ProspectorConfig:
         #   * prospector provided profiles
         profile_path = [Path(path).absolute() for path in config.profile_path]
 
-        prospector_dir = os.path.join(workdir, ".prospector")
+        prospector_dir = workdir / ".prospector"
         if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
             profile_path.append(prospector_dir)
 

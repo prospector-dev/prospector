@@ -1,14 +1,14 @@
-import codecs
 import json
 import os
-from typing import Any, Dict, List, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
 from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS, TOOLS
 
-BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
+BUILTIN_PROFILE_PATH = (Path(__file__).parent / "profiles").absolute()
 
 
 class ProspectorProfile:
@@ -108,8 +108,8 @@ def _is_valid_extension(filename):
     return ext in (".yml", ".yaml")
 
 
-def _load_content(name_or_path, profile_path):
-    filename = None
+def _load_content(name_or_path: str, profile_path: List[Path]):
+    filename: Optional[Path] = None
     optional = False
 
     if isinstance(name_or_path, str) and name_or_path.endswith("?"):
@@ -118,16 +118,16 @@ def _load_content(name_or_path, profile_path):
 
     if _is_valid_extension(name_or_path):
         for path in profile_path:
-            filepath = os.path.join(path, name_or_path)
-            if os.path.exists(filepath):
+            filepath = path / name_or_path
+            if filepath.exists():
                 # this is a full path that we can load
                 filename = filepath
                 break
     else:
         for path in profile_path:
             for ext in ("yml", "yaml"):
-                filepath = os.path.join(path, "%s.%s" % (name_or_path, ext))
-                if os.path.exists(filepath):
+                filepath = path / f"{name_or_path}.{ext}"
+                if filepath.exists():
                     filename = filepath
                     break
 
@@ -136,7 +136,7 @@ def _load_content(name_or_path, profile_path):
             return {}
         raise ProfileNotFound(name_or_path, profile_path)
 
-    with codecs.open(filename) as fct:
+    with filename.open("r") as fct:
         try:
             return yaml.safe_load(fct) or {}
         except yaml.parser.ParserError as parse_error:

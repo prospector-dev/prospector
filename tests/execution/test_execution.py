@@ -2,31 +2,29 @@
 Tests that prospector raises the expected errors on the expected files depending on the
 configuration of the file finder
 """
-import contextlib
 from pathlib import Path
-from typing import Optional, List
 from unittest.mock import patch
 
 from prospector.config import ProspectorConfig
 from prospector.finder import FileFinder
-from prospector.tools import PylintTool
 from prospector.run import Prospector
-from ..utils import patch_execution
+from prospector.tools import PylintTool
 
+from ..utils import patch_execution
 
 TEST_DATA = Path(__file__).parent / "testdata"
 
 
 def test_ignored():
     workdir = TEST_DATA / "ignore_test"
-    with patch_execution(workdir, '--profile', 'profile.yml', str(workdir)):
+    with patch_execution(workdir, "--profile", "profile.yml", str(workdir)):
         config = ProspectorConfig()
         pros = Prospector(config)
         pros.execute()
         msgs = pros.get_messages()
         # only the pkg3.broken should be picked up as everything else is ignored
         assert len(msgs) == 1
-        assert msgs[0].location.module == 'pkg1.pkg2.pkg3.broken'
+        assert msgs[0].location.module == "pkg1.pkg2.pkg3.broken"
 
 
 def test_total_errors():

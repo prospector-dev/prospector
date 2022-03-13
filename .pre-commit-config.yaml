@@ -32,13 +32,6 @@ repos:
             # the following are needed to run mypy successfully in the pre-commit virtualenv
             - types-setuptools
             - types-PyYAML
--   repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
-    hooks:
-    -   id: flake8
-        args:
-        -   --max-line-length=120
-        -   --exclude='testdata'
 -   repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
