@@ -16,7 +16,6 @@ However it may cause slightly different orders or reduce these duplicate warning
 The behaviour of prospector should be unchanged, apart from some bugfixes related to the old file discovery mechanism.
 
 Related bugs and PRs:
-* `#494 <https://github.com/PyCQA/prospector/issues/494>`_
 * `#480 <https://github.com/PyCQA/prospector/issues/480>`_
 * `#417 <https://github.com/PyCQA/prospector/issues/417>`_
 * `#199 <https://github.com/PyCQA/prospector/issues/199>`_

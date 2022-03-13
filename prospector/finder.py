@@ -28,7 +28,6 @@ class FileFinder:
         self._provided_files = []
         self._provided_dirs = []
         self._exclusion_filters = list(exclusion_filters or [])
-
         for path in provided_paths:
             if not path.exists():
                 raise FileNotFoundError(path)
@@ -119,6 +118,7 @@ class FileFinder:
         """
         dirs = set()
         for directory in self._provided_dirs:
+            dirs.add(directory)
             try:
                 for obj in self._walk(directory):
                     if obj.is_dir():

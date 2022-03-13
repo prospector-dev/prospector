@@ -1,35 +1,41 @@
 import re
 from pathlib import Path
-from unittest import TestCase
-from unittest.mock import patch
+
+from prospector.finder import FileFinder
+from ..utils import patch_execution
 
 from prospector.config import ProspectorConfig
 
 
-class TestProspectorConfig(TestCase):
-    def test_determine_ignores_all_str(self):
-        with patch("sys.argv", ["", "-P", "prospector-str-ignores"]), patch(
-            "pathlib.Path.cwd", return_value=Path(__file__).parent
-        ):
-            config = ProspectorConfig()
-        self.assertNotEqual(len(config.ignores), 0)
-        boundary = r"(^|/|\\)%s(/|\\|$)"
-        paths = ["2017", "2018"]
-        for path in paths:
-            compiled_ignored_path = re.compile(boundary % re.escape(path))
-            self.assertIn(compiled_ignored_path, config.ignores)
+def test_relative_ignores():
+    """
+    Tests that if 'ignore-paths: something' is set, then it is ignored; that
+    is, paths relative to the working directory should be ignored too
+    """
+    workdir = Path(__file__).parent / 'testdata/test_relative_ignores'
+    with patch_execution(workdir, "-P", "profile_relative_ignores.yml"):
+        config = ProspectorConfig()
+        files = FileFinder(*config.paths, exclusion_filters=[config.make_exclusion_filter()])
+        assert 2 == len(files.python_modules)
 
-    def test_determine_ignores_containing_int_values_wont_throw_attr_exc(self):
-        try:
-            with patch("sys.argv", ["", "-P", "prospector-int-ignores"]), patch(
-                "pathlib.Path.cwd", return_value=Path(__file__).parent
-            ):
-                config = ProspectorConfig()
-            self.assertNotEqual(len(config.ignores), 0)
-            boundary = r"(^|/|\\)%s(/|\\|$)"
-            paths = ["2017", "2018"]
-            for path in paths:
-                compiled_ignored_path = re.compile(boundary % re.escape(path))
-                self.assertIn(compiled_ignored_path, config.ignores)
-        except AttributeError as attr_exc:
-            self.fail(attr_exc)
+
+def test_determine_ignores_all_str():
+    with patch_execution(Path(__file__).parent, "-P", "prospector-str-ignores"):
+        config = ProspectorConfig()
+    assert len(config.ignores) > 0
+    boundary = r"(^|/|\\)%s(/|\\|$)"
+    paths = ["2017", "2018"]
+    for path in paths:
+        compiled_ignored_path = re.compile(boundary % re.escape(path))
+        assert compiled_ignored_path in config.ignores
+
+
+def test_determine_ignores_containing_int_values_wont_throw_attr_exc():
+    with patch_execution(Path(__file__).parent, "-P", "prospector-int-ignores"):
+        config = ProspectorConfig()
+    assert len(config.ignores) > 0
+    boundary = r"(^|/|\\)%s(/|\\|$)"
+    paths = ["2017", "2018"]
+    for path in paths:
+        compiled_ignored_path = re.compile(boundary % re.escape(path))
+        assert compiled_ignored_path in config.ignores

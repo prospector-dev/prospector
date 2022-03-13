@@ -1,0 +1,6 @@
+strictness: medium
+
+ignore-paths:
+  - pkg1/pkg_ignore
+ignore-patterns:
+  - .*partial.*

@@ -24,7 +24,6 @@ class ProspectorConfig:
 
     def __init__(self, workdir: Path = None):
         self.config, self.arguments = self._configure_prospector()
-
         self.paths = self._get_work_path(self.config, self.arguments)
         self.explicit_file_mode = all(p.is_file for p in self.paths)
         self.workdir = workdir or Path.cwd()
@@ -35,6 +34,15 @@ class ProspectorConfig:
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
         self.configured_by: Dict[str, str] = {}
         self.messages: List[Message] = []
+
+    def make_exclusion_filter(self):
+        def _filter(path: Path):
+            for ignore in self.ignores:
+                path = path.absolute().relative_to(self.workdir)
+                if ignore.match(str(path)):
+                    return True
+            return False
+        return _filter
 
     def get_tools(self, found_files):
         self.configured_by = {}
@@ -98,7 +106,7 @@ class ProspectorConfig:
             paths = [Path.cwd()]
         return [p.resolve() for p in paths]
 
-    def _get_profile(self, path, config):
+    def _get_profile(self, workdir: Path, config):
         # Use the specified profiles
         profile_provided = False
         if len(config.profiles) > 0:
@@ -110,7 +118,7 @@ class ProspectorConfig:
         profile_name = None
         if not profile_provided:
             for possible_profile in AUTO_LOADED_PROFILES:
-                prospector_yaml = os.path.join(path, possible_profile)
+                prospector_yaml = os.path.join(workdir, possible_profile)
                 if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
                     profile_provided = True
                     profile_name = possible_profile
@@ -154,11 +162,11 @@ class ProspectorConfig:
         #   * prospector provided profiles
         profile_path = [Path(path).absolute() for path in config.profile_path]
 
-        prospector_dir = os.path.join(path, ".prospector")
+        prospector_dir = os.path.join(workdir, ".prospector")
         if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
             profile_path.append(prospector_dir)
 
-        profile_path.append(path)
+        profile_path.append(workdir)
         profile_path.append(BUILTIN_PROFILE_PATH)
 
         try:
