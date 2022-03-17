@@ -1,16 +1,13 @@
 output-format: grouped
 
-strictness: veryhigh
-doc-warnings: no
-test-warnings: no
+# strictness: veryhigh
+# doc-warnings: no
+# test-warnings: no
 max-line-length: 120
-pep8: full
+# pep8: full
 
 ignore-paths:
   - docs/
-
-frosted:
-  run: false
 
 mypy:
   run: true

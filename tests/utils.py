@@ -22,7 +22,7 @@ def patch_cwd(set_cwd: Path):
         "os.curdir", new=cwd_str
     ):
         # Turns out that Python 3.10 added the `getcwd` to the _NormalAccessor instead of falling
-        # back on os.getcwd, and so this needs to be packed too...
+        # back on os.getcwd, and so this needs to be patched too...
         if sys.version_info >= (3, 10):
             # sigh...
             with patch("pathlib._NormalAccessor.getcwd", new=lambda _: cwd_str):
@@ -32,7 +32,7 @@ def patch_cwd(set_cwd: Path):
 
 
 @contextlib.contextmanager
-def patch_execution(set_cwd: Path = None, *args: List[str]):
+def patch_execution(*args: List[str], set_cwd: Path = None):
     """
     Utility to patch builtins to simulate running prospector in a particular directory
     with particular commandline args

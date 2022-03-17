@@ -2,6 +2,8 @@
 Tests that prospector raises the expected errors on the expected files depending on the
 configuration of the file finder
 """
+import shutil
+import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -10,14 +12,28 @@ from prospector.finder import FileFinder
 from prospector.run import Prospector
 from prospector.tools import PylintTool
 
-from ..utils import patch_execution
+from ..utils import patch_cli, patch_cwd, patch_execution
 
 TEST_DATA = Path(__file__).parent / "testdata"
 
 
+def test_non_subpath():
+    """
+    Create a temporary directory faaar away from the CWD when running, ensure prospector can run
+    """
+    tempdir = Path(tempfile.mkdtemp())
+    try:
+        with patch_execution(str(tempdir.absolute()), set_cwd=TEST_DATA / "something"):
+            config = ProspectorConfig()
+            pros = Prospector(config)
+            pros.execute()
+    finally:
+        shutil.rmtree(tempdir)
+
+
 def test_ignored():
     workdir = TEST_DATA / "ignore_test"
-    with patch_execution(workdir, "--profile", "profile.yml", str(workdir)):
+    with patch_execution("--profile", "profile.yml", str(workdir), set_cwd=workdir):
         config = ProspectorConfig()
         pros = Prospector(config)
         pros.execute()
@@ -58,16 +74,16 @@ def test_relative_path_specified():
     # for python 3.10+, they return different things if only one is patched; therefore,
     # for this test to work in all python versions prospector supports, both need to
     # be patched (or, an "if python version" statement but it's easier to just patch both)
-    with patch("pathlib.Path.cwd", new=lambda: root), patch("os.getcwd", new=lambda: str(root.absolute())):
-        with patch("sys.argv", ["prospector"]):
+    with patch_cwd(root):
+        with patch_cli("prospector"):
             config1 = ProspectorConfig()
             found_files1 = FileFinder(*config1.paths)
 
-        with patch("sys.argv", ["prospector", "../relative_specified"]):
+        with patch_cli("prospector", "../relative_specified"):
             config2 = ProspectorConfig()
             found_files2 = FileFinder(*config1.paths)
 
-        with patch("sys.argv", ["prospector", "."]):
+        with patch_cli("prospector", "."):
             config3 = ProspectorConfig()
             found_files3 = FileFinder(*config1.paths)
 

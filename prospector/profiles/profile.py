@@ -2,7 +2,7 @@ import codecs
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import yaml
 
@@ -93,7 +93,12 @@ class ProspectorProfile:
         return yaml.safe_dump(self.as_dict())
 
     @staticmethod
-    def load(name_or_path, profile_path, allow_shorthand=True, forced_inherits=None):
+    def load(
+        name_or_path: Union[str, Path],
+        profile_path: List[Path],
+        allow_shorthand: bool = True,
+        forced_inherits: Optional[List[str]] = None,
+    ):
         # First simply load all of the profiles and those that it explicitly inherits from
         data, inherits = _load_and_merge(
             name_or_path,
@@ -295,12 +300,15 @@ def _append_profiles(name, profile_path, data, inherit_list, allow_shorthand=Fal
 
 
 def _load_and_merge(
-    name_or_path, profile_path, allow_shorthand: bool = True, forced_inherits: List[str] = None
+    name_or_path: Union[str, Path],
+    profile_path: List[Path],
+    allow_shorthand: bool = True,
+    forced_inherits: List[str] = None,
 ) -> Tuple[Dict[str, Any], List[str]]:
 
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
-        name_or_path,
+        str(name_or_path),
         profile_path,
         allow_shorthand=allow_shorthand,
         forced_inherits=forced_inherits or [],

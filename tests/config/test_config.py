@@ -13,14 +13,14 @@ def test_relative_ignores():
     is, paths relative to the working directory should be ignored too
     """
     workdir = Path(__file__).parent / "testdata/test_relative_ignores"
-    with patch_execution(workdir, "-P", "profile_relative_ignores.yml"):
+    with patch_execution("-P", "profile_relative_ignores.yml", set_cwd=workdir):
         config = ProspectorConfig()
         files = FileFinder(*config.paths, exclusion_filters=[config.make_exclusion_filter()])
         assert 2 == len(files.python_modules)
 
 
 def test_determine_ignores_all_str():
-    with patch_execution(Path(__file__).parent, "-P", "prospector-str-ignores"):
+    with patch_execution("-P", "prospector-str-ignores", set_cwd=Path(__file__).parent):
         config = ProspectorConfig()
     assert len(config.ignores) > 0
     boundary = r"(^|/|\\)%s(/|\\|$)"
@@ -31,7 +31,7 @@ def test_determine_ignores_all_str():
 
 
 def test_determine_ignores_containing_int_values_wont_throw_attr_exc():
-    with patch_execution(Path(__file__).parent, "-P", "prospector-int-ignores"):
+    with patch_execution("-P", "prospector-int-ignores", set_cwd=Path(__file__).parent):
         config = ProspectorConfig()
     assert len(config.ignores) > 0
     boundary = r"(^|/|\\)%s(/|\\|$)"
