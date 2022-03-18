@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 from prospector import blender, postfilter, tools
+from prospector.compat import is_relative_to
 from prospector.config import ProspectorConfig
 from prospector.config import configuration as cfg
 from prospector.exceptions import FatalProspectorException
@@ -153,7 +154,9 @@ class Prospector:
             relative_to = None
             # use relative paths by default unless explicitly told otherwise (with a --absolute-paths flag)
             # or if some paths passed to prospector are not relative to the CWD
-            if not self.config.absolute_paths and all(p.is_relative_to(self.config.workdir) for p in self.config.paths):
+            if not self.config.absolute_paths and all(
+                is_relative_to(p, self.config.workdir) for p in self.config.paths
+            ):
                 relative_to = self.config.workdir
 
             formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile, relative_to)

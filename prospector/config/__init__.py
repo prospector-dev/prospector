@@ -7,6 +7,7 @@ from typing import Dict, List, Union
 
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
+from prospector.compat import is_relative_to
 from prospector.config import configuration as cfg
 from prospector.message import Message
 from prospector.profiles import AUTO_LOADED_PROFILES
@@ -41,7 +42,7 @@ class ProspectorConfig:
                 # ignore-paths/patterns will usually be relative to a repository
                 # root or the CWD, but the path passed to prospector may not be
                 path = path.absolute()
-                if path.is_relative_to(self.workdir):
+                if is_relative_to(path, self.workdir):
                     path = path.relative_to(self.workdir)
                 if ignore.match(str(path)):
                     return True

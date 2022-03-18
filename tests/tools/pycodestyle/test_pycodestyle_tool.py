@@ -6,7 +6,7 @@ from prospector.config import ProspectorConfig
 from prospector.finder import FileFinder
 from prospector.tools.pycodestyle import PycodestyleTool
 
-from ...utils import patch_cli, patch_cwd, patch_execution
+from ...utils import patch_execution
 
 
 class TestPycodestyleTool(TestCase):
