@@ -1,6 +1,7 @@
-from prospector.formatters import emacs, grouped, json, pylint, text, vscode, xunit, yaml
+from . import emacs, grouped, json, pylint, text, vscode, xunit, yaml
+from .base import Formatter
 
-__all__ = ("FORMATTERS",)
+__all__ = ("FORMATTERS", "Formatter")
 
 
 FORMATTERS = {

@@ -3,6 +3,7 @@ import os.path
 import sys
 import warnings
 from datetime import datetime
+from io import TextIOWrapper
 from pathlib import Path
 
 from prospector import blender, postfilter, tools
@@ -11,7 +12,7 @@ from prospector.config import ProspectorConfig
 from prospector.config import configuration as cfg
 from prospector.exceptions import FatalProspectorException
 from prospector.finder import FileFinder
-from prospector.formatters import FORMATTERS
+from prospector.formatters import FORMATTERS, Formatter
 from prospector.message import Location, Message
 from prospector.tools import DEPRECATED_TOOL_NAMES
 from prospector.tools.utils import CaptureOutput
@@ -121,12 +122,8 @@ class Prospector:
         summary["message_count"] = len(messages)
         summary["completed"] = datetime.now()
 
-        # Timedelta.total_seconds() is not available
-        # on Python<=2.6 so we calculate it ourselves
-        # See issue #60 and http://stackoverflow.com/a/3694895
         delta = summary["completed"] - summary["started"]
-        total_seconds = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 1e6) / 1e6
-        summary["time_taken"] = "%0.2f" % total_seconds
+        summary["time_taken"] = "%0.2f" % delta.total_seconds()
 
         external_config = []
         for tool, configured_by in self.config.configured_by.items():
@@ -166,7 +163,7 @@ class Prospector:
                 with codecs.open(output_file, "w+") as target:
                     self.write_to(formatter, target)
 
-    def write_to(self, formatter, target):
+    def write_to(self, formatter: Formatter, target: TextIOWrapper):
         # Produce the output
         target.write(
             formatter.render(
