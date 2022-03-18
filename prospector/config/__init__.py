@@ -20,7 +20,6 @@ class ProspectorConfig:
     # make this module/class a bit ugly.
     # Also the 'too many instance attributes' warning is ignored, as this
     # is a config object and its sole purpose is to hold many properties!
-    # pylint:disable=no-self-use,too-many-instance-attributes,too-many-public-methods
 
     def __init__(self, workdir: Path = None):
         self.config, self.arguments = self._configure_prospector()
@@ -38,7 +37,12 @@ class ProspectorConfig:
     def make_exclusion_filter(self):
         def _filter(path: Path):
             for ignore in self.ignores:
-                path = path.absolute().relative_to(self.workdir)
+                # first figure out where the path is, relative to the workdir
+                # ignore-paths/patterns will usually be relative to a repository
+                # root or the CWD, but the path passed to prospector may not be
+                path = path.absolute()
+                if path.is_relative_to(self.workdir):
+                    path = path.relative_to(self.workdir)
                 if ignore.match(str(path)):
                     return True
             return False

@@ -26,7 +26,6 @@ class PylintTool(ToolBase):
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
     # make this module/class a bit ugly.
-    # pylint:disable=no-self-use
 
     def __init__(self):
         self._args = None

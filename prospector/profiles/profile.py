@@ -106,7 +106,7 @@ class ProspectorProfile:
             allow_shorthand,
             forced_inherits=forced_inherits or [],
         )
-        return ProspectorProfile(name_or_path, data, inherits)
+        return ProspectorProfile(str(name_or_path), data, inherits)
 
 
 def _is_valid_extension(filename):

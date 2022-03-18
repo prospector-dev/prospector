@@ -23,16 +23,15 @@ repos:
         args:
             - --ignore-words-list=nin
             - --skip=poetry.lock
-#-   repo: https://github.com/PyCQA/prospector
-#    rev: a77d562f953eadcdfd5699c85c8fd2e21996fca7
-#    hooks:
-#    -   id: prospector
-#        args: ['--zero-exit'] # tmp
-#        additional_dependencies:
-#            - '.[with_everything]'
-#            # the following are needed to run mypy successfully in the pre-commit virtualenv
-#            - types-setuptools
-#            - types-PyYAML
+-   repo: https://github.com/PyCQA/prospector
+    rev: d45e07456313be180b2685800aecf34a2877d849
+    hooks:
+    -   id: prospector
+        additional_dependencies:
+            - '.[with_everything]'
+            # the following are needed to run mypy successfully in the pre-commit virtualenv
+            - types-setuptools
+            - types-PyYAML
 -   repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:

@@ -57,7 +57,7 @@ class ProfileValidationTool(ToolBase):
         self.ignore_codes = prospector_config.get_disabled_messages("profile-validator")
 
     def validate(self, filepath: Path):  # noqa
-        # pylint: disable=too-many-locals, too-many-branches
+        # pylint: disable=too-many-locals
         # TODO: this should be broken down into smaller pieces
         messages = []
 

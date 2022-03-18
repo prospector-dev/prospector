@@ -6,7 +6,6 @@ from prospector.formatters.base import Formatter
 __all__ = ("JsonFormatter",)
 
 
-# pylint: disable=too-few-public-methods
 class JsonFormatter(Formatter):
     def render(self, summary=True, messages=True, profile=False):
         output = {}
