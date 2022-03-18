@@ -149,7 +149,13 @@ class Prospector:
         for report in output_reports:
             output_format, output_files = report
             self.summary["formatter"] = output_format
-            relative_to = None if self.config.absolute_paths else self.config.workdir
+
+            relative_to = None
+            # use relative paths by default unless explicitly told otherwise (with a --absolute-paths flag)
+            # or if some paths passed to prospector are not relative to the CWD
+            if not self.config.absolute_paths and all(p.is_relative_to(self.config.workdir) for p in self.config.paths):
+                relative_to = self.config.workdir
+
             formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile, relative_to)
             if not output_files and not self.config.quiet:
                 self.write_to(formatter, sys.stdout)

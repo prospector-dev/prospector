@@ -23,6 +23,7 @@ Related bugs and PRs:
 ** Other bugfixes **
 
 * `#106 <https://github.com/PyCQA/prospector/issues/106>`_
+* Running prospector on a path not in the CWD (eg, 'prospector /some/where/else') will not cause exceptions, and will instead use absolute paths for message output
 
 ** Misc **
 
