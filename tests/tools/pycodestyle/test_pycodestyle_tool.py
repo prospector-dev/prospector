@@ -28,12 +28,11 @@ class TestPycodestyleTool(TestCase):
         self.assertEqual(self._tool.checker.paths, [os.path.join(*root_os_split)])
 
     def test_pycodestyle_space_and_tabs(self):
-        self._configure("testpath/test_space_tab.py")
+        workdir = Path(__file__).parent / "testpath"
+        self._configure("testpath/test_space_tab.py", workdir)
         messages = self._tool.run([])
         self.assertTrue(all(message.source == "pycodestyle" for message in messages))
-        self.assertTrue(any(message.code == "E101" for message in messages))
-        self.assertTrue(any(message.code == "E111" for message in messages))
-        self.assertTrue(any(message.code == "W191" for message in messages))
+        self.assertIn(["E101", "E111", "W191"], [m.code for m in messages])
 
     # TODO: legacy config handling here:
     def test_find_pep8_section_in_config(self):
