@@ -2,8 +2,8 @@
 Changelog
 #########
 
-Version 1.8.0 rc0
------------------
+Version 1.8.0 RC
+----------------
 
 This is currently still a pre-release.
 
