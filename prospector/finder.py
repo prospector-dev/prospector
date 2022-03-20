@@ -27,7 +27,11 @@ class FileFinder:
         """
         self._provided_files = []
         self._provided_dirs = []
-        self._exclusion_filters = list(exclusion_filters or [])
+        self._exclusion_filters = [
+            # we always want to ignore some things
+            lambda _path: _path.is_dir() and _path.name in _SKIP_DIRECTORIES,
+            is_virtualenv,
+        ] + list(exclusion_filters or [])
         for path in provided_paths:
             if not path.exists():
                 raise FileNotFoundError(path)
@@ -48,13 +52,7 @@ class FileFinder:
         return sorted(paths)
 
     def is_excluded(self, path: Path) -> bool:
-        filters = [
-            # we always want to ignore some things
-            lambda _path: _path.is_dir() and _path.name in _SKIP_DIRECTORIES,
-            is_virtualenv,
-        ] + self._exclusion_filters
-
-        return any(filt(path) for filt in filters)
+        return any(filt(path) for filt in self._exclusion_filters)
 
     def _filter(self, paths: Iterable[Path]) -> List[Path]:
         return [path for path in paths if not self.is_excluded(path)]
