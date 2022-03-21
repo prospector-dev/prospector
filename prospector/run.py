@@ -3,8 +3,8 @@ import os.path
 import sys
 import warnings
 from datetime import datetime
-from io import TextIOWrapper
 from pathlib import Path
+from typing import TextIO
 
 from prospector import blender, postfilter, tools
 from prospector.compat import is_relative_to
@@ -163,7 +163,7 @@ class Prospector:
                 with codecs.open(output_file, "w+") as target:
                     self.write_to(formatter, target)
 
-    def write_to(self, formatter: Formatter, target: TextIOWrapper):
+    def write_to(self, formatter: Formatter, target: TextIO):
         # Produce the output
         target.write(
             formatter.render(

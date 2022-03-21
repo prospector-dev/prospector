@@ -32,11 +32,12 @@ class FileFinder:
             lambda _path: _path.is_dir() and _path.name in _SKIP_DIRECTORIES,
             is_virtualenv,
         ] + list(exclusion_filters or [])
+
         for path in provided_paths:
             if not path.exists():
                 raise FileNotFoundError(path)
             # ensure all paths from now one are absolute paths; they can be converted
-            # to s paths for output purposes later
+            # to relative paths for output purposes later
             path = path.absolute()
             if path.is_file():
                 self._provided_files.append(path)
