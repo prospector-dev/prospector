@@ -24,10 +24,11 @@ Related bugs and PRs:
 
 * `#106 <https://github.com/PyCQA/prospector/issues/106>`_
 * Running prospector on a path not in the CWD (eg, 'prospector /some/where/else') will not cause exceptions, and will instead use absolute paths for message output
+* Autodetction of libraries, to automatically use pylint plugins, will no work on projects using a pyproject.toml ; also it has been turned on by default, it seemed to have accidentally been set to off by default some time ago.
 
 ** Misc **
 
-Prospector now runs on itself without generating errors after all linting warnings were fixed
+* Prospector now runs on itself without generating errors after all linting warnings were fixed
 
 
 Version 1.7.6
