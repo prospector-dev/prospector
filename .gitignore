@@ -68,3 +68,4 @@ pip-wheel-metadata
 # local testing for now
 .drone.*
 TODO.txt
+*.swp
