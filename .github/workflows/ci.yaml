@@ -38,8 +38,8 @@ jobs:
           key: >-
             ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
             steps.generate-python-key.outputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-base-venv-${{ env.CACHE_VERSION }}-
+          # restore-keys: |
+          #  ${{ runner.os }}-${{ steps.python.outputs.python-version }}-base-venv-${{ env.CACHE_VERSION }}-
       - name: Create Python virtual environment
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
@@ -59,8 +59,8 @@ jobs:
           path: ${{ env.PRE_COMMIT_CACHE }}
           key: >-
             ${{ runner.os }}-${{ steps.generate-pre-commit-key.outputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-pre-commit-${{ env.CACHE_VERSION }}-
+          # restore-keys: |
+          #  ${{ runner.os }}-pre-commit-${{ env.CACHE_VERSION }}-
       - name: Install pre-commit dependencies
         if: steps.cache-precommit.outputs.cache-hit != 'true'
         run: |
@@ -142,8 +142,8 @@ jobs:
           key: >-
             ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
             steps.generate-python-key.outputs.key }}
-          restore-keys: |
-            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-venv-${{ env.CACHE_VERSION }}-
+          # restore-keys: |
+          #  ${{ runner.os }}-${{ steps.python.outputs.python-version }}-venv-${{ env.CACHE_VERSION }}-
       - name: Create Python virtual environment
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
