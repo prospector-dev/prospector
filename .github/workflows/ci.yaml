@@ -16,23 +16,23 @@ jobs:
       pre-commit-key: ${{ steps.generate-pre-commit-key.outputs.key }}
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: Generate partial Python venv restore key
         id: generate-python-key
         run: >-
           echo "::set-output name=key::base-venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg')
+            hashFiles('pyproject.toml')
           }}"
       - name: Restore Python virtual environment
         id: cache-venv
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: venv
           key: >-
@@ -54,7 +54,7 @@ jobs:
             hashFiles('.pre-commit-config.yaml') }}"
       - name: Restore pre-commit environment
         id: cache-precommit
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: ${{ env.PRE_COMMIT_CACHE }}
           key: >-
@@ -73,15 +73,15 @@ jobs:
     needs: prepare-base
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: Restore Python virtual environment
         id: cache-venv
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: venv
           key:
@@ -94,7 +94,7 @@ jobs:
           exit 1
       - name: Restore pre-commit environment
         id: cache-precommit
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: ${{ env.PRE_COMMIT_CACHE }}
           key: ${{ runner.os }}-${{ needs.prepare-base.outputs.pre-commit-key }}
@@ -120,23 +120,23 @@ jobs:
       python-key: ${{ steps.generate-python-key.outputs.key }}
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Generate partial Python venv restore key
         id: generate-python-key
         run: >-
           echo "::set-output name=key::venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg')
+            hashFiles('pyproject.toml')
           }}"
       - name: Restore Python virtual environment
         id: cache-venv
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: venv
           key: >-
@@ -162,15 +162,15 @@ jobs:
         python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore Python virtual environment
         id: cache-venv
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: venv
           key:
