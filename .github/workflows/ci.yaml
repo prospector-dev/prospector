@@ -28,7 +28,7 @@ jobs:
         id: generate-python-key
         run: >-
           echo "::set-output name=key::base-venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg')
+            hashFiles('pyproject.toml')
           }}"
       - name: Restore Python virtual environment
         id: cache-venv
@@ -132,7 +132,7 @@ jobs:
         id: generate-python-key
         run: >-
           echo "::set-output name=key::venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('setup.cfg')
+            hashFiles('pyproject.toml')
           }}"
       - name: Restore Python virtual environment
         id: cache-venv
