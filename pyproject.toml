@@ -17,7 +17,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Operating System :: Unix",
     "Topic :: Software Development :: Quality Assurance",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -38,7 +37,7 @@ include = [
 prospector = 'prospector.run:main'
 
 [tool.poetry.dependencies]
-python = ">=3.6.2,<4.0"
+python = ">=3.7,<4.0"
 pylint = ">=2.8.3"
 pylint-celery = "0.3"
 pylint-django = "~2.5"
@@ -59,6 +58,7 @@ vulture = {version = ">=1.5", optional = true}
 mypy = {version = ">=0.600", optional = true}
 pyroma = {version = ">=2.4", optional = true}
 setoptconf-tmp = "^0.3.1"
+GitPython = "^3.1.27"
 
 [tool.poetry.extras]
 with_bandit = ["bandit"]
