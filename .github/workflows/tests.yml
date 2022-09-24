@@ -1,7 +1,7 @@
-name: ci
+name: tests
 on: [push, pull_request]
 jobs:
-  ci:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -24,7 +24,7 @@ jobs:
           echo "Checking prospector can run; don't care about messages found, only that it runs successfully"
           poetry run prospector --quiet --zero-exit
           echo "Prospector ran successfully."
-      - name: Build and validate packages
+      - name: Check packaging
         run: |
           echo "Building packages"
           rm -rf dist/
