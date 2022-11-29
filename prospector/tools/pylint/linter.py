@@ -19,8 +19,8 @@ class ProspectorLinter(PyLinter):
 
     def _expand_files(self, modules):
         expanded = super()._expand_files(modules)
-        filtered = []
-        for module in expanded:
+        filtered = {}
+        for filepath, module in expanded.items():
             if self._files.check_module(module["path"]):
-                filtered.append(module)
+                filtered[filepath] = module
         return filtered

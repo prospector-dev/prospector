@@ -38,7 +38,7 @@ prospector = 'prospector.run:main'
 
 [tool.poetry.dependencies]
 python = ">=3.7,<4.0"
-pylint = ">=2.8.3"
+pylint = ">=2.15.7"
 pylint-celery = "0.3"
 pylint-django = "~2.5"
 pylint-plugin-utils = "~0.7"
