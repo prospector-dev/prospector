@@ -1,7 +1,7 @@
 fail_fast: true
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.4.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -10,21 +10,21 @@ repos:
     -   id: debug-statements
     -   id: check-added-large-files
 -   repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 22.10.0
     hooks:
     -   id: black
         args:
             - --exclude=/(tests)/
             - --line-length=120
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+    rev: v2.2.2
     hooks:
       - id: codespell
         args:
             - --ignore-words-list=nin
             - --skip=poetry.lock
 -   repo: https://github.com/PyCQA/prospector
-    rev: 1.7.7
+    rev: v1.8.0rc2
     hooks:
     -       id: prospector
             additional_dependencies:
@@ -33,7 +33,7 @@ repos:
                 - --summary-only
                 - --zero-exit
 -   repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+    rev: 6.0.0
     hooks:
     -   id: flake8
         args:
