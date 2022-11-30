@@ -111,11 +111,11 @@ class Prospector:
                 if self.config.die_on_tool_error:
                     raise FatalProspectorException(f"Tool {toolname} failed to run.") from ex
 
+                loc = Location(self.config.workdir, None, None, None, None)
                 msg = (
                     f"Tool {toolname} failed to run "
                     f"(exception was raised, re-run prospector with -X to see the stacktrace)"
                 )
-                loc = Location(self.config.workdir, None, None, None, None)
                 message = Message(
                     toolname,
                     "failure",
