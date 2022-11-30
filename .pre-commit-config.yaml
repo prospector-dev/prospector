@@ -1,39 +1,56 @@
 fail_fast: true
 repos:
--   repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
     hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: mixed-line-ending
-        args: [ --fix=lf ]
-    -   id: debug-statements
-    -   id: check-added-large-files
--   repo: https://github.com/psf/black
-    rev: 22.1.0
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: debug-statements
+      - id: check-added-large-files
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
     hooks:
-    -   id: black
+      - id: black
         args:
-            - --exclude=/(tests)/
-            - --line-length=120
--   repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+          - --exclude=/(tests)/
+          - --line-length=120
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.2
     hooks:
-    -   id: codespell
+      - id: codespell
         args:
-            - --ignore-words-list=nin
-            - --skip=poetry.lock
--   repo: https://github.com/PyCQA/prospector
-    rev: d45e07456313be180b2685800aecf34a2877d849
+          - --ignore-words-list=nin
+          - --skip=poetry.lock
+  - repo: https://github.com/PyCQA/prospector
+    rev: v1.8.0rc3
     hooks:
-    -   id: prospector
+      - id: prospector
         additional_dependencies:
-            - '.[with_everything]'
-            # the following are needed to run mypy successfully in the pre-commit virtualenv
-            - types-setuptools
-            - types-PyYAML
--   repo: https://github.com/PyCQA/isort
+          - "prospector[with_everything]"
+          # the following are needed to run mypy successfully in the pre-commit virtualenv
+          - types-setuptools
+          - types-PyYAML
+        args:
+          - --summary-only
+          - --zero-exit
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        exclude: "testdata"
+        args:
+          - --max-line-length=120
+  - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
-    -   id: isort
+      - id: isort
         args: ["--profile", "black", "--filter-files"]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0-alpha.0
+    hooks:
+      - id: prettier
+        files: ".pre-commit-config.yaml|.md"
+        args: [--prose-wrap=always, --print-width=88]
+        exclude: tests(/\w*)*data/

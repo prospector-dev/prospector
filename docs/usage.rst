@@ -50,7 +50,7 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +-------------+----------------------------------------------------------------------------+
 | ``yaml``    | | Same as JSON except produces YAML output.                                |
 +-------------+----------------------------------------------------------------------------+
-| ``xunit``   | | Same as JSON except produces xunit compatile XML output.                 |
+| ``xunit``   | | Same as JSON except produces xunit compatible XML output.                 |
 +-------------+----------------------------------------------------------------------------+
 | ``text``    | | The default output format, a simple human readable format.               |
 +-------------+----------------------------------------------------------------------------+
