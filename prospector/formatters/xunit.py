@@ -35,14 +35,14 @@ class XunitFormatter(Formatter):
 
         for message in sorted(self.messages):
             testcase_el = xml_doc.createElement("testcase")
-            testcase_el.setAttribute("name", "%s-%s" % (message.location.path, message.location.line))
+            testcase_el.setAttribute("name", "%s-%s" % (self._make_path(message.location.path), message.location.line))
 
             failure_el = xml_doc.createElement("error")
             failure_el.setAttribute("message", message.message.strip())
             failure_el.setAttribute("type", "%s Error" % message.source)
             template = "%(path)s:%(line)s: [%(code)s(%(source)s), %(function)s] %(message)s"
             cdata = template % {
-                "path": message.location.path,
+                "path": self._make_path(message.location.path),
                 "line": message.location.line,
                 "source": message.source,
                 "code": message.code,

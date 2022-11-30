@@ -2,11 +2,14 @@ import os
 import re
 import sre_constants
 import sys
-from typing import List
+from pathlib import Path
+from typing import Dict, List, Union
 
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
+from prospector.compat import is_relative_to
 from prospector.config import configuration as cfg
+from prospector.message import Message
 from prospector.profiles import AUTO_LOADED_PROFILES
 from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile, ProfileNotFound, ProspectorProfile
 from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES
@@ -18,21 +21,34 @@ class ProspectorConfig:
     # make this module/class a bit ugly.
     # Also the 'too many instance attributes' warning is ignored, as this
     # is a config object and its sole purpose is to hold many properties!
-    # pylint:disable=no-self-use,too-many-instance-attributes
 
-    def __init__(self):
+    def __init__(self, workdir: Path = None):
         self.config, self.arguments = self._configure_prospector()
-
         self.paths = self._get_work_path(self.config, self.arguments)
-        self.explicit_file_mode = all(map(os.path.isfile, self.paths))
-        self.workdir = os.getcwd()
+        self.explicit_file_mode = all(p.is_file for p in self.paths)
+        self.workdir = workdir or Path.cwd()
 
         self.profile, self.strictness = self._get_profile(self.workdir, self.config)
         self.libraries = self._find_used_libraries(self.config, self.profile)
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
-        self.configured_by = {}
-        self.messages = []
+        self.configured_by: Dict[str, str] = {}
+        self.messages: List[Message] = []
+
+    def make_exclusion_filter(self):
+        def _filter(path: Path):
+            for ignore in self.ignores:
+                # first figure out where the path is, relative to the workdir
+                # ignore-paths/patterns will usually be relative to a repository
+                # root or the CWD, but the path passed to prospector may not be
+                path = path.absolute()
+                if is_relative_to(path, self.workdir):
+                    path = path.relative_to(self.workdir)
+                if ignore.match(str(path)):
+                    return True
+            return False
+
+        return _filter
 
     def get_tools(self, found_files):
         self.configured_by = {}
@@ -86,17 +102,17 @@ class ProspectorConfig:
         config = mgr.retrieve(*cfg.build_default_sources())
         return config, mgr.arguments
 
-    def _get_work_path(self, config, arguments):
+    def _get_work_path(self, config, arguments) -> List[Path]:
         # Figure out what paths we're prospecting
         if config["path"]:
-            paths = [self.config["path"]]
+            paths = [Path(self.config["path"])]
         elif arguments["checkpath"]:
-            paths = arguments["checkpath"]
+            paths = [Path(p) for p in arguments["checkpath"]]
         else:
-            paths = [os.getcwd()]
-        return paths
+            paths = [Path.cwd()]
+        return [p.resolve() for p in paths]
 
-    def _get_profile(self, path, config):
+    def _get_profile(self, workdir: Path, config):
         # Use the specified profiles
         profile_provided = False
         if len(config.profiles) > 0:
@@ -105,10 +121,10 @@ class ProspectorConfig:
 
         # if there is a '.prospector.ya?ml' or a '.prospector/prospector.ya?ml' or equivalent landscape config
         # file then we'll include that
-        profile_name = None
+        profile_name: Union[None, str, Path] = None
         if not profile_provided:
             for possible_profile in AUTO_LOADED_PROFILES:
-                prospector_yaml = os.path.join(path, possible_profile)
+                prospector_yaml = os.path.join(workdir, possible_profile)
                 if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
                     profile_provided = True
                     profile_name = possible_profile
@@ -150,13 +166,13 @@ class ProspectorConfig:
         #   * a directory called .prospector in the check path
         #   * the check path
         #   * prospector provided profiles
-        profile_path = config.profile_path
+        profile_path = [Path(path).absolute() for path in config.profile_path]
 
-        prospector_dir = os.path.join(path, ".prospector")
+        prospector_dir = workdir / ".prospector"
         if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
             profile_path.append(prospector_dir)
 
-        profile_path.append(path)
+        profile_path.append(workdir)
         profile_path.append(BUILTIN_PROFILE_PATH)
 
         try:
@@ -170,7 +186,8 @@ class ProspectorConfig:
             sys.exit(1)
         except ProfileNotFound as nfe:
             sys.stderr.write(
-                "Failed to run:\nCould not find profile %s. Search path: %s\n" % (nfe.name, ":".join(nfe.profile_path))
+                "Failed to run:\nCould not find profile %s. Search path: %s\n"
+                % (nfe.name, ":".join(map(str, nfe.profile_path)))
             )
             sys.exit(1)
         else:
@@ -197,7 +214,7 @@ class ProspectorConfig:
             # tools, so we use the defaults
             to_run = set(DEFAULT_TOOLS)
             # we can also use any that the profiles dictate
-            for tool in tools.TOOLS.keys():
+            for tool in tools.TOOLS:
                 if profile.is_tool_enabled(tool):
                     to_run.add(tool)
         else:
@@ -213,7 +230,7 @@ class ProspectorConfig:
                 to_run.remove(tool)
 
         # if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
-        for tool in tools.TOOLS.keys():
+        for tool in tools.TOOLS:
             enabled = profile.is_tool_enabled(tool)
             if enabled is None:
                 enabled = tool in DEFAULT_TOOLS

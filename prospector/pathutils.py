@@ -1,7 +1,17 @@
 import os
+from pathlib import Path
 
 
-def is_virtualenv(path) -> bool:
+def is_python_package(path: Path) -> bool:
+    return path.is_dir() and (path / "__init__.py").exists()
+
+
+def is_python_module(path: Path) -> bool:
+    # TODO: is this too simple?
+    return path.suffix == ".py"
+
+
+def is_virtualenv(path: Path) -> bool:
     if os.name == "nt":
         # Windows!
         clues = ("Scripts", "lib", "include")
@@ -9,7 +19,8 @@ def is_virtualenv(path) -> bool:
         clues = ("bin", "lib", "include")
 
     try:
-        dircontents = os.listdir(path)
+        # just get the anme, iterdir returns absolute paths by default
+        dircontents = [obj.name for obj in path.iterdir()]
     except (OSError, TypeError):
         # listdir failed, probably due to path length issues in windows
         return False
@@ -19,7 +30,7 @@ def is_virtualenv(path) -> bool:
         # this is a virtualenvironment
         return False
 
-    if not all(os.path.isdir(os.path.join(path, clue)) for clue in clues):
+    if not all((path / clue).is_dir() for clue in clues):
         # some of them are not actually directories
         return False
 

@@ -19,12 +19,15 @@ in the file:
 This module's job is to attempt to collect all of these methods into
 a single coherent list of error suppression locations.
 """
-import os
 import re
 import warnings
 from collections import defaultdict
+from pathlib import Path
+from typing import List
 
 from prospector import encoding
+from prospector.exceptions import FatalProspectorException
+from prospector.message import Message
 
 _FLAKE8_IGNORE_FILE = re.compile(r"flake8[:=]\s*noqa", re.IGNORECASE)
 _PEP8_IGNORE_LINE = re.compile(r"#\s+noqa", re.IGNORECASE)
@@ -60,9 +63,9 @@ _PYLINT_EQUIVALENTS = {
 }
 
 
-def _parse_pylint_informational(messages):
+def _parse_pylint_informational(messages: List[Message]):
     ignore_files = set()
-    ignore_messages = defaultdict(lambda: defaultdict(list))
+    ignore_messages: dict = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
         if message.source == "pylint":
@@ -70,6 +73,8 @@ def _parse_pylint_informational(messages):
                 # this is a message indicating that a message was raised
                 # by pylint but suppressed by configuration in the file
                 match = _PYLINT_SUPPRESSED_MESSAGE.match(message.message)
+                if not match:
+                    raise FatalProspectorException(f"Could not parsed suppressed message from {message.message}")
                 suppressed_code = match.group(1)
                 line_dict = ignore_messages[message.location.path]
                 line_dict[message.location.line].append(suppressed_code)
@@ -78,25 +83,23 @@ def _parse_pylint_informational(messages):
     return ignore_files, ignore_messages
 
 
-def get_suppressions(relative_filepaths, root, messages):
+def get_suppressions(filepaths: List[Path], messages):
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
     and a map of filepath -> line-number -> codes to ignore
     """
     paths_to_ignore = set()
-    lines_to_ignore = defaultdict(set)
-    messages_to_ignore = defaultdict(lambda: defaultdict(set))
+    lines_to_ignore: dict = defaultdict(set)
+    messages_to_ignore: dict = defaultdict(lambda: defaultdict(set))
 
     # first deal with 'noqa' style messages
-    for filepath in relative_filepaths:
-        abspath = os.path.join(root, filepath)
-
+    for filepath in filepaths:
         try:
-            file_contents = encoding.read_py_file(abspath).split("\n")
+            file_contents = encoding.read_py_file(filepath).split("\n")
         except encoding.CouldNotHandleEncoding as err:
             # TODO: this output will break output formats such as JSON
-            warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
+            warnings.warn("{0}: {1}".format(err.path, err.__cause__), ImportWarning)
             continue
 
         ignore_file, ignore_lines = get_noqa_suppressions(file_contents)

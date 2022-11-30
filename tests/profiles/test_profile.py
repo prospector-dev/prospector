@@ -123,6 +123,12 @@ class TestProfileParsing(ProfileTestBase):
         profile = ProspectorProfile.load("ignores", self._profile_path)
         self.assertEqual(["^tests/", "/migrations/"].sort(), profile.ignore_patterns.sort())
 
+    def test_enabled_in_disabled(self):
+        """
+        If a
+        :return:
+        """
+
     def test_disable_tool(self):
         profile = ProspectorProfile.load("pylint_disabled", self._profile_path)
         self.assertFalse(profile.is_tool_enabled("pylint"))
@@ -156,6 +162,11 @@ class TestProfileInheritance(ProfileTestBase):
         profile = self._load("precedence")
         self.assertTrue(profile.is_tool_enabled("pylint"))
         self.assertTrue("expression-not-assigned" in profile.get_disabled_messages("pylint"))
+
+        # TODO: this doesn't work entirely as expected, but changing would be a backwards incompatible
+        #       change - so this is parked until version 2.0
+
+    #        self.assertFalse("D401" in profile.get_disabled_messages("pydocstyle"))
 
     def test_strictness_equivalence(self):
         profile = self._load("strictness_equivalence")

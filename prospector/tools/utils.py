@@ -18,6 +18,8 @@ class CaptureStream:
 class CaptureOutput:
     def __init__(self, hide):
         self.hide = hide
+        self._prev_streams = None
+        self.stdout, self.stderr = None, None
 
     def __enter__(self):
         if self.hide:

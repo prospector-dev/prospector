@@ -5,6 +5,7 @@ import re
 from pep8ext_naming import NamingChecker
 from pycodestyle import PROJECT_CONFIG, USER_CONFIG, BaseReport, StyleGuide, register_check
 
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
@@ -57,9 +58,10 @@ class ProspectorReport(BaseReport):
 
 
 class ProspectorStyleGuide(StyleGuide):
-    def __init__(self, found_files, *args, **kwargs):
+    def __init__(self, config, found_files, *args, **kwargs):
+        self._config = config
         self._files = found_files
-        self._module_paths = set(self._files.iter_module_paths())
+        self._module_paths = found_files.python_modules
 
         # Override the default reporter with our custom one.
         kwargs["reporter"] = ProspectorReport
@@ -72,11 +74,10 @@ class ProspectorStyleGuide(StyleGuide):
 
         # If the file survived pycodestyle's exclusion rules, check it against
         # prospector's patterns.
-        fullpath = os.path.join(self._files.rootpath, parent or "", filename)
-        if os.path.isdir(fullpath):
+        fullpath = self._config.workdir / (parent or "") / filename
+        if fullpath.is_dir():
             return False
 
-        fullpath = fullpath if parent else filename
         return fullpath not in self._module_paths
 
 
@@ -85,7 +86,7 @@ class PycodestyleTool(ToolBase):
         super().__init__(*args, **kwargs)
         self.checker = None
 
-    def configure(self, prospector_config, found_files):
+    def configure(self, prospector_config, found_files: FileFinder):
         # figure out if we should use a pre-existing config file
         # such as setup.cfg or tox.ini
         external_config = None
@@ -96,7 +97,7 @@ class PycodestyleTool(ToolBase):
         if prospector_config.use_external_config("pycodestyle"):
             use_config = True
 
-            paths = [os.path.join(found_files.rootpath, name) for name in PROJECT_CONFIG]
+            paths = [os.path.join(prospector_config.workdir, name) for name in PROJECT_CONFIG]
             paths.append(USER_CONFIG)
             ext_loc = prospector_config.external_config_location("pycodestyle")
             if ext_loc is not None:
@@ -108,42 +109,24 @@ class PycodestyleTool(ToolBase):
                     # TODO: Remove this
                     header = re.compile(r"\[(pep8|pycodestyle)\]")
                     with codecs.open(conf_path) as conf_file:
-                        if any([header.search(line) for line in conf_file.readlines()]):
+                        if any(header.search(line) for line in conf_file.readlines()):
                             external_config = conf_path
                             break
 
-        # create a list of packages, but don't include packages which are
-        # subpackages of others as checks will be duplicated
-        packages = [os.path.split(p) for p in found_files.iter_package_paths(abspath=False)]
-        packages.sort(key=len)
-        check_paths = set()
-        for package in packages:
-            package_path = os.path.join(*package)
-            if len(package) == 1:
-                check_paths.add(package_path)
-                continue
-            if os.path.join(*package) in check_paths:
-                continue
-            check_paths.add(package_path)
+        # need to convert to strings rather than Path objects for compatibility with pycodestyle
+        check_paths = [str(f.absolute()) for f in found_files.python_modules]
 
-        for filepath in found_files.iter_module_paths(abspath=False):
-            package = os.path.dirname(filepath).split(os.path.sep)
-            for i in range(0, len(package)):
-                if os.path.join(*package[: i + 1]) in check_paths:
-                    break
-            else:
-                check_paths.add(filepath)
-
-        check_paths = [found_files.to_absolute_path(p) for p in check_paths]
+        # check_paths = [found_files.to_absolute_path(p) for p in check_paths]
 
         # Instantiate our custom pycodestyle checker.
-        self.checker = ProspectorStyleGuide(paths=check_paths, found_files=found_files, config_file=external_config)
+        self.checker = ProspectorStyleGuide(
+            config=prospector_config, paths=check_paths, found_files=found_files, config_file=external_config
+        )
         if not use_config or external_config is None:
             configured_by = None
             # This means that we don't have existing config to use.
             # Make sure pycodestyle's code ignores are fully reset to zero before
             # adding prospector-flavoured configuration.
-            # pylint: disable=attribute-defined-outside-init
             self.checker.options.select = ()
             self.checker.options.ignore = tuple(prospector_config.get_disabled_messages("pycodestyle"))
 

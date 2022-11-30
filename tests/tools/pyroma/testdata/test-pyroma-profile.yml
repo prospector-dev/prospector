@@ -1,0 +1,9 @@
+inherits:
+  - strictness_medium
+  - no_test_warnings
+
+pyroma:
+  run: yes
+
+ignore-paths:
+  - pkg1/ignored_pkg

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 
 class FatalProspectorException(Exception):
@@ -13,19 +14,19 @@ class FatalProspectorException(Exception):
 
     # (see also the --die-on-tool-error flag)
 
-    def __init__(self, message):
+    def __init__(self, message: str):
         super().__init__(message)
+        self.message = message
 
 
 class CouldNotHandleEncoding(Exception):
-    def __init__(self, path, cause):
+    def __init__(self, path: Path):
         super().__init__()
         self.path = path
-        self.cause = cause
 
 
 class PermissionMissing(Exception):
-    def __init__(self, path):
+    def __init__(self, path: Path):
         docs_url = "https://prospector.landscape.io/en/master/profiles.html#ignoring-paths-and-patterns"
         if os.path.isdir(path):
             what = f"directory {path}"

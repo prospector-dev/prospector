@@ -108,7 +108,7 @@ class MypyTool(ToolBase):
                 self.options.append(f"--{list_option}-{entry}")
 
     def run(self, found_files):
-        paths = list(found_files.iter_module_paths())
+        paths = [str(path) for path in found_files.python_modules]
         paths.extend(self.options)
         result = self.checker.run(paths)
         report, _ = result[0], result[1:]  # noqa

@@ -1,0 +1,6 @@
+
+pydocstyle:
+  enable:
+    D301
+  disable:
+    D301

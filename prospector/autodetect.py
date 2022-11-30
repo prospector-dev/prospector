@@ -1,6 +1,7 @@
 import os
 import re
 import warnings
+from pathlib import Path
 
 from requirements_detector import find_requirements
 from requirements_detector.detect import RequirementsNotFound
@@ -41,31 +42,28 @@ def find_from_imports(file_contents):
     return names
 
 
-def find_from_path(path):
+def find_from_path(path: Path):
     names = set()
 
     try:
-        dirlist = os.listdir(path)
+        for item in path.iterdir():
+            if item.is_dir():
+                if is_virtualenv(item):
+                    continue
+                names |= find_from_path(item)
+            elif not item.is_symlink() and item.suffix == ".py":
+                try:
+                    contents = encoding.read_py_file(item)
+                    names |= find_from_imports(contents)
+                except encoding.CouldNotHandleEncoding as err:
+                    # TODO: this output will break output formats such as JSON
+                    warnings.warn("{0}: {1}".format(err.path, err.__cause__), ImportWarning)
+
+            if len(names) == len(POSSIBLE_LIBRARIES):
+                # don't continue on recursing, there's no point!
+                break
     except PermissionError as err:
         raise PermissionMissing(path) from err
-
-    for item in dirlist:
-        item_path = os.path.abspath(os.path.join(path, item))
-        if os.path.isdir(item_path):
-            if is_virtualenv(item_path):
-                continue
-            names |= find_from_path(item_path)
-        elif not os.path.islink(item_path) and item_path.endswith(".py"):
-            try:
-                contents = encoding.read_py_file(item_path)
-                names |= find_from_imports(contents)
-            except encoding.CouldNotHandleEncoding as err:
-                # TODO: this output will break output formats such as JSON
-                warnings.warn("{0}: {1}".format(err.path, err.cause), ImportWarning)
-
-        if len(names) == len(POSSIBLE_LIBRARIES):
-            # don't continue on recursing, there's no point!
-            break
 
     return names
 

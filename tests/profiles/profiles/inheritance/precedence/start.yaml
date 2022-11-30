@@ -7,3 +7,7 @@ pylint:
   run: true
   enable:
     - missing-docstring
+
+pydocstyle:
+  disable:
+    - D401

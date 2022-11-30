@@ -19,7 +19,7 @@ class PylintFormatter(Formatter):
         for message in sorted(self.messages):
             if cur_loc != message.location.path:
                 cur_loc = message.location.path
-                module_name = message.location.path.replace(os.path.sep, ".")
+                module_name = self._make_path(message.location.path).replace(os.path.sep, ".")
                 module_name = re.sub(r"(\.__init__)?\.py$", "", module_name)
 
                 header = "************* Module %s" % module_name
@@ -33,7 +33,7 @@ class PylintFormatter(Formatter):
             output.append(
                 template
                 % {
-                    "path": message.location.path,
+                    "path": self._make_path(message.location.path),
                     "line": message.location.line,
                     "source": message.source,
                     "code": message.code,

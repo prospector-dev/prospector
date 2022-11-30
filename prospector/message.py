@@ -1,64 +1,51 @@
-import os
-from typing import Dict, Optional, Union
+from pathlib import Path
+from typing import Optional, Union
 
 
 class Location:
     def __init__(
-        self,
-        path: str,
-        module: Optional[str],
-        function: Optional[str],
-        line: int,
-        character: int,
-        absolute_path: bool = True,
+        self, path: Union[Path, str], module: Optional[str], function: Optional[str], line: int, character: int
     ):
-        self.path = path
-        self._path_is_absolute = absolute_path
+        if isinstance(path, Path):
+            self._path = path
+        elif isinstance(path, str):
+            self._path = Path(path)
+        else:
+            raise ValueError
         self.module = module or None
         self.function = function or None
         self.line = None if line == -1 else line
         self.character = None if character == -1 else character
 
-    def to_absolute_path(self, root: str):  # TODO: use pathlib?
-        if self._path_is_absolute:
-            return
-        self.path = os.path.abspath(os.path.join(root, self.path))
-        self._path_is_absolute = True
+    @property
+    def path(self):
+        return self._path
 
-    def to_relative_path(self, root: str):
-        if not self._path_is_absolute:
-            return
-        self.path = os.path.relpath(self.path, root)
-        self._path_is_absolute = False
+    def absolute_path(self) -> Path:
+        return self._path.absolute()
 
-    def as_dict(self) -> Dict[str, Union[str, int, None]]:
-        return {
-            "path": self.path,
-            "module": self.module,
-            "function": self.function,
-            "line": self.line,
-            "character": self.character,
-        }
+    def relative_path(self, root: Path) -> Path:
+        return self._path.relative_to(root)
 
     def __repr__(self) -> str:
-        return f"{self.path}:L{self.line}:{self.character}"
+        return f"{self._path}:L{self.line}:{self.character}"
 
     def __hash__(self) -> int:
-        return hash((self.path, self.line, self.character))
+        return hash((self._path, self.line, self.character))
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Location):
             return False
-        return self.path == other.path and self.line == other.line and self.character == other.character
+        return self._path == other._path and self.line == other.line and self.character == other.character
 
     def __lt__(self, other: object) -> bool:
         if not isinstance(other, Location):
             raise ValueError
-        if self.path == other.path:
+        if self._path == other._path:
             if self.line == other.line:
                 return (self.character or -1) < (other.character or -1)
-            return (self.line or -1) < (other.line or -1)  # line can be None if it a file-global warning
-        return self.path < other.path
+            return (self.line or -1) < (other.line or -1)  # line can be None if it's a file-global warning
+        return self._path < other._path
 
 
 class Message:
@@ -67,20 +54,6 @@ class Message:
         self.code = code
         self.location = location
         self.message = message
-
-    def to_absolute_path(self, root: str):
-        self.location.to_absolute_path(root)
-
-    def to_relative_path(self, root: str):
-        self.location.to_relative_path(root)
-
-    def as_dict(self) -> Dict[str, Union[str, dict]]:
-        return {
-            "source": self.source,
-            "code": self.code,
-            "location": self.location.as_dict(),
-            "message": self.message,
-        }
 
     def __repr__(self) -> str:
         return "%s-%s" % (self.source, self.code)
@@ -99,7 +72,7 @@ class Message:
 
 
 def make_tool_error_message(
-    filepath: str,
+    filepath: Union[Path, str],
     source: str,
     code: str,
     message: str,

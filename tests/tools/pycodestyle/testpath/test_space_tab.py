@@ -1,6 +1,6 @@
 # fmt: off
 # flake8: noqa
 for a in "abc":
-      print(a)  # indented with 8 spaces
+      a == 1  # indented with 8 spaces
 for b in "xyz":
-	print(b)  # indented with 1 tab
+	b == b  # indented with 1 tab

@@ -47,14 +47,13 @@ class TextFormatter(Formatter):
 
         return "\n".join(output)
 
-    # pylint: disable=no-self-use
     def render_message(self, message):
         output = []
 
         if message.location.module:
-            output.append("%s (%s):" % (message.location.module, message.location.path))
+            output.append("%s (%s):" % (message.location.module, self._make_path(message.location.path)))
         else:
-            output.append("%s:" % message.location.path)
+            output.append("%s:" % self._make_path(message.location.path))
 
         output.append(
             "    L%s:%s %s: %s - %s"

@@ -1,5 +1,3 @@
-import os
-
 from bandit.cli.main import _get_profile, _init_extensions
 from bandit.core.config import BanditConfig
 from bandit.core.constants import RANKING
@@ -46,7 +44,7 @@ class BanditTool(ToolBase):
         self.manager = BanditManager(b_conf, None, profile=profile)
 
     def run(self, found_files):
-        self.manager.files_list = sorted(found_files.iter_file_paths())
+        self.manager.files_list = sorted(found_files.files)
         self.manager.exclude_files = []
 
         if not self.manager.b_ts.tests:
@@ -56,7 +54,7 @@ class BanditTool(ToolBase):
         results = self.manager.get_issue_list(sev_level=RANKING[self.severity], conf_level=RANKING[self.confidence])
         messages = []
         for result in results:
-            loc = Location(os.path.abspath(result.fname), None, "", int(result.lineno), 0)
+            loc = Location(result.fname, None, "", int(result.lineno), 0)
             msg = Message("bandit", result.test_id, loc, result.text)
             messages.append(msg)
         return messages

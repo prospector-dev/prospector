@@ -28,7 +28,10 @@ repos:
     hooks:
       - id: prospector
         additional_dependencies:
-          - "prospector[with_mypy]"
+          - "prospector[with_everything]"
+          # the following are needed to run mypy successfully in the pre-commit virtualenv
+          - types-setuptools
+          - types-PyYAML
         args:
           - --summary-only
           - --zero-exit
@@ -36,6 +39,7 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
+        exclude: "testdata"
         args:
           - --max-line-length=120
   - repo: https://github.com/PyCQA/isort

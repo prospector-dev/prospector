@@ -3,7 +3,7 @@ from unittest import SkipTest, TestCase
 from unittest.mock import patch
 
 from prospector.config import ProspectorConfig
-from prospector.finder import find_python
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.exceptions import BadToolConfig
 
@@ -21,11 +21,11 @@ class TestMypyTool(TestCase):
             return ProspectorConfig()
 
     def test_unrecognised_options(self):
-        finder = find_python([], [], True, Path(__file__).parent.absolute())
+        finder = FileFinder(Path(__file__).parent)
         self.assertRaises(BadToolConfig, self._get_config("mypy_bad_options").get_tools, finder)
 
     def test_good_options(self):
-        finder = find_python([], [], True, Path(__file__).parent.absolute())
+        finder = FileFinder(Path(__file__).parent)
         self._get_config("mypy_good_options").get_tools(finder)
 
 

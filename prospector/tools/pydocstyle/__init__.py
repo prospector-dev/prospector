@@ -1,6 +1,7 @@
 from pydocstyle.checker import AllError, ConventionChecker
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
+from prospector.finder import FileFinder
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
 
@@ -16,23 +17,16 @@ class PydocstyleTool(ToolBase):
     def configure(self, prospector_config, found_files):
         self.ignore_codes = prospector_config.get_disabled_messages("pydocstyle")
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder):
         messages = []
 
         checker = ConventionChecker()
 
-        for code_file in found_files.iter_module_paths():
+        for code_file in found_files.python_modules:
             try:
-                for error in checker.check_source(read_py_file(code_file), code_file, None):
+                for error in checker.check_source(read_py_file(code_file), str(code_file.absolute()), None):
 
-                    location = Location(
-                        path=code_file,
-                        module=None,
-                        function="",
-                        line=error.line,
-                        character=0,
-                        absolute_path=True,
-                    )
+                    location = Location(path=code_file, module=None, function="", line=error.line, character=0)
                     message = Message(
                         source="pydocstyle",
                         code=error.code,
@@ -46,7 +40,7 @@ class PydocstyleTool(ToolBase):
                         code_file,
                         "pydocstyle",
                         "D000",
-                        message=f"Could not handle the encoding of this file: {err.encoding}",
+                        message=f"Could not handle the encoding of this file: {err.__cause__}",
                     )
                 )
                 continue

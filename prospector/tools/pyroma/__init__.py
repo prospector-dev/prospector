@@ -1,6 +1,8 @@
 import logging
-import os
+from typing import List
 
+from prospector.config import ProspectorConfig
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
@@ -59,29 +61,31 @@ class PyromaTool(ToolBase):
         super().__init__(*args, **kwargs)
         self.ignore_codes = ()
 
-    def configure(self, prospector_config, found_files):
+    def configure(self, prospector_config: ProspectorConfig, found_files: FileFinder):
         self.ignore_codes = prospector_config.get_disabled_messages("pyroma")
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder) -> List[Message]:
         messages = []
-        for module in found_files.iter_module_paths(include_ignored=True):
-            dirname, filename = os.path.split(module)
-            if filename != "setup.py":
-                continue
-
-            data = projectdata.get_data(dirname)
-
-            all_tests = [m() for m in PYROMA_TEST_CLASSES]
-            for test in all_tests:
-                code = PYROMA_CODES.get(test.__class__, "PYRUNKNOWN")
-
-                if code in self.ignore_codes:
+        for directory in found_files.directories:
+            # just list directories which are not ignored, but find any `setup.py` ourselves
+            # as that is excluded by default
+            for filepath in directory.iterdir():
+                if filepath.is_dir() or filepath.name != "setup.py":
                     continue
 
-                passed = test.test(data)
-                if passed is False:  # passed can be True, False or None...
-                    loc = Location(module, "setup", None, -1, -1)
-                    msg = Message("pyroma", code, loc, test.message())
-                    messages.append(msg)
+                data = projectdata.get_data(directory.resolve())
+
+                all_tests = [m() for m in PYROMA_TEST_CLASSES]
+                for test in all_tests:
+                    code = PYROMA_CODES.get(test.__class__, "PYRUNKNOWN")
+
+                    if code in self.ignore_codes:
+                        continue
+
+                    passed = test.test(data)
+                    if passed is False:  # passed can be True, False or None...
+                        loc = Location(filepath, "setup", None, -1, -1)
+                        msg = Message("pyroma", code, loc, test.message())
+                        messages.append(msg)
 
         return messages

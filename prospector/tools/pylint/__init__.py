@@ -9,6 +9,7 @@ from pylint.config import find_pylintrc
 from pylint.exceptions import UnknownMessageError
 from pylint.lint.run import _cpu_count
 
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
@@ -17,29 +18,21 @@ from prospector.tools.pylint.linter import ProspectorLinter
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
 
-def _is_relative_to(subpath: Path, path: Path) -> bool:
-    if hasattr(path, "is_relative_to"):
-        return subpath.is_relative_to(path)
-    # is_relative_to was added in python 3.9; fall back for < 3.9 versions:
-    try:
-        subpath.relative_to(path)
-        return True
-    except ValueError:
-        return False
+def _is_in_dir(subpath: Path, path: Path) -> bool:
+    return subpath.parent == path
 
 
 class PylintTool(ToolBase):
     # There are several methods on this class which could technically
     # be functions (they don't use the 'self' argument) but that would
     # make this module/class a bit ugly.
-    # pylint:disable=no-self-use
 
     def __init__(self):
         self._args = None
         self._collector = self._linter = None
         self._orig_sys_path = []
 
-    def _prospector_configure(self, prospector_config, linter):
+    def _prospector_configure(self, prospector_config, linter: ProspectorLinter):
         errors = []
 
         if "django" in prospector_config.libraries:
@@ -109,10 +102,9 @@ class PylintTool(ToolBase):
                     errors.append(self._error_message(pylintrc, f"Could not load plugin {plugin}"))
         return errors
 
-    def configure(self, prospector_config, found_files):
+    def configure(self, prospector_config, found_files: FileFinder):
 
-        extra_sys_path = found_files.get_minimal_syspath()
-
+        extra_sys_path = found_files.make_syspath()
         check_paths = self._get_pylint_check_paths(found_files)
 
         pylint_options = prospector_config.tool_options("pylint")
@@ -136,53 +128,47 @@ class PylintTool(ToolBase):
         self._linter = linter
         return configured_by, config_messages
 
-    def _set_path_finder(self, extra_sys_path, pylint_options):
+    def _set_path_finder(self, extra_sys_path: List[Path], pylint_options):
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path
         if not pylint_options.get("use_pylint_default_path_finder"):
-            # note: we prepend, so that modules are preferentially found in the
-            # path given as an argument. This prevents problems where we are
-            # checking a module which is already on sys.path before this
-            # manipulation - for example, if we are checking 'requests' in a local
-            # checkout, but 'requests' is already installed system wide, pylint
-            # will discover the system-wide modules first if the local checkout
-            # does not appear first in the path
-            sys.path = list(set(list(extra_sys_path) + sys.path))
+            sys.path = sys.path + [str(path.absolute()) for path in extra_sys_path]
 
-    def _get_pylint_check_paths(self, found_files):
+    def _get_pylint_check_paths(self, found_files: FileFinder) -> List[Path]:
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
         check_paths = set()
 
-        # TODO: removing this janky str->Path->str stuff in 1.8, but for now...
-        packages = [Path(p).absolute() for p in found_files.iter_package_paths(abspath=True)]
-        modules = [Path(p).absolute() for p in found_files.iter_module_paths(abspath=True)]
+        modules = found_files.python_modules
+        packages = found_files.python_packages
+        packages.sort(key=lambda p: len(str(p)))
 
         # don't add modules that are in known packages
         for module in modules:
             for package in packages:
-                if _is_relative_to(module, package):
+                if _is_in_dir(module, package):
                     break
             else:
                 check_paths.add(module)
 
         # sort from earlier packages first...
-        packages.sort(key=lambda p: len(str(p)))
         for idx, package in enumerate(packages):
             # yuck o(n2) but... temporary
             for prev_pkg in packages[:idx]:
-                if _is_relative_to(package, prev_pkg):
+                if _is_in_dir(package, prev_pkg):
                     # this is a sub-package of a package we know about
                     break
             else:
                 # we should care about this one
                 check_paths.add(package)
 
-        check_paths = [str(p) for p in check_paths]
-        return check_paths
+        # need to sort to make sure multiple runs are deterministic
+        return sorted(check_paths)
 
-    def _get_pylint_configuration(self, check_paths, linter, prospector_config, pylint_options):
-        self._args = linter.load_command_line_configuration(check_paths)
+    def _get_pylint_configuration(
+        self, check_paths: List[Path], linter: ProspectorLinter, prospector_config, pylint_options
+    ):
+        self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
         linter.load_default_plugins()
 
         config_messages = self._prospector_configure(prospector_config, linter)

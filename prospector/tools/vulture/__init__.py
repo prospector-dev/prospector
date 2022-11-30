@@ -18,7 +18,7 @@ class ProspectorVulture(Vulture):
         # about that as we use the found_files object. The
         # argument is here to explicitly acknowledge that we
         # are overriding the Vulture.scavenge method.
-        for module in self._files.iter_module_paths():
+        for module in self._files.python_modules:
             try:
                 module_string = read_py_file(module)
             except CouldNotHandleEncoding as err:

@@ -6,7 +6,6 @@ from prospector.formatters.base import Formatter
 __all__ = ("JsonFormatter",)
 
 
-# pylint: disable=too-few-public-methods
 class JsonFormatter(Formatter):
     def render(self, summary=True, messages=True, profile=False):
         output = {}
@@ -26,10 +25,7 @@ class JsonFormatter(Formatter):
         if profile:
             output["profile"] = self.profile.as_dict()
 
-        for message in self.messages:
-            if not isinstance(message.location.path, str):
-                message.location.path = str(message.location.path)
         if messages:
-            output["messages"] = [m.as_dict() for m in self.messages]
+            output["messages"] = [self._message_to_dict(m) for m in self.messages]
 
         return json.dumps(output, indent=2)

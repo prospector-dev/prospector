@@ -1,14 +1,18 @@
+import codecs
 import os.path
 import sys
 import warnings
 from datetime import datetime
+from pathlib import Path
+from typing import TextIO
 
 from prospector import blender, postfilter, tools
+from prospector.compat import is_relative_to
 from prospector.config import ProspectorConfig
 from prospector.config import configuration as cfg
 from prospector.exceptions import FatalProspectorException
-from prospector.finder import find_python
-from prospector.formatters import FORMATTERS
+from prospector.finder import FileFinder
+from prospector.formatters import FORMATTERS, Formatter
 from prospector.message import Location, Message
 from prospector.tools import DEPRECATED_TOOL_NAMES
 from prospector.tools.utils import CaptureOutput
@@ -21,11 +25,6 @@ class Prospector:
         self.messages = config.messages
 
     def process_messages(self, found_files, messages):
-        for message in messages:
-            if self.config.absolute_paths:
-                message.to_absolute_path(self.config.workdir)
-            else:
-                message.to_relative_path(self.config.workdir)
         if self.config.blending:
             messages = blender.blend(messages)
 
@@ -37,8 +36,7 @@ class Prospector:
                 updated.append(msg)
             messages = updated
 
-        filepaths = found_files.iter_module_paths(abspath=False)
-        return postfilter.filter_messages(filepaths, self.config.workdir, messages)
+        return postfilter.filter_messages(found_files.python_modules, messages)
 
     def execute(self):
 
@@ -49,13 +47,8 @@ class Prospector:
         }
         summary.update(self.config.get_summary_information())
 
-        found_files = find_python(
-            self.config.ignores,
-            self.config.paths,
-            self.config.explicit_file_mode,
-            self.config.workdir,
-        )
-
+        paths = [Path(p) for p in self.config.paths]
+        found_files = FileFinder(*paths, exclusion_filters=[self.config.make_exclusion_filter()])
         messages = []
 
         # see if any old tool names are run
@@ -110,7 +103,6 @@ class Prospector:
             except Exception as ex:  # pylint:disable=broad-except
                 if self.config.die_on_tool_error:
                     raise FatalProspectorException(f"Tool {toolname} failed to run.") from ex
-
                 loc = Location(self.config.workdir, None, None, None, None)
                 msg = (
                     f"Tool {toolname} failed to run "
@@ -129,12 +121,8 @@ class Prospector:
         summary["message_count"] = len(messages)
         summary["completed"] = datetime.now()
 
-        # Timedelta.total_seconds() is not available
-        # on Python<=2.6 so we calculate it ourselves
-        # See issue #60 and http://stackoverflow.com/a/3694895
         delta = summary["completed"] - summary["started"]
-        total_seconds = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 1e6) / 1e6
-        summary["time_taken"] = "%0.2f" % total_seconds
+        summary["time_taken"] = "%0.2f" % delta.total_seconds()
 
         external_config = []
         for tool, configured_by in self.config.configured_by.items():
@@ -158,14 +146,23 @@ class Prospector:
         for report in output_reports:
             output_format, output_files = report
             self.summary["formatter"] = output_format
-            formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile)
+
+            relative_to = None
+            # use relative paths by default unless explicitly told otherwise (with a --absolute-paths flag)
+            # or if some paths passed to prospector are not relative to the CWD
+            if not self.config.absolute_paths and all(
+                is_relative_to(p, self.config.workdir) for p in self.config.paths
+            ):
+                relative_to = self.config.workdir
+
+            formatter = FORMATTERS[output_format](self.summary, self.messages, self.config.profile, relative_to)
             if not output_files and not self.config.quiet:
                 self.write_to(formatter, sys.stdout)
             for output_file in output_files:
-                with open(output_file, "w+") as target:
+                with codecs.open(output_file, "w+") as target:
                     self.write_to(formatter, target)
 
-    def write_to(self, formatter, target):
+    def write_to(self, formatter: Formatter, target: TextIO):
         # Produce the output
         target.write(
             formatter.render(

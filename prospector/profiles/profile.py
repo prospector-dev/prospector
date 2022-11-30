@@ -1,14 +1,15 @@
 import codecs
 import json
 import os
-from typing import Any, Dict, List, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import yaml
 
 from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS, TOOLS
 
-BUILTIN_PROFILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "profiles"))
+BUILTIN_PROFILE_PATH = (Path(__file__).parent / "profiles").absolute()
 
 
 class ProspectorProfile:
@@ -22,7 +23,7 @@ class ProspectorProfile:
 
         self.output_format = profile_dict.get("output-format")
         self.output_target = profile_dict.get("output-target")
-        self.autodetect = profile_dict.get("autodetect")
+        self.autodetect = profile_dict.get("autodetect", True)
         self.uses = [
             uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery", "flask")
         ]
@@ -41,7 +42,7 @@ class ProspectorProfile:
             tool_conf = profile_dict.get(tool, {})
 
             # set the defaults for everything
-            conf = {"disable": [], "enable": [], "run": None, "options": {}}
+            conf: Dict[str, Any] = {"disable": [], "enable": [], "run": None, "options": {}}
             # use the "old" tool name
             conf.update(tool_conf)
 
@@ -64,7 +65,7 @@ class ProspectorProfile:
 
     def list_profiles(self):
         # this profile is itself included
-        return self.inherit_order
+        return [str(profile) for profile in self.inherit_order]
 
     def as_dict(self):
         out = {
@@ -92,7 +93,12 @@ class ProspectorProfile:
         return yaml.safe_dump(self.as_dict())
 
     @staticmethod
-    def load(name_or_path, profile_path, allow_shorthand=True, forced_inherits=None):
+    def load(
+        name_or_path: Union[str, Path],
+        profile_path: List[Path],
+        allow_shorthand: bool = True,
+        forced_inherits: Optional[List[str]] = None,
+    ):
         # First simply load all of the profiles and those that it explicitly inherits from
         data, inherits = _load_and_merge(
             name_or_path,
@@ -100,7 +106,7 @@ class ProspectorProfile:
             allow_shorthand,
             forced_inherits=forced_inherits or [],
         )
-        return ProspectorProfile(name_or_path, data, inherits)
+        return ProspectorProfile(str(name_or_path), data, inherits)
 
 
 def _is_valid_extension(filename):
@@ -112,7 +118,7 @@ def _load_content(name_or_path, profile_path):
     filename = None
     optional = False
 
-    if name_or_path.endswith("?"):
+    if isinstance(name_or_path, str) and name_or_path.endswith("?"):
         optional = True
         name_or_path = name_or_path[:-1]
 
@@ -181,7 +187,7 @@ def _merge_tool_config(priority, base):
     return out
 
 
-def _merge_profile_dict(priority, base):
+def _merge_profile_dict(priority: dict, base: dict) -> dict:
     # copy the base dict into our output
     out = dict(base.items())
 
@@ -231,9 +237,9 @@ def _determine_pep8(profile_dict):
     pep8 = profile_dict.get("pep8")
     if pep8 == "full":
         return "full_pep8", True
-    elif pep8 == "none":
+    if pep8 == "none":
         return "no_pep8", True
-    elif isinstance(pep8, dict) and pep8.get("full", False):
+    if isinstance(pep8, dict) and pep8.get("full", False):
         return "full_pep8", False
     return None, False
 
@@ -294,12 +300,15 @@ def _append_profiles(name, profile_path, data, inherit_list, allow_shorthand=Fal
 
 
 def _load_and_merge(
-    name_or_path, profile_path, allow_shorthand: bool = True, forced_inherits: List[str] = None
+    name_or_path: Union[str, Path],
+    profile_path: List[Path],
+    allow_shorthand: bool = True,
+    forced_inherits: List[str] = None,
 ) -> Tuple[Dict[str, Any], List[str]]:
 
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
-        name_or_path,
+        str(name_or_path),
         profile_path,
         allow_shorthand=allow_shorthand,
         forced_inherits=forced_inherits or [],
@@ -327,7 +336,7 @@ def _load_and_merge(
     # top of the inheritance tree to the bottom). This means that the lower down
     # values overwrite those from above, meaning that the initially provided profile
     # has precedence.
-    merged = {}
+    merged: dict = {}
     for name in inherit_list[::-1]:
         priority = data[name]
         merged = _merge_profile_dict(priority, merged)

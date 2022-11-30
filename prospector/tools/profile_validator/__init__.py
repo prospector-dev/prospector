@@ -1,12 +1,13 @@
-import codecs
 import re
 import sre_constants
+from pathlib import Path
 
 import yaml
 
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.tools import ToolBase, pyflakes
+from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS, ToolBase, pyflakes
 
 PROFILE_IS_EMPTY = "profile-is-empty"
 CONFIG_SETTING_SHOULD_BE_LIST = "should-be-list"
@@ -18,13 +19,11 @@ CONFIG_INVALID_REGEXP = "invalid-regexp"
 CONFIG_DEPRECATED_SETTING = "deprecated"
 CONFIG_DEPRECATED_CODE = "deprecated-tool-code"
 
+__all__ = ("ProfileValidationTool",)
+
 
 def _tool_names(with_deprecated: bool = True):
-    # TODO: this is currently a circular import, which is why it is not at the top of
-    #       the module. However, there's no obvious way to get around this right now...
-    from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS  # pylint: disable=import-outside-toplevel
-
-    tools = list(TOOLS.keys())
+    tools = list(TOOLS)
     if with_deprecated:
         tools += DEPRECATED_TOOL_NAMES.keys()
     return tools
@@ -57,15 +56,15 @@ class ProfileValidationTool(ToolBase):
 
         self.ignore_codes = prospector_config.get_disabled_messages("profile-validator")
 
-    def validate(self, relative_filepath, absolute_filepath):  # noqa
-        # pylint: disable=too-many-locals, too-many-branches, too-many-statements
+    def validate(self, filepath: Path):  # noqa
+        # pylint: disable=too-many-locals
         # TODO: this should be broken down into smaller pieces
         messages = []
 
-        with codecs.open(absolute_filepath) as profile_file:
-            raw_contents = profile_file.read()
-            parsed = yaml.safe_load(raw_contents)
-            raw_contents = raw_contents.split("\n")
+        with filepath.open() as profile_file:
+            _file_contents = profile_file.read()
+            parsed = yaml.safe_load(_file_contents)
+            raw_contents = _file_contents.split("\n")
 
         def add_message(code, message, setting):
             if code in self.ignore_codes:
@@ -75,7 +74,7 @@ class ProfileValidationTool(ToolBase):
                 if setting in fileline:
                     line = number + 1
                     break
-            location = Location(relative_filepath, None, None, line, 0, False)
+            location = Location(filepath, None, None, line, 0, False)
             message = Message("profile-validator", code, location, message)
             messages.append(message)
 
@@ -83,7 +82,7 @@ class ProfileValidationTool(ToolBase):
             # this happens if a completely empty profile is found
             add_message(
                 PROFILE_IS_EMPTY,
-                f"{relative_filepath} is a completely empty profile",
+                f"{filepath} is a completely empty profile",
                 "entire-file",
             )
             return messages
@@ -104,9 +103,9 @@ class ProfileValidationTool(ToolBase):
             )
 
         if "strictness" in parsed:
-            possible = ("veryhigh", "high", "medium", "low", "verylow", "none")
-            if parsed["strictness"] not in possible:
-                _joined = ", ".join(possible)
+            possible_strictness = ("veryhigh", "high", "medium", "low", "verylow", "none")
+            if parsed["strictness"] not in possible_strictness:
+                _joined = ", ".join(possible_strictness)
                 add_message(
                     CONFIG_INVALID_VALUE,
                     f'"strictness" must be one of {_joined}',
@@ -114,11 +113,11 @@ class ProfileValidationTool(ToolBase):
                 )
 
         if "uses" in parsed:
-            possible = ("django", "celery", "flask")
+            possible_libs = ("django", "celery", "flask")
             parsed_list = parsed["uses"] if isinstance(parsed["uses"], list) else [parsed["uses"]]
             for uses in parsed_list:
-                if uses not in possible:
-                    _joined = ", ".join(possible)
+                if uses not in possible_libs:
+                    _joined = ", ".join(possible_libs)
                     add_message(
                         CONFIG_INVALID_VALUE,
                         f'"{uses}" is not valid for "uses", must be one of {_joined}',
@@ -200,13 +199,12 @@ class ProfileValidationTool(ToolBase):
 
         return messages
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder):
         messages = []
-        for rel_filepath in found_files.iter_file_paths(abspath=False, include_ignored=True):
+        for filepath in found_files.files:
             for possible in self.to_check:
-                if rel_filepath == possible:
-                    abs_filepath = found_files.to_absolute_path(rel_filepath)
-                    messages += self.validate(rel_filepath, abs_filepath)
+                if filepath == possible:
+                    messages += self.validate(filepath)
                     break
 
         return messages

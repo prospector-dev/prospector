@@ -2,12 +2,33 @@
 Changelog
 #########
 
-Version 1.7.7
--------------
+Version 1.8.0 RC
+----------------
 
-**Fixes**:
+This is currently still a pre-release.
 
-* Restored ``__main__.py`` so that prospector could be run as a module, ie ``python -m prospector`` - `#497 <https://github.com/PyCQA/prospector/pull/497>`_
+** File discovery fixes **
+
+Finding paths and files to check has been replaced with a new version using ``pathlib`` - this should not result in any changes,
+except fixing an issue where ``pylint`` and ``pydocstyle`` were inspecting the same file or directory twice sometimes.
+However it may cause slightly different orders or reduce these duplicate warnings.
+
+The behaviour of prospector should be unchanged, apart from some bugfixes related to the old file discovery mechanism.
+
+Related bugs and PRs:
+* `#480 <https://github.com/PyCQA/prospector/issues/480>`_
+* `#417 <https://github.com/PyCQA/prospector/issues/417>`_
+* `#199 <https://github.com/PyCQA/prospector/issues/199>`_
+
+** Other bugfixes **
+
+* `#106 <https://github.com/PyCQA/prospector/issues/106>`_
+* Running prospector on a path not in the CWD (eg, 'prospector /some/where/else') will not cause exceptions, and will instead use absolute paths for message output
+* Autodetction of libraries, to automatically use pylint plugins, will no work on projects using a pyproject.toml ; also it has been turned on by default, it seemed to have accidentally been set to off by default some time ago.
+
+** Misc **
+
+* Prospector now runs on itself without generating errors after all linting warnings were fixed
 
 
 Version 1.7.6
@@ -78,7 +99,6 @@ More bugfixes!
 * Fix that ``pep8`` and ``pep257`` sections were renamed but the old deprecated values were not properly used to configure ``pycodestyle`` and ``pydocstyle`` - `#491 <https://github.com/PyCQA/prospector/issues/491>`_
 * Better handling for when the user running prospector is not able to read a file or directory - `#271 <https://github.com/PyCQA/prospector/issues/271>`_ and `#487 <https://github.com/PyCQA/prospector/issues/487>`_
 
-
 Version 1.7.1
 -------------
 
@@ -96,7 +116,7 @@ Lots of smaller bugfixes.
 Version 1.7.0
 -------------
 
-This is mostly a "tidying up" release.
+This is mostly a "tidying up" release but some things have changed which may cause differences to output, hence the bump of the major version.
 
 **New**:
 
@@ -113,9 +133,9 @@ Note that this means that prospector profiles and message output uses this new n
 
 * There is now a ``--legacy-tool-names`` flag for outputting pep8 or pep257 as the tool name when outputting errors. This is to be backwards compatible with any parsing logic; this flag is also deprecated and will go away in prospector 2.0
 
-**Tidying up**
+**Tidying up internals**
 
-These are all internal prospector code quality improvements.
+These are all internal prospector code quality improvements. Ideally, they should not be noticed by anybody as they are internal refactorings.
 
 * `#467 <https://github.com/PyCQA/prospector/issues/467>`_ - Removed nosetests, as nose is not compatible with Python 3.10 yet and the pytest tests were already doing the same thing
 * Tidied up the tox testing
@@ -123,6 +143,7 @@ These are all internal prospector code quality improvements.
 * Fixed lots of warnings raised by prospector when running prospector on itself...
 * Removed some old python2 compatibility code which is no longer needed now python2 is not supported at all
 * Fixed hyperlink formatting in this CHANGELOG to be RST (was never updated after converting from markdown)
+* Replaced `os.path` with `pathlib.Path` everywhere in prospector internals, to improve and simplify finding files to inspect. Theoretically this behaves in the same way as far as the user will see (please open a ticket if you notice anything obviously different)
 
 
 Version 1.6.1

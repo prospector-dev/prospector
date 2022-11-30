@@ -1,7 +1,7 @@
-import os
+from pathlib import Path
 
 AUTO_LOADED_PROFILES = list(
-    os.path.join(*parts)
+    Path(*parts)
     for parts in (
         (".landscape.yml",),
         (".landscape.yaml",),
