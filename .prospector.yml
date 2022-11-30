@@ -23,7 +23,7 @@ pylint:
     - missing-docstring
     - star-args
     - consider-using-f-string
-    - too-many-locals  # TODO: clean up these complexity problems
+    - too-many-locals # TODO: clean up these complexity problems
     - too-many-branches
     - too-many-arguments
     - too-many-instance-attributes

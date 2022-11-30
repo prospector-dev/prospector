@@ -6,282 +6,277 @@
 # a line as sorted by the code list will be the one remaining after blending.
 
 combinations:
-    -   # Unused Import
-        - pylint: unused-import
-        - pyflakes: F401
-        - frosted: E101
+  - # Unused Import
+    - pylint: unused-import
+    - pyflakes: F401
+    - frosted: E101
 
-    -   # Syntax Error
-        - dodgy: diff
-        - pylint: syntax-error
-        - pyflakes: F999
-        - pep8: E901
-        - pycodestyle: E901
-        - mccabe: MC0000
-        - frosted: E402
+  - # Syntax Error
+    - dodgy: diff
+    - pylint: syntax-error
+    - pyflakes: F999
+    - pep8: E901
+    - pycodestyle: E901
+    - mccabe: MC0000
+    - frosted: E402
 
-    -   # Undefined local variable
-        - pylint: undefined-variable
-        - pyflakes: F821
-        - frosted: E303
+  - # Undefined local variable
+    - pylint: undefined-variable
+    - pyflakes: F821
+    - frosted: E303
 
-    -   # Unused variable
-        - pylint: unused-variable
-        - vulture: unused-variable
-        - pyflakes: F841
-        - frosted: E307
+  - # Unused variable
+    - pylint: unused-variable
+    - vulture: unused-variable
+    - pyflakes: F841
+    - frosted: E307
 
-    -   # Mixed tabs and spaces
-        - pep257: D206
-        - pydocstyle: D206
-        - pep8: E101
-        - pycodestyle: E101
-        - pylint: indentation-mixture
+  - # Mixed tabs and spaces
+    - pep257: D206
+    - pydocstyle: D206
+    - pep8: E101
+    - pycodestyle: E101
+    - pylint: indentation-mixture
 
-    -   # Import from __future__ not first import
-        - pylint: misplaced-future
-        - pyflakes: F404
-        - frosted: E207
+  - # Import from __future__ not first import
+    - pylint: misplaced-future
+    - pyflakes: F404
+    - frosted: E207
 
-    -   # Line too long
-        - pep8: E501
-        - pycodestyle: E501
-        - pylint: line-too-long
+  - # Line too long
+    - pep8: E501
+    - pycodestyle: E501
+    - pylint: line-too-long
 
-    -   # Trailing whitespace
-        - pep8: W291
-        - pycodestyle: W291
-        - pylint: trailing-whitespace
+  - # Trailing whitespace
+    - pep8: W291
+    - pycodestyle: W291
+    - pylint: trailing-whitespace
 
-    -   # Blank line contains whitespace
-        - pep8: W293
-        - pycodestyle: W293
-        - pylint: trailing-whitespace
+  - # Blank line contains whitespace
+    - pep8: W293
+    - pycodestyle: W293
+    - pylint: trailing-whitespace
 
-    -   # No newline at end of file
-        - pep8: W292
-        - pycodestyle: W292
-        - pylint: missing-final-newline
+  - # No newline at end of file
+    - pep8: W292
+    - pycodestyle: W292
+    - pylint: missing-final-newline
 
-    -   # line ends with semi-colon
-        - pep8: E703
-        - pycodestyle: E703
-        - pylint: unnecessary-semicolon
+  - # line ends with semi-colon
+    - pep8: E703
+    - pycodestyle: E703
+    - pylint: unnecessary-semicolon
 
-    -   # multiple statements on one line (colon)
-        - pep8: E701
-        - pycodestyle: E701
-        - pylint: multiple-statements
+  - # multiple statements on one line (colon)
+    - pep8: E701
+    - pycodestyle: E701
+    - pylint: multiple-statements
 
-    -   # multiple statements on one line (semicolon)
-        - pep8: E702
-        - pycodestyle: E702
-        - pylint: multiple-statements
+  - # multiple statements on one line (semicolon)
+    - pep8: E702
+    - pycodestyle: E702
+    - pylint: multiple-statements
 
-    -   # incorrect indentation
-        - pep257: D207
-        - pydocstyle: D207
-        - pep8: E111
-        - pycodestyle: E111
-        - pylint: bad-indentation
+  - # incorrect indentation
+    - pep257: D207
+    - pydocstyle: D207
+    - pep8: E111
+    - pycodestyle: E111
+    - pylint: bad-indentation
 
-    -   # incorrect indentation
-        - pep257: D208
-        - pydocstyle: D208
-        - pep8: E111
-        - pycodestyle: E111
-        - pylint: bad-indentation
+  - # incorrect indentation
+    - pep257: D208
+    - pydocstyle: D208
+    - pep8: E111
+    - pycodestyle: E111
+    - pylint: bad-indentation
 
-    -   # comma not followed by a space
-        - pep8: E231
-        - pycodestyle: E231
-        - pylint: C0324
-        - pylint: bad-whitespace
+  - # comma not followed by a space
+    - pep8: E231
+    - pycodestyle: E231
+    - pylint: C0324
+    - pylint: bad-whitespace
 
-    -   # missing whitespace around operator
-        - pep8: E225
-        - pycodestyle: E225
-        - pylint: C0322
-        - pylint: bad-whitespace
+  - # missing whitespace around operator
+    - pep8: E225
+    - pycodestyle: E225
+    - pylint: C0322
+    - pylint: bad-whitespace
 
-    -   # missing whitespace around operator
-        - pep8: E225
-        - pycodestyle: E225
-        - pylint: C0323
-        - pylint: bad-whitespace
+  - # missing whitespace around operator
+    - pep8: E225
+    - pycodestyle: E225
+    - pylint: C0323
+    - pylint: bad-whitespace
 
-    -   # undefined name in __all__
-        - pylint: undefined-all-variable
-        - pyflakes: F822
-        - frosted: E304
+  - # undefined name in __all__
+    - pylint: undefined-all-variable
+    - pyflakes: F822
+    - frosted: E304
 
-    -   # duplicate argument in function definition
-        - pylint: duplicate-argument-name
-        - pyflakes: F831
-        - frosted: E206
+  - # duplicate argument in function definition
+    - pylint: duplicate-argument-name
+    - pyflakes: F831
+    - frosted: E206
 
-    -   # redefinition of unused function
-        - pyflakes: F811
-        - pylint: function-redefined
+  - # redefinition of unused function
+    - pyflakes: F811
+    - pylint: function-redefined
 
-    -   # f-string is missing placeholders
-        - pylint: f-string-without-interpolation
-        - pyflakes: F541
+  - # f-string is missing placeholders
+    - pylint: f-string-without-interpolation
+    - pyflakes: F541
 
-    -   # Duplicate key in dictionary
-        - pylint: duplicate-key
-        - pyflakes: F601
+  - # Duplicate key in dictionary
+    - pylint: duplicate-key
+    - pyflakes: F601
 
-    -   # More than one starred expression in assignment
-        - pylint: too-many-star-expressions
-        - pyflakes: F622
+  - # More than one starred expression in assignment
+    - pylint: too-many-star-expressions
+    - pyflakes: F622
 
-    -   # Assert called on a tuple
-        - pylint: assert-on-tuple
-        - pyflakes: F631
+  - # Assert called on a tuple
+    - pylint: assert-on-tuple
+    - pyflakes: F631
 
-    -   # 'break' outside loop
-        - pylint: not-in-loop
-        - pyflakes: F701
+  - # 'break' outside loop
+    - pylint: not-in-loop
+    - pyflakes: F701
 
-    -   # 'continue' not properly in loop
-        - pylint: not-in-loop
-        - pyflakes: F702
+  - # 'continue' not properly in loop
+    - pylint: not-in-loop
+    - pyflakes: F702
 
-    -   # 'continue' not supported inside 'finally' clause
-        - pylint: continue-in-finally
-        - pyflakes: F703
+  - # 'continue' not supported inside 'finally' clause
+    - pylint: continue-in-finally
+    - pyflakes: F703
 
-    -   # Yield outside function
-        - pylint: yield-outside-function
-        - pyflakes: F704
+  - # Yield outside function
+    - pylint: yield-outside-function
+    - pyflakes: F704
 
-    -   # Return outside function
-        - pylint: return-outside-function
-        - pyflakes: F706
+  - # Return outside function
+    - pylint: return-outside-function
+    - pyflakes: F706
 
-    -   # default 'except:' must be last
-        - pylint: bad-except-order
-        - pyflakes: F707
+  - # default 'except:' must be last
+    - pylint: bad-except-order
+    - pyflakes: F707
 
-    -   # NotImplemented raised - should raise NotImplementedError
-        - pylint: notimplemented-raised
-        - pyflakes: F901
+  - # NotImplemented raised - should raise NotImplementedError
+    - pylint: notimplemented-raised
+    - pyflakes: F901
 
-    -   # first argument of a classmethod should be named 'cls'
-        - pep8: N804
-        - pycodestyle: N804
-        - pylint: bad-classmethod-argument
+  - # first argument of a classmethod should be named 'cls'
+    - pep8: N804
+    - pycodestyle: N804
+    - pylint: bad-classmethod-argument
 
-    -   # '<>' is deprecated, use '!='
-        - pep8: W603
-        - pycodestyle: W603
-        - pylint: W0331
+  - # '<>' is deprecated, use '!='
+    - pep8: W603
+    - pycodestyle: W603
+    - pylint: W0331
 
-    -   # backticks are deprecated, use 'repr()'
-        - pep8: W604
-        - pycodestyle: W604
-        - pylint: W0333
+  - # backticks are deprecated, use 'repr()'
+    - pep8: W604
+    - pycodestyle: W604
+    - pylint: W0333
 
-    -   # Redefining name from outer scope
-        - pylint: redefined-outer-name
-        - pyflakes: F810
-        - frosted: E306
+  - # Redefining name from outer scope
+    - pylint: redefined-outer-name
+    - pyflakes: F810
+    - frosted: E306
 
-    -   # Wildcard import
-        - pylint: wildcard-import
-        - pyflakes: F403
-        - frosted: E103
+  - # Wildcard import
+    - pylint: wildcard-import
+    - pyflakes: F403
+    - frosted: E103
 
-    -   # Return with argument inside generator
-        - pylint: return-arg-in-generator
-        - frosted: E208
+  - # Return with argument inside generator
+    - pylint: return-arg-in-generator
+    - frosted: E208
 
-    -   # Too many positional arguments for function call
-        - pylint: too-many-function-args
-        - frosted: E203
+  - # Too many positional arguments for function call
+    - pylint: too-many-function-args
+    - frosted: E203
 
-    -   # Passing unexpected keyword argument
-        - pylint: unexpected-keyword-arg
-        - frosted: E204
+  - # Passing unexpected keyword argument
+    - pylint: unexpected-keyword-arg
+    - frosted: E204
 
-    -   # Missing mandatory keyword argument
-        - pylint: missing-kwoa
-        - frosted: E205
+  - # Missing mandatory keyword argument
+    - pylint: missing-kwoa
+    - frosted: E205
 
-    -   # No exception type(s) specified
-        - pylint: bare-except
-        - frosted: W101
-        - pep8: E722
-        - pycodestyle: E722
+  - # No exception type(s) specified
+    - pylint: bare-except
+    - frosted: W101
+    - pep8: E722
+    - pycodestyle: E722
 
-    -   # Spaces around keyword/parameter equals
-        - pep8: E251
-        - pycodestyle: E251
-        - pylint: bad-whitespace
+  - # Spaces around keyword/parameter equals
+    - pep8: E251
+    - pycodestyle: E251
+    - pylint: bad-whitespace
 
-    -   # Missing space after a comma
-        - pep8: E231
-        - pycodestyle: E231
-        - pylint: bad-whitespace
+  - # Missing space after a comma
+    - pep8: E231
+    - pycodestyle: E231
+    - pylint: bad-whitespace
 
-    -   # redefinition of unused %r from line %r
-        - pyflakes: F811
-        - frosted: E301
+  - # redefinition of unused %r from line %r
+    - pyflakes: F811
+    - frosted: E301
 
-    -   # list comprehension redefines %r from line %r
-        - pyflakes: F812
-        - frosted: E302
+  - # list comprehension redefines %r from line %r
+    - pyflakes: F812
+    - frosted: E302
 
-    -   # import %r from line %r shadowed by loop variable
-        - pyflakes: F402
-        - frosted: E102
+  - # import %r from line %r shadowed by loop variable
+    - pyflakes: F402
+    - frosted: E102
 
-    -   # syntax error in doctest
-        - pyflakes: FL0007
-        - frosted: E401
+  - # syntax error in doctest
+    - pyflakes: FL0007
+    - frosted: E401
 
-    -   # local variable %r referenced before assignment
-        - pyflakes: F823
-        - frosted: E305
+  - # local variable %r referenced before assignment
+    - pyflakes: F823
+    - frosted: E305
 
-    -   # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
-        - pylint: bad-mcs-classmethod-argument
-        - pep8: N804
-        - pycodestyle: N804
+  - # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
+    - pylint: bad-mcs-classmethod-argument
+    - pep8: N804
+    - pycodestyle: N804
 
-    -   # class names should be camelcase
-        - pep8: N801
-        - pycodestyle: N801
-        - pylint: invalid-name
+  - # class names should be camelcase
+    - pep8: N801
+    - pycodestyle: N801
+    - pylint: invalid-name
 
-    -   # too complex
-        - mccabe: MC0001
-        - pylint: too-many-branches
-    -
-        - mccabe: MC0001
-        - pylint: too-many-statements
+  - # too complex
+    - mccabe: MC0001
+    - pylint: too-many-branches
+  - - mccabe: MC0001
+    - pylint: too-many-statements
 
-    -   # pep257 takes preference over pylint documentation warnings
-        - pep257: D100
-        - pydocstyle: D100
-        - pylint: missing-docstring
+  - # pep257 takes preference over pylint documentation warnings
+    - pep257: D100
+    - pydocstyle: D100
+    - pylint: missing-docstring
 
-    -
-        - pep257: D101
-        - pydocstyle: D101
-        - pylint: missing-docstring
+  - - pep257: D101
+    - pydocstyle: D101
+    - pylint: missing-docstring
 
-    -
-        - pep257: D102
-        - pydocstyle: D102
-        - pylint: missing-docstring
+  - - pep257: D102
+    - pydocstyle: D102
+    - pylint: missing-docstring
 
-    -
-        - pep257: D103
-        - pydocstyle: D103
-        - pylint: missing-docstring
-    -
-        - pylint: singleton-comparison
-        - pep8: E711
-        - pycodestyle: E711
+  - - pep257: D103
+    - pydocstyle: D103
+    - pylint: missing-docstring
+  - - pylint: singleton-comparison
+    - pep8: E711
+    - pycodestyle: E711

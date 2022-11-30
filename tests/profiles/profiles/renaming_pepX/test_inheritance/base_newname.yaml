@@ -1,4 +1,3 @@
-
 pydocstyle:
   run: true
   disable:

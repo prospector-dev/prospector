@@ -1,4 +1,3 @@
-
 pylint:
   load-plugins:
     - first_plugin
