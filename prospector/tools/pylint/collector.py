@@ -1,5 +1,6 @@
 from io import StringIO
-from typing import List, Tuple, Union
+from typing import List
+
 from pylint.exceptions import UnknownMessageError
 from pylint.message import Message as PylintMessage
 from pylint.reporters import BaseReporter
