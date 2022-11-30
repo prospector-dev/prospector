@@ -1,5 +1,5 @@
 inherits:
- - base
+  - base
 
 pydocstyle:
   run: yes

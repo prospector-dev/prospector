@@ -1,5 +1,5 @@
 inherits:
- - base2
+  - base2
 
 strictness: high
 doc-warnings: true

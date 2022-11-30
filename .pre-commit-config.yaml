@@ -51,6 +51,6 @@ repos:
     rev: v3.0.0-alpha.0
     hooks:
       - id: prettier
-        files: ".pre-commit-config.yaml|.md"
+        files: ".md|.yml|.yaml"
         args: [--prose-wrap=always, --print-width=88]
         exclude: tests(/\w*)*data/

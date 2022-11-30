@@ -1,4 +1,3 @@
-
 ignore:
   - /migrations/
   - ^tests/
