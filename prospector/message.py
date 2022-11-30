@@ -56,7 +56,7 @@ class Message:
         self.message = message
 
     def __repr__(self) -> str:
-        return "%s-%s" % (self.source, self.code)
+        return f"{self.source}-{self.code}"
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Message):

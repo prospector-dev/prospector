@@ -29,12 +29,12 @@ class BanditTool(ToolBase):
         if "severity" in options:
             self.severity = options["severity"]
             if not 0 <= self.severity <= 2:
-                raise ValueError("severity {!r} must be between 0 and 2".format(self.severity))
+                raise ValueError(f"severity {self.severity!r} must be between 0 and 2")
 
         if "confidence" in options:
             self.confidence = options["confidence"]
             if not 0 <= self.confidence <= 2:
-                raise ValueError("confidence {!r} must be between 0 and 2".format(self.confidence))
+                raise ValueError(f"confidence {self.confidence!r} must be between 0 and 2")
 
         b_conf = BanditConfig(config_file=self.config_file)
         profile = _get_profile(b_conf, self.profile, self.config_file)

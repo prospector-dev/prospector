@@ -99,7 +99,7 @@ def get_suppressions(filepaths: List[Path], messages):
             file_contents = encoding.read_py_file(filepath).split("\n")
         except encoding.CouldNotHandleEncoding as err:
             # TODO: this output will break output formats such as JSON
-            warnings.warn("{0}: {1}".format(err.path, err.__cause__), ImportWarning)
+            warnings.warn(f"{err.path}: {err.__cause__}", ImportWarning)
             continue
 
         ignore_file, ignore_lines = get_noqa_suppressions(file_contents)

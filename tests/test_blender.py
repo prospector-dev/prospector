@@ -20,7 +20,7 @@ class TestBlendLine(TestCase):
         expected = set(expected)
 
         blended = blender.blend_line(messages, TestBlendLine.BLEND)
-        result = set([(msg.source, msg.code) for msg in blended])
+        result = {(msg.source, msg.code) for msg in blended}
 
         self.assertEqual(expected, result)
 
@@ -75,6 +75,6 @@ def test_multiple_lines():
     result = [(msg.source, msg.code, msg.location.line) for msg in result]
     result = set(result)
 
-    expected = set((("s1", "s1c001", 4), ("s1", "s1c001", 6), ("s2", "s2c001", 6)))
+    expected = {("s1", "s1c001", 4), ("s1", "s1c001", 6), ("s2", "s2c001", 6)}
 
     assert expected == result

@@ -57,7 +57,7 @@ def find_from_path(path: Path):
                     names |= find_from_imports(contents)
                 except encoding.CouldNotHandleEncoding as err:
                     # TODO: this output will break output formats such as JSON
-                    warnings.warn("{0}: {1}".format(err.path, err.__cause__), ImportWarning)
+                    warnings.warn(f"{err.path}: {err.__cause__}", ImportWarning)
 
             if len(names) == len(POSSIBLE_LIBRARIES):
                 # don't continue on recursing, there's no point!
