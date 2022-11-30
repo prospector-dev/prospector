@@ -2,31 +2,31 @@
 Changelog
 #########
 
-Version 1.8.0 RC
-----------------
+Version 1.8.0
+-------------
 
-This is currently still a pre-release.
-
-** File discovery fixes **
+**File discovery fixes**:
 
 Finding paths and files to check has been replaced with a new version using ``pathlib`` - this should not result in any changes,
 except fixing an issue where ``pylint`` and ``pydocstyle`` were inspecting the same file or directory twice sometimes.
 However it may cause slightly different orders or reduce these duplicate warnings.
 
-The behaviour of prospector should be unchanged, apart from some bugfixes related to the old file discovery mechanism.
+The behavior of prospector should be unchanged, apart from some bugfixes related to the old file discovery mechanism.
 
 Related bugs and PRs:
+
 * `#480 <https://github.com/PyCQA/prospector/issues/480>`_
 * `#417 <https://github.com/PyCQA/prospector/issues/417>`_
 * `#199 <https://github.com/PyCQA/prospector/issues/199>`_
 
-** Other bugfixes **
+**Other bugfixes**:
 
 * `#106 <https://github.com/PyCQA/prospector/issues/106>`_
 * Running prospector on a path not in the CWD (eg, 'prospector /some/where/else') will not cause exceptions, and will instead use absolute paths for message output
 * Autodetction of libraries, to automatically use pylint plugins, will no work on projects using a pyproject.toml ; also it has been turned on by default, it seemed to have accidentally been set to off by default some time ago.
+* `#529 <https://github.com/PyCQA/prospector/issues/529>`_
 
-** Misc **
+**Misc**:
 
 * Prospector now runs on itself without generating errors after all linting warnings were fixed
 
