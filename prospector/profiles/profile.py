@@ -132,7 +132,7 @@ def _load_content(name_or_path, profile_path):
     else:
         for path in profile_path:
             for ext in ("yml", "yaml"):
-                filepath = os.path.join(path, "%s.%s" % (name_or_path, ext))
+                filepath = os.path.join(path, f"{name_or_path}.{ext}")
                 if os.path.exists(filepath):
                     filename = filepath
                     break

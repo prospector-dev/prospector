@@ -34,7 +34,7 @@ class TestPylintTool(TestCase):
         tool, config = _get_pylint_tool_and_prospector_config()
         check_paths = tool._get_pylint_check_paths(files)
         assert len(check_paths) == 2
-        assert sorted([Path(p).name for p in check_paths]) == ["file3.py", "test_no_init_found"]
+        assert sorted(Path(p).name for p in check_paths) == ["file3.py", "test_no_init_found"]
 
     def test_no_duplicates_in_checkpath(self):
         """

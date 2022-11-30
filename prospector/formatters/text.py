@@ -27,7 +27,7 @@ class TextFormatter(Formatter):
             "=================",
         ]
 
-        label_width = max([len(label[1]) for label in self.summary_labels])
+        label_width = max(len(label[1]) for label in self.summary_labels)
 
         for summary_label in self.summary_labels:
             key = summary_label[0]
@@ -51,7 +51,7 @@ class TextFormatter(Formatter):
         output = []
 
         if message.location.module:
-            output.append("%s (%s):" % (message.location.module, self._make_path(message.location.path)))
+            output.append(f"{message.location.module} ({self._make_path(message.location.path)}):")
         else:
             output.append("%s:" % self._make_path(message.location.path))
 

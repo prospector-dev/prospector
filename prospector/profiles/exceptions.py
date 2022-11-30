@@ -5,7 +5,7 @@ class ProfileNotFound(Exception):
         self.profile_path = profile_path
 
     def __repr__(self):
-        return "Could not find profile %s; searched in %s" % (
+        return "Could not find profile {}; searched in {}".format(
             self.name,
             ":".join(self.profile_path),
         )
@@ -18,7 +18,7 @@ class CannotParseProfile(Exception):
         self.parse_error = parse_error
 
     def get_parse_message(self):
-        return "%s\n  on line %s : char %s" % (
+        return "{}\n  on line {} : char {}".format(
             self.parse_error.problem,
             self.parse_error.problem_mark.line,
             self.parse_error.problem_mark.column,
