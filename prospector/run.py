@@ -104,7 +104,7 @@ class Prospector:
                             messages.append(Message(toolname, "hidden-output", loc, message=msg))
 
             except FatalProspectorException as fatal:
-                sys.stderr.write(fatal.message)
+                sys.stderr.write(str(fatal))
                 sys.exit(2)
 
             except Exception as ex:  # pylint:disable=broad-except
