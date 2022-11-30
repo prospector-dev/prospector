@@ -1,6 +1,6 @@
+from pylint import version as pylint_version
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip
-from pylint import version as pylint_version
 
 
 class ProspectorLinter(PyLinter):
