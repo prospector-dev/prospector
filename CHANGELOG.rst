@@ -2,10 +2,8 @@
 Changelog
 #########
 
-Version 1.8.0 RC
-----------------
-
-This is currently still a pre-release.
+Version 1.8.0
+-------------
 
 ** File discovery fixes **
 
@@ -25,6 +23,7 @@ Related bugs and PRs:
 * `#106 <https://github.com/PyCQA/prospector/issues/106>`_
 * Running prospector on a path not in the CWD (eg, 'prospector /some/where/else') will not cause exceptions, and will instead use absolute paths for message output
 * Autodetction of libraries, to automatically use pylint plugins, will no work on projects using a pyproject.toml ; also it has been turned on by default, it seemed to have accidentally been set to off by default some time ago.
+* `#529 <https://github.com/PyCQA/prospector/issues/529>`_
 
 ** Misc **
 
