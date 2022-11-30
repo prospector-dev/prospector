@@ -1,5 +1,6 @@
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip
+from pylint import version as pylint_version
 
 
 class ProspectorLinter(PyLinter):
@@ -19,8 +20,15 @@ class ProspectorLinter(PyLinter):
 
     def _expand_files(self, modules):
         expanded = super()._expand_files(modules)
-        filtered = []
-        for module in expanded:
-            if self._files.check_module(module["path"]):
-                filtered.append(module)
+        # PyLinter._expand_files returns dict since 2.15.7.
+        if pylint_version > "2.15.6":
+            filtered = {}
+            for module in expanded:
+                if self._files.check_module(module):
+                    filtered[module] = expanded[module]
+        else:
+            filtered = []
+            for module in expanded:
+                if self._files.check_module(module["path"]):
+                    filtered.append(module)
         return filtered
