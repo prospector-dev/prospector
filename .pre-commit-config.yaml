@@ -28,7 +28,7 @@ repos:
     hooks:
     -       id: prospector
             additional_dependencies:
-                - ".[with_mypy]"
+                - "prospector[with_mypy]"
             args:
                 - --summary-only
                 - --zero-exit
