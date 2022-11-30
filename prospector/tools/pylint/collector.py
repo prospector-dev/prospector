@@ -1,5 +1,5 @@
-from typing import List
-
+from io import StringIO
+from typing import List, Tuple, Union
 from pylint.exceptions import UnknownMessageError
 from pylint.message import Message as PylintMessage
 from pylint.reporters import BaseReporter
@@ -12,7 +12,7 @@ class Collector(BaseReporter):
     name = "collector"
 
     def __init__(self, message_store):
-        BaseReporter.__init__(self, output=None)
+        BaseReporter.__init__(self, output=StringIO())
         self._message_store = message_store
         self._messages = []
 
