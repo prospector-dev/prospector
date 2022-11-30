@@ -24,7 +24,7 @@ repos:
             - --ignore-words-list=nin
             - --skip=poetry.lock
 -   repo: https://github.com/PyCQA/prospector
-    rev: a7b5c016bc319e57bf8c34211e88233dc0f244ce
+    rev: c1b8f5d9bd31671c98a2ec1f6524e24ce97d5864
     hooks:
     -       id: prospector
             additional_dependencies:
