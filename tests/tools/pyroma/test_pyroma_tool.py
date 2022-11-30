@@ -34,7 +34,7 @@ def test_forced_include():
         messages = tool.run(files)
 
         # this should still find errors in the setup.py, but not any of the others
-        assert len(messages) == 8
+        assert len(messages) == 10
         allowed = (test_data / "setup.py", test_data / "pkg1/this_one_is_fine/setup.py")
         for message in messages:
             assert message.location.path in allowed
