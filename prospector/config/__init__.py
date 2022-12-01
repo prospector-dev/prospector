@@ -41,7 +41,7 @@ class ProspectorConfig:
                 # first figure out where the path is, relative to the workdir
                 # ignore-paths/patterns will usually be relative to a repository
                 # root or the CWD, but the path passed to prospector may not be
-                path = path.absolute()
+                path = path.resolve().absolute()
                 if is_relative_to(path, self.workdir):
                     path = path.relative_to(self.workdir)
                 if ignore.match(str(path)):

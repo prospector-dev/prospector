@@ -12,7 +12,7 @@ from prospector.finder import FileFinder
 from prospector.run import Prospector
 from prospector.tools import PylintTool
 
-from ..utils import patch_cli, patch_cwd, patch_execution
+from ..utils import patch_cli, patch_execution
 
 TEST_DATA = Path(__file__).parent / "testdata"
 
@@ -70,22 +70,17 @@ def test_relative_path_specified():
     (when running inside the prospector checkout
     """
     root = TEST_DATA / "relative_specified"
-    # oddness here : Path.cwd() uses os.getcwd() under the hood in python<=3.9 but
-    # for python 3.10+, they return different things if only one is patched; therefore,
-    # for this test to work in all python versions prospector supports, both need to
-    # be patched (or, an "if python version" statement but it's easier to just patch both)
-    with patch_cwd(root):
-        with patch_cli("prospector"):
-            config1 = ProspectorConfig()
-            found_files1 = FileFinder(*config1.paths)
+    with patch_cli("prospector"):
+        config1 = ProspectorConfig()
+        found_files1 = FileFinder(*config1.paths)
 
-        with patch_cli("prospector", "../relative_specified"):
-            config2 = ProspectorConfig()
-            found_files2 = FileFinder(*config1.paths)
+    with patch_cli("prospector", "../relative_specified"):
+        config2 = ProspectorConfig()
+        found_files2 = FileFinder(*config1.paths)
 
-        with patch_cli("prospector", "."):
-            config3 = ProspectorConfig()
-            found_files3 = FileFinder(*config1.paths)
+    with patch_cli("prospector", "."):
+        config3 = ProspectorConfig()
+        found_files3 = FileFinder(*config1.paths)
 
     assert root == config2.workdir == config1.workdir == config3.workdir
     assert config1.paths == config2.paths == config3.paths
