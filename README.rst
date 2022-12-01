@@ -7,10 +7,6 @@ prospector
 .. image:: https://github.com/PyCQA/prospector/actions/workflows/ci.yaml/badge.svg
    :target: https://github.com/PyCQA/prospector/actions/workflows/ci.yaml
    :alt: Build Status
-
-
-.. image:: https://github.com/PyCQA/pylint-django/actions/workflows/build.yml/badge.svg
-
 .. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
    :target: https://coveralls.io/r/PyCQA/prospector
    :alt: Test Coverage
