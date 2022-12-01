@@ -23,7 +23,7 @@ def patch_cwd(set_cwd: Path):
     ):
         # Turns out that Python 3.10 added the `getcwd` to the _NormalAccessor instead of falling
         # back on os.getcwd, and so this needs to be patched too...
-        if sys.version_info >= (3, 10):
+        if sys.version_info[:2] == (3, 10):
             # sigh...
             with patch("pathlib._NormalAccessor.getcwd", new=lambda _: cwd_str):
                 yield

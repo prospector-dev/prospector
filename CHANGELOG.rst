@@ -2,6 +2,16 @@
 Changelog
 #########
 
+Version 1.8.1
+-------------
+
+Let's test faster.
+
+**Add support for Python 3.11**:
+
+Python 3.11 is between 10-60% faster than Python 3.10.
+
+
 Version 1.8.0
 -------------
 
