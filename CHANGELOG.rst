@@ -2,6 +2,11 @@
 Changelog
 #########
 
+Version 1.8.2
+-------------
+
+* `#547 <https://github.com/PyCQA/prospector/issues/547>`_
+
 Version 1.8.1
 -------------
 
