@@ -22,15 +22,14 @@ class ProspectorLinter(PyLinter):
 
     def _expand_files(self, modules):
         expanded = super()._expand_files(modules)
+        filtered = {}
         # PyLinter._expand_files returns dict since 2.15.7.
         if pylint_version > "2.15.6":
-            filtered = {}
             for module in expanded:
-                if self._files.check_module(module):
+                if not self._files.is_excluded(Path(module)):
                     filtered[module] = expanded[module]
             return filtered
         else:
-            filtered = {}
             for module in expanded:
                 # need to de-duplicate, as pylint also walks directories given to it, so it will find
                 # files that prospector has already provided and end up checking it more than once
