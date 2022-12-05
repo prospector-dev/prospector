@@ -69,15 +69,15 @@ with_vulture = ["vulture"]
 with_everything = ["bandit", "mypy", "pyroma", "vulture"]
 
 [tool.poetry.dev-dependencies]
-coveralls = "^3.2.0"
-pytest = "^6.2.4"
-pytest-benchmark = "^3.4.1"
-pytest-cov = "^2.12.1"
-tzlocal = "^3.0"
-coverage = "^5.5"
-pre-commit = "^2.14.0"
-tox = "^3.24.5"
-twine = "^3.8.0"
+coveralls = "^3.3.1"
+pytest = "^7.2.0"
+pytest-benchmark = "^4.0.0"
+pytest-cov = "^4.0.0"
+tzlocal = "^4.2"
+coverage = "^6.5"
+pre-commit = "^2.20.0"
+tox = "^3.27.1"
+twine = "^4.0.2"
 types-PyYAML = "^6.0.4"
 types-setuptools = "^57.4.9"
 
