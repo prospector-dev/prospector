@@ -1,6 +1,5 @@
 import os
 import re
-import sre_constants
 import sys
 from pathlib import Path
 from typing import Dict, List, Union
@@ -253,7 +252,7 @@ class ProspectorConfig:
                 continue
             try:
                 ignores.append(re.compile(pattern))
-            except sre_constants.error:
+            except re._constants.error:
                 pass
 
         # Convert ignore paths into patterns
