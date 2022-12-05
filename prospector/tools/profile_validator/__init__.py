@@ -1,5 +1,4 @@
 import re
-import sre_constants
 from pathlib import Path
 
 import yaml
@@ -147,7 +146,7 @@ class ProfileValidationTool(ToolBase):
         for pattern in parsed.get("ignore-patterns", []):
             try:
                 re.compile(pattern)
-            except sre_constants.error:
+            except re._constants.error:
                 add_message(CONFIG_INVALID_REGEXP, "Invalid regular expression", pattern)
 
         for key in ProfileValidationTool.LIST_SETTINGS:
