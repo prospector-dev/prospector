@@ -5,6 +5,13 @@ Changelog
 Version 1.8.3
 -------------
 
+* `#560 <https://github.com/PyCQA/prospector/issues/560>`_
+* `#559 <https://github.com/PyCQA/prospector/issues/559>`_
+* `#555 <https://github.com/PyCQA/prospector/issues/555>`_
+* `#554 <https://github.com/PyCQA/prospector/issues/554>`_
+* `#552 <https://github.com/PyCQA/prospector/issues/552>`_
+* `#551 <https://github.com/PyCQA/prospector/issues/551>`_
+
 Version 1.8.2
 -------------
 
