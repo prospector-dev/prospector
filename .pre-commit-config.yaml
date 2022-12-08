@@ -59,3 +59,16 @@ repos:
         files: ".md|.yml|.yaml"
         args: [--prose-wrap=always, --print-width=88]
         exclude: tests(/\w*)*data/
+  - repo: https://github.com/regebro/pyroma
+    rev: "4.1"
+    hooks:
+      - id: pyroma
+        # Must be specified because of the default value in pyroma
+        always_run: false
+        additional_dependencies:
+          - poetry
+        files: |
+          (?x)^(
+              README.rst|
+              pyproject.toml|
+          )$
