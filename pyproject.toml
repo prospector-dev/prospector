@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "prospector"
 version = "1.8.3"
-description = ""
+description = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
                "Carlos Coelho <carlospecter@gmail.com>",
@@ -10,7 +10,7 @@ readme = "README.rst"
 homepage = "http://prospector.readthedocs.io"
 repository = "https://github.com/PyCQA/prospector"
 keywords = ["pylint", "prospector", "static code analysis"]
-license = "GPLv2"
+license = "GPLv2+"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
