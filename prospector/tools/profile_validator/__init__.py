@@ -1,6 +1,11 @@
 import re
 from pathlib import Path
 
+try:  # Python >= 3.11
+    import re._constants as sre_constants
+except ImportError:
+    import sre_constants
+
 import yaml
 
 from prospector.finder import FileFinder
@@ -146,7 +151,7 @@ class ProfileValidationTool(ToolBase):
         for pattern in parsed.get("ignore-patterns", []):
             try:
                 re.compile(pattern)
-            except re._constants.error:
+            except sre_constants.error:
                 add_message(CONFIG_INVALID_REGEXP, "Invalid regular expression", pattern)
 
         for key in ProfileValidationTool.LIST_SETTINGS:

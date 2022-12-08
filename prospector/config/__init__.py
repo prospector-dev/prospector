@@ -4,6 +4,11 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Union
 
+try:  # Python >= 3.11
+    import re._constants as sre_constants
+except ImportError:
+    import sre_constants
+
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.compat import is_relative_to
@@ -252,7 +257,7 @@ class ProspectorConfig:
                 continue
             try:
                 ignores.append(re.compile(pattern))
-            except re._constants.error:
+            except sre_constants.error:
                 pass
 
         # Convert ignore paths into patterns
