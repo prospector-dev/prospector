@@ -10,12 +10,12 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.0
+    rev: v3.3.1
     hooks:
       - id: pyupgrade
         args: [--py37-plus]
   - repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 22.12.0
     hooks:
       - id: black
         args:
@@ -29,7 +29,7 @@ repos:
           - --ignore-words-list=nin
           - --skip=poetry.lock
   - repo: https://github.com/PyCQA/prospector
-    rev: v1.8.2
+    rev: v1.8.3
     hooks:
       - id: prospector
         additional_dependencies:
@@ -48,7 +48,7 @@ repos:
         args:
           - --max-line-length=120
   - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: 5.11.1
     hooks:
       - id: isort
         args: ["--profile", "black", "--filter-files"]
