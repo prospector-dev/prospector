@@ -49,7 +49,7 @@ them to the hook configuration like so::
             '--with-tool=mypy',
             '--with-tool=bandit',
             ]
-  
+
 
 This is equivalent to running::
 

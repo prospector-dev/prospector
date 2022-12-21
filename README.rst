@@ -170,7 +170,7 @@ them to the hook configuration like so::
 Additional dependencies can be `individually configured <https://prospector.landscape.io/en/master/profiles.html#individual-configuration-options>`_ in your `prospector.yml` file ::
 
     # https://bandit.readthedocs.io/en/latest/config.html
-    bandit: 
+    bandit:
     options:
         skips:
         - B201
@@ -178,7 +178,7 @@ Additional dependencies can be `individually configured <https://prospector.land
         - B610
         - B611
         - B703
-    
+
     # https://mypy.readthedocs.io/en/stable/command_line.html
     mypy:
     options:
