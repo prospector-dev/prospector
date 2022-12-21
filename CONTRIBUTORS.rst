@@ -12,6 +12,7 @@ Contributors
 * Carlos Coêlho (`@chocoelho <https://github.com/chocoelho>`_)
 * Carlos Cruz (`@ccruz09 <https://github.com/ccruz09>`_)
 * Claudiu Popa (`@PCManticore <https://github.com/PCManticore>`_)
+* D Morgan (`@morgangraphics <https://github.com/morgangraphics>` _)
 * David J Pugh (`@djpugh <https://github.com/djpugh>`_)
 * Eric Brown (`@ericwb <https://github.com/ericwb>`_)
 * Florian Bruhin (`@The-Compiler <https://github.com/The-Compiler>`_)
