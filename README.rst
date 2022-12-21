@@ -152,7 +152,7 @@ text to your repositories' ``.pre-commit-config.yaml``::
         hooks:
         -   id: prospector
 
-This only installs base prospector - if you also use optional tools, for example bandit or mypy, then you can add
+This only installs base prospector - if you also use optional tools, for example bandit and/or mypy, then you can add
 them to the hook configuration like so::
 
     repos:
@@ -162,6 +162,27 @@ them to the hook configuration like so::
         -   id: prospector
             additional_dependencies:
             - ".[with_mypy,with_bandit]"
+          - args: [
+            '--with-tool=mypy',
+            '--with-tool=bandit',
+            ]
+
+Additional dependencies can be `individually configured <https://prospector.landscape.io/en/master/profiles.html#individual-configuration-options>`_ in your `prospector.yml` file ::
+
+    # https://bandit.readthedocs.io/en/latest/config.html
+    bandit: 
+    options:
+        skips:
+        - B201
+        - B601
+        - B610
+        - B611
+        - B703
+    
+    # https://mypy.readthedocs.io/en/stable/command_line.html
+    mypy:
+    options:
+        ignore-missing-imports: true
 
 For prospector options which affect display only - those which are not configurable using a profile - these can be
 added as command line arguments to the hook. For example::
@@ -174,8 +195,12 @@ added as command line arguments to the hook. For example::
             additional_dependencies:
             -   ".[with_mypy,with_bandit]"
             args:
+            -   --with-tool=mypy
+            -   --with-tool=bandit
             -   --summary-only
             -   --zero-exit
+
+
 
 License
 -------

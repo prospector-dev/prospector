@@ -45,6 +45,11 @@ them to the hook configuration like so::
         -   id: prospector
             additional_dependencies:
             - ".[with_mypy,with_bandit]"
+          - args: [
+            '--with-tool=mypy',
+            '--with-tool=bandit',
+            ]
+  
 
 This is equivalent to running::
 
