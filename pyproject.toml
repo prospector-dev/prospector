@@ -60,6 +60,7 @@ mypy = {version = ">=0.600", optional = true}
 pyroma = {version = ">=2.4", optional = true}
 setoptconf-tmp = "^0.3.1"
 GitPython = "^3.1.27"
+packaging = "<22.0"
 
 [tool.poetry.extras]
 with_bandit = ["bandit"]

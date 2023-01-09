@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from packaging import version as packaging_version
 from pylint import version as pylint_version
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip
@@ -24,7 +25,7 @@ class ProspectorLinter(PyLinter):
         expanded = super()._expand_files(modules)
         filtered = {}
         # PyLinter._expand_files returns dict since 2.15.7.
-        if pylint_version > "2.15.6":
+        if packaging_version.parse(pylint_version) > packaging_version.parse("2.15.6"):
             for module in expanded:
                 if not self._files.is_excluded(Path(module)):
                     filtered[module] = expanded[module]
