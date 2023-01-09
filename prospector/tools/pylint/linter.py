@@ -1,9 +1,9 @@
 from pathlib import Path
 
+from packaging import version as packaging_version
 from pylint import version as pylint_version
 from pylint.lint import PyLinter
 from pylint.utils import _splitstrip
-from packaging import version as packaging_version
 
 
 class ProspectorLinter(PyLinter):
