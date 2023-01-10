@@ -1,10 +1,13 @@
 import logging
-from typing import List
+from typing import TYPE_CHECKING, List
 
-from prospector.config import ProspectorConfig
 from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
+
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
+
 
 # HACK: pyroma configures logging in its __init__.py so by importing,
 # it will change existing logging configuration to DEBUG which causes
@@ -61,7 +64,7 @@ class PyromaTool(ToolBase):
         super().__init__(*args, **kwargs)
         self.ignore_codes = ()
 
-    def configure(self, prospector_config: ProspectorConfig, found_files: FileFinder):
+    def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder):
         self.ignore_codes = prospector_config.get_disabled_messages("pyroma")
 
     def run(self, found_files: FileFinder) -> List[Message]:
