@@ -40,14 +40,20 @@ class ProspectorConfig:
         self.messages: List[Message] = []
 
     def make_exclusion_filter(self):
+        # Only close over the attributes required by the filter, rather
+        # than the entire self, because ProspectorConfig can't be pickled
+        # because of the config attribute, which would break parallel
+        # pylint.
+        ignores, workdir = self.ignores, self.workdir
+
         def _filter(path: Path):
-            for ignore in self.ignores:
+            for ignore in ignores:
                 # first figure out where the path is, relative to the workdir
                 # ignore-paths/patterns will usually be relative to a repository
                 # root or the CWD, but the path passed to prospector may not be
                 path = path.resolve().absolute()
-                if is_relative_to(path, self.workdir):
-                    path = path.relative_to(self.workdir)
+                if is_relative_to(path, workdir):
+                    path = path.relative_to(workdir)
                 if ignore.match(str(path)):
                     return True
             return False

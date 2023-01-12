@@ -1,0 +1,5 @@
+max-line-length: 40
+
+pylint:
+  options:
+    jobs: 2
