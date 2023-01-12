@@ -20,9 +20,9 @@ def _get_pylint_tool_and_prospector_config(argv_patch=None) -> Tuple[PylintTool,
     return pylint_tool, config
 
 
-def _get_test_files(*names: str):
+def _get_test_files(*names: str, exclusion_filters=None):
     paths = [THIS_DIR / name for name in names]
-    return FileFinder(*paths)
+    return FileFinder(*paths, exclusion_filters=exclusion_filters)
 
 
 class TestPylintTool(TestCase):
@@ -95,3 +95,17 @@ class TestPylintTool(TestCase):
         assert any(
             m.code == "useless-suppression" for m in messages
         ), "There should be at least one useless suppression"
+
+    def test_parallel_execution(self):
+        root = THIS_DIR / "parallel"
+
+        with patch("pathlib.Path.cwd", return_value=root.absolute()):
+            pylint_tool, config = _get_pylint_tool_and_prospector_config()
+        self.assertEqual(Path(config.workdir).absolute(), root.absolute())
+
+        found_files = _get_test_files(root, exclusion_filters=[config.make_exclusion_filter()])
+        pylint_tool.configure(config, found_files)
+        assert pylint_tool._linter.config.jobs == 2
+
+        messages = pylint_tool.run(found_files)
+        assert "line-too-long" in [msg.code for msg in messages if msg.source == "pylint"]
