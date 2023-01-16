@@ -1,5 +1,3 @@
-import os
-import pathlib
 from pathlib import Path
 from typing import List
 
@@ -31,7 +29,7 @@ def filter_messages(filepaths: List[Path], messages: List[Message]) -> List[Mess
     filtered = []
     for message in messages:
         # first get rid of the pylint informational messages
-        relative_message_path = pathlib.Path(message.location.path)
+        relative_message_path = Path(message.location.path)
 
         if message.source == "pylint" and message.code in (
             "suppressed-message",

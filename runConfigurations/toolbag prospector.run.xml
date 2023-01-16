@@ -1,0 +1,31 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="toolbag prospector" type="PythonConfigurationType" factoryName="Python" folderName="toolbag">
+    <module name="christokur" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1" />
+      <env name="PYTHONPATH" value="$PROJECT_DIR$/../../../../github.com/christokur/prospector/" />
+    </envs>
+    <option name="SDK_HOME" value="$USER_HOME$/.pyenv/versions/python-toolbag/bin/python" />
+    <option name="SDK_NAME" value="Python 3.9 (python-toolbag)" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/python-toolbag" />
+    <option name="IS_MODULE_SDK" value="false" />
+    <option name="ADD_CONTENT_ROOTS" value="false" />
+    <option name="ADD_SOURCE_ROOTS" value="false" />
+    <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+    <EXTENSION ID="software.aws.toolkits.jetbrains.core.execution.PythonAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </EXTENSION>
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../../../github.com/christokur/prospector/prospector/__main__.py" />
+    <option name="PARAMETERS" value="--profile prospector.yaml" />
+    <option name="SHOW_COMMAND_LINE" value="false" />
+    <option name="EMULATE_TERMINAL" value="false" />
+    <option name="MODULE_MODE" value="false" />
+    <option name="REDIRECT_INPUT" value="false" />
+    <option name="INPUT_FILE" value="" />
+    <method v="2" />
+  </configuration>
+</component>
