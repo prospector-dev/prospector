@@ -1,0 +1,5 @@
+output-format: pylint
+autodetect: false
+strictness: veryhigh
+test-warnings: true
+doc-warnings: false

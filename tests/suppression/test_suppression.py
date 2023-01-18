@@ -37,3 +37,12 @@ class SuppressionTest(unittest.TestCase):
             pros = Prospector(config)
             pros.execute()
             self.assertEqual(0, pros.summary["message_count"])
+
+    def test_filter_messages_negative(self):
+        workdir = Path(__file__).parent / "testdata/test_filter_messages_negative"
+        with patch("setoptconf.source.commandline.sys.argv", ["prospector"]):
+            config = ProspectorConfig(workdir=workdir)
+            config.paths = [workdir]
+            pros = Prospector(config)
+            pros.execute()
+            self.assertEqual(5, pros.summary["message_count"])
