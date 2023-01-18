@@ -30,7 +30,7 @@ class SuppressionTest(unittest.TestCase):
         self.assertSetEqual({5}, lines)
 
     def test_filter_messages(self):
-        workdir = workdir = Path(__file__).parent / "testdata/test_filter_messages"
+        workdir = Path(__file__).parent / "testdata/test_filter_messages"
         with patch("setoptconf.source.commandline.sys.argv", ["prospector"]):
             config = ProspectorConfig(workdir=workdir)
             config.paths = [workdir]
