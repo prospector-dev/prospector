@@ -103,7 +103,6 @@ class PylintTool(ToolBase):
         return errors
 
     def configure(self, prospector_config, found_files: FileFinder):
-
         extra_sys_path = found_files.make_syspath()
         check_paths = self._get_pylint_check_paths(found_files)
 

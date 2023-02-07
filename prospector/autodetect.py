@@ -78,7 +78,6 @@ def find_from_requirements(path):
 
 
 def autodetect_libraries(path):
-
     if os.path.isfile(path):
         path = os.path.dirname(path)
         if path == "":

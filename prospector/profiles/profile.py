@@ -305,7 +305,6 @@ def _load_and_merge(
     allow_shorthand: bool = True,
     forced_inherits: List[str] = None,
 ) -> Tuple[Dict[str, Any], List[str]]:
-
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
         str(name_or_path),

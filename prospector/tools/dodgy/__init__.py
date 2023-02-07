@@ -20,7 +20,6 @@ class DodgyTool(ToolBase):
         pass
 
     def run(self, found_files: FileFinder):
-
         warnings = []
         for filepath in found_files.files:
             mimetype = mimetypes.guess_type(str(filepath.absolute()))

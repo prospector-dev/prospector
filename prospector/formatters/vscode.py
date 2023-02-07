@@ -16,7 +16,6 @@ class VSCodeFormatter(Formatter):
         output = []
 
         for message in sorted(self.messages):
-
             if cur_loc != message.location.path:
                 cur_loc = message.location.path
                 module_name = self._make_path(message.location.path).replace(os.path.sep, ".")

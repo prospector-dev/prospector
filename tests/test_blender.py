@@ -5,7 +5,6 @@ from prospector.message import Location, Message
 
 
 class TestBlendLine(TestCase):
-
     BLEND = (
         (("s1", "s1c01"), ("s2", "s2c12")),
         (("s3", "s3c81"), ("s1", "s1c04"), ("s2", "s2c44")),
@@ -25,7 +24,6 @@ class TestBlendLine(TestCase):
         self.assertEqual(expected, result)
 
     def test_blend_line(self):
-
         messages = (("s2", "s2c12"), ("s2", "s2c11"), ("s1", "s1c01"))
 
         expected = (
