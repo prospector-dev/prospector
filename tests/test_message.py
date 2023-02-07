@@ -31,7 +31,6 @@ class LocationPathTest(TestCase):
 
 class LocationOrderTest(TestCase):
     def test_path_order(self):
-
         locs = [
             Location(Path("/tmp/path/module3.py"), "module3", "somefunc", 15, 0),
             Location(Path("/tmp/path/module1.py"), "module1", "somefunc", 10, 0),
@@ -44,7 +43,6 @@ class LocationOrderTest(TestCase):
         self.assertEqual(expected, [loc.path for loc in sorted(locs)])
 
     def test_line_order(self):
-
         locs = [
             Location("/tmp/path/module1.py", "module1", "somefunc", 15, 0),
             Location("/tmp/path/module1.py", "module1", "somefunc", 10, 0),
@@ -57,7 +55,6 @@ class LocationOrderTest(TestCase):
         self.assertEqual(expected, [loc.line for loc in sorted(locs)])
 
     def test_sort_between_none_lines(self):
-
         locs = [
             Location("/tmp/path/module1.py", "module1", "somefunc", 15, 0),
             Location("/tmp/path/module1.py", "module1", "somefunc", 10, 0),
@@ -70,7 +67,6 @@ class LocationOrderTest(TestCase):
         self.assertEqual(expected, [loc.line for loc in sorted(locs)])
 
     def test_char_order(self):
-
         locs = [
             Location("/tmp/path/module1.py", "module1", "somefunc", 10, 7),
             Location("/tmp/path/module1.py", "module1", "somefunc", 10, 0),
@@ -83,7 +79,6 @@ class LocationOrderTest(TestCase):
         self.assertEqual(expected, [loc.character for loc in sorted(locs)])
 
     def test_sort_between_none_chars(self):
-
         locs = [
             Location("/tmp/path/module1.py", "module1", "somefunc", 10, -1),
             Location("/tmp/path/module1.py", "module1", "somefunc", 10, 1),

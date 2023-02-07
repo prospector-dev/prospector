@@ -25,7 +25,6 @@ class PydocstyleTool(ToolBase):
         for code_file in found_files.python_modules:
             try:
                 for error in checker.check_source(read_py_file(code_file), str(code_file.absolute()), None):
-
                     location = Location(path=code_file, module=None, function="", line=error.line, character=0)
                     message = Message(
                         source="pydocstyle",

@@ -34,7 +34,6 @@ def _tool_names(with_deprecated: bool = True):
 
 
 class ProfileValidationTool(ToolBase):
-
     LIST_SETTINGS = ("inherits", "uses", "ignore", "ignore-paths", "ignore-patterns")
     BOOL_SETTINGS = ("doc-warnings", "test-warnings", "autodetect")
     OTHER_SETTINGS = (

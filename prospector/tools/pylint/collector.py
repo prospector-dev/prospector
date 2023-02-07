@@ -9,7 +9,6 @@ from prospector.message import Location, Message
 
 
 class Collector(BaseReporter):
-
     name = "collector"
 
     def __init__(self, message_store):
