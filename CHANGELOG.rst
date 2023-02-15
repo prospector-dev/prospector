@@ -2,6 +2,20 @@
 Changelog
 #########
 
+Version 1.9.0
+-------------
+
+* https://github.com/PyCQA/prospector/pull/577
+* https://github.com/PyCQA/prospector/pull/580
+* https://github.com/PyCQA/prospector/pull/592
+
+Version 1.8.4
+-------------
+
+* https://github.com/PyCQA/prospector/issues/566
+* https://github.com/PyCQA/prospector/issues/575
+* https://github.com/PyCQA/prospector/issues/578
+
 Version 1.8.3
 -------------
 
