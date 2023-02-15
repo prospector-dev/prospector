@@ -1,11 +1,9 @@
 import os
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
-from prospector.config import ProspectorConfig
-from prospector.run import Prospector
 from prospector.suppression import get_noqa_suppressions
+from tests.utils import patch_workdir_argv
 
 
 class SuppressionTest(unittest.TestCase):
@@ -30,19 +28,15 @@ class SuppressionTest(unittest.TestCase):
         self.assertSetEqual({5}, lines)
 
     def test_filter_messages(self):
-        workdir = Path(__file__).parent / "testdata/test_filter_messages"
-        with patch("setoptconf.source.commandline.sys.argv", ["prospector"]):
-            config = ProspectorConfig(workdir=workdir)
-            config.paths = [workdir]
-            pros = Prospector(config)
-            pros.execute()
+        with patch_workdir_argv(
+            target="setoptconf.source.commandline.sys.argv",
+            workdir=Path(__file__).parent / "testdata/test_filter_messages",
+        ) as pros:
             self.assertEqual(0, pros.summary["message_count"])
 
     def test_filter_messages_negative(self):
-        workdir = Path(__file__).parent / "testdata/test_filter_messages_negative"
-        with patch("setoptconf.source.commandline.sys.argv", ["prospector"]):
-            config = ProspectorConfig(workdir=workdir)
-            config.paths = [workdir]
-            pros = Prospector(config)
-            pros.execute()
+        with patch_workdir_argv(
+            target="setoptconf.source.commandline.sys.argv",
+            workdir=Path(__file__).parent / "testdata/test_filter_messages_negative",
+        ) as pros:
             self.assertEqual(5, pros.summary["message_count"])
