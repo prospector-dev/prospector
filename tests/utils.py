@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import contextlib
 import sys
 from pathlib import Path
-from typing import List
 from unittest.mock import patch
+
+from prospector.config import ProspectorConfig
+from prospector.run import Prospector
 
 
 @contextlib.contextmanager
-def patch_cli(*args: List[str]):
-    with patch("sys.argv", args):
+def patch_cli(*args: list[str], target: str = "sys.argv"):
+    with patch(target, args):
         yield
 
 
@@ -32,7 +36,7 @@ def patch_cwd(set_cwd: Path):
 
 
 @contextlib.contextmanager
-def patch_execution(*args: List[str], set_cwd: Path = None):
+def patch_execution(*args: list[str], set_cwd: Path = None):
     """
     Utility to patch builtins to simulate running prospector in a particular directory
     with particular commandline args
@@ -47,3 +51,15 @@ def patch_execution(*args: List[str], set_cwd: Path = None):
                 yield
         else:
             yield
+
+
+@contextlib.contextmanager
+def patch_workdir_argv(target: str = "sys.argv", args: list[str] | None = None, workdir: Path | None = None):
+    if args is None:
+        args = ["prospector"]
+    with patch_cli(*args, target=target):
+        config = ProspectorConfig(workdir=workdir)
+        config.paths = [workdir]
+        pros = Prospector(config)
+        pros.execute()
+        yield pros

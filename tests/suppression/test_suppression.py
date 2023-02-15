@@ -1,7 +1,9 @@
 import os
 import unittest
+from pathlib import Path
 
 from prospector.suppression import get_noqa_suppressions
+from tests.utils import patch_workdir_argv
 
 
 class SuppressionTest(unittest.TestCase):
@@ -24,3 +26,17 @@ class SuppressionTest(unittest.TestCase):
         file_contents = self._get_file_contents("test_ignore_enum/test.py")
         _, lines = get_noqa_suppressions(file_contents)
         self.assertSetEqual({5}, lines)
+
+    def test_filter_messages(self):
+        with patch_workdir_argv(
+            target="setoptconf.source.commandline.sys.argv",
+            workdir=Path(__file__).parent / "testdata/test_filter_messages",
+        ) as pros:
+            self.assertEqual(0, pros.summary["message_count"])
+
+    def test_filter_messages_negative(self):
+        with patch_workdir_argv(
+            target="setoptconf.source.commandline.sys.argv",
+            workdir=Path(__file__).parent / "testdata/test_filter_messages_negative",
+        ) as pros:
+            self.assertEqual(5, pros.summary["message_count"])
