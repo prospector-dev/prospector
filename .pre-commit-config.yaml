@@ -60,7 +60,7 @@ repos:
         args: [--prose-wrap=always, --print-width=88]
         exclude: tests(/\w*)*data/
   - repo: https://github.com/regebro/pyroma
-    rev: "4.1"
+    rev: "4.2"
     hooks:
       - id: pyroma
         # Must be specified because of the default value in pyroma
