@@ -1,6 +1,7 @@
 import codecs
 import json
 import os
+import pkgutil
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -114,6 +115,32 @@ def _is_valid_extension(filename):
     return ext in (".yml", ".yaml")
 
 
+def _load_content_package(name):
+    name_split = name.split(":", 1)
+    module_name = f"prospector_profile_{name_split[0]}"
+    file_names = (
+        ["prospector.yaml", "prospector.yml"]
+        if len(name_split) == 1
+        else [f"{name_split[1]}.yaml", f"{name_split[1]}.yaml"]
+    )
+
+    data = None
+    used_name = None
+    for file_name in file_names:
+        used_name = f"{module_name}:{file_name}"
+        data = pkgutil.get_data(module_name, file_name)
+        if data is not None:
+            break
+
+    if data is None:
+        return None
+
+    try:
+        return yaml.safe_load(data) or {}
+    except yaml.parser.ParserError as parse_error:
+        raise CannotParseProfile(used_name, parse_error) from parse_error
+
+
 def _load_content(name_or_path, profile_path):
     filename = None
     optional = False
@@ -138,8 +165,13 @@ def _load_content(name_or_path, profile_path):
                     break
 
     if filename is None:
+        result = _load_content_package(name_or_path)
+        if result is not None:
+            return result
+
         if optional:
             return {}
+
         raise ProfileNotFound(name_or_path, profile_path)
 
     with codecs.open(filename) as fct:

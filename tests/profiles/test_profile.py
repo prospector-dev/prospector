@@ -198,3 +198,11 @@ class TestProfileInheritance(ProfileTestBase):
     def test_pycodestyle_inheritance(self):
         profile = self._load("pep8")
         self.assertTrue("full_pep8" in profile.inherit_order)
+
+    def test_module_inheritance(self):
+        profile = ProspectorProfile.load("inherittest-module", self._profile_path, allow_shorthand=False)
+        self.assertEqual(["test-from-module"], profile.pylint["disable"])
+
+    def test_module_file_inheritance(self):
+        profile = ProspectorProfile.load("inherittest-module-file", self._profile_path, allow_shorthand=False)
+        self.assertEqual(["alternate-test-from-module"], profile.pylint["disable"])

@@ -195,9 +195,13 @@ class ProspectorConfig:
             )
             sys.exit(1)
         except ProfileNotFound as nfe:
+            search_path = ":".join(map(str, nfe.profile_path))
+            profile = nfe.name.split(":")[0]
             sys.stderr.write(
-                "Failed to run:\nCould not find profile %s. Search path: %s\n"
-                % (nfe.name, ":".join(map(str, nfe.profile_path)))
+                f"""Failed to run:
+Could not find profile {nfe.name}.
+Search path: {search_path}, or in module 'prospector_profile_{profile}'
+"""
             )
             sys.exit(1)
         else:
