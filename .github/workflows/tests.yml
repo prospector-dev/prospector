@@ -24,6 +24,8 @@ jobs:
       # - run: poetry show --all
       # - run: poetry show --outdated
       # - run: poetry show --tree
+      - name: Install test profile used in the tests
+        run: poetry run pip install tests/prospector-profile-test/
       - run: poetry run pytest --benchmark-disable --cov --cov-report= tests/
       - name: Check that Prospector can run
         run: |

@@ -1,0 +1,7 @@
+[project]
+name = "prospector-profile-test"
+description = "A package used to test the prospector external profile"
+version = "0.0.0"
+
+[tool.setuptools.package-data]
+prospector_profile_test = ["*.yaml"]

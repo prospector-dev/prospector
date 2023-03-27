@@ -235,6 +235,15 @@ built-in prospector profiles::
     inherits:
         - strictness_medium
 
+The ``inherits`` file can also be in an external package, if you specify a name Prospector will search for a tile named
+``prospector.yaml`` or ``prospector.yml`` in the module ``prospector-profile-<name>``. And if the name contains a ``:``
+this mean that we use the syntax ``<module>:<file>`` to search the file named ``<file>.yaml`` or ``<file>.yml``
+in the module name ``prospector-profile-<module>``. For example::
+
+    inherits:
+        - my_module
+        - my_module:my_file
+
 .. _ignore-paths:
 .. _ignore-patterns:
 
