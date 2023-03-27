@@ -22,7 +22,7 @@ repos:
           - --exclude=/(tests)/
           - --line-length=120
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.2
+    rev: v2.2.4
     hooks:
       - id: codespell
         args:
