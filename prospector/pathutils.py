@@ -19,7 +19,7 @@ def is_virtualenv(path: Path) -> bool:
         clues = ("bin", "lib", "include")
 
     try:
-        # just get the anme, iterdir returns absolute paths by default
+        # just get the name, iterdir returns absolute paths by default
         dircontents = [obj.name for obj in path.iterdir()]
     except (OSError, TypeError):
         # listdir failed, probably due to path length issues in windows
