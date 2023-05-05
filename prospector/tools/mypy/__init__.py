@@ -1,3 +1,5 @@
+from multiprocessing import Process, Queue
+
 from mypy import api
 
 from prospector.message import Location, Message
@@ -9,6 +11,7 @@ from prospector.tools.exceptions import BadToolConfig
 
 LIST_OPTIONS = ["allow", "check", "disallow", "no-check", "no-warn", "warn"]
 VALID_OPTIONS = LIST_OPTIONS + [
+    "use-dmypy",
     "strict",
     "follow-imports",
     "ignore-missing-imports",
@@ -50,11 +53,20 @@ def format_message(message):
     )
 
 
+def _run_in_subprocess(q, cmd, paths):
+    """
+    This function exists only to be called by multiprocessing.Process as using
+    lambda is forbidden
+    """
+    q.put(cmd(paths))
+
+
 class MypyTool(ToolBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.checker = api
         self.options = ["--show-column-numbers", "--no-error-summary"]
+        self.use_dmypy = False
 
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options("mypy")
@@ -65,6 +77,8 @@ class MypyTool(ToolBase):
                 raise BadToolConfig(
                     "mypy", f"Option {option_key} is not valid. " f"See the list of possible options: {url}"
                 )
+
+        self.use_dmypy = options.get("use-dmypy", False)
 
         strict = options.get("strict", False)
 
@@ -110,7 +124,16 @@ class MypyTool(ToolBase):
     def run(self, found_files):
         paths = [str(path) for path in found_files.python_modules]
         paths.extend(self.options)
-        result = self.checker.run(paths)
+        if self.use_dmypy:
+            # Due to dmypy messing with stdout/stderr we call it in a separate
+            # process
+            q = Queue(1)
+            p = Process(target=_run_in_subprocess, args=(q, self.checker.run_dmypy, ["run", "--"] + paths))
+            p.start()
+            result = q.get()
+            p.join()
+        else:
+            result = self.checker.run(paths)
         report, _ = result[0], result[1:]  # noqa
 
         return [format_message(message) for message in report.splitlines()]
