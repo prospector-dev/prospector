@@ -22,6 +22,7 @@ Contributors
 * Joe Wallis (`@Peilonrayz <https://github.com/Peilonrayz>`_)
 * Jon Parise (`@jparise <https://github.com/jparise>`_)
 * Kristian Glass (`@doismellburning <https://github.com/doismellburning>`_)
+* Lukasz Piatkowski (`@lukaspiatkowski <https://github.com/lukaspiatkowski>`_)
 * Luke Hinds (`@lukehinds <https://github.com/lukehinds>`_)
 * Matt Seymour (`@mattseymour <https://github.com/mattseymour>`_)
 * Michael Tinsley (`@michaeltinsley <https://github.com/michaeltinsley>`_)

@@ -282,7 +282,7 @@ Individual Configuration Options
 
 Each tool can be individually configured with a section beginning with the tool name
 (in lowercase). Valid values are ``bandit``, ``dodgy``, ``frosted``, ``mccabe``, ``mypy``, ``pydocstyle``, ``pycodestyle``,
-``pyflakes``, ``pylint``, ``pyroma`` and  ``vulture``.
+``pyflakes``, ``pylint``, ``pyright``, ``pyroma`` and  ``vulture``.
 
 Enabling and Disabling Tools
 ............................
@@ -402,16 +402,35 @@ The available options are:
 +----------------+------------------------+----------------------------------------------+
 | bandit         | confidence             | report only issues of a given confidence     |
 +----------------+------------------------+----------------------------------------------+
+| pyright        | level                  | Minimum diagnostic level (error or warning)  |
++----------------+------------------------+----------------------------------------------+
+| pyright        | project                | Path to location of configuration file       |
++----------------+------------------------+----------------------------------------------+
+| pyright        | pythonplatform         | Analyze for a specific platform (Darwin,     |
+|                |                        | Linux, Windows)                              |
++----------------+------------------------+----------------------------------------------+
+| pyright        | pythonversion          | Analyze for a specific version               |
++----------------+------------------------+----------------------------------------------+
+| pyright        | skipunannotated        | Skip analysis of functions with no type      |
+|                |                        | annotations                                  |
++----------------+------------------------+----------------------------------------------+
+| pyright        | typeshed-path          | Path to location of typeshed type stubs      |
++----------------+------------------------+----------------------------------------------+
+| pyright        | venv-path              | Directory that contains virtual environments |
++----------------+------------------------+----------------------------------------------+
 
 See `mypy options`_ for more details
 
 See `bandit options`_ for more details
+
+See `pyright options`_ for more details
 
 
 
 .. _pylint options: https://pylint.readthedocs.io/en/latest/user_guide/run.html
 .. _bandit options: https://bandit.readthedocs.io/en/latest/config.html
 .. _mypy options: https://mypy.readthedocs.io/en/stable/command_line.html
+.. _pyright options: https://microsoft.github.io/pyright/#/command-line
 
 
 
@@ -492,6 +511,12 @@ Next is another example using most options::
       disable:
         - PYR15
         - PYR18
+
+    pyright:
+      options:
+        level: warning
+        pythonversion: 3.7
+        skipunannotated: true
 
     mypy:
       run: true
