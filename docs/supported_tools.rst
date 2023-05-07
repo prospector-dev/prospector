@@ -165,7 +165,6 @@ To install and use::
     prospector --with-tool mypy
 
 
-
 `Bandit <https://github.com/PyCQA/bandit>`_
 ```````````````````````````````````````````
 Bandit finds common security issues in Python code.
@@ -174,3 +173,14 @@ To install and use::
 
     pip install prospector[with_bandit]
     prospector --with-tool bandit
+
+
+`Pyright <https://github.com/microsoft/pyright>`_
+````````````````````````````````````````
+Pyright is a full-featured, standards-based static type checker for Python. It
+is designed for high performance and can be used with large Python source bases.
+
+To install and use::
+
+    pip install prospector[with_pyright]
+    prospector --with-tool pyright

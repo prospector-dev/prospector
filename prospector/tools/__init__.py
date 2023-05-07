@@ -61,6 +61,7 @@ TOOLS = {
     "profile-validator": _profile_validator_tool,
     "vulture": _optional_tool("vulture"),
     "pyroma": _optional_tool("pyroma"),
+    "pyright": _optional_tool("pyright"),
     "mypy": _optional_tool("mypy"),
     "bandit": _optional_tool("bandit"),
 }

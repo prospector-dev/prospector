@@ -65,6 +65,11 @@ Tool classes
 .. autoclass:: prospector.tools.pyroma.PyromaTool
     :members:
 
+:class:`PyrightTool`
+-------------------
+.. autoclass:: prospector.tools.pyright.PyrightTool
+    :members:
+
 :class:`VultureTool`
 --------------------
 .. autoclass:: prospector.tools.vulture.VultureTool

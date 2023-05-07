@@ -1,0 +1,4 @@
+pyright:
+  run: yes
+  options:
+    level: error
