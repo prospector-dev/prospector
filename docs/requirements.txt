@@ -1,2 +1,2 @@
-sphinx>=7.0.0,<8
+sphinx>=5.0.0,<8
 sphinx-argparse
