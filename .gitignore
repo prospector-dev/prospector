@@ -44,6 +44,7 @@ nosetests.xml
 
 # Sphinx
 docs/_build
+docs/html
 
 # testing/linting
 .mypy_cache
@@ -64,6 +65,7 @@ venv
 .pylint.d
 
 pip-wheel-metadata
+
 
 # local testing for now
 .drone.*

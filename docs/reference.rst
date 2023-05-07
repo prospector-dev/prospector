@@ -61,7 +61,7 @@ Tool classes
     :members:
 
 :class:`PyrightTool`
--------------------
+--------------------
 .. autoclass:: prospector.tools.pyright.PyrightTool
     :members:
 
