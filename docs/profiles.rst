@@ -394,6 +394,9 @@ The available options are:
 +----------------+------------------------+----------------------------------------------+
 | mypy           | namespace-packages     | Import discovery uses namespace packages     |
 +----------------+------------------------+----------------------------------------------+
+| mypy           | use-dmypy              | Use mypy daemon (mypy server) for faster     |
+|                |                        | checks                                       |
++----------------+------------------------+----------------------------------------------+
 | bandit         | config                 | configuration filename                       |
 +----------------+------------------------+----------------------------------------------+
 | bandit         | profile                | profile to use                               |
