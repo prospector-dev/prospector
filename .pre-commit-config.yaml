@@ -10,7 +10,7 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.2
+    rev: v3.4.0
     hooks:
       - id: pyupgrade
         args: [--py37-plus]
@@ -52,13 +52,6 @@ repos:
     hooks:
       - id: isort
         args: ["--profile", "black", "--filter-files"]
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.9-for-vscode
-    hooks:
-      - id: prettier
-        files: ".md|.yml|.yaml"
-        args: [--prose-wrap=always, --print-width=88]
-        exclude: tests(/\w*)*data/
   - repo: https://github.com/regebro/pyroma
     rev: "4.2"
     hooks:
