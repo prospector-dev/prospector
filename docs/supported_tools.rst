@@ -139,19 +139,6 @@ To install and use::
     prospector --with-tool vulture
 
 
-`Frosted <https://github.com/timothycrosley/frosted>`_
-``````````````````````````````````````````````````````
-Frosted is a fork of pyflakes which was created with the intention of taking over
-from and extending pyflakes as development had slowed. Since Prospector was originally
-created, pyflakes development has started up again and frosted has stagnated, so it has
-been demoted to be an optional extra.
-
-To install and use::
-
-    pip install prospector[with_frosted]
-    prospector --with-tool frosted
-
-
 `Mypy <https://github.com/python/mypy>`_
 ````````````````````````````````````````
 Mypy is an experimental optional static type checker for Python that aims to combine

@@ -20,11 +20,6 @@ Tool classes
 .. autoclass:: prospector.tools.dodgy.DodgyTool
     :members:
 
-:class:`FrostedTool`
---------------------
-.. autoclass:: prospector.tools.frosted.FrostedTool
-    :members:
-
 :class:`McCabeTool`
 -------------------
 .. autoclass:: prospector.tools.mccabe.McCabeTool
