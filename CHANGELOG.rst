@@ -2,6 +2,15 @@
 Changelog
 #########
 
+Version 1.10.0
+-------------
+
+**New**:
+
+* Prospector profiles can now be loaded from external packages, meaning that behaviour can be packaged and re-used across projects - `#604 <https://github.com/PyCQA/prospector/pull/604>`_
+* Added pyright as an optional additional tool - `#612 <https://github.com/PyCQA/prospector/pull/612>`_
+* `use-dmypy` option now passed through to MyPy `#611 <https://github.com/PyCQA/prospector/pull/611>`_
+
 Version 1.9.0
 -------------
 

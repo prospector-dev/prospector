@@ -4,8 +4,8 @@ prospector
 .. image:: https://img.shields.io/pypi/v/prospector.svg
    :target: https://pypi.python.org/pypi/prospector
    :alt: Latest Version of Prospector
-.. image:: https://github.com/PyCQA/prospector/actions/workflows/ci.yaml/badge.svg
-   :target: https://github.com/PyCQA/prospector/actions/workflows/ci.yaml
+.. image:: https://github.com/PyCQA/prospector/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/PyCQA/prospector/actions/workflows/tests.yml
    :alt: Build Status
 .. image:: https://img.shields.io/coveralls/PyCQA/prospector.svg?style=flat
    :target: https://coveralls.io/r/PyCQA/prospector
