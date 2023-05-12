@@ -148,7 +148,7 @@ text to your repositories' ``.pre-commit-config.yaml``::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.7.5 # The version of Prospector to use, if not 'master' for latest
+        rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest
         hooks:
         -   id: prospector
 
@@ -157,7 +157,7 @@ them to the hook configuration like so::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.7.5
+        rev: 1.10.0
         hooks:
         -   id: prospector
             additional_dependencies:
@@ -189,7 +189,7 @@ added as command line arguments to the hook. For example::
 
     repos:
     -   repo: https://github.com/PyCQA/prospector
-        rev: 1.7.5
+        rev: 1.10.0
         hooks:
         -   id: prospector
             additional_dependencies:
