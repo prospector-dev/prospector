@@ -2,8 +2,22 @@
 Changelog
 #########
 
+
+Version 1.10.1 and 1.10.2
+-------------------------
+
+**Bugfixes**:
+
+1.10.1 was released to fix a packaging and installation problem (see `this issue <https://github.com/PyCQA/pylint-plugin-utils/issues/29`_
+for a description of the problem).
+
+However this caused a separate regression in packaging and installation `#618 <https://github.com/PyCQA/prospector/issues/618>`_
+
+1.10.2 fixes both issues
+
+
 Version 1.10.0
--------------
+--------------
 
 **New**:
 
