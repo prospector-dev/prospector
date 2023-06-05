@@ -1,4 +1,5 @@
 import os
+from getpass import getuser
 from pathlib import Path
 
 
@@ -33,7 +34,7 @@ class PermissionMissing(Exception):
         else:
             what = f"the file {path}"
         error_msg = (
-            f"The current user {os.getlogin()} does not have permission to open "
+            f"The current user {getuser()} does not have permission to open "
             f"{what}. Either fix permissions or tell prospector to skip it "
             f"by adding this path to `--ignore-paths` on the commandline "
             f"or in `ignore-paths` in the prospector profile (see {docs_url})"
