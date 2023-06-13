@@ -141,7 +141,7 @@ To install and use::
 
 `Mypy <https://github.com/python/mypy>`_
 ````````````````````````````````````````
-Mypy is an experimental optional static type checker for Python that aims to combine
+Mypy is an optional static type checker for Python that aims to combine
 the benefits of dynamic (or "duck") typing and static typing. Mypy combines the
 expressive power and convenience of Python with a powerful type system and
 compile-time type checking.
