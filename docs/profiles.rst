@@ -397,6 +397,9 @@ The available options are:
 | mypy           | use-dmypy              | Use mypy daemon (mypy server) for faster     |
 |                |                        | checks                                       |
 +----------------+------------------------+----------------------------------------------+
+| mypy           | check-untyped-defs     |Type check the interior of functions without  |
+|                |                        |type annotations                              |
++----------------+------------------------+----------------------------------------------+
 | bandit         | config                 | configuration filename                       |
 +----------------+------------------------+----------------------------------------------+
 | bandit         | profile                | profile to use                               |
