@@ -44,7 +44,7 @@ them to the hook configuration like so::
         hooks:
         -   id: prospector
             additional_dependencies:
-            - ".[with_mypy,with_bandit]"
+            - ".[with-mypy,with-bandit]"
           - args: [
             '--with-tool=mypy',
             '--with-tool=bandit',
@@ -53,4 +53,4 @@ them to the hook configuration like so::
 
 This is equivalent to running::
 
-    pip install prospector[with_bandit,with_mypy]
+    pip install prospector[with-bandit,with-mypy]
