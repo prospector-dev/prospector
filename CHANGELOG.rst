@@ -2,6 +2,12 @@
 Changelog
 #########
 
+Version 1.10.3
+--------------
+
+**New**:
+
+* Dependencies versions were bumped following multiple moderate CVE declared in transitive dependencies.
 
 Version 1.10.1 and 1.10.2
 -------------------------
