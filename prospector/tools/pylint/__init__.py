@@ -182,8 +182,8 @@ class PylintTool(ToolBase):
 
             if pylintrc is None:
                 for p in pylint_config.find_default_config_files():
-                  pylintrc = str(p)
-                  break
+                    pylintrc = str(p)
+                    break
             
             if pylintrc is None:  # nothing explicitly configured
                 for possible in (".pylintrc", "pylintrc", "pyproject.toml", "setup.cfg"):
