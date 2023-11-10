@@ -181,7 +181,7 @@ class PylintTool(ToolBase):
             pylintrc = pylintrc or external_config
 
             if pylintrc is None:
-                for p in pylint_config.find_default_config_files():
+                for p in find_default_config_files():
                     pylintrc = str(p)
                     break
             
