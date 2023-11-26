@@ -98,7 +98,7 @@ def blend(messages, blend_combos=None):
 
 
 def get_default_blend_combinations():
-    combos = yaml.safe_load(resources.files(__package__).joinpath("blender_combinations.yaml").read_text())
+    combos = yaml.safe_load(resources.read_text(__package__, "blender_combinations.yaml"))
     combos = combos.get("combinations", [])
 
     defaults = []
