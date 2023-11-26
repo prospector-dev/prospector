@@ -1,5 +1,6 @@
 # flake8: noqa
 from importlib import metadata
+
 import setoptconf as soc
 
 from prospector.config.datatype import OutputChoice
