@@ -1,5 +1,5 @@
 # flake8: noqa
-import pkg_resources
+from importlib import metadata
 import setoptconf as soc
 
 from prospector.config.datatype import OutputChoice
@@ -8,7 +8,7 @@ from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 __all__ = ("build_manager",)
 
-_VERSION = pkg_resources.get_distribution("prospector").version
+_VERSION = metadata.distribution("prospector").version
 
 
 def build_manager():

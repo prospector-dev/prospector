@@ -6,7 +6,7 @@
 # remove duplicates.
 from collections import defaultdict
 
-import pkg_resources
+from importlib import resources
 import yaml
 
 __all__ = (
@@ -98,7 +98,7 @@ def blend(messages, blend_combos=None):
 
 
 def get_default_blend_combinations():
-    combos = yaml.safe_load(pkg_resources.resource_string(__name__, "blender_combinations.yaml"))
+    combos = yaml.safe_load(resources.read_text(__name__, "blender_combinations.yaml"))
     combos = combos.get("combinations", [])
 
     defaults = []
