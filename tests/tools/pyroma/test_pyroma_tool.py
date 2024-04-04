@@ -31,7 +31,9 @@ def test_forced_include():
             tool.configure(config, files)
 
         # must do this outside of the CLI patch because pyroma does its own sys.argv patching...
+        print(files.files)
         messages = tool.run(files)
+        print(messages)
 
         # this should still find errors in the setup.py, but not any of the others
         assert len(messages) == 10
