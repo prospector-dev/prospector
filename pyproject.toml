@@ -17,11 +17,11 @@ classifiers = [
     "Intended Audience :: Developers",
     "Operating System :: Unix",
     "Topic :: Software Development :: Quality Assurance",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
 ]
 packages = [
@@ -36,7 +36,7 @@ include = [
 prospector = 'prospector.run:main'
 
 [tool.poetry.dependencies]
-python = ">=3.7.2,<4.0"
+python = ">=3.8.1,<4.0"
 pylint = ">=2.8.3"
 pylint-celery = "0.3"
 pylint-django = "~2.5"
@@ -45,8 +45,8 @@ pylint-flask = "0.6"
 requirements-detector = ">=1.2.0"
 PyYAML = "*"
 mccabe = "^0.7.0"
-flake8 = "<6.0.0"
-pyflakes = ">=2.2.0,<3.*"
+flake8 = "<7.0.0"
+pyflakes = ">=2.2.0,<4.*"
 pycodestyle = ">=2.9.0"
 pep8-naming = ">=0.3.3,<=0.10.0"
 pydocstyle = ">=2.0.0"
@@ -78,7 +78,7 @@ tzlocal = "^4.2"
 coverage = "^6.5"
 pre-commit = "^2.20.0"
 tox = "^3.27.1"
-twine = "^4.0.2"
+twine = "^5.1.1"
 types-PyYAML = "^6.0.4"
 types-setuptools = "^57.4.9"
 
