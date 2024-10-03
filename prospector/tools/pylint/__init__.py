@@ -184,7 +184,7 @@ class PylintTool(ToolBase):
                 for p in find_default_config_files():
                     pylintrc = str(p)
                     break
-            
+
             if pylintrc is None:  # nothing explicitly configured
                 for possible in (".pylintrc", "pylintrc", "pyproject.toml", "setup.cfg"):
                     pylintrc_path = os.path.join(prospector_config.workdir, possible)

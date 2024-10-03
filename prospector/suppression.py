@@ -19,6 +19,7 @@ in the file:
 This module's job is to attempt to collect all of these methods into
 a single coherent list of error suppression locations.
 """
+
 import re
 import warnings
 from collections import defaultdict

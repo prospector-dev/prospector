@@ -3,7 +3,6 @@ from pathlib import Path
 
 
 class FatalProspectorException(Exception):
-
     """
     Exception used to indicate an internal prospector problem.
     Problems in prospector itself should raise this to notify
