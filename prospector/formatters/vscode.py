@@ -5,7 +5,6 @@ from prospector.formatters.base import Formatter
 
 
 class VSCodeFormatter(Formatter):
-
     """
     This formatter outputs messages in the same way as vscode prospector linter expects.
     """

@@ -2,6 +2,7 @@
 Tests that prospector raises the expected errors on the expected files depending on the
 configuration of the file finder
 """
+
 import shutil
 import tempfile
 from pathlib import Path

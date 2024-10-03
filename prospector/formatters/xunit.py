@@ -4,7 +4,6 @@ from prospector.formatters.base import Formatter
 
 
 class XunitFormatter(Formatter):
-
     """
     This formatter outputs messages in the Xunit xml format, which is used by several
     CI tools to parse output. This formatter is therefore a compatibility shim between tools built
