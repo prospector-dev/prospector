@@ -5,7 +5,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import List
 
-from pylint.config import find_pylintrc
+from pylint.config import find_default_config_files
 from pylint.exceptions import UnknownMessageError
 from pylint.lint.run import _cpu_count
 
@@ -177,7 +177,14 @@ class PylintTool(ToolBase):
             # try to find a .pylintrc
             pylintrc = pylint_options.get("config_file")
             external_config = prospector_config.external_config_location("pylint")
-            pylintrc = pylintrc or external_config or find_pylintrc()
+
+            pylintrc = pylintrc or external_config
+
+            if pylintrc is None:
+                for p in find_default_config_files():
+                    pylintrc = str(p)
+                    break
+            
             if pylintrc is None:  # nothing explicitly configured
                 for possible in (".pylintrc", "pylintrc", "pyproject.toml", "setup.cfg"):
                     pylintrc_path = os.path.join(prospector_config.workdir, possible)
