@@ -2,6 +2,14 @@
 Changelog
 #########
 
+Version 1.11.0
+--------------
+
+**New**:
+
+* We dropped support for python 3.7.
+
+
 Version 1.10.3
 --------------
 
