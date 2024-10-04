@@ -8,6 +8,10 @@ Version 1.11.0
 **New**:
 
 * We dropped support for python 3.7.
+* prospector now support python 3.12 and 3.13.
+* pylint is now set to version 3.0.0 or less, while waiting
+  for a new release of ``requirements-detector`` compatible
+  with pylint 3.0+.
 
 
 Version 1.10.3
@@ -388,7 +392,7 @@ Version 0.12.9
 
 Version 0.12.8
 ---------------
-* Enforece pylint, pyflakes and pycodestyle versions to avoid breaking other dependent tools
+* Enforce pylint, pyflakes and pycodestyle versions to avoid breaking other dependent tools
 * `#242 <https://github.com/PyCQA/prospector/pull/248>`_ Fix absolute path issue with pylint
 * `#234 <https://github.com/PyCQA/prospector/pull/234>`_ Added Python 3.5/3.6 support on build
 
