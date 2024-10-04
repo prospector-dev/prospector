@@ -21,6 +21,7 @@ VALID_OPTIONS = LIST_OPTIONS + [
     "python-2-mode",
     "python-version",
     "namespace-packages",
+    "check-untyped-defs",
 ]
 
 
@@ -90,6 +91,7 @@ class MypyTool(ToolBase):
         python_version = options.get("python-version", None)
         strict_optional = options.get("strict-optional", False)
         namespace_packages = options.get("namespace-packages", False)
+        check_untyped_defs = options.get("check-untyped-defs", False)
 
         self.options.append(f"--follow-imports={follow_imports}")
 
@@ -116,6 +118,9 @@ class MypyTool(ToolBase):
 
         if namespace_packages:
             self.options.append("--namespace-packages")
+
+        if check_untyped_defs:
+            self.options.append("--check-untyped-defs")
 
         for list_option in LIST_OPTIONS:
             for entry in options.get(list_option, []):
