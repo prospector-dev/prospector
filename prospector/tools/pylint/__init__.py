@@ -64,7 +64,7 @@ class PylintTool(ToolBase):
                 continue
             for option in checker.options:
                 if option[0] in options:
-                    checker.set_option(option[0], options[option[0]])
+                    checker._arguments_manager.set_option(option[0], options[option[0]])
 
         # The warnings about disabling warnings are useful for figuring out
         # with other tools to suppress messages from. For example, an unused
@@ -167,7 +167,7 @@ class PylintTool(ToolBase):
     def _get_pylint_configuration(
         self, check_paths: List[Path], linter: ProspectorLinter, prospector_config, pylint_options
     ):
-        self._args = linter.load_command_line_configuration(str(path) for path in check_paths)
+        self._args = check_paths
         linter.load_default_plugins()
 
         config_messages = self._prospector_configure(prospector_config, linter)

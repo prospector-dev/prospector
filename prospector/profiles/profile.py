@@ -121,7 +121,7 @@ def _load_content_package(name):
     file_names = (
         ["prospector.yaml", "prospector.yml"]
         if len(name_split) == 1
-        else [f"{name_split[1]}.yaml", f"{name_split[1]}.yaml"]
+        else [f"{name_split[1]}.yaml", f"{name_split[1]}.yml"]
     )
 
     data = None
