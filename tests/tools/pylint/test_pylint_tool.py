@@ -1,5 +1,5 @@
 import os
-from pathlib import Path
+from pathlib import Path, PosixPath
 from typing import Tuple
 from unittest import TestCase
 from unittest.mock import patch
@@ -75,7 +75,7 @@ class TestPylintTool(TestCase):
         found_files = _get_test_files("testpath/testfile.py")
         pylint_tool.configure(config, found_files)
         self.assertNotEqual(pylint_tool._args, [os.path.join(*root_sep_split)])
-        self.assertEqual(pylint_tool._args, [os.path.join(*root_os_split)])
+        self.assertEqual(pylint_tool._args, [PosixPath(os.path.join(*root_os_split))])
 
     def test_wont_throw_false_positive_relative_beyond_top_level(self):
         with patch("os.getcwd", return_value=os.path.realpath("tests/tools/pylint/testpath/")):
@@ -91,6 +91,8 @@ class TestPylintTool(TestCase):
 
         found_files = _get_test_files("testpath", "testpath/test_useless_suppression.py")
         pylint_tool.configure(config, found_files)
+        # useless-suppression is now disable by default in pylint
+        pylint_tool._linter.enable("useless-suppression")
         messages = pylint_tool.run(found_files)
         assert any(
             m.code == "useless-suppression" for m in messages

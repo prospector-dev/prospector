@@ -2,6 +2,13 @@
 Changelog
 #########
 
+Version 1.12.0
+--------------
+
+**New**:
+
+* pylint version will now be above 3.0.0 again
+
 Version 1.11.0
 --------------
 
