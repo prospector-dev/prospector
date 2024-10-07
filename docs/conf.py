@@ -14,9 +14,9 @@
 # import os
 # import sys
 
-import pkg_resources
+import importlib.metadata
 
-version = pkg_resources.get_distribution("prospector").version
+version = importlib.metadata.version("prospector")
 
 release = ".".join(version.split(".")[:2])
 

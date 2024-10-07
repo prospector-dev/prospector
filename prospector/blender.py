@@ -4,9 +4,9 @@
 # the same line. For example, both pyflakes and pylint will generate an
 # "Unused Import" warning on the same line. This is obviously redundant, so we
 # remove duplicates.
+import pkgutil
 from collections import defaultdict
 
-import pkg_resources
 import yaml
 
 __all__ = (
@@ -98,7 +98,7 @@ def blend(messages, blend_combos=None):
 
 
 def get_default_blend_combinations():
-    combos = yaml.safe_load(pkg_resources.resource_string(__name__, "blender_combinations.yaml"))
+    combos = yaml.safe_load(pkgutil.get_data(__name__, "blender_combinations.yaml"))
     combos = combos.get("combinations", [])
 
     defaults = []
