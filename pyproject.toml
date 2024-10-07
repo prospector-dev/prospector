@@ -5,7 +5,8 @@ description = "Prospector is a tool to analyse Python code by aggregating the re
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
                "Carlos Coelho <carlospecter@gmail.com>",
-               "Pierre Sassoulas <pierre.sassoulas@gmail.com>"]
+               "Pierre Sassoulas <pierre.sassoulas@gmail.com>",
+               "Stéphane Brunner <stephane.brunner@gmail.com>"]
 readme = "README.rst"
 homepage = "http://prospector.readthedocs.io"
 repository = "https://github.com/PyCQA/prospector"
