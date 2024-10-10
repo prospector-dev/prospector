@@ -81,7 +81,6 @@ pre-commit = "^2.20.0"
 tox = "^3.27.1"
 twine = "^5.1.1"
 types-PyYAML = "^6.0.4"
-types-setuptools = "^57.4.9"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

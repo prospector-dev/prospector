@@ -1755,17 +1755,6 @@ files = [
 ]
 
 [[package]]
-name = "types-setuptools"
-version = "57.4.18"
-description = "Typing stubs for setuptools"
-optional = false
-python-versions = "*"
-files = [
-    {file = "types-setuptools-57.4.18.tar.gz", hash = "sha256:8ee03d823fe7fda0bd35faeae33d35cb5c25b497263e6a58b34c4cfd05f40bcf"},
-    {file = "types_setuptools-57.4.18-py3-none-any.whl", hash = "sha256:9660b8774b12cd61b448e2fd87a667c02e7ec13ce9f15171f1d49a4654c4df6a"},
-]
-
-[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -1887,4 +1876,4 @@ with-vulture = ["vulture"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "5dd7743372b29a0f6ad18b422f00204ae9e8400421206c6c18a5b79f18fc8edb"
+content-hash = "75d63f1b14c304827e63c33acecb8d4030a260101049a836f9120432a7a8e6d4"
