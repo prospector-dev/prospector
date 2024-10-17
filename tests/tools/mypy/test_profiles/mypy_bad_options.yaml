@@ -1,4 +1,5 @@
 mypy:
   run: yes
   options:
-    warn-unreachable: true
+    wrong-option-type:
+      test: true

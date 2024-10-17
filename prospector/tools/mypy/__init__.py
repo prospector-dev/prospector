@@ -9,21 +9,6 @@ __all__ = ("MypyTool",)
 
 from prospector.tools.exceptions import BadToolConfig
 
-LIST_OPTIONS = ["allow", "check", "disallow", "no-check", "no-warn", "warn"]
-VALID_OPTIONS = LIST_OPTIONS + [
-    "use-dmypy",
-    "strict",
-    "follow-imports",
-    "ignore-missing-imports",
-    "implicit-optional",
-    "strict-optional",
-    "platform",
-    "python-2-mode",
-    "python-version",
-    "namespace-packages",
-    "check-untyped-defs",
-]
-
 
 def format_message(message):
     try:
@@ -72,59 +57,29 @@ class MypyTool(ToolBase):
     def configure(self, prospector_config, _):
         options = prospector_config.tool_options("mypy")
 
-        for option_key in options.keys():
-            if option_key not in VALID_OPTIONS:
-                url = "https://github.com/PyCQA/prospector/blob/master/prospector/tools/mypy/__init__.py"
-                raise BadToolConfig(
-                    "mypy", f"Option {option_key} is not valid. " f"See the list of possible options: {url}"
-                )
+        self.use_dmypy = options.pop("use-dmypy", False)
 
-        self.use_dmypy = options.get("use-dmypy", False)
+        # For backward compatibility
+        if "follow-imports" not in options:
+            options["follow-imports"] = "normal"
+        if "python-2-mode" in options and "py2" not in options:
+            options["py2"] = options.pop("python-2-mode")
 
-        strict = options.get("strict", False)
+        for name, value in options.items():
+            if value is False:
+                continue
+            if value is True:
+                self.options.append(f"--{name}")
+                continue
+            if isinstance(value, (int, float, str)):
+                self.options.append(f"--{name}={value}")
+                continue
+            if isinstance(value, list):
+                for v in value:
+                    self.options.append(f"--{name}-{v}")
+                continue
 
-        follow_imports = options.get("follow-imports", "normal")
-        ignore_missing_imports = options.get("ignore-missing-imports", False)
-        implict_optional = options.get("implict-optional", False)
-        platform = options.get("platform", None)
-        python_2_mode = options.get("python-2-mode", False)
-        python_version = options.get("python-version", None)
-        strict_optional = options.get("strict-optional", False)
-        namespace_packages = options.get("namespace-packages", False)
-        check_untyped_defs = options.get("check-untyped-defs", False)
-
-        self.options.append(f"--follow-imports={follow_imports}")
-
-        if strict:
-            self.options.append("--strict")
-
-        if ignore_missing_imports:
-            self.options.append("--ignore-missing-imports")
-
-        if implict_optional:
-            self.options.append("--implict-optional")
-
-        if platform:
-            self.options.append(f"--platform {platform}")
-
-        if python_2_mode:
-            self.options.append("--py2")
-
-        if python_version:
-            self.options.append(f"--python-version {python_version}")
-
-        if strict_optional:
-            self.options.append("--strict-optional")
-
-        if namespace_packages:
-            self.options.append("--namespace-packages")
-
-        if check_untyped_defs:
-            self.options.append("--check-untyped-defs")
-
-        for list_option in LIST_OPTIONS:
-            for entry in options.get(list_option, []):
-                self.options.append(f"--{list_option}-{entry}")
+            raise BadToolConfig("mypy", f"The option {name} has an unsupported balue type: {type(value)}")
 
     def run(self, found_files):
         paths = [str(path) for path in found_files.python_modules]
