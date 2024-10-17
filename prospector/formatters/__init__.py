@@ -1,7 +1,7 @@
 from . import emacs, grouped, json, pylint, text, vscode, xunit, yaml
 from .base import Formatter
 
-__all__ = ("FORMATTERS", "Formatter")
+__all__ = ["Formatter", "FORMATTERS"]
 
 
 FORMATTERS: dict[str, type[Formatter]] = {

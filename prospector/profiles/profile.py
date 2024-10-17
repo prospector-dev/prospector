@@ -18,26 +18,28 @@ class ProspectorProfile:
         self.name = name
         self.inherit_order = inherit_order
 
-        self.ignore_paths = _ensure_list(profile_dict.get("ignore-paths", []))
+        self.ignore_paths: list[str] = _ensure_list(profile_dict.get("ignore-paths", []))
         # The 'ignore' directive is an old one which should be deprecated at some point
-        self.ignore_patterns = _ensure_list(profile_dict.get("ignore-patterns", []) + profile_dict.get("ignore", []))
+        self.ignore_patterns: list[str] = _ensure_list(
+            profile_dict.get("ignore-patterns", []) + profile_dict.get("ignore", [])
+        )
 
-        self.output_format = profile_dict.get("output-format")
-        self.output_target = profile_dict.get("output-target")
-        self.autodetect = profile_dict.get("autodetect", True)
-        self.uses = [
+        self.output_format: Optional[str] = profile_dict["output-format"] if "output-format" in profile_dict else None
+        self.output_target: Optional[str] = profile_dict.get("output-target")
+        self.autodetect: bool = profile_dict.get("autodetect", True)
+        self.uses: list[str] = [
             uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery", "flask")
         ]
-        self.max_line_length = profile_dict.get("max-line-length")
+        self.max_line_length: Optional[int] = profile_dict.get("max-line-length")
 
         # informational shorthands
-        self.strictness = profile_dict.get("strictness")
-        self.test_warnings = profile_dict.get("test-warnings")
-        self.doc_warnings = profile_dict.get("doc-warnings")
-        self.member_warnings = profile_dict.get("member-warnings")
+        self.strictness: Optional[str] = profile_dict.get("strictness")
+        self.test_warnings: Optional[bool] = profile_dict.get("test-warnings")
+        self.doc_warnings: Optional[bool] = profile_dict.get("doc-warnings")
+        self.member_warnings: Optional[bool] = profile_dict.get("member-warnings")
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
-        self.requirements = _ensure_list(profile_dict.get("requirements", []))
+        self.requirements: list[str] = _ensure_list(profile_dict.get("requirements", []))
 
         for tool in TOOLS:
             tool_conf = profile_dict.get(tool, {})
@@ -57,12 +59,12 @@ class ProspectorProfile:
         enable = getattr(self, tool_name)["enable"]
         return list(set(disable) - set(enable))
 
-    def is_tool_enabled(self, name: str) -> bool:
-        enabled: Optional[bool] = getattr(self, name).get("run")
+    def is_tool_enabled(self, tool: str) -> bool:
+        enabled: Optional[bool] = getattr(self, tool).get("run")
         if enabled is not None:
             return enabled
         # this is not explicitly enabled or disabled, so use the default
-        return name in DEFAULT_TOOLS
+        return tool in DEFAULT_TOOLS
 
     def list_profiles(self) -> list[str]:
         # this profile is itself included
@@ -173,7 +175,7 @@ def _load_content(name_or_path: Union[str, Path], profile_path: list[Path]) -> d
         if optional:
             return {}
 
-        raise ProfileNotFound(str(name_or_path), str(profile_path))
+        raise ProfileNotFound(name_or_path, profile_path)
 
     with codecs.open(filename) as fct:
         try:
@@ -222,7 +224,7 @@ def _merge_tool_config(priority: dict[str, Any], base: dict[str, Any]) -> dict[s
 
 def _merge_profile_dict(priority: dict[str, Any], base: dict[str, Any]) -> dict[str, Any]:
     # copy the base dict into our output
-    out = dict(base.items())
+    out = {**base}
 
     for key, value in priority.items():
         if key in (
@@ -235,7 +237,7 @@ def _merge_profile_dict(priority: dict[str, Any], base: dict[str, Any]) -> dict[
             "max-line-length",
             "pep8",
         ):
-            # some keys are simple values which are overwritten
+            # Some keys are simple values which are overwritten
             out[key] = value
         elif key in (
             "ignore",
@@ -246,10 +248,10 @@ def _merge_profile_dict(priority: dict[str, Any], base: dict[str, Any]) -> dict[
             "python-targets",
             "output-target",
         ):
-            # some keys should be appended
+            # Some keys should be appended
             out[key] = _ensure_list(value) + _ensure_list(base.get(key, []))
         elif key in TOOLS:
-            # this is tool config!
+            # This is tool config!
             out[key] = _merge_tool_config(value, base.get(key, {}))
 
     return out
