@@ -1,4 +1,5 @@
 import importlib
+from enum import Enum
 
 from prospector.exceptions import FatalProspectorException
 from prospector.tools.base import ToolBase
@@ -66,6 +67,7 @@ TOOLS = {
     "bandit": _optional_tool("bandit"),
 }
 
+Tools = Enum("Tools", TOOLS)
 
 DEFAULT_TOOLS = (
     "dodgy",

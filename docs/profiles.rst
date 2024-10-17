@@ -380,25 +380,15 @@ The available options are:
 +----------------+------------------------+----------------------------------------------+
 | pylint         | -anything-             | Any of the `pylint options`_                 |
 +----------------+------------------------+----------------------------------------------+
-| mypy           | strict                 | strict mode                                  |
-+----------------+------------------------+----------------------------------------------+
-| mypy           | follow-imports         | How to treat imports                         |
-+----------------+------------------------+----------------------------------------------+
-| mypy           | ignore-missing-import  | Silently ignore imports of missing modules   |
-+----------------+------------------------+----------------------------------------------+
-| mypy           | platform               | Check for the given platform                 |
-+----------------+------------------------+----------------------------------------------+
-| mypy           | python-version         | assume it will be running on Python x.y      |
-+----------------+------------------------+----------------------------------------------+
-| mypy           | strict-optional        | Checking of Optional types and None values   |
-+----------------+------------------------+----------------------------------------------+
-| mypy           | namespace-packages     | Import discovery uses namespace packages     |
-+----------------+------------------------+----------------------------------------------+
 | mypy           | use-dmypy              | Use mypy daemon (mypy server) for faster     |
 |                |                        | checks                                       |
 +----------------+------------------------+----------------------------------------------+
-| mypy           | check-untyped-defs     |Type check the interior of functions without  |
-|                |                        |type annotations                              |
+| mypy           | -anything-other-       | Any of the `mypy options`_,                  |
+|                |                        | if the value is a list of string we it       |
+|                |                        | corresponds to the argument like             |
+|                |                        | `--<key>-<value>`                            |
+|                |                        | e.g. `disallow: [any-expr, any-explicit]` => |
+|                |                        | `--disallow-any-expr --disallow-any-explicit`|
 +----------------+------------------------+----------------------------------------------+
 | bandit         | config                 | configuration filename                       |
 +----------------+------------------------+----------------------------------------------+
@@ -424,8 +414,6 @@ The available options are:
 +----------------+------------------------+----------------------------------------------+
 | pyright        | venv-path              | Directory that contains virtual environments |
 +----------------+------------------------+----------------------------------------------+
-
-See `mypy options`_ for more details
 
 See `bandit options`_ for more details
 

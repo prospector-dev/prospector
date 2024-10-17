@@ -3,7 +3,7 @@ import re
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from pylint.config import find_default_config_files
 from pylint.exceptions import UnknownMessageError
@@ -14,6 +14,9 @@ from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.linter import ProspectorLinter
+
+if TYPE_CHECKING:
+    from prospector.config.configuration import Config
 
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
@@ -165,7 +168,7 @@ class PylintTool(ToolBase):
         return sorted(check_paths)
 
     def _get_pylint_configuration(
-        self, check_paths: List[Path], linter: ProspectorLinter, prospector_config, pylint_options
+        self, check_paths: List[Path], linter: ProspectorLinter, prospector_config: "Config", pylint_options
     ):
         self._args = check_paths
         linter.load_default_plugins()

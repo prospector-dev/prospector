@@ -10,8 +10,8 @@ from prospector.run import Prospector
 
 
 @contextlib.contextmanager
-def patch_cli(*args: list[str], target: str = "sys.argv"):
-    with patch(target, args):
+def patch_cli(*args: tuple[str], target: str = "sys.argv"):
+    with patch(target, list(args)):
         yield
 
 
