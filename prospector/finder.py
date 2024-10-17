@@ -1,5 +1,6 @@
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import Callable, Iterable, Iterator, List
+from typing import Callable, Optional
 
 from prospector.exceptions import PermissionMissing
 from prospector.pathutils import is_python_module, is_python_package, is_virtualenv
@@ -17,7 +18,7 @@ class FileFinder:
     is basically to know which files to pass to which tools to be inspected.
     """
 
-    def __init__(self, *provided_paths: Path, exclusion_filters: Iterable[Callable] = None):
+    def __init__(self, *provided_paths: Path, exclusion_filters: Optional[Iterable[Callable]] = None):
         """
         :param provided_paths:
             A list of Path objects to search for files and modules - can be either directories or files
@@ -44,7 +45,7 @@ class FileFinder:
             if path.is_dir():
                 self._provided_dirs.append(path)
 
-    def make_syspath(self) -> List[Path]:
+    def make_syspath(self) -> list[Path]:
         paths = set()
         for path in self._provided_dirs:
             paths.add(path)
@@ -55,7 +56,7 @@ class FileFinder:
     def is_excluded(self, path: Path) -> bool:
         return any(filt(path) for filt in self._exclusion_filters)
 
-    def _filter(self, paths: Iterable[Path]) -> List[Path]:
+    def _filter(self, paths: Iterable[Path]) -> list[Path]:
         return [path for path in paths if not self.is_excluded(path)]
 
     def _walk(self, directory: Path) -> Iterator[Path]:
@@ -71,7 +72,7 @@ class FileFinder:
                 yield path
 
     @property
-    def files(self) -> List[Path]:
+    def files(self) -> list[Path]:
         """
         List every individual file found from the given configuration.
 
@@ -89,7 +90,7 @@ class FileFinder:
         return self._filter(files)
 
     @property
-    def python_packages(self) -> List[Path]:
+    def python_packages(self) -> list[Path]:
         """
         Lists every directory found in the given configuration which is a python module (that is,
         contains an `__init__.py` file).
@@ -99,7 +100,7 @@ class FileFinder:
         return self._filter(d for d in self.directories if is_python_package(d))
 
     @property
-    def python_modules(self) -> List[Path]:
+    def python_modules(self) -> list[Path]:
         """
         Lists every directory found in the given configuration which is a python module (that is,
         contains an `__init__.py` file).
@@ -109,7 +110,7 @@ class FileFinder:
         return self._filter(f for f in self.files if is_python_module(f))
 
     @property
-    def directories(self) -> List[Path]:
+    def directories(self) -> list[Path]:
         """
         Lists every directory found from the given configuration, regardless of its contents.
 
