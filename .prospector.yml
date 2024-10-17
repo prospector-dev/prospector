@@ -14,6 +14,11 @@ mypy:
   options:
     ignore-missing-imports: true
     follow-imports: skip
+    warn-redundant-casts: true
+    warn-unused-ignores: true
+    warn-return-any: true
+    strict-optional: true
+    strict: true
 
 pylint:
   options:
