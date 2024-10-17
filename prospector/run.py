@@ -1,11 +1,10 @@
-import argparse
 import codecs
 import os.path
 import sys
 import warnings
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, TextIO
+from typing import Any, Optional, TextIO, Union
 
 from prospector import blender, postfilter, tools
 from prospector.compat import is_relative_to
@@ -22,7 +21,7 @@ from prospector.tools.utils import CaptureOutput
 class Prospector:
     def __init__(self, config: ProspectorConfig) -> None:
         self.config = config
-        self.summary: Optional[dict[str, Any]] = None
+        self.summary: Optional[dict[str, Union[str, int, datetime, list[str]]]] = None
         self.messages = config.messages
 
     def process_messages(self, found_files: FileFinder, messages: list[Message]) -> list[Message]:
@@ -72,9 +71,9 @@ class Prospector:
 
         # Run the tools
         for tool in self.config.get_tools(found_files):
-            for name, cls in tools.TOOLS.items():
+            for available_tool, cls in tools.TOOLS.items():
                 if cls == tool.__class__:
-                    toolname = name
+                    toolname = available_tool
                     break
             else:
                 toolname = "Unknown"
@@ -175,16 +174,6 @@ class Prospector:
         target.write("\n")
 
 
-def get_parser() -> argparse.ArgumentParser:
-    """
-    This is a helper method to return an argparse parser, to
-    be used with the Sphinx argparse plugin for documentation.
-    """
-    manager = cfg.build_manager()
-    source = cfg.build_command_line_source(prog="prospector", description=None)
-    return source.build_parser(manager.settings, None)
-
-
 def main() -> None:
     # Get our configuration
     config = ProspectorConfig()
@@ -192,7 +181,7 @@ def main() -> None:
     paths = config.paths
     if len(paths) > 1 and not all(os.path.isfile(path) for path in paths):
         sys.stderr.write("\nIn multi-path mode, all inputs must be files, not directories.\n\n")
-        get_parser().print_usage()
+        cfg.build_command_line_parser(args=["--help"])
         sys.exit(2)
 
     # Make it so
