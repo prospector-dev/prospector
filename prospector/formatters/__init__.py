@@ -1,7 +1,9 @@
+from enum import Enum
+
 from . import emacs, grouped, json, pylint, text, vscode, xunit, yaml
 from .base import Formatter
 
-__all__ = ("FORMATTERS", "Formatter")
+__all__ = ["Formatters", "Formatter", "FORMATTERS"]
 
 
 FORMATTERS = {
@@ -14,3 +16,4 @@ FORMATTERS = {
     "xunit": xunit.XunitFormatter,
     "vscode": vscode.VSCodeFormatter,
 }
+Formatters = Enum("Formatters", FORMATTERS)

@@ -178,9 +178,7 @@ def get_parser():
     This is a helper method to return an argparse parser, to
     be used with the Sphinx argparse plugin for documentation.
     """
-    manager = cfg.build_manager()
-    source = cfg.build_command_line_source(prog="prospector", description=None)
-    return source.build_parser(manager.settings, None)
+    return cfg.build_command_line_parser()
 
 
 def main():

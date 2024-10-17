@@ -2,7 +2,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 try:  # Python >= 3.11
     import re._constants as sre_constants
@@ -27,8 +27,8 @@ class ProspectorConfig:
     # is a config object and its sole purpose is to hold many properties!
 
     def __init__(self, workdir: Path = None):
-        self.config, self.arguments = self._configure_prospector()
-        self.paths = self._get_work_path(self.config, self.arguments)
+        self.config = self._configure_prospector()
+        self.paths = self._get_work_path(self.config)
         self.explicit_file_mode = all(p.is_file for p in self.paths)
         self.workdir = workdir or Path.cwd()
 
@@ -106,23 +106,19 @@ class ProspectorConfig:
 
         return output_report
 
-    def _configure_prospector(self):
-        # first we will configure prospector as a whole
-        mgr = cfg.build_manager()
-        config = mgr.retrieve(*cfg.build_default_sources())
-        return config, mgr.arguments
+    def _configure_prospector(self) -> cfg.Config:
+        # First we will configure prospector as a whole
+        return cfg.get_config()
 
-    def _get_work_path(self, config, arguments) -> List[Path]:
+    def _get_work_path(self, config) -> List[Path]:
         # Figure out what paths we're prospecting
-        if config["path"]:
-            paths = [Path(self.config["path"])]
-        elif arguments["checkpath"]:
-            paths = [Path(p) for p in arguments["checkpath"]]
+        if config.path:
+            paths = [Path(self.config.path)]
         else:
             paths = [Path.cwd()]
         return [p.resolve() for p in paths]
 
-    def _get_profile(self, workdir: Path, config):
+    def _get_profile(self, workdir: Path, config: cfg.Config) -> Tuple[ProspectorProfile, str]:
         # Use the specified profiles
         profile_provided = False
         if len(config.profiles) > 0:
@@ -168,7 +164,7 @@ class ProspectorConfig:
 
         # Use the strictness profile only if no profile has been given
         if config.strictness is not None and config.strictness:
-            cmdline_implicit.append("strictness_%s" % config.strictness)
+            cmdline_implicit.append("strictness_%s" % config.strictness.value)
             strictness = config.strictness
 
         # the profile path is
