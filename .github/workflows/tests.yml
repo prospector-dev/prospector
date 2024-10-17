@@ -33,6 +33,8 @@ jobs:
           echo "Checking prospector can run; don't care about messages found, only that it runs successfully"
           poetry run prospector --quiet --zero-exit
           echo "Prospector ran successfully."
+      - name: Run Prospector checks
+        run: poetry run prospector --output=pylint
       - name: Check packaging
         run: |
           echo "Building packages"

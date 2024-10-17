@@ -64,7 +64,9 @@ class PylintTool(ToolBase):
                 continue
             for option in checker.options:
                 if option[0] in options:
-                    checker._arguments_manager.set_option(option[0], options[option[0]])
+                    checker._arguments_manager.set_option(
+                        option[0], options[option[0]]
+                    )  # pylint: disable=protected-access
 
         # The warnings about disabling warnings are useful for figuring out
         # with other tools to suppress messages from. For example, an unused

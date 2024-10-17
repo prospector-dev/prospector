@@ -419,12 +419,12 @@ def _transform_legacy(profile_dict):
 
 
 def _load_profile(
-    name_or_path,
-    profile_path,
-    shorthands_found=None,
-    already_loaded=None,
-    allow_shorthand=True,
-    forced_inherits=None,
+    name_or_path: Union[str, Path],
+    profile_path: list[Path],
+    shorthands_found: Optional[set[str]] = None,
+    already_loaded: Optional[list[Union[str, Path]]] = None,
+    allow_shorthand: bool = True,
+    forced_inherits: Optional[list[str]] = None,
 ):
     # recursively get the contents of the basic profile and those it inherits from
     base_contents = _load_content(name_or_path, profile_path)

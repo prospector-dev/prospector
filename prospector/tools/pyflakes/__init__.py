@@ -86,8 +86,9 @@ class ProspectorReporter(Reporter):
         self._messages = []
         self.ignore = ignore or ()
 
-    # pylint: disable=too-many-arguments
-    def record_message(self, filename=None, line=None, character=None, code=None, message=None):
+    def record_message(
+        self, filename=None, line=None, character=None, code=None, message=None
+    ):  # pylint: disable=too-many-arguments
         code = code or "F999"
         if code in self.ignore:
             return
