@@ -29,14 +29,12 @@ class SuppressionTest(unittest.TestCase):
 
     def test_filter_messages(self):
         with patch_workdir_argv(
-            target="setoptconf.source.commandline.sys.argv",
             workdir=Path(__file__).parent / "testdata/test_filter_messages",
         ) as pros:
             self.assertEqual(0, pros.summary["message_count"])
 
     def test_filter_messages_negative(self):
         with patch_workdir_argv(
-            target="setoptconf.source.commandline.sys.argv",
             workdir=Path(__file__).parent / "testdata/test_filter_messages_negative",
         ) as pros:
             self.assertEqual(5, pros.summary["message_count"])

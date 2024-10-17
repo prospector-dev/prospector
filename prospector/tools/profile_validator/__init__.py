@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from prospector.tools.base import ToolBase
 
@@ -35,7 +35,7 @@ __all__ = ("ProfileValidationTool",)
 def _tool_names(with_deprecated: bool = True) -> list[str]:
     from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS  # pylint: disable=import-outside-toplevel
 
-    tools = list(TOOLS)
+    tools: list[str] = list(TOOLS.keys())
     if with_deprecated:
         tools += DEPRECATED_TOOL_NAMES.keys()
     return tools
@@ -58,7 +58,7 @@ class ProfileValidationTool(ToolBase):
     ALL_SETTINGS = LIST_SETTINGS + BOOL_SETTINGS + OTHER_SETTINGS
 
     def __init__(self) -> None:
-        self.to_check = set(AUTO_LOADED_PROFILES)
+        self.to_check: set[Union[str, Path]] = set(AUTO_LOADED_PROFILES)
         self.ignore_codes: list[str] = []
 
     def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder) -> None:

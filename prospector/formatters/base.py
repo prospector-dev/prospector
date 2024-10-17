@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from prospector.profiles.profile import ProspectorProfile
+from prospector.profiles.profile import ProspectorProfile  # pylint: disable=cyclic-import
 
 __all__ = ("Formatter",)
 

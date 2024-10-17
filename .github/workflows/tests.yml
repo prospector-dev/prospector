@@ -34,7 +34,7 @@ jobs:
           poetry run prospector --quiet --zero-exit
           echo "Prospector ran successfully."
       - name: Run Prospector checks
-        run: poetry run prospector --output=pylint
+        run: poetry run prospector --output-format=pylint
       - name: Check packaging
         run: |
           echo "Building packages"
