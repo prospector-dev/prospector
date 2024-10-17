@@ -1,8 +1,10 @@
 from pathlib import Path
 
+from typing import Union
+
 
 class ProfileNotFound(Exception):
-    def __init__(self, name: str, profile_path: list[Path]) -> None:
+    def __init__(self, name: Union[str, Path], profile_path: list[Path]) -> None:
         super().__init__()
         self.name = name
         self.profile_path = profile_path

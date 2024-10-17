@@ -83,4 +83,7 @@ DEFAULT_TOOLS = (
     "profile-validator",
 )
 
-DEPRECATED_TOOL_NAMES = {"pep8": "pycodestyle", "pep257": "pydocstyle"}
+DEPRECATED_TOOL_NAMES = {
+    "pep8": "pycodestyle",
+    "pep257": "pydocstyle",
+}
