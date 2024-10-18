@@ -3,7 +3,6 @@ import re
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import List
 
 from pylint.config import find_default_config_files
 from pylint.exceptions import UnknownMessageError
@@ -64,7 +63,9 @@ class PylintTool(ToolBase):
                 continue
             for option in checker.options:
                 if option[0] in options:
-                    checker._arguments_manager.set_option(option[0], options[option[0]])
+                    checker._arguments_manager.set_option(  # pylint: disable=protected-access
+                        option[0], options[option[0]]
+                    )
 
         # The warnings about disabling warnings are useful for figuring out
         # with other tools to suppress messages from. For example, an unused
@@ -127,13 +128,13 @@ class PylintTool(ToolBase):
         self._linter = linter
         return configured_by, config_messages
 
-    def _set_path_finder(self, extra_sys_path: List[Path], pylint_options):
+    def _set_path_finder(self, extra_sys_path: list[Path], pylint_options):
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path
         if not pylint_options.get("use_pylint_default_path_finder"):
             sys.path = sys.path + [str(path.absolute()) for path in extra_sys_path]
 
-    def _get_pylint_check_paths(self, found_files: FileFinder) -> List[Path]:
+    def _get_pylint_check_paths(self, found_files: FileFinder) -> list[Path]:
         # create a list of packages, but don't include packages which are
         # subpackages of others as checks will be duplicated
         check_paths = set()
@@ -165,7 +166,7 @@ class PylintTool(ToolBase):
         return sorted(check_paths)
 
     def _get_pylint_configuration(
-        self, check_paths: List[Path], linter: ProspectorLinter, prospector_config, pylint_options
+        self, check_paths: list[Path], linter: ProspectorLinter, prospector_config, pylint_options
     ):
         self._args = check_paths
         linter.load_default_plugins()
@@ -241,7 +242,7 @@ class PylintTool(ToolBase):
         combined = self._combine_w0614(messages)
         return sorted(combined)
 
-    def run(self, found_files) -> List[Message]:
+    def run(self, found_files) -> list[Message]:
         self._linter.check(self._args)
         sys.path = self._orig_sys_path
 

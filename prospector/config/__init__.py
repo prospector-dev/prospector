@@ -2,12 +2,12 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Optional, Union
 
 try:  # Python >= 3.11
     import re._constants as sre_constants
 except ImportError:
-    import sre_constants
+    import sre_constants  # pylint: disable=deprecated-module
 
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
@@ -26,7 +26,7 @@ class ProspectorConfig:
     # Also the 'too many instance attributes' warning is ignored, as this
     # is a config object and its sole purpose is to hold many properties!
 
-    def __init__(self, workdir: Path = None):
+    def __init__(self, workdir: Optional[Path] = None):
         self.config, self.arguments = self._configure_prospector()
         self.paths = self._get_work_path(self.config, self.arguments)
         self.explicit_file_mode = all(p.is_file for p in self.paths)
@@ -36,8 +36,8 @@ class ProspectorConfig:
         self.libraries = self._find_used_libraries(self.config, self.profile)
         self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
         self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
-        self.configured_by: Dict[str, str] = {}
-        self.messages: List[Message] = []
+        self.configured_by: dict[str, str] = {}
+        self.messages: list[Message] = []
 
     def make_exclusion_filter(self):
         # Only close over the attributes required by the filter, rather
@@ -79,7 +79,7 @@ class ProspectorConfig:
             runners.append(tool)
         return runners
 
-    def replace_deprecated_tool_names(self) -> List[str]:
+    def replace_deprecated_tool_names(self) -> list[str]:
         # pep8 was renamed pycodestyle ; pep257 was renamed pydocstyle
         # for backwards compatibility, these have been deprecated but will remain until prospector v2
         deprecated_found = []
@@ -112,7 +112,7 @@ class ProspectorConfig:
         config = mgr.retrieve(*cfg.build_default_sources())
         return config, mgr.arguments
 
-    def _get_work_path(self, config, arguments) -> List[Path]:
+    def _get_work_path(self, config, arguments) -> list[Path]:
         # Figure out what paths we're prospecting
         if config["path"]:
             paths = [Path(self.config["path"])]

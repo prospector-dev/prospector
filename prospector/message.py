@@ -78,8 +78,8 @@ def make_tool_error_message(
     message: str,
     line: int = 0,
     character: int = 0,
-    module: str = None,
-    function: str = None,
+    module: Optional[str] = None,
+    function: Optional[str] = None,
 ) -> Message:
     location = Location(path=filepath, module=module, function=function, line=line, character=character)
     return Message(source=source, code=code, location=location, message=message)

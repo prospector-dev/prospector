@@ -9,8 +9,6 @@ from pylint.lint import PyLinter
 class UnrecognizedOptions(Exception):
     """Raised when an unrecognized option is found in the Pylint configuration."""
 
-    pass
-
 
 class ProspectorLinter(PyLinter):
     def __init__(self, found_files, *args, **kwargs):
@@ -24,14 +22,14 @@ class ProspectorLinter(PyLinter):
         _config_initialization(self, [], config_file=config_file)
         return True
 
-    def _expand_files(self, modules):
-        expanded = super()._expand_files(modules)
+    def _expand_files(self, files_or_modules):
+        expanded = super()._expand_files(files_or_modules)
         filtered = {}
         # PyLinter._expand_files returns dict since 2.15.7.
         if packaging_version.parse(pylint_version) > packaging_version.parse("2.15.6"):
-            for module in expanded:
+            for module, expanded_module in expanded.items():
                 if not self._files.is_excluded(Path(module)):
-                    filtered[module] = expanded[module]
+                    filtered[module] = expanded_module
             return filtered
         else:
             for module in expanded:

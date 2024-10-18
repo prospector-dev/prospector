@@ -189,7 +189,7 @@ def main():
 
     paths = config.paths
     if len(paths) > 1 and not all(os.path.isfile(path) for path in paths):
-        sys.stderr.write("\nIn multi-path mode, all inputs must be files, " "not directories.\n\n")
+        sys.stderr.write("\nIn multi-path mode, all inputs must be files, not directories.\n\n")
         get_parser().print_usage()
         sys.exit(2)
 
