@@ -1,4 +1,3 @@
-# flake8: noqa
 def someFunction(user, password="Admin"):
     print("Hi " + user)
 

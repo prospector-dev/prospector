@@ -1,5 +1,4 @@
 # fmt: off
-# flake8: noqa
 for a in "abc":
       a == 1  # indented with 8 spaces
 for b in "xyz":
