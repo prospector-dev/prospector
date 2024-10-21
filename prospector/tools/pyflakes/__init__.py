@@ -1,15 +1,21 @@
+from typing import TYPE_CHECKING, Any, Optional
+
 from pyflakes.api import checkPath
+from pyflakes.messages import Message as FlakeMessage
 from pyflakes.reporter import Reporter
 
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
 __all__ = ("PyFlakesTool",)
 
 
 # Prospector uses the same pyflakes codes as flake8 defines,
 # see https://flake8.pycqa.org/en/latest/user/error-codes.html
-# and https://gitlab.com/pycqa/flake8/-/blob/e817c63a/src/flake8/plugins/pyflakes.py
+# and https://github.com/PyCQA/flake8/blob/e817c63a/src/flake8/plugins/pyflakes.py
 _MESSAGE_CODES = {
     "UnusedImport": "F401",
     "ImportShadowedByLoopVar": "F402",
@@ -81,14 +87,22 @@ LEGACY_CODE_MAP = {
 
 
 class ProspectorReporter(Reporter):
-    def __init__(self, ignore=None):
+    def __init__(self, ignore: Optional[list[str]] = None) -> None:
         super().__init__(None, None)
-        self._messages = []
+        self._messages: list[Message] = []
         self.ignore = ignore or ()
 
-    def record_message(
-        self, filename=None, line=None, character=None, code=None, message=None
-    ):  # pylint: disable=too-many-arguments
+    def record_message(  # pylint: disable=too-many-arguments
+        self,
+        filename: str,
+        line: Optional[int] = None,
+        character: Optional[int] = None,
+        code: Optional[str] = None,
+        message: Optional[str] = None,
+    ) -> None:
+        assert message is not None
+        assert code is not None
+
         code = code or "F999"
         if code in self.ignore:
             return
@@ -100,15 +114,16 @@ class ProspectorReporter(Reporter):
             line=line,
             character=character,
         )
-        message = Message(
-            source="pyflakes",
-            code=code,
-            location=location,
-            message=message,
+        self._messages.append(
+            Message(
+                source="pyflakes",
+                code=code,
+                location=location,
+                message=message,
+            )
         )
-        self._messages.append(message)
 
-    def unexpectedError(self, filename, msg):  # noqa
+    def unexpectedError(self, filename: str, msg: str) -> None:
         self.record_message(
             filename=filename,
             code="F999",
@@ -116,7 +131,7 @@ class ProspectorReporter(Reporter):
         )
 
     # pylint: disable=too-many-arguments
-    def syntaxError(self, filename, msg, lineno, offset, text):  # noqa
+    def syntaxError(self, filename: str, msg: str, lineno: int, offset: int, text: str) -> None:
         self.record_message(
             filename=filename,
             line=lineno,
@@ -125,7 +140,7 @@ class ProspectorReporter(Reporter):
             message=msg,
         )
 
-    def flake(self, message):
+    def flake(self, message: FlakeMessage) -> None:
         code = _MESSAGE_CODES.get(message.__class__.__name__, "F999")
 
         self.record_message(
@@ -136,21 +151,21 @@ class ProspectorReporter(Reporter):
             message=message.message % message.message_args,
         )
 
-    def get_messages(self):
+    def get_messages(self) -> list[Message]:
         return self._messages
 
 
 class PyFlakesTool(ToolBase):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.ignore_codes = ()
+        self.ignore_codes: list[str] = []
 
-    def configure(self, prospector_config, _):
+    def configure(self, prospector_config: "ProspectorConfig", _: Any) -> None:
         ignores = prospector_config.get_disabled_messages("pyflakes")
         # convert old style to new
         self.ignore_codes = [LEGACY_CODE_MAP.get(code, code) for code in ignores]
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder) -> list[Message]:
         reporter = ProspectorReporter(ignore=self.ignore_codes)
         for filepath in found_files.python_modules:
             checkPath(str(filepath.absolute()), reporter)

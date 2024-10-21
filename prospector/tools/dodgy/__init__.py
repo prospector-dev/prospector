@@ -1,5 +1,6 @@
 import mimetypes
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from dodgy.checks import check_file_contents
 
@@ -8,18 +9,21 @@ from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
 
-def module_from_path(path: Path):
+
+def module_from_path(path: Path) -> str:
     # TODO hacky...
     return ".".join(path.parts[1:-1] + (path.stem,))
 
 
 class DodgyTool(ToolBase):
-    def configure(self, prospector_config, found_files):
+    def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder) -> None:
         # empty: just implementing to satisfy the ABC contract
         pass
 
-    def run(self, found_files: FileFinder):
+    def run(self, found_files: FileFinder) -> list[Message]:
         warnings = []
         for filepath in found_files.files:
             mimetype = mimetypes.guess_type(str(filepath.absolute()))

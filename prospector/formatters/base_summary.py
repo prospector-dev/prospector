@@ -20,7 +20,7 @@ class SummaryFormatter(Formatter):
         ("external_config", "External Config", None),
     )
 
-    def render_summary(self):
+    def render_summary(self) -> str:
         output = [
             "Check Information",
             "=================",

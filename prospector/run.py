@@ -1,10 +1,11 @@
+import argparse
 import codecs
 import os.path
 import sys
 import warnings
 from datetime import datetime
 from pathlib import Path
-from typing import TextIO
+from typing import Any, Optional, TextIO
 
 from prospector import blender, postfilter, tools
 from prospector.compat import is_relative_to
@@ -19,12 +20,12 @@ from prospector.tools.utils import CaptureOutput
 
 
 class Prospector:
-    def __init__(self, config: ProspectorConfig):
+    def __init__(self, config: ProspectorConfig) -> None:
         self.config = config
-        self.summary = None
+        self.summary: Optional[dict[str, Any]] = None
         self.messages = config.messages
 
-    def process_messages(self, found_files, messages):
+    def process_messages(self, found_files: FileFinder, messages: list[Message]) -> list[Message]:
         if self.config.blending:
             messages = blender.blend(messages)
 
@@ -38,10 +39,10 @@ class Prospector:
 
         return postfilter.filter_messages(found_files.python_modules, messages)
 
-    def execute(self):
+    def execute(self) -> None:
         deprecated_names = self.config.replace_deprecated_tool_names()
 
-        summary = {
+        summary: dict[str, Any] = {
             "started": datetime.now(),
         }
         summary.update(self.config.get_summary_information())
@@ -124,25 +125,26 @@ class Prospector:
         summary["time_taken"] = "%0.2f" % delta.total_seconds()
 
         external_config = []
-        for tool, configured_by in self.config.configured_by.items():
+        for tool_name, configured_by in self.config.configured_by.items():
             if configured_by is not None:
-                external_config.append((tool, configured_by))
+                external_config.append((tool_name, configured_by))
         if len(external_config) > 0:
             summary["external_config"] = ", ".join(["%s: %s" % info for info in external_config])
 
         self.summary = summary
         self.messages = self.messages + messages
 
-    def get_summary(self):
+    def get_summary(self) -> Optional[dict[str, Any]]:
         return self.summary
 
-    def get_messages(self):
+    def get_messages(self) -> list[Message]:
         return self.messages
 
-    def print_messages(self):
+    def print_messages(self) -> None:
         output_reports = self.config.get_output_report()
 
         for report in output_reports:
+            assert self.summary is not None
             output_format, output_files = report
             self.summary["formatter"] = output_format
 
@@ -161,7 +163,7 @@ class Prospector:
                 with codecs.open(output_file, "w+") as target:
                     self.write_to(formatter, target)
 
-    def write_to(self, formatter: Formatter, target: TextIO):
+    def write_to(self, formatter: Formatter, target: TextIO) -> None:
         # Produce the output
         target.write(
             formatter.render(
@@ -173,7 +175,7 @@ class Prospector:
         target.write("\n")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """
     This is a helper method to return an argparse parser, to
     be used with the Sphinx argparse plugin for documentation.
@@ -183,7 +185,7 @@ def get_parser():
     return source.build_parser(manager.settings, None)
 
 
-def main():
+def main() -> None:
     # Get our configuration
     config = ProspectorConfig()
 

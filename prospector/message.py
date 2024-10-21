@@ -4,7 +4,12 @@ from typing import Optional, Union
 
 class Location:
     def __init__(
-        self, path: Union[Path, str], module: Optional[str], function: Optional[str], line: int, character: int
+        self,
+        path: Union[Path, str],
+        module: Optional[str],
+        function: Optional[str],
+        line: Optional[int],
+        character: Optional[int],
     ):
         if isinstance(path, Path):
             self._path = path
@@ -18,7 +23,7 @@ class Location:
         self.character = None if character == -1 else character
 
     @property
-    def path(self):
+    def path(self) -> Path:
         return self._path
 
     def absolute_path(self) -> Path:
@@ -38,7 +43,7 @@ class Location:
             return False
         return self._path == other._path and self.line == other.line and self.character == other.character
 
-    def __lt__(self, other: object) -> bool:
+    def __lt__(self, other: "Location") -> bool:
         if not isinstance(other, Location):
             raise ValueError
         if self._path == other._path:
@@ -65,7 +70,7 @@ class Message:
             return self.code == other.code
         return False
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: "Message") -> bool:
         if self.location == other.location:
             return self.code < other.code
         return self.location < other.location
@@ -76,8 +81,8 @@ def make_tool_error_message(
     source: str,
     code: str,
     message: str,
-    line: int = 0,
-    character: int = 0,
+    line: Optional[int] = None,
+    character: Optional[int] = None,
     module: Optional[str] = None,
     function: Optional[str] = None,
 ) -> Message:

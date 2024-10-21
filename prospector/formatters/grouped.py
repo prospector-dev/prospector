@@ -1,21 +1,23 @@
 from collections import defaultdict
 
 from prospector.formatters.text import TextFormatter
+from prospector.message import Message
 
 __all__ = ("GroupedFormatter",)
 
 
 class GroupedFormatter(TextFormatter):
-    def render_messages(self):
+    def render_messages(self) -> str:
         output = [
             "Messages",
             "========",
             "",
         ]
 
-        groups = defaultdict(lambda: defaultdict(list))
+        groups: dict[str, dict[int, list[Message]]] = defaultdict(lambda: defaultdict(list))
 
         for message in self.messages:
+            assert message.location.line is not None
             groups[self._make_path(message.location.path)][message.location.line].append(message)
 
         for filename in sorted(groups.keys()):

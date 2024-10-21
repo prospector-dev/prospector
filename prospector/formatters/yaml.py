@@ -1,3 +1,5 @@
+from typing import Any
+
 import yaml
 
 from prospector.formatters.base import Formatter
@@ -6,8 +8,8 @@ __all__ = ("YamlFormatter",)
 
 
 class YamlFormatter(Formatter):
-    def render(self, summary=True, messages=True, profile=False):
-        output = {}
+    def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
+        output: dict[str, Any] = {}
 
         if summary:
             output["summary"] = self.summary

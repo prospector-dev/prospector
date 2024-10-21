@@ -2,6 +2,7 @@ import os
 import re
 import warnings
 from pathlib import Path
+from typing import Union
 
 from requirements_detector import find_requirements
 from requirements_detector.detect import RequirementsNotFound
@@ -19,7 +20,7 @@ _IMPORT_REGEX = re.compile(r"^\s*import ([\._a-zA-Z0-9]+)$")
 _IMPORT_MULTIPLE_REGEX = re.compile(r"^\s*import ([\._a-zA-Z0-9]+(, ){1})+")
 
 
-def find_from_imports(file_contents):
+def find_from_imports(file_contents: str) -> set[str]:
     names = set()
     for line in file_contents.split("\n"):
         match = _IMPORT_MULTIPLE_REGEX.match(line)
@@ -42,7 +43,7 @@ def find_from_imports(file_contents):
     return names
 
 
-def find_from_path(path: Path):
+def find_from_path(path: Path) -> set[str]:
     names = set()
 
     try:
@@ -68,22 +69,22 @@ def find_from_path(path: Path):
     return names
 
 
-def find_from_requirements(path):
+def find_from_requirements(path: Union[str, Path]) -> set[str]:
     reqs = find_requirements(path)
-    names = []
+    names: set[str] = set()
     for requirement in reqs:
         if requirement.name is not None and requirement.name.lower() in POSSIBLE_LIBRARIES:
-            names.append(requirement.name.lower())
+            names.add(requirement.name.lower())
     return names
 
 
-def autodetect_libraries(path):
+def autodetect_libraries(path: Union[str, Path]) -> set[str]:
     if os.path.isfile(path):
         path = os.path.dirname(path)
         if path == "":
             path = "."
 
-    libraries = []
+    libraries: set[str] = set()
 
     try:
         libraries = find_from_requirements(path)
@@ -91,6 +92,6 @@ def autodetect_libraries(path):
         pass
 
     if len(libraries) < len(POSSIBLE_LIBRARIES):
-        libraries = find_from_path(path)
+        libraries = find_from_path(Path(path))
 
     return libraries

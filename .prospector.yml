@@ -14,6 +14,15 @@ mypy:
   options:
     ignore-missing-imports: true
     follow-imports: skip
+    check-untyped-defs: true
+    disallow-any-generics: true
+    disallow-untyped-defs: true
+    disallow-incomplete-defs: true
+    disallow-untyped-decorators: true
+    warn-unused-configs: true
+    warn-unused-ignores: true
+    warn-redundant-casts: true
+    extra-checks: true
 
 pylint:
   options:
