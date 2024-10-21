@@ -1,14 +1,21 @@
 import json
 import subprocess
+from collections.abc import Iterable
+from typing import TYPE_CHECKING, Any, Optional
 
 import pyright
 
+from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools import ToolBase
+from prospector.tools.exceptions import BadToolConfig
+
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
+
 
 __all__ = ("PyrightTool",)
 
-from prospector.tools.exceptions import BadToolConfig
 
 VALID_OPTIONS = [
     "level",
@@ -21,7 +28,7 @@ VALID_OPTIONS = [
 ]
 
 
-def format_messages(json_encoded):
+def format_messages(json_encoded: str) -> list[Message]:
     json_decoded = json.loads(json_encoded)
     diagnostics = json_decoded.get("generalDiagnostics", [])
     messages = []
@@ -42,12 +49,14 @@ def format_messages(json_encoded):
 
 
 class PyrightTool(ToolBase):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.checker = pyright
         self.options = ["--outputjson"]
 
-    def configure(self, prospector_config, _):
+    def configure(  # pylint: disable=useless-return
+        self, prospector_config: "ProspectorConfig", _: Any
+    ) -> Optional[tuple[str, Optional[Iterable[Message]]]]:
         options = prospector_config.tool_options("pyright")
 
         for option_key in options.keys():
@@ -80,7 +89,9 @@ class PyrightTool(ToolBase):
         if venv_path:
             self.options.extend(["--venv-path", venv_path])
 
-    def run(self, found_files):
+        return None
+
+    def run(self, found_files: FileFinder) -> list[Message]:
         paths = [str(path) for path in found_files.python_modules]
         paths.extend(self.options)
         result = self.checker.run(*paths, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

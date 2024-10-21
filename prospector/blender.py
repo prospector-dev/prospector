@@ -6,8 +6,12 @@
 # remove duplicates.
 import pkgutil
 from collections import defaultdict
+from pathlib import Path
+from typing import Optional
 
 import yaml
+
+from prospector.message import Message
 
 __all__ = (
     "blend",
@@ -15,7 +19,7 @@ __all__ = (
 )
 
 
-def blend_line(messages, blend_combos=None):
+def blend_line(messages: list[Message], blend_combos: Optional[list[list[tuple[str, str]]]] = None) -> list[Message]:
     """
     Given a list of messages on the same line, blend them together so that we
     end up with one message per actual problem. Note that we can still return
@@ -23,8 +27,8 @@ def blend_line(messages, blend_combos=None):
     the line.
     """
     blend_combos = blend_combos or BLEND_COMBOS
-    blend_lists = [[] for _ in range(len(blend_combos))]
-    blended = []
+    blend_lists: list[list[Message]] = [[] for _ in range(len(blend_combos))]
+    blended: list[Message] = []
 
     # first we split messages into each of the possible blendable categories
     # so that we have a list of lists of messages which can be blended together
@@ -72,18 +76,19 @@ def blend_line(messages, blend_combos=None):
         # it will appear in two blend_lists. Therefore we mark anything not taken from the blend list
         # as "consumed" and then filter later, to avoid such cases.
         for now_used in blend_list[1:]:
-            now_used.used = True
+            now_used.used = True  # type: ignore[attr-defined]
 
     return [m for m in blended if not getattr(m, "used", False)]
 
 
-def blend(messages, blend_combos=None):
+def blend(messages: list[Message], blend_combos: Optional[list[list[tuple[str, str]]]] = None) -> list[Message]:
     blend_combos = blend_combos or BLEND_COMBOS
 
     # group messages by file and then line number
-    msgs_grouped = defaultdict(lambda: defaultdict(list))
+    msgs_grouped: dict[Path, dict[int, list[Message]]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
+        assert message.location.line is not None
         msgs_grouped[message.location.path][message.location.line].append(
             message,
         )
@@ -97,18 +102,20 @@ def blend(messages, blend_combos=None):
     return out
 
 
-def get_default_blend_combinations():
-    combos = yaml.safe_load(pkgutil.get_data(__name__, "blender_combinations.yaml"))
+def get_default_blend_combinations() -> list[list[tuple[str, str]]]:
+    blender_combinations = pkgutil.get_data(__name__, "blender_combinations.yaml")
+    assert blender_combinations is not None
+    combos = yaml.safe_load(blender_combinations)
     combos = combos.get("combinations", [])
 
-    defaults = []
+    defaults: list[list[tuple[str, str]]] = []
     for combo in combos:
         toblend = []
         for msg in combo:
             toblend += msg.items()
-        defaults.append(tuple(toblend))
+        defaults.append(toblend)
 
-    return tuple(defaults)
+    return defaults
 
 
 BLEND_COMBOS = get_default_blend_combinations()

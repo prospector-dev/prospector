@@ -14,6 +14,8 @@ mypy:
   options:
     ignore-missing-imports: true
     follow-imports: skip
+    disallow-untyped-defs: true
+    #strict: true
 
 pylint:
   options:

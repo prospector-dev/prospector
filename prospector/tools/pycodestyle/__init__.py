@@ -1,6 +1,9 @@
 import codecs
 import os
 import re
+from collections.abc import Iterable
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 from pep8ext_naming import NamingChecker
 from pycodestyle import PROJECT_CONFIG, USER_CONFIG, BaseReport, StyleGuide, register_check
@@ -9,15 +12,18 @@ from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
+
 __all__ = ("PycodestyleTool",)
 
 
 class ProspectorReport(BaseReport):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self._prospector_messages = []
+        self._prospector_messages: list[Message] = []
 
-    def error(self, line_number, offset, text, check):
+    def error(self, line_number: Optional[int], offset: int, text: str, check: str) -> None:
         code = super().error(
             line_number,
             offset,
@@ -53,12 +59,12 @@ class ProspectorReport(BaseReport):
 
         self._prospector_messages.append(message)
 
-    def get_messages(self):
+    def get_messages(self) -> list[Message]:
         return self._prospector_messages
 
 
 class ProspectorStyleGuide(StyleGuide):
-    def __init__(self, config, found_files, *args, **kwargs):
+    def __init__(self, config: "ProspectorConfig", found_files: FileFinder, *args: Any, **kwargs: Any) -> None:
         self._config = config
         self._files = found_files
         self._module_paths = found_files.python_modules
@@ -68,7 +74,7 @@ class ProspectorStyleGuide(StyleGuide):
 
         super().__init__(*args, **kwargs)
 
-    def excluded(self, filename, parent=None):
+    def excluded(self, filename: str, parent: Optional[str] = None) -> bool:
         if super().excluded(filename, parent):
             return True
 
@@ -82,11 +88,11 @@ class ProspectorStyleGuide(StyleGuide):
 
 
 class PycodestyleTool(ToolBase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.checker = None
+    checker: Optional[ProspectorStyleGuide] = None
 
-    def configure(self, prospector_config, found_files: FileFinder):
+    def configure(
+        self, prospector_config: "ProspectorConfig", found_files: FileFinder
+    ) -> Optional[tuple[Optional[str], Optional[Iterable[Message]]]]:
         # figure out if we should use a pre-existing config file
         # such as setup.cfg or tox.ini
         external_config = None
@@ -97,18 +103,18 @@ class PycodestyleTool(ToolBase):
         if prospector_config.use_external_config("pycodestyle"):
             use_config = True
 
-            paths = [os.path.join(prospector_config.workdir, name) for name in PROJECT_CONFIG]
+            paths: list[Union[str, Path]] = [os.path.join(prospector_config.workdir, name) for name in PROJECT_CONFIG]
             paths.append(USER_CONFIG)
             ext_loc = prospector_config.external_config_location("pycodestyle")
             if ext_loc is not None:
-                paths = [ext_loc] + paths
+                paths = [ext_loc] + paths  # type: ignore[assignment,operator]
 
             for conf_path in paths:
                 if os.path.exists(conf_path) and os.path.isfile(conf_path):
                     # this file exists - but does it have pep8 or pycodestyle config in it?
                     # TODO: Remove this
                     header = re.compile(r"\[(pep8|pycodestyle)\]")
-                    with codecs.open(conf_path) as conf_file:
+                    with codecs.open(str(conf_path)) as conf_file:
                         if any(header.search(line) for line in conf_file.readlines()):
                             external_config = conf_path
                             break
@@ -143,7 +149,8 @@ class PycodestyleTool(ToolBase):
 
         return configured_by, []
 
-    def run(self, _):
+    def run(self, _: Any) -> list[Message]:
+        assert self.checker is not None
         report = self.checker.check_files()
         return report.get_messages()
 

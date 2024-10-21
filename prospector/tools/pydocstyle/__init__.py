@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING, Any
+
 from pydocstyle.checker import AllError, ConventionChecker
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
@@ -5,19 +7,23 @@ from prospector.finder import FileFinder
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
 
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
+
+
 __all__ = ("PydocstyleTool",)
 
 
 class PydocstyleTool(ToolBase):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self._code_files = []
-        self.ignore_codes = ()
+        self._code_files: list[str] = []
+        self.ignore_codes: list[str] = []
 
-    def configure(self, prospector_config, found_files):
+    def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder) -> None:
         self.ignore_codes = prospector_config.get_disabled_messages("pydocstyle")
 
-    def run(self, found_files: FileFinder):
+    def run(self, found_files: FileFinder) -> list[Message]:
         messages = []
 
         checker = ConventionChecker()
@@ -61,5 +67,5 @@ class PydocstyleTool(ToolBase):
 
         return self.filter_messages(messages)
 
-    def filter_messages(self, messages):
+    def filter_messages(self, messages: list[Message]) -> list[Message]:
         return [message for message in messages if message.code not in self.ignore_codes]
