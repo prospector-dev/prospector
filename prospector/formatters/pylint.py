@@ -1,10 +1,10 @@
 import os
 import re
 
-from prospector.formatters.base import Formatter
+from prospector.formatters.base_summary import SummaryFormatter
 
 
-class PylintFormatter(Formatter):
+class PylintFormatter(SummaryFormatter):
     """
     This formatter outputs messages in the same way as pylint -f parseable , which is used by several
     tools to parse pylint output. This formatter is therefore a compatibility shim between tools built
@@ -40,5 +40,9 @@ class PylintFormatter(Formatter):
                     "message": message.message.strip(),
                 }
             )
+
+        if summary:
+            output.append("")
+            output.append(self.render_summary())
 
         return "\n".join(output)

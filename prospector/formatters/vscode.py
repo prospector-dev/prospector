@@ -1,10 +1,10 @@
 import os
 import re
 
-from prospector.formatters.base import Formatter
+from prospector.formatters.base_summary import SummaryFormatter
 
 
-class VSCodeFormatter(Formatter):
+class VSCodeFormatter(SummaryFormatter):
     """
     This formatter outputs messages in the same way as vscode prospector linter expects.
     """
@@ -34,5 +34,8 @@ class VSCodeFormatter(Formatter):
                     "message": message.message.strip(),
                 }
             )
+        if summary:
+            output.append("")
+            output.append(self.render_summary())
 
         return "\n".join(output)
