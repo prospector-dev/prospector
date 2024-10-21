@@ -98,10 +98,11 @@ class ProspectorConfig:
 
     def get_output_report(self) -> list[tuple[str, list[str]]]:
         # Get the output formatter
+        output_report: list[tuple[str, list[str]]]
         if self.config.output_format is not None:
             output_report = self.config.output_format
         else:
-            output_report = [(self.profile.output_format, self.profile.output_target)]
+            output_report = [(self.profile.output_format, self.profile.output_target)]  # type: ignore[list-item]
 
         for index, report in enumerate(output_report):
             if not all(report):
@@ -262,7 +263,7 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
 
     def _determine_ignores(
         self, config: setoptconf.config.Configuration, profile: ProspectorProfile, libraries: list[str]
-    ) -> list[re.Pattern]:
+    ) -> list[re.Pattern[str]]:
         # Grab ignore patterns from the options
         ignores = []
         for pattern in config.ignore_patterns + profile.ignore_patterns:

@@ -45,7 +45,9 @@ def format_message(message: str) -> Message:
     )
 
 
-def _run_in_subprocess(q: Queue, cmd: Callable[[list[str]], tuple[str, str]], paths: list[str]) -> None:
+def _run_in_subprocess(
+    q: "Queue[tuple[str, str]]", cmd: Callable[[list[str]], tuple[str, str]], paths: list[str]
+) -> None:
     """
     This function exists only to be called by multiprocessing.Process as using
     lambda is forbidden
