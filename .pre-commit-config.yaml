@@ -44,7 +44,13 @@ repos:
     rev: 7.1.1
     hooks:
       - id: flake8
-        exclude: "testdata"
+        exclude: |
+          (?x)^(
+           .*/testdata/.*
+           |.*/testpath/.*
+           |tests/tools/pylint/test_no_init_found/.*
+           |tests/test_message\.py
+          )$
         args:
           - --max-line-length=120
   - repo: https://github.com/PyCQA/isort

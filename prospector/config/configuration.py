@@ -1,4 +1,3 @@
-# flake8: noqa
 import importlib.metadata
 
 import setoptconf as soc

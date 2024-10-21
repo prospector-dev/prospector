@@ -1,4 +1,3 @@
-# flake8: noqa
 from pathlib import Path
 from unittest import TestCase
 
