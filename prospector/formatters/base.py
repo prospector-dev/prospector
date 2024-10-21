@@ -3,12 +3,13 @@ from abc import ABC, abstractmethod
 __all__ = ("Formatter",)
 
 from pathlib import Path
+from typing import Optional
 
 from prospector.message import Message
 
 
 class Formatter(ABC):
-    def __init__(self, summary, messages, profile, paths_relative_to: Path = None):
+    def __init__(self, summary, messages, profile, paths_relative_to: Optional[Path] = None):
         self.summary = summary
         self.messages = messages
         self.profile = profile

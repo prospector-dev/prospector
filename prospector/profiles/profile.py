@@ -3,7 +3,7 @@ import json
 import os
 import pkgutil
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import yaml
 
@@ -14,7 +14,7 @@ BUILTIN_PROFILE_PATH = (Path(__file__).parent / "profiles").absolute()
 
 
 class ProspectorProfile:
-    def __init__(self, name: str, profile_dict: Dict[str, Any], inherit_order: List[str]):
+    def __init__(self, name: str, profile_dict: dict[str, Any], inherit_order: list[str]):
         self.name = name
         self.inherit_order = inherit_order
 
@@ -43,7 +43,7 @@ class ProspectorProfile:
             tool_conf = profile_dict.get(tool, {})
 
             # set the defaults for everything
-            conf: Dict[str, Any] = {"disable": [], "enable": [], "run": None, "options": {}}
+            conf: dict[str, Any] = {"disable": [], "enable": [], "run": None, "options": {}}
             # use the "old" tool name
             conf.update(tool_conf)
 
@@ -96,9 +96,9 @@ class ProspectorProfile:
     @staticmethod
     def load(
         name_or_path: Union[str, Path],
-        profile_path: List[Path],
+        profile_path: list[Path],
         allow_shorthand: bool = True,
-        forced_inherits: Optional[List[str]] = None,
+        forced_inherits: Optional[list[str]] = None,
     ):
         # First simply load all of the profiles and those that it explicitly inherits from
         data, inherits = _load_and_merge(
@@ -333,10 +333,10 @@ def _append_profiles(name, profile_path, data, inherit_list, allow_shorthand=Fal
 
 def _load_and_merge(
     name_or_path: Union[str, Path],
-    profile_path: List[Path],
+    profile_path: list[Path],
     allow_shorthand: bool = True,
-    forced_inherits: List[str] = None,
-) -> Tuple[Dict[str, Any], List[str]]:
+    forced_inherits: Optional[list[str]] = None,
+) -> tuple[dict[str, Any], list[str]]:
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
         str(name_or_path),
@@ -419,12 +419,12 @@ def _transform_legacy(profile_dict):
 
 
 def _load_profile(
-    name_or_path,
-    profile_path,
-    shorthands_found=None,
-    already_loaded=None,
-    allow_shorthand=True,
-    forced_inherits=None,
+    name_or_path: Union[str, Path],
+    profile_path: list[Path],
+    shorthands_found: Optional[set[str]] = None,
+    already_loaded: Optional[list[Union[str, Path]]] = None,
+    allow_shorthand: bool = True,
+    forced_inherits: Optional[list[str]] = None,
 ):
     # recursively get the contents of the basic profile and those it inherits from
     base_contents = _load_content(name_or_path, profile_path)

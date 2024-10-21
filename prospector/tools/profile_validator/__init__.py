@@ -4,7 +4,7 @@ from pathlib import Path
 try:  # Python >= 3.11
     import re._constants as sre_constants
 except ImportError:
-    import sre_constants
+    import sre_constants  # pylint: disable=deprecated-module
 
 import yaml
 
@@ -170,7 +170,7 @@ class ProfileValidationTool(ToolBase):
         if "pep257" in parsed:
             add_message(
                 CONFIG_DEPRECATED_CODE,
-                "pep257 tool has been renamed to 'pydocstyle'. " "The name pep257 will be removed in prospector 2.0+.",
+                "pep257 tool has been renamed to 'pydocstyle'. The name pep257 will be removed in prospector 2.0+.",
                 "pep257",
             )
 

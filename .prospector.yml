@@ -29,6 +29,8 @@ pylint:
     - too-many-instance-attributes
     - too-many-function-args
     - too-many-statements
+    - too-many-positional-arguments
+    - no-else-return
 
 mccabe:
   run: false
@@ -36,6 +38,7 @@ mccabe:
 pycodestyle:
   disable:
     - E126
+    - E501 # line too long
 
 pydocstyle:
   run: false

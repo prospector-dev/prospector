@@ -31,8 +31,8 @@ class CaptureOutput:
             ]
             self.stdout = CaptureStream()
             self.stderr = CaptureStream()
-            sys.stdout, sys.__stdout__ = self.stdout, self.stdout
-            sys.stderr, sys.__stderr__ = self.stderr, self.stderr
+            sys.stdout, sys.__stdout__ = self.stdout, self.stdout  # type: ignore[misc]
+            sys.stderr, sys.__stderr__ = self.stderr, self.stderr  # type: ignore[misc]
         return self
 
     def get_hidden_stdout(self):
@@ -43,5 +43,5 @@ class CaptureOutput:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.hide:
-            sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._prev_streams
+            sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._prev_streams  # type: ignore[misc]
             del self._prev_streams
