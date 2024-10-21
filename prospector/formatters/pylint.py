@@ -11,7 +11,7 @@ class PylintFormatter(SummaryFormatter):
     on top of pylint and prospector itself.
     """
 
-    def render(self, summary=True, messages=True, profile=False):
+    def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
         # this formatter will always ignore the summary and profile
         cur_loc = None
         output = []

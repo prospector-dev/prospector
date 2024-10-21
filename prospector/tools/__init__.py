@@ -1,16 +1,22 @@
-import importlib
+from typing import TYPE_CHECKING, Any, Optional
 
 from prospector.exceptions import FatalProspectorException
+from prospector.finder import FileFinder
+from prospector.message import Message
 from prospector.tools.base import ToolBase
 from prospector.tools.dodgy import DodgyTool
 from prospector.tools.mccabe import McCabeTool
+from prospector.tools.profile_validator import ProfileValidationTool  # pylint: disable=cyclic-import
 from prospector.tools.pycodestyle import PycodestyleTool
 from prospector.tools.pydocstyle import PydocstyleTool
 from prospector.tools.pyflakes import PyFlakesTool
 from prospector.tools.pylint import PylintTool
 
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
 
-def _tool_not_available(name, install_option_name):
+
+def _tool_not_available(name: str, install_option_name: str) -> type[ToolBase]:
     class NotAvailableTool(ToolBase):
         """
         Dummy tool class to return when a particular dependency is not found (such as mypy, or bandit)
@@ -18,10 +24,10 @@ def _tool_not_available(name, install_option_name):
         if the user tries to run prospector and specifies using the tool at which point an error is raised.
         """
 
-        def configure(self, prospector_config, found_files):
+        def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder) -> None:
             pass
 
-        def run(self, _):
+        def run(self, _: Any) -> list[Message]:
             raise FatalProspectorException(
                 f"\nCannot run tool {name} as support was not installed.\n"
                 f"Please install by running 'pip install prospector[{install_option_name}]'\n\n"
@@ -30,7 +36,12 @@ def _tool_not_available(name, install_option_name):
     return NotAvailableTool
 
 
-def _optional_tool(name, package_name=None, tool_class_name=None, install_option_name=None):
+def _optional_tool(
+    name: str,
+    package_name: Optional[str] = None,
+    tool_class_name: Optional[str] = None,
+    install_option_name: Optional[str] = None,
+) -> type[ToolBase]:
     package_name = "prospector.tools.%s" % (package_name or name)
     tool_class_name = tool_class_name or f"{name.title()}Tool"
     install_option_name = install_option_name or f"with_{name}"
@@ -45,20 +56,14 @@ def _optional_tool(name, package_name=None, tool_class_name=None, install_option
     return tool_class
 
 
-def _profile_validator_tool(*args, **kwargs):
-    # bit of a hack to avoid a cyclic import...
-    mdl = importlib.import_module("prospector.tools.profile_validator")
-    return mdl.ProfileValidationTool(*args, **kwargs)
-
-
-TOOLS = {
+TOOLS: dict[str, type[ToolBase]] = {
     "dodgy": DodgyTool,
     "mccabe": McCabeTool,
     "pyflakes": PyFlakesTool,
     "pycodestyle": PycodestyleTool,
     "pylint": PylintTool,
     "pydocstyle": PydocstyleTool,
-    "profile-validator": _profile_validator_tool,
+    "profile-validator": ProfileValidationTool,
     "vulture": _optional_tool("vulture"),
     "pyroma": _optional_tool("pyroma"),
     "pyright": _optional_tool("pyright"),

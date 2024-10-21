@@ -14,7 +14,7 @@ BUILTIN_PROFILE_PATH = (Path(__file__).parent / "profiles").absolute()
 
 
 class ProspectorProfile:
-    def __init__(self, name: str, profile_dict: dict[str, Any], inherit_order: list[str]):
+    def __init__(self, name: str, profile_dict: dict[str, Any], inherit_order: list[str]) -> None:
         self.name = name
         self.inherit_order = inherit_order
 
@@ -52,23 +52,23 @@ class ProspectorProfile:
 
             setattr(self, tool, conf)
 
-    def get_disabled_messages(self, tool_name):
+    def get_disabled_messages(self, tool_name: str) -> list[str]:
         disable = getattr(self, tool_name)["disable"]
         enable = getattr(self, tool_name)["enable"]
         return list(set(disable) - set(enable))
 
-    def is_tool_enabled(self, name):
+    def is_tool_enabled(self, name: str) -> bool:
         enabled = getattr(self, name).get("run")
         if enabled is not None:
             return enabled
         # this is not explicitly enabled or disabled, so use the default
         return name in DEFAULT_TOOLS
 
-    def list_profiles(self):
+    def list_profiles(self) -> list[str]:
         # this profile is itself included
         return [str(profile) for profile in self.inherit_order]
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, Any]:
         out = {
             "ignore-paths": self.ignore_paths,
             "ignore-patterns": self.ignore_patterns,
@@ -87,10 +87,10 @@ class ProspectorProfile:
             out[tool] = getattr(self, tool)
         return out
 
-    def as_json(self):
+    def as_json(self) -> str:
         return json.dumps(self.as_dict())
 
-    def as_yaml(self):
+    def as_yaml(self) -> str:
         return yaml.safe_dump(self.as_dict())
 
     @staticmethod
@@ -99,7 +99,7 @@ class ProspectorProfile:
         profile_path: list[Path],
         allow_shorthand: bool = True,
         forced_inherits: Optional[list[str]] = None,
-    ):
+    ) -> "ProspectorProfile":
         # First simply load all of the profiles and those that it explicitly inherits from
         data, inherits = _load_and_merge(
             name_or_path,
@@ -110,12 +110,12 @@ class ProspectorProfile:
         return ProspectorProfile(str(name_or_path), data, inherits)
 
 
-def _is_valid_extension(filename):
+def _is_valid_extension(filename: Union[str, Path]) -> bool:
     ext = os.path.splitext(filename)[1]
     return ext in (".yml", ".yaml")
 
 
-def _load_content_package(name):
+def _load_content_package(name: str) -> Optional[dict[str, Any]]:
     name_split = name.split(":", 1)
     module_name = f"prospector_profile_{name_split[0]}"
     file_names = (
@@ -138,10 +138,11 @@ def _load_content_package(name):
     try:
         return yaml.safe_load(data) or {}
     except yaml.parser.ParserError as parse_error:
+        assert used_name is not None
         raise CannotParseProfile(used_name, parse_error) from parse_error
 
 
-def _load_content(name_or_path, profile_path):
+def _load_content(name_or_path: Union[str, Path], profile_path: list[Path]) -> dict[str, Any]:
     filename = None
     optional = False
 
@@ -165,14 +166,14 @@ def _load_content(name_or_path, profile_path):
                     break
 
     if filename is None:
-        result = _load_content_package(name_or_path)
+        result = _load_content_package(str(name_or_path))
         if result is not None:
             return result
 
         if optional:
             return {}
 
-        raise ProfileNotFound(name_or_path, profile_path)
+        raise ProfileNotFound(str(name_or_path), str(profile_path))
 
     with codecs.open(filename) as fct:
         try:
@@ -181,19 +182,19 @@ def _load_content(name_or_path, profile_path):
             raise CannotParseProfile(filename, parse_error) from parse_error
 
 
-def _ensure_list(value):
+def _ensure_list(value: Any) -> list[Any]:
     if isinstance(value, list):
         return value
     return [value]
 
 
-def _simple_merge_dict(priority, base):
+def _simple_merge_dict(priority: dict[str, Any], base: dict[str, Any]) -> dict[str, Any]:
     out = dict(base.items())
     out.update(dict(priority.items()))
     return out
 
 
-def _merge_tool_config(priority, base):
+def _merge_tool_config(priority: dict[str, Any], base: dict[str, Any]) -> dict[str, Any]:
     out = dict(base.items())
 
     # add options that are missing, but keep existing options from the priority dictionary
@@ -208,10 +209,10 @@ def _merge_tool_config(priority, base):
 
     # anything enabled in the 'priority' dict is removed
     # from 'disabled' in the base dict and vice versa
-    base_disabled = base.get("disable") or []
-    base_enabled = base.get("enable") or []
-    pri_disabled = priority.get("disable") or []
-    pri_enabled = priority.get("enable") or []
+    base_disabled: list[Any] = base.get("disable") or []
+    base_enabled: list[Any] = base.get("enable") or []
+    pri_disabled: list[Any] = priority.get("disable") or []
+    pri_enabled: list[Any] = priority.get("enable") or []
 
     out["disable"] = list(set(pri_disabled) | (set(base_disabled) - set(pri_enabled)))
     out["enable"] = list(set(pri_enabled) | (set(base_enabled) - set(pri_disabled)))
@@ -219,7 +220,7 @@ def _merge_tool_config(priority, base):
     return out
 
 
-def _merge_profile_dict(priority: dict, base: dict) -> dict:
+def _merge_profile_dict(priority: dict[str, Any], base: dict[str, Any]) -> dict[str, Any]:
     # copy the base dict into our output
     out = dict(base.items())
 
@@ -254,7 +255,7 @@ def _merge_profile_dict(priority: dict, base: dict) -> dict:
     return out
 
 
-def _determine_strictness(profile_dict, inherits):
+def _determine_strictness(profile_dict: dict[str, Any], inherits: list[str]) -> tuple[Optional[str], bool]:
     for profile in inherits:
         if profile.startswith("strictness_"):
             return None, False
@@ -265,7 +266,7 @@ def _determine_strictness(profile_dict, inherits):
     return ("strictness_%s" % strictness), True
 
 
-def _determine_pep8(profile_dict):
+def _determine_pep8(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
     pep8 = profile_dict.get("pep8")
     if pep8 == "full":
         return "full_pep8", True
@@ -276,28 +277,30 @@ def _determine_pep8(profile_dict):
     return None, False
 
 
-def _determine_doc_warnings(profile_dict):
+def _determine_doc_warnings(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
     doc_warnings = profile_dict.get("doc-warnings")
     if doc_warnings is None:
         return None, False
     return ("doc_warnings" if doc_warnings else "no_doc_warnings"), True
 
 
-def _determine_test_warnings(profile_dict):
+def _determine_test_warnings(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
     test_warnings = profile_dict.get("test-warnings")
     if test_warnings is None:
         return None, False
     return (None if test_warnings else "no_test_warnings"), True
 
 
-def _determine_member_warnings(profile_dict):
+def _determine_member_warnings(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
     member_warnings = profile_dict.get("member-warnings")
     if member_warnings is None:
         return None, False
     return ("member_warnings" if member_warnings else "no_member_warnings"), True
 
 
-def _determine_implicit_inherits(profile_dict, already_inherits, shorthands_found):
+def _determine_implicit_inherits(
+    profile_dict: dict[str, Any], already_inherits: list[str], shorthands_found: set[str]
+) -> tuple[list[str], set[str]]:
     # Note: the ordering is very important here - the earlier items
     # in the list have precedence over the later items. The point of
     # the doc/test/pep8 profiles is usually to restore items which were
@@ -324,7 +327,13 @@ def _determine_implicit_inherits(profile_dict, already_inherits, shorthands_foun
     return inherits, shorthands_found
 
 
-def _append_profiles(name, profile_path, data, inherit_list, allow_shorthand=False):
+def _append_profiles(
+    name: str,
+    profile_path: list[Path],
+    data: dict[Union[str, Path], Any],
+    inherit_list: list[str],
+    allow_shorthand: bool = False,
+) -> tuple[dict[Union[str, Path], Any], list[str]]:
     new_data, new_il, _ = _load_profile(name, profile_path, allow_shorthand=allow_shorthand)
     data.update(new_data)
     inherit_list += new_il
@@ -367,7 +376,7 @@ def _load_and_merge(
     # top of the inheritance tree to the bottom). This means that the lower down
     # values overwrite those from above, meaning that the initially provided profile
     # has precedence.
-    merged: dict = {}
+    merged: dict[str, Any] = {}
     for name in inherit_list[::-1]:
         priority = data[name]
         merged = _merge_profile_dict(priority, merged)
@@ -375,7 +384,7 @@ def _load_and_merge(
     return merged, inherit_list
 
 
-def _transform_legacy(profile_dict):
+def _transform_legacy(profile_dict: dict[str, Any]) -> dict[str, Any]:
     """
     After pep8 was renamed to pycodestyle, this pre-filter just moves profile
     config blocks using the old name to use the new name, merging if both are
@@ -425,13 +434,13 @@ def _load_profile(
     already_loaded: Optional[list[Union[str, Path]]] = None,
     allow_shorthand: bool = True,
     forced_inherits: Optional[list[str]] = None,
-):
+) -> tuple[dict[Union[str, Path], Any], list[str], set[str]]:
     # recursively get the contents of the basic profile and those it inherits from
     base_contents = _load_content(name_or_path, profile_path)
 
     base_contents = _transform_legacy(base_contents)
 
-    inherit_order = [name_or_path]
+    inherit_order = [str(name_or_path)]
     shorthands_found = shorthands_found or set()
 
     already_loaded = already_loaded or []
@@ -448,7 +457,7 @@ def _load_profile(
         inherits += extra_inherits
         shorthands_found |= extra_shorthands
 
-    contents_dict = {name_or_path: base_contents}
+    contents_dict: dict[Union[str, Path], Any] = {name_or_path: base_contents}
 
     for inherit_profile in inherits:
         if inherit_profile in already_loaded:
@@ -470,4 +479,4 @@ def _load_profile(
     # note: a new list is returned here rather than simply using inherit_order to give astroid a
     # clue about the type of the returned object, as otherwise it can recurse infinitely and crash,
     # this meaning that prospector does not run on prospector cleanly!
-    return contents_dict, list(inherit_order), shorthands_found
+    return contents_dict, inherit_order, shorthands_found

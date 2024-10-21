@@ -24,7 +24,6 @@ import re
 import warnings
 from collections import defaultdict
 from pathlib import Path
-from typing import List
 
 from prospector import encoding
 from prospector.exceptions import FatalProspectorException
@@ -35,7 +34,7 @@ _PEP8_IGNORE_LINE = re.compile(r"#\s+noqa", re.IGNORECASE)
 _PYLINT_SUPPRESSED_MESSAGE = re.compile(r"^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$")
 
 
-def get_noqa_suppressions(file_contents):
+def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int]]:
     """
     Finds all pep8/flake8 suppression messages
 
@@ -64,9 +63,9 @@ _PYLINT_EQUIVALENTS = {
 }
 
 
-def _parse_pylint_informational(messages: List[Message]):
-    ignore_files = set()
-    ignore_messages: dict = defaultdict(lambda: defaultdict(list))
+def _parse_pylint_informational(messages: list[Message]) -> tuple[set[Path], dict[Path, dict[int, list[str]]]]:
+    ignore_files: set[Path] = set()
+    ignore_messages: dict[Path, dict[int, list[str]]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
         if message.source == "pylint":
@@ -78,21 +77,24 @@ def _parse_pylint_informational(messages: List[Message]):
                     raise FatalProspectorException(f"Could not parsed suppressed message from {message.message}")
                 suppressed_code = match.group(1)
                 line_dict = ignore_messages[message.location.path]
+                assert message.location.line is not None
                 line_dict[message.location.line].append(suppressed_code)
             elif message.code == "file-ignored":
                 ignore_files.add(message.location.path)
     return ignore_files, ignore_messages
 
 
-def get_suppressions(filepaths: List[Path], messages):
+def get_suppressions(
+    filepaths: list[Path], messages: list[Message]
+) -> tuple[set[Path], dict[Path, set[int]], dict[Path, dict[int, set[tuple[str, str]]]]]:
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
     and a map of filepath -> line-number -> codes to ignore
     """
-    paths_to_ignore = set()
-    lines_to_ignore: dict = defaultdict(set)
-    messages_to_ignore: dict = defaultdict(lambda: defaultdict(set))
+    paths_to_ignore: set[Path] = set()
+    lines_to_ignore: dict[Path, set[int]] = defaultdict(set)
+    messages_to_ignore: dict[Path, dict[int, set[tuple[str, str]]]] = defaultdict(lambda: defaultdict(set))
 
     # first deal with 'noqa' style messages
     for filepath in filepaths:

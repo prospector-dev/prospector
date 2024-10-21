@@ -2,7 +2,9 @@ import os
 import re
 import sys
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 from pylint.config import find_default_config_files
 from pylint.exceptions import UnknownMessageError
@@ -13,6 +15,9 @@ from prospector.message import Location, Message
 from prospector.tools.base import ToolBase
 from prospector.tools.pylint.collector import Collector
 from prospector.tools.pylint.linter import ProspectorLinter
+
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
 
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
@@ -26,12 +31,13 @@ class PylintTool(ToolBase):
     # be functions (they don't use the 'self' argument) but that would
     # make this module/class a bit ugly.
 
-    def __init__(self):
-        self._args = None
-        self._collector = self._linter = None
-        self._orig_sys_path = []
+    def __init__(self) -> None:
+        self._args: Any = None
+        self._collector: Optional[Collector] = None
+        self._linter: Optional[ProspectorLinter] = None
+        self._orig_sys_path: list[str] = []
 
-    def _prospector_configure(self, prospector_config, linter: ProspectorLinter):
+    def _prospector_configure(self, prospector_config: "ProspectorConfig", linter: ProspectorLinter) -> list[Message]:
         errors = []
 
         if "django" in prospector_config.libraries:
@@ -42,7 +48,7 @@ class PylintTool(ToolBase):
             linter.load_plugin_modules(["pylint_flask"])
 
         profile_path = os.path.join(prospector_config.workdir, prospector_config.profile.name)
-        for plugin in prospector_config.profile.pylint.get("load-plugins", []):
+        for plugin in prospector_config.profile.pylint.get("load-plugins", []):  # type: ignore[attr-defined]
             try:
                 linter.load_plugin_modules([plugin])
             except ImportError:
@@ -88,11 +94,11 @@ class PylintTool(ToolBase):
                         checker.set_option("max-line-length", max_line_length)
         return errors
 
-    def _error_message(self, filepath, message):
+    def _error_message(self, filepath: Union[str, Path], message: str) -> Message:
         location = Location(filepath, None, None, 0, 0)
         return Message("prospector", "config-problem", location, message)
 
-    def _pylintrc_configure(self, pylintrc, linter):
+    def _pylintrc_configure(self, pylintrc: Union[str, Path], linter: ProspectorLinter) -> list[Message]:
         errors = []
         are_plugins_loaded = linter.config_from_file(pylintrc)
         if not are_plugins_loaded and hasattr(linter.config, "load_plugins"):
@@ -103,7 +109,9 @@ class PylintTool(ToolBase):
                     errors.append(self._error_message(pylintrc, f"Could not load plugin {plugin}"))
         return errors
 
-    def configure(self, prospector_config, found_files: FileFinder):
+    def configure(
+        self, prospector_config: "ProspectorConfig", found_files: FileFinder
+    ) -> Optional[tuple[Optional[Union[str, Path]], Optional[Iterable[Message]]]]:
         extra_sys_path = found_files.make_syspath()
         check_paths = self._get_pylint_check_paths(found_files)
 
@@ -128,7 +136,7 @@ class PylintTool(ToolBase):
         self._linter = linter
         return configured_by, config_messages
 
-    def _set_path_finder(self, extra_sys_path: list[Path], pylint_options):
+    def _set_path_finder(self, extra_sys_path: list[Path], pylint_options: dict[str, Any]) -> None:
         # insert the target path into the system path to get correct behaviour
         self._orig_sys_path = sys.path
         if not pylint_options.get("use_pylint_default_path_finder"):
@@ -166,17 +174,21 @@ class PylintTool(ToolBase):
         return sorted(check_paths)
 
     def _get_pylint_configuration(
-        self, check_paths: list[Path], linter: ProspectorLinter, prospector_config, pylint_options
-    ):
+        self,
+        check_paths: list[Path],
+        linter: ProspectorLinter,
+        prospector_config: "ProspectorConfig",
+        pylint_options: dict[str, Any],
+    ) -> tuple[list[Message], Optional[Union[Path, str]]]:
         self._args = check_paths
         linter.load_default_plugins()
 
-        config_messages = self._prospector_configure(prospector_config, linter)
-        configured_by = None
+        config_messages: list[Message] = self._prospector_configure(prospector_config, linter)
+        configured_by: Optional[Union[str, Path]] = None
 
         if prospector_config.use_external_config("pylint"):
-            # try to find a .pylintrc
-            pylintrc = pylint_options.get("config_file")
+            # Try to find a .pylintrc
+            pylintrc: Optional[Union[str, Path]] = pylint_options.get("config_file")
             external_config = prospector_config.external_config_location("pylint")
 
             pylintrc = pylintrc or external_config
@@ -202,7 +214,7 @@ class PylintTool(ToolBase):
 
         return config_messages, configured_by
 
-    def _combine_w0614(self, messages):
+    def _combine_w0614(self, messages: list[Message]) -> list[Message]:
         """
         For the "unused import from wildcard import" messages,
         we want to combine all warnings about the same line into
@@ -220,7 +232,9 @@ class PylintTool(ToolBase):
         for location, message_list in by_loc.items():
             names = []
             for msg in message_list:
-                names.append(_UNUSED_WILDCARD_IMPORT_RE.match(msg.message).group(1))
+                match_ = _UNUSED_WILDCARD_IMPORT_RE.match(msg.message)
+                assert match_ is not None
+                names.append(match_.group(1))
 
             msgtxt = "Unused imports from wildcard import: %s" % ", ".join(names)
             combined_message = Message("pylint", "unused-wildcard-import", location, msgtxt)
@@ -228,7 +242,7 @@ class PylintTool(ToolBase):
 
         return out
 
-    def combine(self, messages):
+    def combine(self, messages: list[Message]) -> list[Message]:
         """
         Combine repeated messages.
 
@@ -242,7 +256,10 @@ class PylintTool(ToolBase):
         combined = self._combine_w0614(messages)
         return sorted(combined)
 
-    def run(self, found_files) -> list[Message]:
+    def run(self, found_files: FileFinder) -> list[Message]:
+        assert self._collector is not None
+        assert self._linter is not None
+
         self._linter.check(self._args)
         sys.path = self._orig_sys_path
 

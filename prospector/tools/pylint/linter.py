@@ -1,9 +1,13 @@
+from collections.abc import Iterable
 from pathlib import Path
+from typing import Any, Optional, Union
 
 from packaging import version as packaging_version
 from pylint import version as pylint_version
 from pylint.config.config_initialization import _config_initialization
 from pylint.lint import PyLinter
+
+from prospector.finder import FileFinder
 
 
 class UnrecognizedOptions(Exception):
@@ -11,20 +15,20 @@ class UnrecognizedOptions(Exception):
 
 
 class ProspectorLinter(PyLinter):
-    def __init__(self, found_files, *args, **kwargs):
+    def __init__(self, found_files: FileFinder, *args: Any, **kwargs: Any) -> None:
         self._files = found_files
         # set up the standard PyLint linter
         PyLinter.__init__(self, *args, **kwargs)
 
     # Largely inspired by https://github.com/pylint-dev/pylint/blob/main/pylint/config/config_initialization.py#L26
-    def config_from_file(self, config_file=None):
+    def config_from_file(self, config_file: Optional[Union[str, Path]] = None) -> bool:
         """Initialize the configuration from a file."""
         _config_initialization(self, [], config_file=config_file)
         return True
 
-    def _expand_files(self, files_or_modules):
+    def _expand_files(self, files_or_modules: list[str]) -> Union[Iterable[Any], dict[str, Any]]:
         expanded = super()._expand_files(files_or_modules)
-        filtered = {}
+        filtered: dict[str, Any] = {}
         # PyLinter._expand_files returns dict since 2.15.7.
         if packaging_version.parse(pylint_version) > packaging_version.parse("2.15.6"):
             for module, expanded_module in expanded.items():
