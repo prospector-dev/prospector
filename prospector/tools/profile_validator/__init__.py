@@ -62,7 +62,7 @@ class ProfileValidationTool(ToolBase):
         self.ignore_codes: list[str] = []
 
     def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder) -> None:
-        for profile in prospector_config.config.profiles:  # type: ignore[attr-defined]
+        for profile in prospector_config.config.profiles:
             self.to_check.add(profile)
 
         self.ignore_codes = prospector_config.get_disabled_messages("profile-validator")

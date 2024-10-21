@@ -58,7 +58,7 @@ class ProspectorProfile:
         return list(set(disable) - set(enable))
 
     def is_tool_enabled(self, name: str) -> bool:
-        enabled = getattr(self, name).get("run")
+        enabled: Optional[bool] = getattr(self, name).get("run")
         if enabled is not None:
             return enabled
         # this is not explicitly enabled or disabled, so use the default
