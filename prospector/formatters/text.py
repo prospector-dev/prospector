@@ -4,17 +4,14 @@ from prospector.message import Message
 __all__ = ("TextFormatter",)
 
 
-# pylint: disable=unnecessary-lambda
-
-
 class TextFormatter(SummaryFormatter):
     def render_message(self, message: Message) -> str:
         output = []
 
         if message.location.module:
-            output.append(f"{message.location.module} ({self._make_path(message.location.path)}):")
+            output.append(f"{message.location.module} ({self._make_path(message.location)}):")
         else:
-            output.append(f"{self._make_path(message.location.path)}:")
+            output.append(f"{self._make_path(message.location)}:")
 
         output.append(
             "    L{}:{} {}: {} - {}".format(
