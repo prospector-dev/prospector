@@ -186,9 +186,10 @@ def build_command_line_source(
         },
         "output_format": {
             "flags": ["-o", "--output-format"],
-            "help": "The output format. Valid values are: %s. This will output to stdout by default, "
-            "however a target file can be used instead by adding :path-to-output-file, eg, -o json:output.json"
-            % (", ".join(sorted(FORMATTERS.keys())),),
+            "help": "The output format. Valid values are: {}. This will output to stdout by default, "
+            "however a target file can be used instead by adding :path-to-output-file, eg, -o json:output.json".format(
+                ", ".join(sorted(FORMATTERS.keys()))
+            ),
         },
         "absolute_paths": {
             "help": "Whether to output absolute paths when referencing files "
@@ -199,9 +200,8 @@ def build_command_line_source(
             "flags": ["-t", "--tool"],
             "help": "A list of tools to run. This lets you set exactly which "
             "tools to run. To add extra tools to the defaults, see "
-            "--with-tool. Possible values are: %s. By "
-            "default, the following tools will be run: %s"
-            % (
+            "--with-tool. Possible values are: {}. By "
+            "default, the following tools will be run: {}".format(
                 ", ".join(sorted(TOOLS.keys())),
                 ", ".join(sorted(DEFAULT_TOOLS)),
             ),
@@ -210,14 +210,14 @@ def build_command_line_source(
             "flags": ["-w", "--with-tool"],
             "help": "A list of tools to run in addition to the default tools. "
             "To specify all tools explicitly, use the --tool argument. "
-            "Possible values are %s." % (", ".join(sorted(TOOLS.keys()))),
+            "Possible values are {}.".format(", ".join(sorted(TOOLS.keys()))),
         },
         "without_tools": {
             "flags": ["-W", "--without-tool"],
             "help": "A list of tools that should not be run. Useful to turn off "
             "only a single tool from the defaults. "
             "To specify all tools explicitly, use the --tool argument. "
-            "Possible values are %s." % (", ".join(sorted(TOOLS.keys()))),
+            "Possible values are {}.".format(", ".join(sorted(TOOLS.keys()))),
         },
         "profiles": {
             "flags": ["-P", "--profile"],

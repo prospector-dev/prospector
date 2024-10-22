@@ -59,7 +59,7 @@ class PyrightTool(ToolBase):
     ) -> Optional[tuple[str, Optional[Iterable[Message]]]]:
         options = prospector_config.tool_options("pyright")
 
-        for option_key in options.keys():
+        for option_key in options:
             if option_key not in VALID_OPTIONS:
                 url = "https://github.com/PyCQA/prospector/blob/master/prospector/tools/pyright/__init__.py"
                 raise BadToolConfig(

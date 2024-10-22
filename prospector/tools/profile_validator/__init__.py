@@ -166,7 +166,7 @@ class ProfileValidationTool(ToolBase):
             if not isinstance(parsed[key], (tuple, list)):
                 add_message(CONFIG_SETTING_SHOULD_BE_LIST, f'"{key}" should be a list', key)
 
-        for key in parsed.keys():
+        for key in parsed:
             if key not in ProfileValidationTool.ALL_SETTINGS and key not in _tool_names():
                 add_message(
                     CONFIG_UNKNOWN_SETTING,

@@ -13,15 +13,14 @@ class EmacsFormatter(TextFormatter):
                 message.location.line,
                 (message.location.character or 0) + 1,
             ),
-            "    L%s:%s %s: %s - %s"
-            % (
+            "    L{}:{} {}: {} - {}".format(
                 message.location.line or "-",
                 message.location.character if message.location.line else "-",
                 message.location.function,
                 message.source,
                 message.code,
             ),
-            "    %s" % message.message,
+            f"    {message.message}",
         ]
 
         return "\n".join(output)

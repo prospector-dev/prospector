@@ -50,7 +50,7 @@ class TestToolRenaming(TestCase):
 
         assert "E266" not in profile.pycodestyle["disable"]
 
-        assert 120 == profile.pycodestyle["options"]["max-line-length"]
+        assert profile.pycodestyle["options"]["max-line-length"] == 120
 
     def test_new_inherits_from_old(self):
         """
@@ -65,7 +65,7 @@ class TestToolRenaming(TestCase):
 
         assert "E266" not in profile.pycodestyle["disable"]
 
-        assert 140 == profile.pycodestyle["options"]["max-line-length"]
+        assert profile.pycodestyle["options"]["max-line-length"] == 140
 
     def test_legacy_names_equivalent(self):
         """

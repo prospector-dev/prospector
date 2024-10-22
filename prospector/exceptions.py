@@ -8,7 +8,6 @@ class FatalProspectorException(Exception):
     Problems in prospector itself should raise this to notify
     the user directly. Errors in dependent tools should be
     caught and the user notified elegantly.
-
     """
 
     # (see also the --die-on-tool-error flag)
@@ -27,10 +26,7 @@ class CouldNotHandleEncoding(Exception):
 class PermissionMissing(Exception):
     def __init__(self, path: Path):
         docs_url = "https://prospector.landscape.io/en/master/profiles.html#ignoring-paths-and-patterns"
-        if os.path.isdir(path):
-            what = f"directory {path}"
-        else:
-            what = f"the file {path}"
+        what = f"directory {path}" if os.path.isdir(path) else f"the file {path}"
         error_msg = (
             f"The current user {os.getlogin()} does not have permission to open "
             f"{what}. Either fix permissions or tell prospector to skip it "

@@ -55,7 +55,7 @@ class PylintTool(ToolBase):
                 errors.append(self._error_message(profile_path, f"Could not load plugin {plugin}"))
 
         for msg_id in prospector_config.get_disabled_messages("pylint"):
-            try:
+            try:  # noqa: SIM105
                 linter.disable(msg_id)
             except UnknownMessageError:
                 # If the msg_id doesn't exist in PyLint any more,
@@ -89,9 +89,8 @@ class PylintTool(ToolBase):
             if not hasattr(checker, "options"):
                 continue
             for option in checker.options:
-                if max_line_length is not None:
-                    if option[0] == "max-line-length":
-                        checker.set_option("max-line-length", max_line_length)
+                if max_line_length is not None and option[0] == "max-line-length":
+                    checker.set_option("max-line-length", max_line_length)
         return errors
 
     def _error_message(self, filepath: Union[str, Path], message: str) -> Message:
@@ -236,7 +235,7 @@ class PylintTool(ToolBase):
                 assert match_ is not None
                 names.append(match_.group(1))
 
-            msgtxt = "Unused imports from wildcard import: %s" % ", ".join(names)
+            msgtxt = "Unused imports from wildcard import: {}".format(", ".join(names))
             combined_message = Message("pylint", "unused-wildcard-import", location, msgtxt)
             out.append(combined_message)
 

@@ -11,7 +11,7 @@ from prospector.tools.exceptions import BadToolConfig
 try:
     from prospector.tools.pyright import format_messages
 except ImportError:
-    raise SkipTest
+    raise SkipTest  # noqa: B904
 
 
 class TestPyrightTool(TestCase):

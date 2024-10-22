@@ -9,7 +9,7 @@ class SummaryFormatter(Formatter):
     summary_labels = (
         ("started", "Started", None),
         ("completed", "Finished", None),
-        ("time_taken", "Time Taken", lambda x: "%s seconds" % x),
+        ("time_taken", "Time Taken", lambda x: f"{x} seconds"),
         ("formatter", "Formatter", None),
         ("profiles", "Profiles", None),
         ("strictness", "Strictness", None),

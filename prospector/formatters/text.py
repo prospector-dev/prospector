@@ -8,18 +8,16 @@ __all__ = ("TextFormatter",)
 
 
 class TextFormatter(SummaryFormatter):
-
     def render_message(self, message: Message) -> str:
         output = []
 
         if message.location.module:
             output.append(f"{message.location.module} ({self._make_path(message.location.path)}):")
         else:
-            output.append("%s:" % self._make_path(message.location.path))
+            output.append(f"{self._make_path(message.location.path)}:")
 
         output.append(
-            "    L%s:%s %s: %s - %s"
-            % (
+            "    L{}:{} {}: {} - {}".format(
                 message.location.line or "-",
                 message.location.character if message.location.character else "-",
                 message.location.function,
@@ -28,7 +26,7 @@ class TextFormatter(SummaryFormatter):
             )
         )
 
-        output.append("    %s" % message.message)
+        output.append(f"    {message.message}")
 
         return "\n".join(output)
 

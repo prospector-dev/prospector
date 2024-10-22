@@ -24,16 +24,15 @@ class GroupedFormatter(TextFormatter):
             output.append(str(filename))
 
             for line in sorted(groups[filename].keys(), key=lambda x: 0 if x is None else int(x)):
-                output.append("  Line: %s" % line)
+                output.append(f"  Line: {line}")
 
                 for message in groups[filename][line]:
                     output.append(
-                        "    %s: %s / %s%s"
-                        % (
+                        "    {}: {} / {}{}".format(
                             message.source,
                             message.code,
                             message.message,
-                            (" (col %s)" % message.location.character) if message.location.character else "",
+                            (f" (col {message.location.character})") if message.location.character else "",
                         )
                     )
 
