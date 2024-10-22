@@ -41,6 +41,9 @@ class PylintFormatter(SummaryFormatter):
                 }
             )
 
+        if profile:
+            output.append("")
+            output.append(self.render_profile())
         if summary:
             output.append("")
             output.append(self.render_summary())
