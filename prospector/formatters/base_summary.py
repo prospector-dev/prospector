@@ -36,3 +36,8 @@ class SummaryFormatter(Formatter):
                 output.append(f" {label.rjust(label_width)}: {value}")
 
         return "\n".join(output)
+
+    def render_profile(self) -> str:
+        output = ["Profile", "=======", "", self.profile.as_yaml().strip()]
+
+        return "\n".join(output)

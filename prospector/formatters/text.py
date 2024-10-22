@@ -45,11 +45,6 @@ class TextFormatter(SummaryFormatter):
 
         return "\n".join(output)
 
-    def render_profile(self) -> str:
-        output = ["Profile", "=======", "", self.profile.as_yaml().strip()]
-
-        return "\n".join(output)
-
     def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
         output = []
         if messages and self.messages:  # if there are no messages, don't render an empty header

@@ -34,6 +34,9 @@ class VSCodeFormatter(SummaryFormatter):
                     "message": message.message.strip(),
                 }
             )
+        if profile:
+            output.append("")
+            output.append(self.render_profile())
         if summary:
             output.append("")
             output.append(self.render_summary())
