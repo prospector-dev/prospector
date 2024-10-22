@@ -54,3 +54,10 @@ pydocstyle:
   disable:
     - D400
     - D401
+
+mypy:
+  options:
+    ignore-missing-imports: true
+    follow-imports: skip
+    disallow-untyped-defs: true
+    strict: false
