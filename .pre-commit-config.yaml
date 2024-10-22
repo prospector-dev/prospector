@@ -21,6 +21,11 @@ repos:
         args:
           - --exclude=/(tests)/
           - --line-length=120
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/codespell-project/codespell
     rev: v2.3.0
     hooks:
@@ -28,18 +33,6 @@ repos:
         args:
           - --ignore-words-list=nin,astroid
           - --skip=poetry.lock
-  - repo: https://github.com/PyCQA/prospector
-    rev: v1.10.3
-    hooks:
-      - id: prospector
-        additional_dependencies:
-          - "prospector[with_everything]"
-          # the following are needed to run mypy successfully in the pre-commit virtualenv
-          - types-setuptools
-          - types-PyYAML
-        args:
-          - --summary-only
-          - --zero-exit
   - repo: https://github.com/PyCQA/flake8
     rev: 7.1.1
     hooks:
@@ -53,11 +46,6 @@ repos:
           )$
         args:
           - --max-line-length=120
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/regebro/pyroma
     rev: "4.2"
     hooks:
@@ -71,3 +59,15 @@ repos:
               README.rst|
               pyproject.toml|
           )$
+  - repo: https://github.com/PyCQA/prospector
+    rev: v1.10.3
+    hooks:
+      - id: prospector
+        additional_dependencies:
+          - "prospector[with_everything]"
+          # the following are needed to run mypy successfully in the pre-commit virtualenv
+          - types-setuptools
+          - types-PyYAML
+        args:
+          - --summary-only
+          - --zero-exit
