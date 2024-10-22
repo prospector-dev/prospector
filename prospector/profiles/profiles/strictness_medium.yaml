@@ -125,3 +125,7 @@ pydocstyle:
     - D101
     - D102
     - D103
+
+mypy:
+  options:
+    disallow-untyped-defs: false
