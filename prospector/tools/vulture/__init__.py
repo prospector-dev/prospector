@@ -1,19 +1,27 @@
+from collections.abc import Iterable
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Optional
+
 from vulture import Vulture
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
+from prospector.finder import FileFinder
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
 
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
+
 
 class ProspectorVulture(Vulture):
-    def __init__(self, found_files):
+    def __init__(self, found_files: FileFinder) -> None:
         Vulture.__init__(self, verbose=False)
         self._files = found_files
-        self._internal_messages = []
-        self.file = None
-        self.filename = None
+        self._internal_messages: list[Message] = []
+        self.file: Optional[Path] = None
+        self.filename: Optional[Path] = None
 
-    def scavenge(self, _=None, __=None):
+    def scavenge(self, _: Any = None, __: Any = None) -> None:
         # The argument is a list of paths, but we don't care
         # about that as we use the found_files object. The
         # argument is here to explicitly acknowledge that we
@@ -27,7 +35,10 @@ class ProspectorVulture(Vulture):
                         module,
                         "vulture",
                         "V000",
-                        message=f"Could not handle the encoding of this file: {err.encoding}",
+                        message=(
+                            "Could not handle the encoding of this file: "
+                            f"{err.encoding}"  # type: ignore[attr-defined]
+                        ),
                     )
                 )
                 continue
@@ -38,7 +49,7 @@ class ProspectorVulture(Vulture):
             except TypeError:
                 self.scan(module_string)
 
-    def get_messages(self):
+    def get_messages(self) -> list[Message]:
         all_items = (
             ("unused-function", "Unused function %s", self.unused_funcs),
             ("unused-property", "Unused property %s", self.unused_props),
@@ -66,15 +77,18 @@ class ProspectorVulture(Vulture):
 
 
 class VultureTool(ToolBase):
-    def __init__(self):
+    def __init__(self) -> None:
         ToolBase.__init__(self)
         self._vulture = None
-        self.ignore_codes = ()
+        self.ignore_codes: list[str] = []
 
-    def configure(self, prospector_config, found_files):
+    def configure(  # pylint: disable=useless-return
+        self, prospector_config: "ProspectorConfig", found_files: FileFinder
+    ) -> Optional[tuple[Optional[str], Optional[Iterable[Message]]]]:
         self.ignore_codes = prospector_config.get_disabled_messages("vulture")
+        return None
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder) -> list[Message]:
         vulture = ProspectorVulture(found_files)
         vulture.scavenge()
         return [message for message in vulture.get_messages() if message.code not in self.ignore_codes]

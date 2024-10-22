@@ -2,7 +2,7 @@ from io import StringIO
 from typing import List
 
 from pylint.exceptions import UnknownMessageError
-from pylint.message import Message as PylintMessage
+from pylint.message import Message as PylintMessage, MessageDefinitionStore
 from pylint.reporters import BaseReporter
 
 from prospector.message import Location, Message
@@ -11,10 +11,10 @@ from prospector.message import Location, Message
 class Collector(BaseReporter):
     name = "collector"
 
-    def __init__(self, message_store):
+    def __init__(self, message_store: MessageDefinitionStore) -> None:
         BaseReporter.__init__(self, output=StringIO())
         self._message_store = message_store
-        self._messages = []
+        self._messages: list[Message] = []
 
     def handle_message(self, msg: PylintMessage) -> None:
         loc = Location(msg.abspath, msg.module, msg.obj, msg.line, msg.column)
@@ -33,9 +33,6 @@ class Collector(BaseReporter):
 
         message = Message("pylint", msg_symbol, loc, msg.msg)
         self._messages.append(message)
-
-    def _display(self, layout) -> None:
-        pass
 
     def get_messages(self) -> List[Message]:
         return self._messages

@@ -1,4 +1,5 @@
 from prospector.formatters.base_summary import SummaryFormatter
+from prospector.message import Message
 
 __all__ = ("TextFormatter",)
 
@@ -8,7 +9,7 @@ __all__ = ("TextFormatter",)
 
 class TextFormatter(SummaryFormatter):
 
-    def render_message(self, message):
+    def render_message(self, message: Message) -> str:
         output = []
 
         if message.location.module:
@@ -31,7 +32,7 @@ class TextFormatter(SummaryFormatter):
 
         return "\n".join(output)
 
-    def render_messages(self):
+    def render_messages(self) -> str:
         output = [
             "Messages",
             "========",
@@ -44,12 +45,12 @@ class TextFormatter(SummaryFormatter):
 
         return "\n".join(output)
 
-    def render_profile(self):
+    def render_profile(self) -> str:
         output = ["Profile", "=======", "", self.profile.as_yaml().strip()]
 
         return "\n".join(output)
 
-    def render(self, summary=True, messages=True, profile=False):
+    def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
         output = []
         if messages and self.messages:  # if there are no messages, don't render an empty header
             output.append(self.render_messages())

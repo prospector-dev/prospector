@@ -9,7 +9,7 @@ class VSCodeFormatter(SummaryFormatter):
     This formatter outputs messages in the same way as vscode prospector linter expects.
     """
 
-    def render(self, summary=True, messages=True, profile=False):
+    def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
         # this formatter will always ignore the summary and profile
         cur_loc = None
         output = []

@@ -1,5 +1,6 @@
 import logging
-from typing import TYPE_CHECKING, List
+from collections.abc import Iterable
+from typing import TYPE_CHECKING, Any, Optional
 
 from prospector.finder import FileFinder
 from prospector.message import Location, Message
@@ -48,7 +49,7 @@ PYROMA_ALL_CODES = {
 PYROMA_CODES = {}
 
 
-def _copy_codes():
+def _copy_codes() -> None:
     for name, code in PYROMA_ALL_CODES.items():
         if hasattr(ratings, name):
             PYROMA_CODES[getattr(ratings, name)] = code
@@ -60,14 +61,17 @@ PYROMA_TEST_CLASSES = [t.__class__ for t in ratings.ALL_TESTS]
 
 
 class PyromaTool(ToolBase):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.ignore_codes = ()
+        self.ignore_codes: list[str] = []
 
-    def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder):
+    def configure(  # pylint: disable=useless-return
+        self, prospector_config: "ProspectorConfig", found_files: FileFinder
+    ) -> Optional[tuple[str, Optional[Iterable[Message]]]]:
         self.ignore_codes = prospector_config.get_disabled_messages("pyroma")
+        return None
 
-    def run(self, found_files: FileFinder) -> List[Message]:
+    def run(self, found_files: FileFinder) -> list[Message]:
         messages = []
         for directory in found_files.directories:
             # just list directories which are not ignored, but find any `setup.py` ourselves

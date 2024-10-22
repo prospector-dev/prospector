@@ -1,28 +1,33 @@
 import ast
+from typing import TYPE_CHECKING, Any
 
 from mccabe import PathGraphingAstVisitor
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
+from prospector.finder import FileFinder
 from prospector.message import Location, Message, make_tool_error_message
 from prospector.tools.base import ToolBase
+
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
 
 __all__ = ("McCabeTool",)
 
 
 class McCabeTool(ToolBase):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.ignore_codes = ()
+        self.ignore_codes: list[str] = []
         self.max_complexity = 10
 
-    def configure(self, prospector_config, _):
+    def configure(self, prospector_config: "ProspectorConfig", _: Any) -> None:
         self.ignore_codes = prospector_config.get_disabled_messages("mccabe")
 
         options = prospector_config.tool_options("mccabe")
         if "max-complexity" in options:
-            self.max_complexity = options["max-complexity"]
+            self.max_complexity = options["max-complexity"]  # type: ignore[assignment]
 
-    def run(self, found_files):
+    def run(self, found_files: FileFinder) -> list[Message]:
         messages = []
 
         for code_file in found_files.python_modules:
@@ -38,7 +43,10 @@ class McCabeTool(ToolBase):
                         code_file,
                         "mccabe",
                         "MC0000",
-                        message=f"Could not handle the encoding of this file: {err.encoding}",
+                        message=(
+                            "Could not handle the encoding of this file: "
+                            f"{err.encoding}"  # type: ignore[attr-defined]
+                        ),
                     )
                 )
                 continue
@@ -77,5 +85,5 @@ class McCabeTool(ToolBase):
 
         return self.filter_messages(messages)
 
-    def filter_messages(self, messages):
+    def filter_messages(self, messages: list[Message]) -> list[Message]:
         return [message for message in messages if message.code not in self.ignore_codes]

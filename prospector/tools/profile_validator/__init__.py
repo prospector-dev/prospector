@@ -1,5 +1,8 @@
 import re
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+from prospector.tools.base import ToolBase
 
 try:  # Python >= 3.11
     import re._constants as sre_constants
@@ -11,7 +14,10 @@ import yaml
 from prospector.finder import FileFinder
 from prospector.message import Location, Message
 from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS, ToolBase, pyflakes
+
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
+
 
 PROFILE_IS_EMPTY = "profile-is-empty"
 CONFIG_SETTING_SHOULD_BE_LIST = "should-be-list"
@@ -26,7 +32,9 @@ CONFIG_DEPRECATED_CODE = "deprecated-tool-code"
 __all__ = ("ProfileValidationTool",)
 
 
-def _tool_names(with_deprecated: bool = True):
+def _tool_names(with_deprecated: bool = True) -> list[str]:
+    from prospector.tools import DEPRECATED_TOOL_NAMES, TOOLS  # pylint: disable=import-outside-toplevel
+
     tools = list(TOOLS)
     if with_deprecated:
         tools += DEPRECATED_TOOL_NAMES.keys()
@@ -49,27 +57,27 @@ class ProfileValidationTool(ToolBase):
     )
     ALL_SETTINGS = LIST_SETTINGS + BOOL_SETTINGS + OTHER_SETTINGS
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.to_check = set(AUTO_LOADED_PROFILES)
-        self.ignore_codes = ()
+        self.ignore_codes: list[str] = []
 
-    def configure(self, prospector_config, found_files):
+    def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder) -> None:
         for profile in prospector_config.config.profiles:
             self.to_check.add(profile)
 
         self.ignore_codes = prospector_config.get_disabled_messages("profile-validator")
 
-    def validate(self, filepath: Path):  # noqa
+    def validate(self, filepath: Path) -> list[Message]:
         # pylint: disable=too-many-locals
         # TODO: this should be broken down into smaller pieces
-        messages = []
+        messages: list[Message] = []
 
         with filepath.open() as profile_file:
             _file_contents = profile_file.read()
             parsed = yaml.safe_load(_file_contents)
             raw_contents = _file_contents.split("\n")
 
-        def add_message(code, message, setting):
+        def add_message(code: str, message: str, setting: str) -> None:
             if code in self.ignore_codes:
                 return
             line = -1
@@ -77,9 +85,8 @@ class ProfileValidationTool(ToolBase):
                 if setting in fileline:
                     line = number + 1
                     break
-            location = Location(filepath, None, None, line, 0, False)
-            message = Message("profile-validator", code, location, message)
-            messages.append(message)
+            location = Location(filepath, None, None, line, 0)
+            messages.append(Message("profile-validator", code, location, message))
 
         if parsed is None:
             # this happens if a completely empty profile is found
@@ -191,6 +198,8 @@ class ProfileValidationTool(ToolBase):
                 )
 
         if "pyflakes" in parsed:
+            from prospector.tools import pyflakes  # pylint: disable=import-outside-toplevel
+
             for code in parsed["pyflakes"].get("enable", []) + parsed["pyflakes"].get("disable", []):
                 if code in pyflakes.LEGACY_CODE_MAP:
                     _legacy = pyflakes.LEGACY_CODE_MAP[code]
@@ -202,7 +211,7 @@ class ProfileValidationTool(ToolBase):
 
         return messages
 
-    def run(self, found_files: FileFinder):
+    def run(self, found_files: FileFinder) -> list[Message]:
         messages = []
         for filepath in found_files.files:
             for possible in self.to_check:

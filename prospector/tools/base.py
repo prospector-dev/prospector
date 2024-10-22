@@ -1,12 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Optional, Tuple
+from collections.abc import Iterable
+from pathlib import Path
+from typing import TYPE_CHECKING, Optional, Union
 
+from prospector.finder import FileFinder
 from prospector.message import Message
+
+if TYPE_CHECKING:
+    from prospector.config import ProspectorConfig
 
 
 class ToolBase(ABC):
     @abstractmethod
-    def configure(self, prospector_config, found_files) -> Tuple[str, Optional[Iterable[Message]]]:
+    def configure(
+        self, prospector_config: "ProspectorConfig", found_files: FileFinder
+    ) -> Optional[tuple[Optional[Union[str, Path]], Optional[Iterable[Message]]]]:
         """
         Tools have their own way of being configured from configuration files
         on the current path - for example, a .pep8rc file. Prospector will use
@@ -25,7 +33,7 @@ class ToolBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def run(self, found_files) -> List[Message]:
+    def run(self, found_files: FileFinder) -> list[Message]:
         """
         Actually run the tool and collect the various messages emitted by the tool.
         It is expected that this will convert whatever output of the tool into the

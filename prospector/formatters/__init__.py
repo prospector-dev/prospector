@@ -4,7 +4,7 @@ from .base import Formatter
 __all__ = ("FORMATTERS", "Formatter")
 
 
-FORMATTERS = {
+FORMATTERS: dict[str, type[Formatter]] = {
     "json": json.JsonFormatter,
     "text": text.TextFormatter,
     "grouped": grouped.GroupedFormatter,

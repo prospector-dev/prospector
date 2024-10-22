@@ -6,7 +6,7 @@ from setoptconf.datatype import Choice
 
 
 class OutputChoice(Choice):
-    def sanitize(self, value):
+    def sanitize(self, value: str) -> tuple[str, list[str]]:
         parsed = re.split(r"[;:]", value)
         output_format, output_targets = parsed[0], parsed[1:]
         checked_targets = []

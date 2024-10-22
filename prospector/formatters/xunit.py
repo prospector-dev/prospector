@@ -10,7 +10,7 @@ class XunitFormatter(Formatter):
     to use Xunit and prospector itself.
     """
 
-    def render(self, summary=True, messages=True, profile=False):
+    def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
         xml_doc = Document()
 
         testsuite_el = xml_doc.createElement("testsuite")

@@ -1,4 +1,5 @@
 import importlib.metadata
+from typing import Optional
 
 import setoptconf as soc
 
@@ -11,7 +12,7 @@ __all__ = ("build_manager",)
 _VERSION = importlib.metadata.version("prospector")
 
 
-def build_manager():
+def build_manager() -> soc.ConfigurationManager:
     manager = soc.ConfigurationManager("prospector")
 
     manager.add(soc.BooleanSetting("zero_exit", default=False))
@@ -76,7 +77,7 @@ def build_manager():
     return manager
 
 
-def build_default_sources():
+def build_default_sources() -> list[soc.Source]:
     sources = [
         build_command_line_source(),
         soc.EnvironmentVariableSource(),
@@ -98,7 +99,9 @@ def build_default_sources():
     return sources
 
 
-def build_command_line_source(prog=None, description="Performs static analysis of Python code"):
+def build_command_line_source(
+    prog: Optional[str] = None, description: Optional[str] = "Performs static analysis of Python code"
+) -> soc.CommandLineSource:
     parser_options = {}
     if prog is not None:
         parser_options["prog"] = prog

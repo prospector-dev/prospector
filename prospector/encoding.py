@@ -7,8 +7,8 @@ from prospector.exceptions import CouldNotHandleEncoding, PermissionMissing
 #       mypy complains with 'Incompatible return value type (got "str", expected "bytes")'
 
 
-def read_py_file(filepath: Path):
-    # see https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding
+def read_py_file(filepath: Path) -> str:
+    # See https://docs.python.org/3/library/tokenize.html#tokenize.detect_encoding
     # first just see if the file is properly encoded
     try:
         with open(filepath, "rb") as bfile_:

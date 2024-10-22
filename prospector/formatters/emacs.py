@@ -1,10 +1,11 @@
 from prospector.formatters.text import TextFormatter
+from prospector.message import Message
 
 __all__ = ("EmacsFormatter",)
 
 
 class EmacsFormatter(TextFormatter):
-    def render_message(self, message):
+    def render_message(self, message: Message) -> str:
         output = [
             "%s:%s:%d:"
             % (
