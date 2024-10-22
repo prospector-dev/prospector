@@ -16,7 +16,7 @@ class XunitFormatter(Formatter):
         testsuite_el = xml_doc.createElement("testsuite")
         testsuite_el.setAttribute("errors", str(self.summary["message_count"]))
         testsuite_el.setAttribute("failures", "0")
-        testsuite_el.setAttribute("name", "prospector-%s" % "-".join(self.summary["tools"]))
+        testsuite_el.setAttribute("name", "prospector-{}".format("-".join(self.summary["tools"])))
         testsuite_el.setAttribute("tests", str(self.summary["message_count"]))
         testsuite_el.setAttribute("time", str(self.summary["time_taken"]))
         xml_doc.appendChild(testsuite_el)
@@ -38,7 +38,7 @@ class XunitFormatter(Formatter):
 
             failure_el = xml_doc.createElement("error")
             failure_el.setAttribute("message", message.message.strip())
-            failure_el.setAttribute("type", "%s Error" % message.source)
+            failure_el.setAttribute("type", f"{message.source} Error")
             template = "%(path)s:%(line)s: [%(code)s(%(source)s), %(function)s] %(message)s"
             cdata = template % {
                 "path": self._make_path(message.location.path),

@@ -28,7 +28,7 @@ def _simple_summary() -> dict:
 
 
 def test_formatter_types(_simple_summary, _simple_profile):
-    for formatter_name, formatter in FORMATTERS.items():
+    for _formatter_name, formatter in FORMATTERS.items():
         formatter_instance = formatter(_simple_summary, [], _simple_profile)
         assert isinstance(formatter_instance.render(True, True, False), str)
 
@@ -37,7 +37,7 @@ def test_formatters_render(_simple_summary, _simple_profile):
     """
     Basic test to ensure that formatters can at least render messages without erroring
     """
-    for formatter_name, formatter in FORMATTERS.items():
+    for _formatter_name, formatter in FORMATTERS.items():
         messages = [
             Message(
                 "testtool",

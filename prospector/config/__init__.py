@@ -13,6 +13,8 @@ try:  # Python >= 3.11
 except ImportError:
     import sre_constants  # pylint: disable=deprecated-module
 
+import contextlib
+
 from prospector import tools
 from prospector.autodetect import autodetect_libraries
 from prospector.compat import is_relative_to
@@ -174,7 +176,7 @@ class ProspectorConfig:
 
         # Use the strictness profile only if no profile has been given
         if config.strictness is not None and config.strictness:
-            cmdline_implicit.append("strictness_%s" % config.strictness)
+            cmdline_implicit.append(f"strictness_{config.strictness}")
             strictness = config.strictness
 
         # the profile path is
@@ -196,8 +198,14 @@ class ProspectorConfig:
             profile = ProspectorProfile.load(profile_name, profile_path, forced_inherits=forced_inherits)
         except CannotParseProfile as cpe:
             sys.stderr.write(
-                "Failed to run:\nCould not parse profile %s as it is not valid YAML\n%s\n"
-                % (cpe.filepath, cpe.get_parse_message())
+                "\n".join(
+                    [
+                        "Failed to run:",
+                        f"Could not parse profile {cpe.filepath} as it is not valid YAML",
+                        f"{cpe.get_parse_message()}",
+                        "",
+                    ]
+                )
             )
             sys.exit(1)
         except ProfileNotFound as nfe:
@@ -273,10 +281,8 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
                 #  ignore-patterns:
                 #  uses: django
                 continue
-            try:
+            with contextlib.suppress(sre_constants.error):
                 ignores.append(re.compile(pattern))
-            except sre_constants.error:
-                pass
 
         # Convert ignore paths into patterns
         boundary = r"(^|/|\\)%s(/|\\|$)"
@@ -318,7 +324,7 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
         return tool.get("options", {})
 
     def external_config_location(self, tool_name: str) -> Optional[Path]:
-        return getattr(self.config, "%s_config_file" % tool_name, None)
+        return getattr(self.config, f"{tool_name}_config_file", None)
 
     @property
     def die_on_tool_error(self) -> bool:

@@ -42,15 +42,16 @@ def filter_messages(filepaths: List[Path], messages: List[Message]) -> List[Mess
             continue
 
         # some lines are skipped entirely by messages
-        if relative_message_path in lines_to_ignore:
-            if message.location.line in lines_to_ignore[relative_message_path]:
-                continue
+        if relative_message_path in lines_to_ignore and message.location.line in lines_to_ignore[relative_message_path]:
+            continue
 
         # and some lines have only certain messages explicitly ignored
-        if relative_message_path in messages_to_ignore:
-            if message.location.line in messages_to_ignore[relative_message_path]:
-                if message.code in messages_to_ignore[relative_message_path][message.location.line]:
-                    continue
+        if (
+            relative_message_path in messages_to_ignore
+            and message.location.line in messages_to_ignore[relative_message_path]
+            and message.code in messages_to_ignore[relative_message_path][message.location.line]
+        ):
+            continue
 
         # otherwise this message was not filtered
         filtered.append(message)

@@ -16,7 +16,7 @@ def test_relative_ignores():
     with patch_execution("-P", "profile_relative_ignores.yml", set_cwd=workdir):
         config = ProspectorConfig()
         files = FileFinder(*config.paths, exclusion_filters=[config.make_exclusion_filter()])
-        assert 2 == len(files.python_modules)
+        assert len(files.python_modules) == 2
 
 
 def test_determine_ignores_all_str():

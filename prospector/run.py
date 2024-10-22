@@ -68,7 +68,7 @@ class Prospector:
                 message=msg,
             )
             messages.append(message)
-            warnings.warn(msg, category=DeprecationWarning)
+            warnings.warn(msg, category=DeprecationWarning, stacklevel=0)
 
         # Run the tools
         for tool in self.config.get_tools(found_files):
@@ -122,14 +122,14 @@ class Prospector:
         summary["completed"] = datetime.now()
 
         delta = summary["completed"] - summary["started"]
-        summary["time_taken"] = "%0.2f" % delta.total_seconds()
+        summary["time_taken"] = f"{delta.total_seconds():0.2f}"
 
         external_config = []
         for tool_name, configured_by in self.config.configured_by.items():
             if configured_by is not None:
                 external_config.append((tool_name, configured_by))
         if len(external_config) > 0:
-            summary["external_config"] = ", ".join(["%s: %s" % info for info in external_config])
+            summary["external_config"] = ", ".join(["{}: {}".format(*info) for info in external_config])
 
         self.summary = summary
         self.messages = self.messages + messages

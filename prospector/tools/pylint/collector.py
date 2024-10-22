@@ -2,7 +2,8 @@ from io import StringIO
 from typing import List
 
 from pylint.exceptions import UnknownMessageError
-from pylint.message import Message as PylintMessage, MessageDefinitionStore
+from pylint.message import Message as PylintMessage
+from pylint.message import MessageDefinitionStore
 from pylint.reporters import BaseReporter
 
 from prospector.message import Location, Message

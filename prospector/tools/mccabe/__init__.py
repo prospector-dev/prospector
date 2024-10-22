@@ -44,8 +44,7 @@ class McCabeTool(ToolBase):
                         "mccabe",
                         "MC0000",
                         message=(
-                            "Could not handle the encoding of this file: "
-                            f"{err.encoding}"  # type: ignore[attr-defined]
+                            f"Could not handle the encoding of this file: {err.encoding}"  # type: ignore[attr-defined]
                         ),
                     )
                 )

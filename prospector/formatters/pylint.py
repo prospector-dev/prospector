@@ -21,7 +21,7 @@ class PylintFormatter(SummaryFormatter):
                 module_name = self._make_path(message.location.path).replace(os.path.sep, ".")
                 module_name = re.sub(r"(\.__init__)?\.py$", "", module_name)
 
-                header = "************* Module %s" % module_name
+                header = f"************* Module {module_name}"
                 output.append(header)
 
             #   ={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}

@@ -263,7 +263,7 @@ def _determine_strictness(profile_dict: dict[str, Any], inherits: list[str]) -> 
     strictness = profile_dict.get("strictness")
     if strictness is None:
         return None, False
-    return ("strictness_%s" % strictness), True
+    return (f"strictness_{strictness}"), True
 
 
 def _determine_pep8(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:

@@ -36,8 +36,7 @@ class ProspectorVulture(Vulture):
                         "vulture",
                         "V000",
                         message=(
-                            "Could not handle the encoding of this file: "
-                            f"{err.encoding}"  # type: ignore[attr-defined]
+                            f"Could not handle the encoding of this file: {err.encoding}"  # type: ignore[attr-defined]
                         ),
                     )
                 )
@@ -64,10 +63,7 @@ class ProspectorVulture(Vulture):
                     filename = item.file
                 except AttributeError:
                     filename = item.filename
-                if hasattr(item, "lineno"):
-                    lineno = item.lineno  # for older versions of vulture
-                else:
-                    lineno = item.first_lineno
+                lineno = item.lineno if hasattr(item, "lineno") else item.first_lineno
                 loc = Location(filename, None, None, lineno, -1)
                 message_text = template % item
                 message = Message("vulture", code, loc, message_text)

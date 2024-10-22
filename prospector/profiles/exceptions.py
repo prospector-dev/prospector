@@ -18,11 +18,11 @@ class CannotParseProfile(Exception):
         self.parse_error = parse_error
 
     def get_parse_message(self) -> str:
-        return "{}\n  on line {} : char {}".format(
-            self.parse_error.problem,  # type: ignore[attr-defined]
-            self.parse_error.problem_mark.line,  # type: ignore[attr-defined]
-            self.parse_error.problem_mark.column,  # type: ignore[attr-defined]
+        return (
+            f"{self.parse_error.problem}\n"  # type: ignore[attr-defined]
+            f"  on line {self.parse_error.problem_mark.line}: "  # type: ignore[attr-defined]
+            f"char {self.parse_error.problem_mark.column}"  # type: ignore[attr-defined]
         )
 
     def __repr__(self) -> str:
-        return "Could not parse profile found at %s - it is not valid YAML" % self.filepath
+        return f"Could not parse profile found at {self.filepath} - it is not valid YAML"

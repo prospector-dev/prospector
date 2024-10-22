@@ -39,10 +39,10 @@ class TestPycodestyleTool(TestCase):
         workdir = Path(__file__).parent / "testsettings/pep8"
         configured_by, _ = self._configure("testsettings/pep8/testfile.py", workdir=workdir)
         expected_config_path = str(workdir / "setup.cfg")
-        self.assertEqual(configured_by, "Configuration found at %s" % expected_config_path)
+        self.assertEqual(configured_by, f"Configuration found at {expected_config_path}")
 
     def test_find_pycodestyle_section_in_config(self):
         workdir = Path(__file__).parent / "testsettings/pycodestyle"
         configured_by, _ = self._configure("testsettings/pycodestyle/testfile.py", workdir=workdir)
         expected_config_path = str(workdir / "setup.cfg")
-        self.assertEqual(configured_by, "Configuration found at %s" % expected_config_path)
+        self.assertEqual(configured_by, f"Configuration found at {expected_config_path}")

@@ -139,7 +139,7 @@ class PycodestyleTool(ToolBase):
             if "max-line-length" in prospector_config.tool_options("pycodestyle"):
                 self.checker.options.max_line_length = prospector_config.tool_options("pycodestyle")["max-line-length"]
         else:
-            configured_by = "Configuration found at %s" % external_config
+            configured_by = f"Configuration found at {external_config}"
 
         # if we have a command line --max-line-length argument, that
         # overrules everything

@@ -9,23 +9,17 @@ repos:
         args: [--fix=lf]
       - id: debug-statements
       - id: check-added-large-files
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.17.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.0
     hooks:
-      - id: pyupgrade
-        args: [--py39-plus]
-  - repo: https://github.com/psf/black
-    rev: 24.8.0
-    hooks:
-      - id: black
+      - id: ruff-format
+      - id: ruff
         args:
-          - --exclude=/(tests)/
-          - --line-length=120
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        args: ["--profile", "black", "--filter-files"]
+        - --fix
+        exclude: |
+          (?x)^(
+            |tests/.*
+          )$
   - repo: https://github.com/codespell-project/codespell
     rev: v2.3.0
     hooks:
@@ -33,19 +27,6 @@ repos:
         args:
           - --ignore-words-list=nin,astroid
           - --skip=poetry.lock
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.1.1
-    hooks:
-      - id: flake8
-        exclude: |
-          (?x)^(
-           .*/testdata/.*
-           |.*/testpath/.*
-           |tests/tools/pylint/test_no_init_found/.*
-           |tests/test_message\.py
-          )$
-        args:
-          - --max-line-length=120
   - repo: https://github.com/regebro/pyroma
     rev: "4.2"
     hooks:
