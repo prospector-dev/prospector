@@ -12,9 +12,9 @@ class Location:
         character: Optional[int],
     ):
         if isinstance(path, Path):
-            self._path = path
+            self._path = path.absolute()
         elif isinstance(path, str):
-            self._path = Path(path)
+            self._path = Path(path).absolute()
         else:
             raise ValueError
         self.module = module or None
@@ -27,10 +27,10 @@ class Location:
         return self._path
 
     def absolute_path(self) -> Path:
-        return self._path.absolute()
+        return self._path
 
-    def relative_path(self, root: Path) -> Path:
-        return self._path.relative_to(root)
+    def relative_path(self, root: Optional[Path]) -> Path:
+        return self._path.relative_to(root) if root else self._path
 
     def __repr__(self) -> str:
         return f"{self._path}:L{self.line}:{self.character}"

@@ -11,14 +11,13 @@ class PylintFormatter(SummaryFormatter):
     on top of pylint and prospector itself.
     """
 
-    def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
-        # this formatter will always ignore the summary and profile
+    def render_messages(self) -> list[str]:
         cur_loc = None
         output = []
         for message in sorted(self.messages):
             if cur_loc != message.location.path:
                 cur_loc = message.location.path
-                module_name = self._make_path(message.location.path).replace(os.path.sep, ".")
+                module_name = str(self._make_path(message.location)).replace(os.path.sep, ".")
                 module_name = re.sub(r"(\.__init__)?\.py$", "", module_name)
 
                 header = f"************* Module {module_name}"
@@ -32,7 +31,7 @@ class PylintFormatter(SummaryFormatter):
             output.append(
                 template
                 % {
-                    "path": self._make_path(message.location.path),
+                    "path": self._make_path(message.location),
                     "line": message.location.line,
                     "source": message.source,
                     "code": message.code,
@@ -40,7 +39,12 @@ class PylintFormatter(SummaryFormatter):
                     "message": message.message.strip(),
                 }
             )
+        return output
 
+    def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
+        output: list[str] = []
+        if messages:
+            output.extend(self.render_messages())
         if profile:
             output.append("")
             output.append(self.render_profile())

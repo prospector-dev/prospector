@@ -7,7 +7,7 @@ __all__ = ("Formatter",)
 from pathlib import Path
 from typing import Any, Optional
 
-from prospector.message import Message
+from prospector.message import Location, Message
 
 
 class Formatter(ABC):
@@ -27,16 +27,12 @@ class Formatter(ABC):
     def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
         raise NotImplementedError
 
-    def _make_path(self, path: Path) -> str:
-        if self.paths_relative_to is None:
-            path = path.absolute()
-        elif path.is_absolute():
-            path = path.relative_to(self.paths_relative_to)
-        return str(path)
+    def _make_path(self, location: Location) -> Path:
+        return location.relative_path(self.paths_relative_to)
 
     def _message_to_dict(self, message: Message) -> dict[str, Any]:
         loc = {
-            "path": self._make_path(message.location.path),
+            "path": str(self._make_path(message.location)),
             "module": message.location.module,
             "function": message.location.function,
             "line": message.location.line,
