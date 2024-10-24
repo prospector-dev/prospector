@@ -1,4 +1,4 @@
-from xml.dom.minidom import Document
+from xml.dom.minidom import Document  # nosec
 
 from prospector.formatters.base import Formatter
 
