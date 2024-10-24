@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Optional
 
 from bandit.cli.main import _get_profile, _init_extensions
 from bandit.core.config import BanditConfig
@@ -14,35 +14,39 @@ if TYPE_CHECKING:
 
 
 class BanditTool(ToolBase):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.manager = None
-        self.profile = None
-        self.config_file = None
-        self.agg_type = "file"
-        self.severity = 0
-        self.confidence = 0
+    manager: Optional[BanditManager] = None
+    profile: Optional[str] = None
+    config_file: Optional[str] = None
+    agg_type = "file"
+    severity = 0
+    confidence = 0
 
     def configure(self, prospector_config: "ProspectorConfig", _: Any) -> None:
         options = prospector_config.tool_options("bandit")
 
         if "profile" in options:
-            self.profile = options["profile"]  # type: ignore[assignment]
+            self.profile = options.pop("profile")
 
         if "config" in options:
-            self.config_file = options["config"]  # type: ignore[assignment]
+            self.config_file = options.pop("config")
 
         if "severity" in options:
-            self.severity = options["severity"]  # type: ignore[assignment]
+            self.severity = options.pop("severity")
             if not 0 <= self.severity <= 2:
                 raise ValueError(f"severity {self.severity!r} must be between 0 and 2")
 
         if "confidence" in options:
-            self.confidence = options["confidence"]  # type: ignore[assignment]
+            self.confidence = options.pop("confidence")
             if not 0 <= self.confidence <= 2:
                 raise ValueError(f"confidence {self.confidence!r} must be between 0 and 2")
 
         b_conf = BanditConfig(config_file=self.config_file)
+        disabled_messages = prospector_config.get_disabled_messages("bandit")
+        if disabled_messages:
+            b_conf.config.setdefault("skips", []).extend(disabled_messages)
+        if options:
+            b_conf.config.update(options)
+            b_conf.validate(path="<prospector config>")
         profile = _get_profile(b_conf, self.profile, self.config_file)
         extension_mgr = _init_extensions()
         extension_mgr.validate_profile(profile)

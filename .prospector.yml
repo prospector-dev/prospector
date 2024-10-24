@@ -60,3 +60,8 @@ pydocstyle:
     - D205
     - D400
     - D401
+
+bandit:
+  run: true
+  disable:
+  - B101 # Use of assert detected.

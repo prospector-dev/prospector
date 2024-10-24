@@ -25,7 +25,7 @@ class McCabeTool(ToolBase):
 
         options = prospector_config.tool_options("mccabe")
         if "max-complexity" in options:
-            self.max_complexity = options["max-complexity"]  # type: ignore[assignment]
+            self.max_complexity = options["max-complexity"]
 
     def run(self, found_files: FileFinder) -> list[Message]:
         messages = []

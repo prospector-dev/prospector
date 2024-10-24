@@ -398,6 +398,8 @@ The available options are:
 +----------------+------------------------+----------------------------------------------+
 | bandit         | confidence             | report only issues of a given confidence     |
 +----------------+------------------------+----------------------------------------------+
+| bandit         | -anything-other-       | Options pass to Bandit directly              |
++----------------+------------------------+----------------------------------------------+
 | pyright        | level                  | Minimum diagnostic level (error or warning)  |
 +----------------+------------------------+----------------------------------------------+
 | pyright        | project                | Path to location of configuration file       |
