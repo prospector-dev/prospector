@@ -9,7 +9,7 @@ class EmacsFormatter(TextFormatter):
         output = [
             "%s:%s:%d:"
             % (
-                self._make_path(message.location.path),
+                self._make_path(message.location),
                 message.location.line,
                 (message.location.character or 0) + 1,
             ),
