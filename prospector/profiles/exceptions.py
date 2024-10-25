@@ -1,5 +1,8 @@
+from pathlib import Path
+
+
 class ProfileNotFound(Exception):
-    def __init__(self, name: str, profile_path: str) -> None:
+    def __init__(self, name: str, profile_path: list[Path]) -> None:
         super().__init__()
         self.name = name
         self.profile_path = profile_path
@@ -7,7 +10,7 @@ class ProfileNotFound(Exception):
     def __repr__(self) -> str:
         return "Could not find profile {}; searched in {}".format(
             self.name,
-            ":".join(self.profile_path),
+            ":".join(map(str, self.profile_path)),
         )
 
 
