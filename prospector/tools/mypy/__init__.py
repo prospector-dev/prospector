@@ -65,7 +65,7 @@ class MypyTool(ToolBase):
     def configure(self, prospector_config: "ProspectorConfig", _: Any) -> None:
         options = prospector_config.tool_options("mypy")
 
-        self.use_dmypy = options.pop("use-dmypy", False)  # type: ignore[assignment]
+        self.use_dmypy = options.pop("use-dmypy", False)
 
         # For backward compatibility
         if "follow-imports" not in options:

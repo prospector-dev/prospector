@@ -317,7 +317,7 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
         # global config, but this could be extended in the future
         return not self.config.no_external_config
 
-    def tool_options(self, tool_name: str) -> dict[str, str]:
+    def tool_options(self, tool_name: str) -> dict[str, Any]:
         tool = getattr(self.profile, tool_name, None)
         if tool is None:
             return {}
