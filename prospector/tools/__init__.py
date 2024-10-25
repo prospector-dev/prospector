@@ -69,6 +69,7 @@ TOOLS: dict[str, type[ToolBase]] = {
     "pyright": _optional_tool("pyright"),
     "mypy": _optional_tool("mypy"),
     "bandit": _optional_tool("bandit"),
+    "ruff": _optional_tool("ruff"),
 }
 
 

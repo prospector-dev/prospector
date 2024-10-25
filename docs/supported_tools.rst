@@ -172,3 +172,14 @@ To install and use::
 
     pip install prospector[with_pyright]
     prospector --with-tool pyright
+
+
+`Ruff <https://docs.astral.sh/ruff/>`_
+``````````````````````````````````````
+
+An extremely fast Python linter, written in Rust.
+
+To install and use::
+
+    pip install prospector[with_ruff]
+    prospector --with-tool ruff

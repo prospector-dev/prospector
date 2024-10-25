@@ -65,3 +65,12 @@ bandit:
   run: true
   disable:
   - B101 # Use of assert detected.
+
+ruff:
+  run: true
+  options:
+    fix: true
+  disable:
+    - E501 # line too long
+    - S101 # Use of assert detected
+    - SIM105 # suppressible-exception (slow code)

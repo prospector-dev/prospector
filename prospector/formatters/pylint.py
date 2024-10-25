@@ -27,12 +27,24 @@ class PylintFormatter(SummaryFormatter):
             # prospector/configuration.py:65: [missing-docstring(missing-docstring), build_default_sources] \
             # Missing function docstring
 
-            template = "%(path)s:%(line)s: [%(code)s(%(source)s), %(function)s] %(message)s"
+            template_location = (
+                "%(path)s"
+                if message.location.line is None
+                else "%(path)s:%(line)s"
+                if message.location.character is None
+                else "%(path)s:%(line)s:%(character)s"
+            )
+            template_code = (
+                "%(code)s(%(source)s)" if message.location.function is None else "[%(code)s(%(source)s), %(function)s]"
+            )
+            template = f"{template_location}: {template_code}: %(message)s"
+
             output.append(
                 template
                 % {
                     "path": self._make_path(message.location),
                     "line": message.location.line,
+                    "character": message.location.character,
                     "source": message.source,
                     "code": message.code,
                     "function": message.location.function,
