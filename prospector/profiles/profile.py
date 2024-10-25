@@ -57,6 +57,11 @@ class ProspectorProfile:
         enable = getattr(self, tool_name)["enable"]
         return list(set(disable) - set(enable))
 
+    def get_enabled_messages(self, tool_name: str) -> list[str]:
+        disable = getattr(self, tool_name)["disable"]
+        enable = getattr(self, tool_name)["enable"]
+        return list(set(enable) - set(disable))
+
     def is_tool_enabled(self, name: str) -> bool:
         enabled: Optional[bool] = getattr(self, name).get("run")
         if enabled is not None:
@@ -189,23 +194,20 @@ def _ensure_list(value: Any) -> list[Any]:
 
 
 def _simple_merge_dict(priority: dict[str, Any], base: dict[str, Any]) -> dict[str, Any]:
-    out = dict(base.items())
-    out.update(dict(priority.items()))
+    out = {**base, **priority}
+    keys = set(priority.keys()) | set(base.keys())
+    for key in keys:
+        if isinstance(base.get(key), dict) and isinstance(priority.get(key), dict):
+            out[key] = _simple_merge_dict(priority[key], base[key])
     return out
 
 
 def _merge_tool_config(priority: dict[str, Any], base: dict[str, Any]) -> dict[str, Any]:
-    out = dict(base.items())
+    out = {**base, **priority}
 
     # add options that are missing, but keep existing options from the priority dictionary
     # TODO: write a unit test for this :-|
     out["options"] = _simple_merge_dict(priority.get("options", {}), base.get("options", {}))
-
-    # copy in some basic pieces
-    for key in ("run", "load-plugins"):
-        value = priority.get(key, base.get(key))
-        if value is not None:
-            out[key] = value
 
     # anything enabled in the 'priority' dict is removed
     # from 'disabled' in the base dict and vice versa

@@ -282,7 +282,7 @@ Individual Configuration Options
 
 Each tool can be individually configured with a section beginning with the tool name
 (in lowercase). Valid values are ``bandit``, ``dodgy``, ``frosted``, ``mccabe``, ``mypy``, ``pydocstyle``, ``pycodestyle``,
-``pyflakes``, ``pylint``, ``pyright``, ``pyroma`` and  ``vulture``.
+``pyflakes``, ``pylint``, ``pyright``, ``pyroma``,  ``vulture`` and ``ruff``.
 
 Enabling and Disabling Tools
 ............................
@@ -416,17 +416,26 @@ The available options are:
 +----------------+------------------------+----------------------------------------------+
 | pyright        | venv-path              | Directory that contains virtual environments |
 +----------------+------------------------+----------------------------------------------+
+| ruff           | -anything-             | Options pass to ruff as argument             |
+|                |                        | `True` => --<option>                         |
+|                |                        | `False` => ignoring                          |
+|                |                        | <string> => --<option>=<value>               |
+|                |                        | <list> => --<option>=<comma separated value> |
+|                |                        | <dict> => --<option>=<comma separated key>   |
+|                |                        |           if sub value is true               |
++----------------+------------------------+----------------------------------------------+
 
 See `bandit options`_ for more details
 
 See `pyright options`_ for more details
 
-
+See `ruff options`_ for more details
 
 .. _pylint options: https://pylint.readthedocs.io/en/latest/user_guide/run.html
 .. _bandit options: https://bandit.readthedocs.io/en/latest/config.html
 .. _mypy options: https://mypy.readthedocs.io/en/stable/command_line.html
 .. _pyright options: https://microsoft.github.io/pyright/#/command-line
+.. _ruff options: https://docs.astral.sh/ruff/configuration/#command-line-interface
 
 
 

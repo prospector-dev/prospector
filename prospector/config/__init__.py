@@ -312,6 +312,9 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
     def get_disabled_messages(self, tool_name: str) -> list[str]:
         return self.profile.get_disabled_messages(tool_name)
 
+    def get_enabled_messages(self, tool_name: str) -> list[str]:
+        return self.profile.get_enabled_messages(tool_name)
+
     def use_external_config(self, _: Any) -> bool:
         # Currently there is only one single global setting for whether to use
         # global config, but this could be extended in the future
