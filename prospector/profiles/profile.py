@@ -178,7 +178,7 @@ def _load_content(name_or_path: Union[str, Path], profile_path: list[Path]) -> d
         if optional:
             return {}
 
-        raise ProfileNotFound(str(name_or_path), str(profile_path))
+        raise ProfileNotFound(str(name_or_path), profile_path)
 
     with codecs.open(filename) as fct:
         try:
