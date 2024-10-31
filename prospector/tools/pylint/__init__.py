@@ -90,7 +90,9 @@ class PylintTool(ToolBase):
                 continue
             for option in checker.options:
                 if max_line_length is not None and option[0] == "max-line-length":
-                    checker.set_option("max-line-length", max_line_length)
+                    checker._arguments_manager.set_option(  # pylint: disable=protected-access
+                        "max-line-length", max_line_length
+                    )
         return errors
 
     def _error_message(self, filepath: Union[str, Path], message: str) -> Message:
