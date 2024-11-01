@@ -97,6 +97,26 @@ Possible values are ``verylow``, ``low``, ``medium``, ``high``, ``veryhigh``.
 
 Prospector does not include documentation warnings by default, but you can turn this on using the ``--doc-warnings`` flag.
 
+Configuration files
+'''''''''''''''''''
+
+The options can also be provided by a configuration file that can have one of the following names:
+
+- ``~/.prospectorrc``
+- ``<user_config>/.prospectorrc``
+- ``.prospectorrc``
+- ``setup.cfg``
+- ``tox.ini``
+- ``pyproject.toml``
+
+The configuration file should be in the ``ini`` format. except for the ``pyproject.toml`` which
+should be in the ``toml`` format.
+
+The ``prospectorrc`` files can also be suffixed with ``.toml``, ``.yaml`` or ``.yml``
+to specify the format of the file.
+
+Notes that the YAML files should not provide the ``prospector`` global section, and the ``pyproject.toml``
+should not provide the ``tool.prospector`` section.
 
 .. _full_options:
 

@@ -4,8 +4,6 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, Optional, Union
 
-import setoptconf.config
-
 from prospector.finder import FileFinder
 
 try:  # Python >= 3.11
@@ -33,15 +31,15 @@ class ProspectorConfig:
     # is a config object and its sole purpose is to hold many properties!
 
     def __init__(self, workdir: Optional[Path] = None):
-        self.config, self.arguments = self._configure_prospector()
-        self.paths = self._get_work_path(self.config, self.arguments)
+        self.config = self._configure_prospector()
+        self.paths = self._get_work_path()
         self.explicit_file_mode = all(p.is_file for p in self.paths)
         self.workdir = workdir or Path.cwd()
 
-        self.profile, self.strictness = self._get_profile(self.workdir, self.config)
-        self.libraries = self._find_used_libraries(self.config, self.profile)
-        self.tools_to_run = self._determine_tool_runners(self.config, self.profile)
-        self.ignores = self._determine_ignores(self.config, self.profile, self.libraries)
+        self.profile, self.strictness = self._get_profile()
+        self.libraries = self._find_used_libraries()
+        self.tools_to_run = self._determine_tool_runners()
+        self.ignores = self._determine_ignores()
         self.configured_by: dict[str, Optional[Union[str, Path]]] = {}
         self.messages: list[Message] = []
 
@@ -112,28 +110,19 @@ class ProspectorConfig:
 
         return output_report
 
-    def _configure_prospector(self) -> tuple[setoptconf.config.Configuration, dict[str, str]]:
-        # first we will configure prospector as a whole
-        mgr = cfg.build_manager()
-        config = mgr.retrieve(*cfg.build_default_sources())
-        return config, mgr.arguments
+    def _configure_prospector(self) -> cfg.ProspectorConfiguration:
+        # First we will configure prospector as a whole
+        return cfg.get_config()
 
-    def _get_work_path(self, config: setoptconf.config.Configuration, arguments: dict[str, str]) -> list[Path]:
+    def _get_work_path(self) -> list[Path]:
         # Figure out what paths we're prospecting
-        if config["path"]:
-            paths = [Path(self.config["path"])]
-        elif arguments["checkpath"]:
-            paths = [Path(p) for p in arguments["checkpath"]]
-        else:
-            paths = [Path.cwd()]
+        paths = [Path(self.config.path)] if self.config.path else [Path.cwd()]
         return [p.resolve() for p in paths]
 
-    def _get_profile(
-        self, workdir: Path, config: setoptconf.config.Configuration
-    ) -> tuple[ProspectorProfile, Optional[str]]:
+    def _get_profile(self) -> tuple[ProspectorProfile, cfg.Strictness]:
         # Use the specified profiles
         profile_provided = False
-        if len(config.profiles) > 0:
+        if len(self.config.profiles) > 0:
             profile_provided = True
         cmdline_implicit = []
 
@@ -142,55 +131,55 @@ class ProspectorConfig:
         profile_name: Union[None, str, Path] = None
         if not profile_provided:
             for possible_profile in AUTO_LOADED_PROFILES:
-                prospector_yaml = os.path.join(workdir, possible_profile)
+                prospector_yaml = os.path.join(self.workdir, possible_profile)
                 if os.path.exists(prospector_yaml) and os.path.isfile(prospector_yaml):
                     profile_provided = True
                     profile_name = possible_profile
                     break
 
-        strictness = None
+        strictness = cfg.Strictness.none
 
         if profile_provided:
             if profile_name is None:
-                profile_name = config.profiles[0]
-                extra_profiles = config.profiles[1:]
+                profile_name = self.config.profiles[0]
+                extra_profiles = self.config.profiles[1:]
             else:
-                extra_profiles = config.profiles
+                extra_profiles = self.config.profiles
 
-            strictness = "from profile"
+            strictness = cfg.Strictness.from_profile
         else:
             # Use the preconfigured prospector profiles
             profile_name = "default"
             extra_profiles = []
 
-        if config.doc_warnings is not None and config.doc_warnings:
+        if self.config.doc_warnings is not None and self.config.doc_warnings:
             cmdline_implicit.append("doc_warnings")
-        if config.test_warnings is not None and config.test_warnings:
+        if self.config.test_warnings is not None and self.config.test_warnings:
             cmdline_implicit.append("test_warnings")
-        if config.no_style_warnings is not None and config.no_style_warnings:
+        if self.config.no_style_warnings is not None and self.config.no_style_warnings:
             cmdline_implicit.append("no_pep8")
-        if config.full_pep8 is not None and config.full_pep8:
+        if self.config.full_pep8 is not None and self.config.full_pep8:
             cmdline_implicit.append("full_pep8")
-        if config.member_warnings is not None and config.member_warnings:
+        if self.config.member_warnings is not None and self.config.member_warnings:
             cmdline_implicit.append("member_warnings")
 
         # Use the strictness profile only if no profile has been given
-        if config.strictness is not None and config.strictness:
-            cmdline_implicit.append(f"strictness_{config.strictness}")
-            strictness = config.strictness
+        if self.config.strictness is not None:
+            cmdline_implicit.append(f"strictness_{self.config.strictness.value}")
+            strictness = self.config.strictness
 
         # the profile path is
         #   * anything provided as an argument
         #   * a directory called .prospector in the check path
         #   * the check path
         #   * prospector provided profiles
-        profile_path = [Path(path).absolute() for path in config.profile_path]
+        profile_path = [Path(path).absolute() for path in self.config.profile_path]
 
-        prospector_dir = workdir / ".prospector"
+        prospector_dir = self.workdir / ".prospector"
         if os.path.exists(prospector_dir) and os.path.isdir(prospector_dir):
             profile_path.append(prospector_dir)
 
-        profile_path.append(workdir)
+        profile_path.append(self.workdir)
         profile_path.append(BUILTIN_PROFILE_PATH)
 
         try:
@@ -210,7 +199,7 @@ class ProspectorConfig:
             sys.exit(1)
         except ProfileNotFound as nfe:
             search_path = ":".join(map(str, nfe.profile_path))
-            module_name = nfe.name.split(":")[0]
+            module_name = str(nfe.name).split(":", maxsplit=1)[0]
             sys.stderr.write(
                 f"""Failed to run:
 Could not find profile {nfe.name}.
@@ -221,60 +210,64 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
         else:
             return profile, strictness
 
-    def _find_used_libraries(self, config: setoptconf.config.Configuration, profile: ProspectorProfile) -> list[str]:
+    def _find_used_libraries(self) -> list[str]:
         libraries = []
 
         # Bring in adaptors that we automatically detect are needed
-        if config.autodetect and profile.autodetect is True:
+        if self.config.autodetect and self.profile.autodetect is True:
             for found_dep in autodetect_libraries(self.workdir):
                 libraries.append(found_dep)
 
         # Bring in adaptors for the specified libraries
-        for name in set(config.uses + profile.uses):
+        for name in set(self.config.uses + self.profile.uses):
             if name not in libraries:
                 libraries.append(name)
 
         return libraries
 
-    def _determine_tool_runners(self, config: setoptconf.config.Configuration, profile: ProspectorProfile) -> list[str]:
-        if config.tools is None:
+    def _determine_tool_runners(self) -> list[str]:
+        if self.config.tools is None:
             # we had no command line settings for an explicit list of
             # tools, so we use the defaults
-            to_run = set(DEFAULT_TOOLS)
+            to_run: set[str] = set(DEFAULT_TOOLS)
             # we can also use any that the profiles dictate
             for tool in tools.TOOLS:
-                if profile.is_tool_enabled(tool):
+                if self.profile.is_tool_enabled(tool):
                     to_run.add(tool)
         else:
-            to_run = set(config.tools)
+            to_run = set(self.config.tools)
             # profiles have no say in the list of tools run when
             # a command line is specified
 
-        for tool in config.with_tools:
-            to_run.add(tool)
+        for tool_name in self.config.with_tools:
+            to_run.add(tool_name)
 
-        for tool in config.without_tools:
+        for tool_name in self.config.without_tools:
+            tool = tool_name
             if tool in to_run:
                 to_run.remove(tool)
 
         # if config.tools is None and len(config.with_tools) == 0 and len(config.without_tools) == 0:
         for tool in tools.TOOLS:
-            enabled = profile.is_tool_enabled(tool)
+            enabled = self.profile.is_tool_enabled(tool)
             if enabled is None:
                 enabled = tool in DEFAULT_TOOLS
-            if tool in to_run and not enabled and tool not in config.with_tools and tool not in (config.tools or []):
+            if (
+                tool in to_run
+                and not enabled
+                and tool not in self.config.with_tools
+                and tool not in (self.config.tools or [])
+            ):
                 # if this is not enabled in a profile but is asked for in a command line arg, we keep it, otherwise
                 # remove it from the list to run
                 to_run.remove(tool)
 
         return sorted(list(to_run))
 
-    def _determine_ignores(
-        self, config: setoptconf.config.Configuration, profile: ProspectorProfile, libraries: list[str]
-    ) -> list[re.Pattern[str]]:
+    def _determine_ignores(self) -> list[re.Pattern[str]]:
         # Grab ignore patterns from the options
         ignores = []
-        for pattern in config.ignore_patterns + profile.ignore_patterns:
+        for pattern in self.config.ignore_patterns + self.profile.ignore_patterns:
             if pattern is None:
                 # this can happen if someone has a profile with an empty ignore-patterns value, eg:
                 #
@@ -286,22 +279,22 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
 
         # Convert ignore paths into patterns
         boundary = r"(^|/|\\)%s(/|\\|$)"
-        for ignore_path in config.ignore_paths + profile.ignore_paths:
+        for ignore_path in self.config.ignore_paths + self.profile.ignore_paths:
             ignore_path = str(ignore_path)
             if ignore_path.endswith("/") or ignore_path.endswith("\\"):
                 ignore_path = ignore_path[:-1]
             ignores.append(re.compile(boundary % re.escape(ignore_path)))
 
         # some libraries have further automatic ignores
-        if "django" in libraries:
+        if "django" in self.libraries:
             ignores += [re.compile("(^|/)(south_)?migrations(/|$)")]
 
         return ignores
 
-    def get_summary_information(self) -> dict[str, Any]:
+    def get_summary_information(self) -> dict[str, Union[str, int, list[str]]]:
         return {
             "libraries": self.libraries,
-            "strictness": self.strictness,
+            "strictness": self.strictness.value,
             "profiles": ", ".join(self.profile.list_profiles()),
             "tools": self.tools_to_run,
         }
@@ -354,7 +347,7 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
         return self.config.absolute_paths
 
     @property
-    def max_line_length(self) -> int:
+    def max_line_length(self) -> Optional[int]:
         return self.config.max_line_length
 
     @property

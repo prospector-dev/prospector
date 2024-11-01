@@ -5,7 +5,7 @@ import sys
 import warnings
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, TextIO
+from typing import Any, Optional, TextIO, Union
 
 from prospector import blender, postfilter, tools
 from prospector.compat import is_relative_to
@@ -22,7 +22,7 @@ from prospector.tools.utils import CaptureOutput
 class Prospector:
     def __init__(self, config: ProspectorConfig) -> None:
         self.config = config
-        self.summary: Optional[dict[str, Any]] = None
+        self.summary: Optional[dict[str, Union[str, int, datetime, list[str]]]] = None
         self.messages = config.messages
 
     def process_messages(self, found_files: FileFinder, messages: list[Message]) -> list[Message]:
@@ -180,9 +180,7 @@ def get_parser() -> argparse.ArgumentParser:
     This is a helper method to return an argparse parser, to
     be used with the Sphinx argparse plugin for documentation.
     """
-    manager = cfg.build_manager()
-    source = cfg.build_command_line_source(prog="prospector", description=None)
-    return source.build_parser(manager.settings, None)
+    return cfg.build_command_line_parser()
 
 
 def main() -> None:

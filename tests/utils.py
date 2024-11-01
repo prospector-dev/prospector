@@ -10,8 +10,8 @@ from prospector.run import Prospector
 
 
 @contextlib.contextmanager
-def patch_cli(*args: list[str], target: str = "sys.argv"):
-    with patch(target, args):
+def patch_cli(*args: tuple[str], target: str = "sys.argv"):
+    with patch(target, [arg for arg in args]):
         yield
 
 
@@ -36,7 +36,7 @@ def patch_cwd(set_cwd: Path):
 
 
 @contextlib.contextmanager
-def patch_execution(*args: list[str], set_cwd: Path = None):
+def patch_execution(*args: tuple[str], set_cwd: Path = None):
     """
     Utility to patch builtins to simulate running prospector in a particular directory
     with particular commandline args
@@ -44,7 +44,8 @@ def patch_execution(*args: list[str], set_cwd: Path = None):
     :param set_cwd:  Simulate changing directory into the given directory
     :param args:  Any additional command-line arguments to pass to prospector
     """
-    args = ("prospector",) + args
+    print(f"args: {args}")
+    args = ["prospector"] + list(args)
     with patch_cli(*args):
         if set_cwd:
             with patch_cwd(set_cwd):
