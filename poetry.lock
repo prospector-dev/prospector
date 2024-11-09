@@ -1448,20 +1448,20 @@ requests = ">=2.0.1,<3.0.0"
 
 [[package]]
 name = "requirements-detector"
-version = "1.3.1"
+version = "1.3.2"
 description = "Python tool to find and list requirements of a Python project"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "requirements_detector-1.3.1-py3-none-any.whl", hash = "sha256:3ef72e1c5c3ad11100058e8f074a5762a4902985e698099d2e7f1283758d4045"},
-    {file = "requirements_detector-1.3.1.tar.gz", hash = "sha256:b89e34faf0e4d17f5736923918bd5401949cbe723294ccfefd698b3cda28e676"},
+    {file = "requirements_detector-1.3.2-py3-none-any.whl", hash = "sha256:e7595a32a21e5273dd54d3727bfef4591bbb96de341f6d95c9671981440876ee"},
+    {file = "requirements_detector-1.3.2.tar.gz", hash = "sha256:af5a3ea98ca703d14cf7b66751b2aeb3656d02d9e5fc1c97d7d4da02b057b601"},
 ]
 
 [package.dependencies]
 astroid = ">=3.0,<4.0"
 packaging = ">=21.3"
 semver = ">=3.0.0,<4.0.0"
-toml = ">=0.10.2,<0.11.0"
+toml = {version = ">=0.10.2,<0.11.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "rfc3986"
@@ -1854,4 +1854,4 @@ with-vulture = ["vulture"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "5df048c7fdf414e2b3b27994066a91deffefd4352d929a783404bbbc1a5b043c"
+content-hash = "f1880e03941a37de86800023e7ecd995bce76cd29e8a29cf504e58b3a0f68e88"
