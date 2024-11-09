@@ -2,4 +2,9 @@
   // $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: ["config:recommended"],
   dependencyDashboardApproval: true,
+  packageRules: [
+    {
+      groupName: 'Upgrade all dependencies',
+    },
+  ]
 }
