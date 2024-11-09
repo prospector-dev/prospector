@@ -4,6 +4,7 @@
   dependencyDashboardApproval: true,
   packageRules: [
     {
+      matchUpdateTypes: ['patch', 'minor', 'major'],
       groupName: 'Upgrade all dependencies',
     },
   ]
