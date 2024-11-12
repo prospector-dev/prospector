@@ -43,7 +43,6 @@ class RuffTool(ToolBase):
                 self.ruff_args.append(f"--{key}={value}")
 
     def run(self, found_files: FileFinder) -> list[Message]:
-        print([self.ruff_bin, *self.ruff_args])
         messages = []
         completed_process = subprocess.run(  # noqa: S603
             [self.ruff_bin, *self.ruff_args, *found_files.python_modules], capture_output=True

@@ -20,8 +20,8 @@ class CaptureStream(TextIOWrapper):
 
 class CaptureOutput:
     _prev_streams = None
-    stdout: Optional[TextIOWrapper] = None
-    stderr: Optional[TextIOWrapper] = None
+    stdout: Optional[CaptureStream] = None
+    stderr: Optional[CaptureStream] = None
 
     def __init__(self, hide: bool) -> None:
         self.hide = hide
@@ -41,12 +41,10 @@ class CaptureOutput:
         return self
 
     def get_hidden_stdout(self) -> str:
-        assert isinstance(self.stdout, CaptureStream)
-        return self.stdout.contents
+        return "" if self.stdout is None else self.stdout.contents
 
     def get_hidden_stderr(self) -> str:
-        assert isinstance(self.stderr, CaptureStream)
-        return self.stderr.contents
+        return "" if self.stderr is None else self.stderr.contents
 
     def __exit__(self, exc_type: type, exc_val: Exception, exc_tb: type) -> None:
         if self.hide:
