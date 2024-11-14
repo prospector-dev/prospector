@@ -47,6 +47,16 @@ class RuffTool(ToolBase):
         completed_process = subprocess.run(  # noqa: S603
             [self.ruff_bin, *self.ruff_args, *found_files.python_modules], capture_output=True
         )
+        if not completed_process.stdout:
+            messages.append(
+                Message(
+                    "ruff",
+                    "",
+                    Location(None, None, None, None, None),
+                    completed_process.stderr.decode(),
+                )
+            )
+            return messages
         for message in json.loads(completed_process.stdout):
             sub_message = {}
             if message.get("url"):

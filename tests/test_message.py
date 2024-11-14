@@ -25,7 +25,6 @@ class LocationPathTest(TestCase):
 
     def test_bad_path_input(self):
         self.assertRaises(ValueError, Location, 3.2, "module", "func", 1, 2)
-        self.assertRaises(ValueError, Location, None, "module", "func", 1, 2)
 
 
 class LocationOrderTest(TestCase):
