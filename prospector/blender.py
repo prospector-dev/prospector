@@ -88,8 +88,8 @@ def blend(messages: list[Message], blend_combos: Optional[list[list[tuple[str, s
     msgs_grouped: dict[Path, dict[int, list[Message]]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
-        assert message.location.line is not None
-        msgs_grouped[message.location.path][message.location.line].append(
+        line = message.location.line
+        msgs_grouped[message.location.path][-1 if line is None else line].append(
             message,
         )
 
