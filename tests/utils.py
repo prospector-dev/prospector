@@ -22,8 +22,10 @@ def patch_cwd(set_cwd: Path):
     # for this test to work in all python versions prospector supports, both need to
     # be patched (or, an "if python version" statement but it's easier to just patch both)
     cwd_str = str(set_cwd.absolute())
-    with patch("pathlib.Path.cwd", new=lambda: set_cwd), patch("os.getcwd", new=lambda: cwd_str), patch(
-        "os.curdir", new=cwd_str
+    with (
+        patch("pathlib.Path.cwd", new=lambda: set_cwd),
+        patch("os.getcwd", new=lambda: cwd_str),
+        patch("os.curdir", new=cwd_str),
     ):
         # Turns out that Python 3.10 added the `getcwd` to the _NormalAccessor instead of falling
         # back on os.getcwd, and so this needs to be patched too...
