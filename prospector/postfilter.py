@@ -1,11 +1,10 @@
 from pathlib import Path
-from typing import List
 
 from prospector.message import Message
 from prospector.suppression import get_suppressions
 
 
-def filter_messages(filepaths: List[Path], messages: List[Message]) -> List[Message]:
+def filter_messages(filepaths: list[Path], messages: list[Message]) -> list[Message]:
     """
     This method post-processes all messages output by all tools, in order to filter
     out any based on the overall output.

@@ -1,5 +1,4 @@
 from io import StringIO
-from typing import List
 
 from pylint.exceptions import UnknownMessageError
 from pylint.message import Message as PylintMessage
@@ -35,5 +34,5 @@ class Collector(BaseReporter):
         message = Message("pylint", msg_symbol, loc, msg.msg)
         self._messages.append(message)
 
-    def get_messages(self) -> List[Message]:
+    def get_messages(self) -> list[Message]:
         return self._messages
