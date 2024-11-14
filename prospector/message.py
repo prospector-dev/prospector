@@ -3,9 +3,11 @@ from typing import Optional, Union
 
 
 class Location:
+    _path: Optional[Path]
+
     def __init__(
         self,
-        path: Union[Path, str],
+        path: Optional[Union[Path, str]],
         module: Optional[str],
         function: Optional[str],
         line: Optional[int],
@@ -15,6 +17,8 @@ class Location:
             self._path = path.absolute()
         elif isinstance(path, str):
             self._path = Path(path).absolute()
+        elif path is None:
+            self._path = None
         else:
             raise ValueError
         self.module = module or None
@@ -23,13 +27,15 @@ class Location:
         self.character = None if character == -1 else character
 
     @property
-    def path(self) -> Path:
+    def path(self) -> Optional[Path]:
         return self._path
 
-    def absolute_path(self) -> Path:
+    def absolute_path(self) -> Optional[Path]:
         return self._path
 
-    def relative_path(self, root: Optional[Path]) -> Path:
+    def relative_path(self, root: Optional[Path]) -> Optional[Path]:
+        if self._path is None:
+            return None
         return self._path.relative_to(root) if root else self._path
 
     def __repr__(self) -> str:
@@ -46,6 +52,13 @@ class Location:
     def __lt__(self, other: "Location") -> bool:
         if not isinstance(other, Location):
             raise ValueError
+
+        if self._path is None and other._path is None:
+            return False
+        if self._path is None:
+            return True
+        if other._path is None:
+            return False
         if self._path == other._path:
             if self.line == other.line:
                 return (self.character or -1) < (other.character or -1)

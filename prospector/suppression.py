@@ -24,6 +24,7 @@ import re
 import warnings
 from collections import defaultdict
 from pathlib import Path
+from typing import Optional
 
 from prospector import encoding
 from prospector.exceptions import FatalProspectorException
@@ -63,9 +64,11 @@ _PYLINT_EQUIVALENTS = {
 }
 
 
-def _parse_pylint_informational(messages: list[Message]) -> tuple[set[Path], dict[Path, dict[int, list[str]]]]:
-    ignore_files: set[Path] = set()
-    ignore_messages: dict[Path, dict[int, list[str]]] = defaultdict(lambda: defaultdict(list))
+def _parse_pylint_informational(
+    messages: list[Message],
+) -> tuple[set[Optional[Path]], dict[Optional[Path], dict[int, list[str]]]]:
+    ignore_files: set[Optional[Path]] = set()
+    ignore_messages: dict[Optional[Path], dict[int, list[str]]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
         if message.source == "pylint":
@@ -86,15 +89,15 @@ def _parse_pylint_informational(messages: list[Message]) -> tuple[set[Path], dic
 
 def get_suppressions(
     filepaths: list[Path], messages: list[Message]
-) -> tuple[set[Path], dict[Path, set[int]], dict[Path, dict[int, set[tuple[str, str]]]]]:
+) -> tuple[set[Optional[Path]], dict[Path, set[int]], dict[Optional[Path], dict[int, set[tuple[str, str]]]]]:
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
     and a map of filepath -> line-number -> codes to ignore
     """
-    paths_to_ignore: set[Path] = set()
+    paths_to_ignore: set[Optional[Path]] = set()
     lines_to_ignore: dict[Path, set[int]] = defaultdict(set)
-    messages_to_ignore: dict[Path, dict[int, set[tuple[str, str]]]] = defaultdict(lambda: defaultdict(set))
+    messages_to_ignore: dict[Optional[Path], dict[int, set[tuple[str, str]]]] = defaultdict(lambda: defaultdict(set))
 
     # first deal with 'noqa' style messages
     for filepath in filepaths:
@@ -113,12 +116,12 @@ def get_suppressions(
     # now figure out which messages were suppressed by pylint
     pylint_ignore_files, pylint_ignore_messages = _parse_pylint_informational(messages)
     paths_to_ignore |= pylint_ignore_files
-    for filepath, line in pylint_ignore_messages.items():
+    for pylint_filepath, line in pylint_ignore_messages.items():
         for line_number, codes in line.items():
             for code in codes:
-                messages_to_ignore[filepath][line_number].add(("pylint", code))
+                messages_to_ignore[pylint_filepath][line_number].add(("pylint", code))
                 if code in _PYLINT_EQUIVALENTS:
                     for equivalent in _PYLINT_EQUIVALENTS[code]:
-                        messages_to_ignore[filepath][line_number].add(equivalent)
+                        messages_to_ignore[pylint_filepath][line_number].add(equivalent)
 
     return paths_to_ignore, lines_to_ignore, messages_to_ignore

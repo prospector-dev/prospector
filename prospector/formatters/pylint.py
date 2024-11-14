@@ -28,16 +28,26 @@ class PylintFormatter(SummaryFormatter):
             # Missing function docstring
 
             template_location = (
-                "%(path)s"
+                ""
+                if message.location.path is None
+                else "%(path)s"
                 if message.location.line is None
                 else "%(path)s:%(line)s"
                 if message.location.character is None
                 else "%(path)s:%(line)s:%(character)s"
             )
             template_code = (
-                "%(code)s(%(source)s)" if message.location.function is None else "[%(code)s(%(source)s), %(function)s]"
+                "(%(source)s)"
+                if message.code is None
+                else "%(code)s(%(source)s)"
+                if message.location.function is None
+                else "[%(code)s(%(source)s), %(function)s]"
             )
-            template = f"{template_location}: {template_code}: %(message)s"
+            template = (
+                f"{template_location}: {template_code}: %(message)s"
+                if template_location
+                else f"{template_code}: %(message)s"
+            )
 
             output.append(
                 template

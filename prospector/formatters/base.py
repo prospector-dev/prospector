@@ -28,7 +28,8 @@ class Formatter(ABC):
         raise NotImplementedError
 
     def _make_path(self, location: Location) -> Path:
-        return location.relative_path(self.paths_relative_to)
+        path_ = location.relative_path(self.paths_relative_to)
+        return Path() if path_ is None else path_
 
     def _message_to_dict(self, message: Message) -> dict[str, Any]:
         loc = {

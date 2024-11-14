@@ -85,11 +85,10 @@ def blend(messages: list[Message], blend_combos: Optional[list[list[tuple[str, s
     blend_combos = blend_combos or BLEND_COMBOS
 
     # group messages by file and then line number
-    msgs_grouped: dict[Path, dict[int, list[Message]]] = defaultdict(lambda: defaultdict(list))
+    msgs_grouped: dict[Optional[Path], dict[Optional[int], list[Message]]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
-        line = message.location.line
-        msgs_grouped[message.location.path][-1 if line is None else line].append(
+        msgs_grouped[message.location.path][message.location.line].append(
             message,
         )
 
