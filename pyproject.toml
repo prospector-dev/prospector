@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prospector"
-version = "1.13.2"
+version = "1.13.3"
 description = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
