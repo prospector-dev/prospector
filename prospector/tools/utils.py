@@ -4,8 +4,9 @@ from typing import Optional
 
 
 class CaptureStream(TextIOWrapper):
-    def __init__(self) -> None:
+    def __init__(self, tty: bool) -> None:
         self.contents = ""
+        self._tty = tty
 
     def write(self, text: str, /) -> int:
         self.contents += text
@@ -16,6 +17,9 @@ class CaptureStream(TextIOWrapper):
 
     def flush(self) -> None:
         pass
+
+    def isatty(self) -> bool:
+        return self._tty
 
 
 class CaptureOutput:
@@ -28,14 +32,16 @@ class CaptureOutput:
 
     def __enter__(self) -> "CaptureOutput":
         if self.hide:
+            is_a_tty = hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+
             self._prev_streams = (
                 sys.stdout,
                 sys.stderr,
                 sys.__stdout__,
                 sys.__stderr__,
             )
-            self.stdout = CaptureStream()
-            self.stderr = CaptureStream()
+            self.stdout = CaptureStream(is_a_tty)
+            self.stderr = CaptureStream(is_a_tty)
             sys.stdout, sys.__stdout__ = self.stdout, self.stdout  # type: ignore[misc]
             sys.stderr, sys.__stderr__ = self.stderr, self.stderr  # type: ignore[misc]
         return self
