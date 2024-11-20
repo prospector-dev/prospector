@@ -38,3 +38,7 @@ pyroma:
 pydocstyle:
   disable:
     - D000
+
+mypy:
+ options:
+    strict: true
