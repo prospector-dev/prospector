@@ -36,7 +36,9 @@ class Location:
     def relative_path(self, root: Optional[Path]) -> Optional[Path]:
         if self._path is None:
             return None
-        return self._path.relative_to(root) if root else self._path
+        if root is None:
+            return self._path
+        return self._path.relative_to(root) if self._path.is_relative_to(root) else self._path
 
     def __repr__(self) -> str:
         return f"{self._path}:L{self.line}:{self.character}"
