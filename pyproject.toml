@@ -25,8 +25,9 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
 ]
+# The format is a workaround aganst https://github.com/python-poetry/poetry/issues/9961
 packages = [
-  { include = "prospector/"}
+  { include = "prospector/", format = ["sdist"] }
 ]
 include = [
   "prospector/blender_combinations.yaml",
@@ -70,7 +71,7 @@ with_vulture = ["vulture"]
 with_ruff = ["ruff"]
 with_everything = ["bandit", "mypy", "pyright", "pyroma", "vulture", "ruff"]
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 coveralls = "^3.3.1"
 pytest = "^7.2.0"
 pytest-benchmark = "^4.0.0"
