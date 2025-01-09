@@ -16,25 +16,24 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v3
-      - run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "poetry"
-      - run: poetry install -E with_everything
+      - run: pip install poetry
+      - run: poetry install --all-extras --all-groups
       # - run: poetry show --all
       # - run: poetry show --outdated
       # - run: poetry show --tree
       - name: Install test profile used in the tests
         run: poetry run pip install tests/prospector-profile-test/
       - run: poetry run pytest --benchmark-disable --cov --cov-report= tests/
+      - name: Run Prospector checks
+        run: poetry run prospector --output=pylint
       - name: Check that Prospector can run
         run: |
           echo "Checking prospector can run; don't care about messages found, only that it runs successfully"
           poetry run prospector --quiet --zero-exit
           echo "Prospector ran successfully."
-      - name: Run Prospector checks
-        run: poetry run prospector --output=pylint
       - name: Check packaging
         run: |
           echo "Building packages"
