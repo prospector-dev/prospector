@@ -56,8 +56,8 @@ class FileFinder:
     def is_excluded(self, path: Path) -> bool:
         return any(filt(path) for filt in self._exclusion_filters)
 
-    def _filter(self, paths: Iterable[Path]) -> list[Path]:
-        return [path for path in paths if not self.is_excluded(path)]
+    def _filter(self, paths: Iterable[Path]) -> set[Path]:
+        return {path for path in paths if not self.is_excluded(path)}
 
     def _walk(self, directory: Path) -> Iterator[Path]:
         if not self.is_excluded(directory):
@@ -72,22 +72,25 @@ class FileFinder:
                 yield path
 
     @property
-    def files(self) -> list[Path]:
+    def files(self) -> set[Path]:
         """
         List every individual file found from the given configuration.
 
         This method is useful for tools which require an explicit list of files to check.
         """
         files = set()
-        for path in self._provided_files:
-            files.add(path)
 
         for directory in self.directories:
             for path in self._walk(directory):
                 if path.is_file():
                     files.add(path)
 
-        return self._filter(files)
+        files = self._filter(files)
+
+        for path in self._provided_files:
+            files.add(path)
+
+        return files
 
     @property
     def python_packages(self) -> list[Path]:
@@ -97,7 +100,7 @@ class FileFinder:
 
         This method is useful for passing to tools which will do their own discovery of python files.
         """
-        return self._filter(d for d in self.directories if is_python_package(d))
+        return [d for d in self.directories if is_python_package(d)]
 
     @property
     def python_modules(self) -> list[Path]:
@@ -107,10 +110,10 @@ class FileFinder:
 
         This method is useful for passing to tools which will do their own discovery of python files.
         """
-        return self._filter(f for f in self.files if is_python_module(f))
+        return [f for f in self.files if is_python_module(f)]
 
     @property
-    def directories(self) -> list[Path]:
+    def directories(self) -> set[Path]:
         """
         Lists every directory found from the given configuration, regardless of its contents.
 
