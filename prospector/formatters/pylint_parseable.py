@@ -6,7 +6,7 @@ from prospector.formatters.base_summary import SummaryFormatter
 
 class PylintParseableFormatter(SummaryFormatter):
     """
-    This formatter outputs messages in the same way as pylint -f parseable , which is used by several
+    This formatter outputs messages in the same way as `pylint --output-format=parseable`, which is used by several
     tools to parse pylint output. This formatter is therefore a compatibility shim between tools built
     on top of pylint and prospector itself.
     """
