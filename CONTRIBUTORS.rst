@@ -19,6 +19,7 @@ Contributors
 * Ian Lee (`@IanLee1521 <https://github.com/IanLee1521>`_)
 * Ian Stapleton Cordasco (`@sigmavirus24 <https://github.com/sigmavirus24>`_)
 * iderr (`@IDerr <https://github.com/IDerr>`_)
+* Joa Cortez (`@joacortez <https://github.com/joacortez>`_)
 * Joe Wallis (`@Peilonrayz <https://github.com/Peilonrayz>`_)
 * Jon Parise (`@jparise <https://github.com/jparise>`_)
 * Kristian Glass (`@doismellburning <https://github.com/doismellburning>`_)
