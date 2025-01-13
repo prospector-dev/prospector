@@ -29,31 +29,39 @@ Output Format
 
 The default output format of ``prospector`` is designed to be human readable. You can change the output format using the ``--output-format`` or ``-o`` flags - for example, to get the output in JSON form you can use the ``--output-format json``.
 
-+-------------+----------------------------------------------------------------------------+
-| Format Name | Notes                                                                      |
-+=============+============================================================================+
-| ``emacs``   | | Support for emacs compilation output mode, see `issue_16`_.              |
-+-------------+----------------------------------------------------------------------------+
-| ``vscode``  | | Support for `vscode_python_plugin`_                                      |
-+-------------+----------------------------------------------------------------------------+
-| ``grouped`` | | Similar to ``text``, but groups all message on the same line together    |
-|             | | rather than having a separate entry per message.                         |
-+-------------+----------------------------------------------------------------------------+
-| ``pylint``  | | Produces output in the same style as ``pylint --parseable``. This should |
-|             | | allow ``prospector`` to be used as a drop-in replacement for any tools   |
-|             | | which parse ``pylint`` output. The one minor difference is that the      |
-|             | | output includes the name of the tool which generated the error as well   |
-|             | | as the error code.                                                       |
-+-------------+----------------------------------------------------------------------------+
-| ``json``    | | Produces a structured, parseable output of the messages and summary. See |
-|             | | below for more information about the structure.                          |
-+-------------+----------------------------------------------------------------------------+
-| ``yaml``    | | Same as JSON except produces YAML output.                                |
-+-------------+----------------------------------------------------------------------------+
-| ``xunit``   | | Same as JSON except produces xunit compatible XML output.                |
-+-------------+----------------------------------------------------------------------------+
-| ``text``    | | The default output format, a simple human readable format.               |
-+-------------+----------------------------------------------------------------------------+
++----------------------+----------------------------------------------------------------------------+
+|     Format Name      | Notes                                                                      |
++======================+============================================================================+
+| ``emacs``            | | Support for emacs compilation output mode, see `issue_16`_.              |
++----------------------+----------------------------------------------------------------------------+
+| ``vscode``           | | Support for `vscode_python_plugin`_                                      |
++----------------------+----------------------------------------------------------------------------+
+| ``grouped``          | | Similar to ``text``, but groups all message on the same line together    |
+|                      | | rather than having a separate entry per message.                         |
++----------------------+----------------------------------------------------------------------------+
+| ``pylint``           | | Produces output in the same style as ``pylint`` using the following      |
+|                      | | format:                                                                  |
+|                      | | ``{path}:{line}:{character}: [{msg_id}({symbol}), {obj}] {msg}``.        |
+|                      | | The output includes the name of the tool which generated the error as    |
+|                      | | as well as the error code.                                               |
++----------------------+----------------------------------------------------------------------------+
+| ``pylint_parseable`` | | Produces output in the same style as ``pylint --parseable``. The         |
+|                      | | format is ``{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}``.          |
+|                      | | The difference is that this option excludes the column. This should      |
+|                      | | allow ``prospector`` to be used as a drop-in replacement for any tools   |
+|                      | | which parse ``pylint --parseable`` output. The one minor difference is   |
+|                      | | that the output includes the name of the tool which generated the error  |
+|                      | | as well as the error code.                                               |
++----------------------+----------------------------------------------------------------------------+
+| ``json``             | | Produces a structured, parseable output of the messages and summary. See |
+|                      | | below for more information about the structure.                          |
++----------------------+----------------------------------------------------------------------------+
+| ``yaml``             | | Same as JSON except produces YAML output.                                |
++----------------------+----------------------------------------------------------------------------+
+| ``xunit``            | | Same as JSON except produces xunit compatible XML output.                |
++----------------------+----------------------------------------------------------------------------+
+| ``text``             | | The default output format, a simple human readable format.               |
++----------------------+----------------------------------------------------------------------------+
 
 
 If your code uses frameworks and libraries

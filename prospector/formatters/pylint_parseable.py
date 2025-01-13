@@ -4,7 +4,7 @@ import re
 from prospector.formatters.base_summary import SummaryFormatter
 
 
-class PylintFormatter(SummaryFormatter):
+class PylintParseableFormatter(SummaryFormatter):
     """
     This formatter outputs messages in the same way as pylint -f parseable , which is used by several
     tools to parse pylint output. This formatter is therefore a compatibility shim between tools built
@@ -23,8 +23,8 @@ class PylintFormatter(SummaryFormatter):
                 header = f"************* Module {module_name}"
                 output.append(header)
 
-            #   ={path}:{line}:{character}: [{msg_id}({symbol}), {obj}] {msg}
-            # prospector/configuration.py:65:1: [missing-docstring(missing-docstring), build_default_sources] \
+            #   ={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
+            # prospector/configuration.py:65: [missing-docstring(missing-docstring), build_default_sources] \
             # Missing function docstring
 
             template_location = (
@@ -33,8 +33,6 @@ class PylintFormatter(SummaryFormatter):
                 else "%(path)s"
                 if message.location.line is None
                 else "%(path)s:%(line)s"
-                if message.location.character is None
-                else "%(path)s:%(line)s:%(character)s"
             )
             template_code = (
                 "(%(source)s)"
@@ -54,7 +52,6 @@ class PylintFormatter(SummaryFormatter):
                 % {
                     "path": self._make_path(message.location),
                     "line": message.location.line,
-                    "character": message.location.character,
                     "source": message.source,
                     "code": message.code,
                     "function": message.location.function,
