@@ -12,6 +12,8 @@ class Location:
         function: Optional[str],
         line: Optional[int],
         character: Optional[int],
+        line_end: Optional[int] = None,
+        character_end: Optional[int] = None,
     ):
         if isinstance(path, Path):
             self._path = path.absolute()
@@ -25,6 +27,8 @@ class Location:
         self.function = function or None
         self.line = None if line == -1 else line
         self.character = None if character == -1 else character
+        self.line_end = line_end
+        self.character_end = character_end
 
     @property
     def path(self) -> Optional[Path]:
@@ -69,11 +73,21 @@ class Location:
 
 
 class Message:
-    def __init__(self, source: str, code: str, location: Location, message: str):
+    def __init__(
+        self,
+        source: str,
+        code: str,
+        location: Location,
+        message: str,
+        doc_url: Optional[str] = None,
+        is_fixable: bool = False,
+    ):
         self.source = source
         self.code = code
         self.location = location
         self.message = message
+        self.doc_url = doc_url
+        self.is_fixable = is_fixable
 
     def __repr__(self) -> str:
         return f"{self.source}-{self.code}"

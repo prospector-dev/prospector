@@ -59,8 +59,6 @@ class RuffTool(ToolBase):
             return messages
         for message in json.loads(completed_process.stdout):
             sub_message = {}
-            if message.get("url"):
-                sub_message["See"] = message["url"]
             if message.get("fix") and message["fix"].get("applicability"):
                 sub_message["Fix applicability"] = message["fix"]["applicability"]
             message_str = message.get("message", "")
@@ -77,8 +75,12 @@ class RuffTool(ToolBase):
                         None,
                         line=message.get("location", {}).get("row"),
                         character=message.get("location", {}).get("column"),
+                        line_end=message.get("end_location", {}).get("row"),
+                        character_end=message.get("end_location", {}).get("column"),
                     ),
                     message_str,
+                    doc_url=message.get("url"),
+                    is_fixable=bool((message.get("fix") or {}).get("applicability") in ("safe", "unsafe")),
                 )
             )
         return messages

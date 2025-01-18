@@ -49,6 +49,9 @@ class PylintFormatter(SummaryFormatter):
                 else f"{template_code}: %(message)s"
             )
 
+            message_str = message.message.strip()
+            if message.doc_url:
+                message_str += f" (See: {message.doc_url})"
             output.append(
                 template
                 % {

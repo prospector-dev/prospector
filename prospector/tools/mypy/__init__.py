@@ -87,7 +87,7 @@ class MypyTool(ToolBase):
                     self.options.append(f"--{name}-{v}")
                 continue
 
-            raise BadToolConfig("mypy", f"The option {name} has an unsupported balue type: {type(value)}")
+            raise BadToolConfig("mypy", f"The option {name} has an unsupported value type: {type(value)}")
 
     def run(self, found_files: FileFinder) -> list[Message]:
         paths = [str(path) for path in found_files.python_modules]
