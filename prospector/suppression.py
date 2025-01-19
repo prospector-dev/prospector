@@ -31,11 +31,28 @@ from prospector.exceptions import FatalProspectorException
 from prospector.message import Message
 
 _FLAKE8_IGNORE_FILE = re.compile(r"flake8[:=]\s*noqa", re.IGNORECASE)
-_PEP8_IGNORE_LINE = re.compile(r"#\s+noqa", re.IGNORECASE)
+_PEP8_IGNORE_LINE = re.compile(r"#\s*noqa(\s*#.*)?$", re.IGNORECASE)
+_PEP8_IGNORE_LINE_CODE = re.compile(r"#\s*noqa:([^#]*[^# ])(\s*#.*)?$", re.IGNORECASE)
 _PYLINT_SUPPRESSED_MESSAGE = re.compile(r"^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$")
 
 
-def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int]]:
+class Ignore:
+    source: Optional[str]
+    code: str
+
+    def __init__(
+        self,
+        source: Optional[str],
+        code: str,
+    ) -> None:
+        self.source = source
+        self.code = code
+
+    def __str__(self) -> str:
+        return self.code if self.source is None else f"{self.source}.{self.code}"
+
+
+def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int], dict[int, set[Ignore]]]:
     """
     Finds all pep8/flake8 suppression messages
 
@@ -47,12 +64,21 @@ def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int]]:
     """
     ignore_whole_file = False
     ignore_lines = set()
+    messages_to_ignore: dict[int, set[Ignore]] = defaultdict(set)
     for line_number, line in enumerate(file_contents):
         if _FLAKE8_IGNORE_FILE.search(line):
             ignore_whole_file = True
         if _PEP8_IGNORE_LINE.search(line):
             ignore_lines.add(line_number + 1)
-    return ignore_whole_file, ignore_lines
+        else:
+            noqa_match = _PEP8_IGNORE_LINE_CODE.search(line)
+            if noqa_match:
+                prospector_ignore = noqa_match.group(1).strip().split(",")
+                prospector_ignore = [elem.strip() for elem in prospector_ignore]
+                for code in prospector_ignore:
+                    messages_to_ignore[line_number + 1].add(Ignore(None, code))
+
+    return ignore_whole_file, ignore_lines, messages_to_ignore
 
 
 _PYLINT_EQUIVALENTS = {
@@ -89,7 +115,7 @@ def _parse_pylint_informational(
 
 def get_suppressions(
     filepaths: list[Path], messages: list[Message]
-) -> tuple[set[Optional[Path]], dict[Path, set[int]], dict[Optional[Path], dict[int, set[tuple[str, str]]]]]:
+) -> tuple[set[Optional[Path]], dict[Path, set[int]], dict[Optional[Path], dict[int, set[Ignore]]]]:
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
@@ -97,9 +123,9 @@ def get_suppressions(
     """
     paths_to_ignore: set[Optional[Path]] = set()
     lines_to_ignore: dict[Path, set[int]] = defaultdict(set)
-    messages_to_ignore: dict[Optional[Path], dict[int, set[tuple[str, str]]]] = defaultdict(lambda: defaultdict(set))
+    messages_to_ignore: dict[Optional[Path], dict[int, set[Ignore]]] = defaultdict(lambda: defaultdict(set))
 
-    # first deal with 'noqa' style messages
+    # First deal with 'noqa' style messages
     for filepath in filepaths:
         try:
             file_contents = encoding.read_py_file(filepath).split("\n")
@@ -108,20 +134,24 @@ def get_suppressions(
             warnings.warn(f"{err.path}: {err.__cause__}", ImportWarning, stacklevel=2)
             continue
 
-        ignore_file, ignore_lines = get_noqa_suppressions(file_contents)
+        ignore_file, ignore_lines, file_messages_to_ignore = get_noqa_suppressions(file_contents)
         if ignore_file:
             paths_to_ignore.add(filepath)
         lines_to_ignore[filepath] |= ignore_lines
+        for line, codes_ignore in file_messages_to_ignore.items():
+            messages_to_ignore[filepath][line] |= codes_ignore
 
-    # now figure out which messages were suppressed by pylint
+    # Now figure out which messages were suppressed by pylint
     pylint_ignore_files, pylint_ignore_messages = _parse_pylint_informational(messages)
     paths_to_ignore |= pylint_ignore_files
-    for pylint_filepath, line in pylint_ignore_messages.items():
-        for line_number, codes in line.items():
+    for pylint_filepath, line_codes in pylint_ignore_messages.items():
+        for line_number, codes in line_codes.items():
             for code in codes:
-                messages_to_ignore[pylint_filepath][line_number].add(("pylint", code))
+                ignore = Ignore("pylint", code)
+                messages_to_ignore[pylint_filepath][line_number].add(ignore)
                 if code in _PYLINT_EQUIVALENTS:
-                    for equivalent in _PYLINT_EQUIVALENTS[code]:
-                        messages_to_ignore[pylint_filepath][line_number].add(equivalent)
+                    for ignore_source, ignore_code in _PYLINT_EQUIVALENTS[code]:
+                        ignore = Ignore(ignore_source, ignore_code)
+                        messages_to_ignore[pylint_filepath][line_number].add(ignore)
 
     return paths_to_ignore, lines_to_ignore, messages_to_ignore
