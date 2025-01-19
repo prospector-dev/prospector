@@ -1,7 +1,7 @@
 Profiles / Configuration
 ========================
 
-The behaviour of prospector can be configured by creating a profile. A profile is
+The behavior of prospector can be configured by creating a profile. A profile is
 a YAML file containing several sections as described below.
 
 Prospector will search for a ``.prospector.yaml`` file (and `several others`_) in the path that it is checking.
@@ -95,6 +95,7 @@ Global configuration options for tools are the following:
 * autodetect_
 * uses_
 * max-line-length_
+* suppression_
 
 
 .. _output-format:
@@ -120,8 +121,8 @@ If creating your own profile, you can use the ``strictness`` like so::
 
     strictness: medium
 
-Valid values are 'verylow', 'low', 'medium' (the default), 'high' and 'veryhigh'. If you don't specify a
-strictness value, then the default of 'medium' will be used. To avoid using any of Prospector's default
+Valid values are ``verylow``, ``low``, ``medium`` (the default), ``high`` and ``veryhigh``. If you don't specify a
+strictness value, then the default of ``medium`` will be used. To avoid using any of Prospector's default
 strictness profiles, set ``strictness: none``.
 
 
@@ -172,7 +173,7 @@ but you can turn it on using the ``--member-warnings`` flag or in a profile::
 Libraries Used and Autodetect
 .............................
 
-Prospector will adjust the behaviour of the underlying tools based on the libraries that your project
+Prospector will adjust the behavior of the underlying tools based on the libraries that your project
 uses. If you use Django, for example, the `pylint-django <https://github.com/PyCQA/pylint-django>`_ plugin
 will be loaded. This will happen automatically.
 
@@ -275,6 +276,12 @@ This general option, provides a way to select maximum line length allowed.
 
 .. Note:: This general option overrides and takes precedence over same option in a particular tool (pycodestyle or pylint)
 
+.. _suppression:
+
+Dictionary used to control the suppression of messages with the following attributes:
+
+* ``noqa``: Set it to ``False`` to disable the suppression of messages with ``# noqa`` comments.
+* ``flake8``: Set it to ``False`` to disable the suppression of messages with ``# flake8: noqa`` comments.
 
 
 Individual Configuration Options

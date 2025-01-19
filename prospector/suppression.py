@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Optional
 
 from prospector import encoding
+from prospector.config import ProspectorConfig
 from prospector.exceptions import FatalProspectorException
 from prospector.message import Message
 
@@ -35,7 +36,7 @@ _PEP8_IGNORE_LINE = re.compile(r"#\s+noqa", re.IGNORECASE)
 _PYLINT_SUPPRESSED_MESSAGE = re.compile(r"^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$")
 
 
-def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int]]:
+def get_noqa_suppressions(file_contents: list[str], noqa: bool = True, flake8: bool = True) -> tuple[bool, set[int]]:
     """
     Finds all pep8/flake8 suppression messages
 
@@ -48,10 +49,11 @@ def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int]]:
     ignore_whole_file = False
     ignore_lines = set()
     for line_number, line in enumerate(file_contents):
-        if _FLAKE8_IGNORE_FILE.search(line):
+        if flake8 and _FLAKE8_IGNORE_FILE.search(line):
             ignore_whole_file = True
-        if _PEP8_IGNORE_LINE.search(line):
+        if noqa and _PEP8_IGNORE_LINE.search(line):
             ignore_lines.add(line_number + 1)
+
     return ignore_whole_file, ignore_lines
 
 
@@ -88,7 +90,7 @@ def _parse_pylint_informational(
 
 
 def get_suppressions(
-    filepaths: list[Path], messages: list[Message]
+    filepaths: list[Path], messages: list[Message], config: ProspectorConfig
 ) -> tuple[set[Optional[Path]], dict[Path, set[int]], dict[Optional[Path], dict[int, set[tuple[str, str]]]]]:
     """
     Given every message which was emitted by the tools, and the
@@ -99,7 +101,8 @@ def get_suppressions(
     lines_to_ignore: dict[Path, set[int]] = defaultdict(set)
     messages_to_ignore: dict[Optional[Path], dict[int, set[tuple[str, str]]]] = defaultdict(lambda: defaultdict(set))
 
-    # first deal with 'noqa' style messages
+    conf = config.profile.suppression
+    # First deal with 'noqa' style messages
     for filepath in filepaths:
         try:
             file_contents = encoding.read_py_file(filepath).split("\n")
@@ -108,20 +111,23 @@ def get_suppressions(
             warnings.warn(f"{err.path}: {err.__cause__}", ImportWarning, stacklevel=2)
             continue
 
-        ignore_file, ignore_lines = get_noqa_suppressions(file_contents)
+        (
+            ignore_file,
+            ignore_lines,
+        ) = get_noqa_suppressions(file_contents, conf.get("noqa", True), conf.get("flake8", True))
         if ignore_file:
             paths_to_ignore.add(filepath)
         lines_to_ignore[filepath] |= ignore_lines
 
-    # now figure out which messages were suppressed by pylint
+    # Now figure out which messages were suppressed by pylint
     pylint_ignore_files, pylint_ignore_messages = _parse_pylint_informational(messages)
     paths_to_ignore |= pylint_ignore_files
-    for pylint_filepath, line in pylint_ignore_messages.items():
-        for line_number, codes in line.items():
+    for pylint_filepath, line_codes in pylint_ignore_messages.items():
+        for line_number, codes in line_codes.items():
             for code in codes:
                 messages_to_ignore[pylint_filepath][line_number].add(("pylint", code))
                 if code in _PYLINT_EQUIVALENTS:
-                    for equivalent in _PYLINT_EQUIVALENTS[code]:
-                        messages_to_ignore[pylint_filepath][line_number].add(equivalent)
+                    for ignore_source, ignore_code in _PYLINT_EQUIVALENTS[code]:
+                        messages_to_ignore[pylint_filepath][line_number].add((ignore_source, ignore_code))
 
     return paths_to_ignore, lines_to_ignore, messages_to_ignore

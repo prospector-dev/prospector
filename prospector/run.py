@@ -37,7 +37,7 @@ class Prospector:
                 updated.append(msg)
             messages = updated
 
-        return postfilter.filter_messages(found_files.python_modules, messages)
+        return postfilter.filter_messages(found_files.python_modules, messages, self.config)
 
     def execute(self) -> None:
         deprecated_names = self.config.replace_deprecated_tool_names()

@@ -3,7 +3,7 @@ import json
 import os
 import pkgutil
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Optional, TypedDict, Union, cast
 
 import yaml
 
@@ -11,6 +11,11 @@ from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
 from prospector.tools import DEFAULT_TOOLS, TOOLS
 
 BUILTIN_PROFILE_PATH = (Path(__file__).parent / "profiles").absolute()
+
+
+class SuppressionConfig(TypedDict):
+    noqa: bool
+    flake8: bool
 
 
 class ProspectorProfile:
@@ -35,6 +40,8 @@ class ProspectorProfile:
         self.test_warnings = profile_dict.get("test-warnings")
         self.doc_warnings = profile_dict.get("doc-warnings")
         self.member_warnings = profile_dict.get("member-warnings")
+
+        self.suppression = cast(SuppressionConfig, profile_dict.get("suppression", {}))
 
         # TODO: this is needed by Landscape but not by prospector; there is probably a better place for it
         self.requirements = _ensure_list(profile_dict.get("requirements", []))
