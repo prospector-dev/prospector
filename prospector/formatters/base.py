@@ -39,9 +39,18 @@ class Formatter(ABC):
             "line": message.location.line,
             "character": message.location.character,
         }
-        return {
+        if message.location.line_end is not None and message.location.line_end != -1:
+            loc["lineEnd"] = message.location.line_end
+        if message.location.character_end is not None and message.location.character_end != -1:
+            loc["characterEnd"] = message.location.character_end
+        result = {
             "source": message.source,
             "code": message.code,
             "location": loc,
             "message": message.message,
+            "isFixable": message.is_fixable,
         }
+        if message.doc_url:
+            result["docUrl"] = message.doc_url
+
+        return result

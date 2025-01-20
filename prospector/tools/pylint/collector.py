@@ -17,7 +17,7 @@ class Collector(BaseReporter):
         self._messages: list[Message] = []
 
     def handle_message(self, msg: PylintMessage) -> None:
-        loc = Location(msg.abspath, msg.module, msg.obj, msg.line, msg.column)
+        loc = Location(msg.abspath, msg.module, msg.obj, msg.line, msg.column, msg.end_line, msg.end_column)
 
         # At this point pylint will give us the code but we want the
         # more user-friendly symbol
@@ -31,7 +31,13 @@ class Collector(BaseReporter):
         else:
             msg_symbol = msg_data[0].symbol
 
-        message = Message("pylint", msg_symbol, loc, msg.msg)
+        message = Message(
+            "pylint",
+            msg_symbol,
+            loc,
+            msg.msg,
+            doc_url=f"https://pylint.readthedocs.io/en/latest/user_guide/messages/{msg.category}/{msg.symbol}.html",
+        )
         self._messages.append(message)
 
     def get_messages(self) -> list[Message]:

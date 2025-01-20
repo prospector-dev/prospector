@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Optional
 
 from bandit.cli.main import _get_profile, _init_extensions
+from bandit.core import docs_utils
 from bandit.core.config import BanditConfig
 from bandit.core.constants import RANKING
 from bandit.core.manager import BanditManager
@@ -66,7 +67,15 @@ class BanditTool(ToolBase):
         results = self.manager.get_issue_list(sev_level=RANKING[self.severity], conf_level=RANKING[self.confidence])
         messages = []
         for result in results:
-            loc = Location(result.fname, None, "", int(result.lineno), 0)
-            msg = Message("bandit", result.test_id, loc, result.text)
+            loc = Location(
+                result.fname,
+                None,
+                "",
+                result.lineno,
+                result.col_offset,
+                line_end=result.linerange[-1] if result.linerange else result.lineno,
+                character_end=result.end_col_offset,
+            )
+            msg = Message("bandit", result.test_id, loc, result.text, doc_url=docs_utils.get_url(result.test_id))
             messages.append(msg)
         return messages
