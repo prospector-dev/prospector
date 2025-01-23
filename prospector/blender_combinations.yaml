@@ -277,6 +277,11 @@ combinations:
   - - pep257: D103
     - pydocstyle: D103
     - pylint: missing-docstring
+
   - - pylint: singleton-comparison
     - pep8: E711
     - pycodestyle: E711
+
+  - - pylint: subprocess-run-check
+    - bandit: B603
+    - ruff: S603

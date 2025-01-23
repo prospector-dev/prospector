@@ -44,7 +44,7 @@ class RuffTool(ToolBase):
 
     def run(self, found_files: FileFinder) -> list[Message]:
         messages = []
-        completed_process = subprocess.run(  # noqa: S603
+        completed_process = subprocess.run(  # noqa
             [self.ruff_bin, *self.ruff_args, *found_files.python_modules], capture_output=True
         )
         if not completed_process.stdout:

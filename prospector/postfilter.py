@@ -48,9 +48,14 @@ def filter_messages(filepaths: list[Path], messages: list[Message]) -> list[Mess
         if (
             relative_message_path in messages_to_ignore
             and message.location.line in messages_to_ignore[relative_message_path]
-            and message.code in messages_to_ignore[relative_message_path][message.location.line]
         ):
-            continue
+            matched = False
+            for ignore in messages_to_ignore[relative_message_path][message.location.line]:
+                if (ignore.source is None or message.source == ignore.source) and message.code in ignore.code:
+                    matched = True
+                    continue
+            if matched:
+                continue
 
         # otherwise this message was not filtered
         filtered.append(message)
