@@ -8,7 +8,7 @@ from prospector.message import Location, Message
 from prospector.tools.exceptions import BadToolConfig
 
 try:
-    from prospector.tools.mypy import format_message
+    from prospector.tools.mypy import MypyTool, format_message
 except ImportError:
     raise SkipTest  # noqa: B904
 
@@ -27,6 +27,14 @@ class TestMypyTool(TestCase):
     def test_good_options(self):
         finder = FileFinder(Path(__file__).parent)
         self._get_config("mypy_good_options").get_tools(finder)
+
+    def test_ignore_code(self):
+        mypy_tool = MypyTool()
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc]") == ["misc"]
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc] # toto") == ["misc"]
+        assert mypy_tool.get_ignored_codes("toto # Type: Ignore[misc] # toto") == ["misc"]
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc,misc2]") == ["misc", "misc2"]
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc, misc2]") == ["misc", "misc2"]
 
 
 class TestMypyMessageFormat(TestCase):

@@ -6,7 +6,7 @@ from ruff.__main__ import find_ruff_bin
 
 from prospector.finder import FileFinder
 from prospector.message import Location, Message
-from prospector.tools.base import ToolBase
+from prospector.tools.base import PEP8_IGNORE_LINE_CODE, ToolBase
 
 if TYPE_CHECKING:
     from prospector.config import ProspectorConfig
@@ -84,3 +84,9 @@ class RuffTool(ToolBase):
                 )
             )
         return messages
+
+    def get_ignored_codes(self, line: str) -> list[str]:
+        match = PEP8_IGNORE_LINE_CODE.search(line)
+        if match:
+            return [e.strip() for e in match.group(1).split(",")]
+        return []
