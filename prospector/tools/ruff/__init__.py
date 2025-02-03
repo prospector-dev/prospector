@@ -1,5 +1,6 @@
 import json
 import subprocess  # nosec
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from ruff.__main__ import find_ruff_bin
@@ -65,6 +66,8 @@ class RuffTool(ToolBase):
             if sub_message:
                 message_str += f" [{', '.join(f'{k}: {v}' for k, v in sub_message.items())}]"
 
+            if message.get("filename") is None or found_files.is_excluded(Path(message.get("filename"))):
+                continue
             messages.append(
                 Message(
                     "ruff",
