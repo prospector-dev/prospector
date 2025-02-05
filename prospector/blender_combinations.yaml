@@ -500,3 +500,563 @@ combinations:
   - - pylint: eval-used
     - bandit: B307
     - ruff: S307
+
+  - # {kind} name "{param_name}" does not reflect its {variance}; consider renaming it to "{replacement_name}"
+    - pylint: type-name-incorrect-variance
+    - pylint: C0105
+    - ruff: PLC0105
+
+  - # {kind} cannot be both covariant and contravariant
+    - pylint: type-bivariance
+    - pylint: C0131
+    - ruff: PLC0131
+
+  - # {kind} name {param_name} does not match assigned variable name {var_name}
+    - pylint: type-param-name-mismatch
+    - pylint: C0132
+    - ruff: PLC0132
+
+  - # Class __slots__ should be a non-string iterable
+    - pylint: single-string-slots
+    - pylint: C0205
+    - ruff: PLC0205
+
+  - # Extracting value from dictionary without calling .items()
+    - pylint: dict-index-missing-items
+    - pylint: C0206
+    - ruff: PLC0206
+
+  - # Use a sequence type instead of a set when iterating over values
+    - pylint: iteration-over-set
+    - pylint: C0208
+    - ruff: PLC0208
+
+  - # Import alias does not rename original package
+    - pylint: useless-import-alias
+    - pylint: C0414
+    - ruff: PLC0414
+
+  - # import should be at the top-level of a file
+    - pylint: import-outside-top-level
+    - pylint: C0415
+    - ruff: PLC0415
+
+  - # len({expression}) used as condition without comparison
+    - pylint: len-test
+    - pylint: C1802
+    - ruff: PLC1802
+
+  - # {existing} can be simplified to {replacement} as an empty string is falsey
+    - pylint: compare-to-empty-string
+    - pylint: C1901
+    - ruff: PLC1901
+
+  - # {kind} name {name} contains a non-ASCII character
+    - pylint: non-ascii-name
+    - pylint: C2401
+    - ruff: PLC2401
+
+  - # Module alias {name} contains a non-ASCII character
+    - pylint: non-ascii-import-name
+    - pylint: C2403
+    - ruff: PLC2403
+
+  - # Private name import {name} from external module {module}
+    - pylint: import-private-name
+    - pylint: C2701
+    - ruff: PLC2701
+
+  - # Unnecessary dunder call to {method}. {replacement}.
+    - pylint: unnecessary-dunder-call
+    - pylint: C2801
+    - ruff: PLC2801
+
+  - # Lambda expression called directly. Execute the expression inline instead.
+    - pylint: unnecessary-direct-lambda-call
+    - pylint: C3002
+    - ruff: PLC3002
+
+  - # __init__ method is a generator
+    - pylint: yield-in-init
+    - pylint: E0100
+    - ruff: PLE0100
+
+  - # Explicit return in __init__
+    - pylint: return-in-init
+    - pylint: E0101
+    - ruff: PLE0101
+
+  - # Name {name} is both nonlocal and global
+    - pylint: nonlocal-and-global
+    - pylint: E0115
+    - ruff: PLE0115
+
+  - # continue not supported inside finally clause
+    - pylint: continue-in-finally
+    - pylint: E0116
+    - ruff: PLE0116
+
+  - # Nonlocal name {name} found without binding
+    - pylint: nonlocal-without-binding
+    - pylint: E0117
+    - ruff: PLE0117
+
+  - # Name {name} is used prior to global declaration on {row}
+    - pylint: load-before-global-declaration
+    - pylint: E0118
+    - ruff: PLE0118
+
+  - # Attribute {name} is not defined in class's __slots__
+    - pylint: non-slot-assignment
+    - pylint: E0237
+    - ruff: PLE0237
+
+  - # Duplicate base {base} for class {class}
+    - pylint: duplicate-bases
+    - pylint: E0241
+    - ruff: PLE0241
+
+  - # The special method {} expects {}, {} {} given
+    - pylint: unexpected-special-method-signature
+    - pylint: E0302
+    - ruff: PLE0302
+
+  - # __len__ does not return a non-negative integer
+    - pylint: invalid-length-return-type
+    - pylint: E0303
+    - ruff: PLE0303
+
+  - # __bool__ does not return bool
+    - pylint: invalid-bool-return-type
+    - pylint: E0304
+    - ruff: PLE0304
+
+  - # __index__ does not return an integer
+    - pylint: invalid-index-return-type
+    - pylint: E0305
+    - ruff: PLE0305
+
+  - # __str__ does not return str
+    - pylint: invalid-str-return-type
+    - pylint: E0307
+    - ruff: PLE0307
+
+  - # __bytes__ does not return bytes
+    - pylint: invalid-bytes-return-type
+    - pylint: E0308
+    - ruff: PLE0308
+
+  - # __hash__ does not return an integer
+    - pylint: invalid-hash-return-type
+    - pylint: E0309
+    - ruff: PLE0309
+
+  - # Invalid object in __all__, must contain only strings
+    - pylint: invalid-all-object
+    - pylint: E0604
+    - ruff: PLE0604
+
+  - # Invalid format for __all__, must be tuple or list
+    - pylint: invalid-all-format
+    - pylint: E0605
+    - ruff: PLE0605
+
+  - # Expression is likely to raise IndexError
+    - pylint: potential-index-error
+    - pylint: E0643
+    - ruff: PLE0643
+
+  - # Bare raise statement is not inside an exception handler
+    - pylint: misplaced-bare-raise
+    - pylint: E0704
+    - ruff: PLE0704
+
+  - # Repeated keyword argument: {duplicate_keyword}
+    - pylint: repeated-keyword-argument
+    - pylint: E1132
+    - ruff: PLE1132
+
+  - # Unpacking a dictionary in iteration without calling .items()
+    - pylint: dict-iter-missing-items
+    - pylint: E1141
+    - ruff: PLE1141
+
+  - # await should be used within an async function
+    - pylint: await-outside-async
+    - pylint: E1142
+    - ruff: PLE1142
+
+  - # Too many arguments for logging format string
+    - pylint: logging-too-many-args
+    - pylint: E1205
+    - ruff: PLE1205
+
+  - # Not enough arguments for logging format string
+    - pylint: logging-too-few-args
+    - pylint: E1206
+    - ruff: PLE1206
+
+  - # Unsupported format character '{format_char}'
+    - pylint: bad-string-format-character
+    - pylint: E1300
+    - ruff: PLE1300
+
+  - # Format type does not match argument type
+    - pylint: bad-string-format-type
+    - pylint: E1307
+    - ruff: PLE1307
+
+  - # String {strip} call contains duplicate characters (did you mean {removal}?)
+    - pylint: bad-str-strip-call
+    - pylint: E1310
+    - ruff: PLE1310
+
+  - # Invalid type for initial os.getenv argument; expected str
+    - pylint: invalid-envvar-value
+    - pylint: E1507
+    - ruff: PLE1507
+
+  - # @singledispatch decorator should not be used on methods
+    - pylint: singledispatch-method
+    - pylint: E1519
+    - ruff: PLE1519
+
+  - # @singledispatchmethod decorator should not be used on non-method functions
+    - pylint: singledispatchmethod-function
+    - pylint: E1520
+    - ruff: PLE1520
+
+  - # yield from statement in async function; use async for instead
+    - pylint: yield-from-in-async-function
+    - pylint: E1700
+    - ruff: PLE1700
+
+  - #	Contains control characters that can permit obfuscated code
+    - pylint: bidirectional-unicode
+    - pylint: E2502
+    - ruff: PLE2502
+
+  - #	Invalid unescaped character backspace, use "\b" instead
+    - pylint: invalid-character-backspace
+    - pylint: E2510
+    - ruff: PLE2510
+
+  - #	Invalid unescaped character SUB, use "\x1a" instead
+    - pylint: invalid-character-sub
+    - pylint: E2512
+    - ruff: PLE2512
+
+  - #	Invalid unescaped character ESC, use "\x1b" instead
+    - pylint: invalid-character-esc
+    - pylint: E2513
+    - ruff: PLE2513
+
+  - #	Invalid unescaped character NULL, use "\x00" instead
+    - pylint: invalid-character-nul
+    - pylint: E2514
+    - ruff: PLE2514
+
+  - #	Invalid unescaped character zero-width-space, use "\u200B" instead
+    - pylint: invalid-character-zero-width-space
+    - pylint: E2515
+    - ruff: PLE2515
+
+  - #	Iterated set {name} is modified within the for loop
+    - pylint: modified-iterating-set
+    - pylint: E2515
+    - ruff: PLE2515
+
+  - #	Name compared with itself, consider replacing {actual}
+    - pylint: comparison-with-itself
+    - pylint: R0124
+    - ruff: PLR0124
+
+  - #	Two constants compared in a comparison, consider replacing {left_constant} {op} {right_constant}
+    - pylint: comparison-of-constant
+    - pylint: R0133
+    - ruff: PLR0133
+
+  - #	Class method defined without decorator
+    - pylint: no-classmethod-decorator
+    - pylint: R0202
+    - ruff: PLR0202
+
+  - #	Static method defined without decorator
+    - pylint: no-staticmethod-decorator
+    - pylint: R0203
+    - ruff: PLR0203
+
+  - #	Cannot have defined parameters for properties
+    - pylint: property-with-parameters
+    - pylint: R0206
+    - ruff: PLR0206
+
+  - #	Use from {module} import {name} in lieu of alias
+    - pylint: manual-from-import
+    - pylint: R0402
+    - ruff: PLR0402
+
+  - #	Too many public methods ({methods} > {max_methods})
+    - pylint: too-many-public-methods
+    - pylint: R0904
+    - ruff: PLR0904
+
+  - #	Too many return statements ({returns} > {max_returns})
+    - pylint: too-many-return-statements
+    - pylint: R0911
+    - ruff: PLR0911
+
+  - #	Too many branches ({branches} > {max_branches})
+    - pylint: too-many-branches
+    - pylint: R0912
+    - ruff: PLR0912
+
+  - #	Too many arguments in function definition ({c_args} > {max_args})
+    - pylint: too-many-arguments
+    - pylint: R0913
+    - ruff: PLR0913
+
+  - #	Too many local variables ({current_amount}/{max_amount})
+    - pylint: too-many-locals
+    - pylint: R0914
+    - ruff: PLR0914
+
+  - #	Too many statements ({statements} > {max_statements})
+    - pylint: too-many-statements
+    - pylint: R0915
+    - ruff: PLR0915
+
+  - #	Too many Boolean expressions ({expressions} > {max_expressions})
+    - pylint: too-many-boolean-expressions
+    - pylint: R0916
+    - ruff: PLR0916
+
+  - #	Too many positional arguments ({c_pos}/{max_pos})
+    - pylint: too-many-positional-arguments
+    - pylint: R0917
+    - ruff: PLR0917
+
+  - #	Merge isinstance calls: {expression}
+    - pylint: repeated-isinstance-calls
+    - pylint: R1701
+    - ruff: PLR1701
+
+  - #	Too many nested blocks ({nested_blocks} > {max_nested_blocks})
+    - pylint: too-many-nested-blocks
+    - pylint: R1702
+    - ruff: PLR1702
+
+  - #	Redefining argument with the local name {name}
+    - pylint: redefined-argument-from-local
+    - pylint: R1704
+    - ruff: PLR1704
+
+  - #	Consider using if-else expression
+    - pylint: and-or-ternary
+    - pylint: R1706
+    - ruff: PLR1706
+
+  - #	Useless return statement at end of function
+    - pylint: useless-return
+    - pylint: R1711
+    - ruff: PLR1711
+
+  - #	Consider merging multiple comparisons: {expression}. Use a set if the elements are hashable.
+    - pylint: repeated-equality-comparison
+    - pylint: R1714
+    - ruff: PLR1714
+
+  - #	Contains chained boolean comparison that can be simplified
+    - pylint: boolean-chained-comparison
+    - pylint: R1716
+    - ruff: PLR1716
+
+  - #	Use sys.exit() instead of {name}
+    - pylint: sys-exit-alias
+    - pylint: R1722
+    - ruff: PLR1722
+
+  - #	Replace if statement with {replacement}
+    - pylint: if-stmt-min-max
+    - pylint: R1730
+    - ruff: PLR1730
+
+  - #	Unnecessary lookup of dictionary value by key
+    - pylint: unnecessary-dict-index-lookup
+    - pylint: R1733
+    - ruff: PLR1733
+
+  - #	List index lookup in enumerate() loop
+    - pylint: unnecessary-list-index-lookup
+    - pylint: R1736
+    - ruff: PLR1736
+
+  - #	Magic value used in comparison, consider replacing {value} with a constant variable
+    - pylint: magic-value-comparison
+    - pylint: R2004
+    - ruff: PLR2004
+
+  - #	Line with empty comment
+    - pylint: empty-comment
+    - pylint: R2044
+    - ruff: PLR2044
+
+  - #	Use elif instead of else then if, to reduce indentation
+    - pylint: collapsible-else-if
+    - pylint: R5501
+    - ruff: PLR5501
+
+  - #	Use {operator} to perform an augmented assignment directly
+    - pylint: non-augmented-assignment
+    - pylint: R6104
+    - ruff: PLR6104
+
+  - #	Use a set literal when testing for membership
+    - pylint: literal-membership
+    - pylint: R6201
+    - ruff: PLR6201
+
+  - #	Method {method_name} could be a function, class method, or static method
+    - pylint: no-self-use
+    - pylint: R6301
+    - ruff: PLR6301
+
+  - #	Lambda may be unnecessary; consider inlining inner function
+    - pylint: unnecessary-lambda
+    - pylint: W0108
+    - ruff: PLW0108
+
+  - #	else clause on loop without a break statement; remove the else and dedent its contents
+    - pylint: useless-else-on-loop
+    - pylint: W0120
+    - ruff: PLW0120
+
+  - #	Self-assignment of variable {name}
+    - pylint: self-assigning-variable
+    - pylint: W0127
+    - ruff: PLW0127
+
+  - #	Redeclared variable {name} in assignment
+    - pylint: redeclared-assigned-name
+    - pylint: W0128
+    - ruff: PLW0128
+
+  - #	Asserting on an empty string literal will never pass
+    - pylint: assert-on-string-literal
+    - pylint: W0129
+    - ruff: PLW0129
+
+  - #	Named expression used without context
+    - pylint: named-expr-without-context
+    - pylint: W0131
+    - ruff: PLW0131
+
+  - #	Missing raise statement on exception
+    - pylint: useless-exception-statement
+    - pylint: W0133
+    - ruff: PLW0133
+
+  - #	Comparing against a NaN value; use math.isnan instead
+    - pylint: nan-comparison
+    - pylint: W0177
+    - ruff: PLW0177
+
+  - #	First argument of a static method should not be named {argument_name}
+    - pylint: bad-staticmethod-argument
+    - pylint: W0211
+    - ruff: PLW0211
+
+  - #	Slot {slot_name} redefined from base class {base}
+    - pylint: redefined-slots-in-subclass
+    - pylint: W0244
+    - ruff: PLW0244
+
+  - #	super call is missing parentheses
+    - pylint: super-without-brackets
+    - pylint: W0245
+    - ruff: PLW0245
+
+  - #	Module {name} imports itself
+    - pylint: import-self
+    - pylint: W0406
+    - ruff: PLW0406
+
+  - #	Using global for {name} but no assignment is done
+    - pylint: global-variable-not-assigned
+    - pylint: W0602
+    - ruff: PLW0602
+
+  - #	Using the global statement to update {name} is discouraged
+    - pylint: global-statement
+    - pylint: W0603
+    - ruff: PLW0603
+
+  - #	global at module level is redundant
+    - pylint: global-at-module-level
+    - pylint: W0604
+    - ruff: PLW0604
+
+  - #	Reassigned {} variable in {method_type} method
+    - pylint: self-or-cls-assignment
+    - pylint: W0642
+    - ruff: PLW0642
+
+  - #	Exception to catch is the result of a binary and operation
+    - pylint: binary-op-exception
+    - pylint: W0711
+    - ruff: PLW0711
+
+  - #	{mode} is not a valid mode for open
+    - pylint: bad-open-mode
+    - pylint: W1501
+    - ruff: PLW1501
+
+  - #	Shallow copy of os.environ via copy.copy(os.environ)
+    - pylint: shallow-copy-environ
+    - pylint: W1507
+    - ruff: PLW1507
+
+  - #	Invalid type for environment variable default; expected str or None
+    - pylint: invalid-envvar-default
+    - pylint: W1508
+    - ruff: PLW1508
+
+  - #	preexec_fn argument is unsafe when using threads
+    - pylint: subprocess-popen-preexec-fn
+    - pylint: W1509
+    - ruff: PLW1509
+
+  - #	subprocess.run without explicit check argument
+    - pylint: subprocess-run-without-check
+    - pylint: W1510
+    - ruff: PLW1510
+
+  - #	{function_name} in text mode without explicit encoding argument
+    - pylint: unspecified-encoding
+    - pylint: W1514
+    - ruff: PLW1514
+
+  - #	Object does not implement __hash__ method
+    - pylint: eq-without-hash
+    - pylint: W1641
+    - ruff: PLW1641
+
+  - #	Threading lock directly created in with statement has no effect
+    - pylint: useless-with-lock
+    - pylint: W2101
+    - ruff: PLW2101
+
+  - #	Outer {outer_kind} variable {name} overwritten by inner {inner_kind} target
+    - pylint: redefined-loop-name
+    - pylint: W2901
+    - ruff: PLW2901
+
+  - #	Dunder method {name} has no special meaning in Python 3
+    - pylint: bad-dunder-method-name
+    - pylint: W3201
+    - ruff: PLW3201
+
+  - # Nested {func} calls can be flattened
+    - pylint: nested-min-max
+    - pylint: W3301
+    - ruff: PLW3301
