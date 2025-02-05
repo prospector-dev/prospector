@@ -168,8 +168,10 @@ combinations:
 
   - # 'continue' not supported inside 'finally' clause
     - pylint: continue-in-finally
+    - pylint: E0116
     - pyflakes: F703
     - ruff: F703
+    - ruff: PLE0116
 
   - # Yield outside function
     - pylint: yield-outside-function
@@ -318,11 +320,18 @@ combinations:
     - pep8: N806
     - pycodestyle: N806
 
-  - # too complex
-    - mccabe: MC0001
+  # too complex
+  - #	Too many branches ({branches} > {max_branches})
     - pylint: too-many-branches
-  - - mccabe: MC0001
+    - pylint: R0912
+    - mccabe: MC0001
+    - ruff: PLR0912
+  - #	Too many statements ({statements} > {max_statements})
     - pylint: too-many-statements
+    - pylint: R0915
+    - mccabe: MC0001
+    - pylint: too-many-statements
+    - ruff: PLR0915
 
   - # pep257 takes preference over pylint documentation warnings
     - pep257: D100
@@ -591,11 +600,6 @@ combinations:
     - pylint: E0115
     - ruff: PLE0115
 
-  - # continue not supported inside finally clause
-    - pylint: continue-in-finally
-    - pylint: E0116
-    - ruff: PLE0116
-
   - # Nonlocal name {name} found without binding
     - pylint: nonlocal-without-binding
     - pylint: E0117
@@ -806,11 +810,6 @@ combinations:
     - pylint: R0911
     - ruff: PLR0911
 
-  - #	Too many branches ({branches} > {max_branches})
-    - pylint: too-many-branches
-    - pylint: R0912
-    - ruff: PLR0912
-
   - #	Too many arguments in function definition ({c_args} > {max_args})
     - pylint: too-many-arguments
     - pylint: R0913
@@ -820,11 +819,6 @@ combinations:
     - pylint: too-many-locals
     - pylint: R0914
     - ruff: PLR0914
-
-  - #	Too many statements ({statements} > {max_statements})
-    - pylint: too-many-statements
-    - pylint: R0915
-    - ruff: PLR0915
 
   - #	Too many Boolean expressions ({expressions} > {max_expressions})
     - pylint: too-many-boolean-expressions
