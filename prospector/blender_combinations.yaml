@@ -311,3 +311,151 @@ combinations:
   - - pylint: subprocess-run-check
     - bandit: B603
     - ruff: S603
+
+  # assert_used
+  - - ruff: S101
+    - bandit: B101
+
+  # exec_used
+  - - ruff: S102
+    - bandit: B102
+
+  # set_bad_file_permissions
+  - - ruff: S103
+    - bandit: B103
+
+  # hardcoded_bind_all_interfaces
+  - - ruff: S104
+    - bandit: B104
+
+  # hardcoded_password_string
+  - - ruff: S105
+    - bandit: B105
+
+  # hardcoded_password_funcarg
+  - - ruff: S106
+    - bandit: B106
+
+  # hardcoded_password_default
+  - - ruff: S107
+    - bandit: B107
+
+  # hardcoded_tmp_directory
+  - - ruff: S108
+    - bandit: B108
+
+  # try_except_pass
+  - - ruff: S110
+    - bandit: B110
+
+  # try_except_continue
+  - - ruff: S112
+    - bandit: B112
+
+  # request_without_timeout
+  - - ruff: S113
+    - bandit: B113
+
+  # flask_debug_true
+  - - ruff: S201
+    - bandit: B201
+
+  # tarfile_unsafe_members
+  - - ruff: S202
+    - bandit: B202
+
+  # hashlib
+  - - ruff: S324
+    - bandit: B324
+
+  # request_with_no_cert_validation
+  - - ruff: S501
+    - bandit: B501
+
+  # ssl_with_bad_version
+  - - ruff: S502
+    - bandit: B502
+
+  # ssl_with_bad_defaults
+  - - ruff: S503
+    - bandit: B503
+
+  # ssl_with_no_version
+  - - ruff: S504
+    - bandit: B504
+
+  # weak_cryptographic_key
+  - - ruff: S505
+    - bandit: B505
+
+  # unsafe-yaml-load
+  - - ruff: S506
+    - bandit: B506
+
+  # ssh_no_host_key_verification
+  - - ruff: S507
+    - bandit: B507
+
+  # snmp_insecure_version
+  - - ruff: S508
+    - bandit: B508
+
+  # snmp_weak_cryptography
+  - - ruff: S509
+    - bandit: B509
+
+  # paramiko-call
+  - - ruff: S601
+    - bandit: B601
+
+  # subprocess-popen-with-shell-equals-true
+  - - ruff: S602
+    - bandit: B602
+
+  # subprocess-without-shell-equals-true
+  - - ruff: S603
+    - bandit: B603
+
+  # call-with-shell-equals-true
+  - - ruff: S604
+    - bandit: B604
+
+  # start-process-with-a-shell
+  - - ruff: S605
+    - bandit: B605
+
+  # start-process-with-no-shell
+  - - ruff: S606
+    - bandit: B606
+
+  # start-process-with-partial-path
+  - - ruff: S607
+    - bandit: B607
+
+  # hardcoded-sql-expression
+  - - ruff: S608
+    - bandit: B608
+
+  # linux-commands-wildcard-injection
+  - - ruff: S609
+    - bandit: B609
+
+  # django-extra
+  - - ruff: S610
+    - bandit: B610
+
+  # django-raw-sql
+  - - ruff: S611
+    - bandit: B611
+
+  # logging-config-insecure-listen
+  - - ruff: S612
+    - bandit: B612
+
+  # jinja2_autoescape_false
+  - - ruff: S701
+    - bandit: B701
+
+  # mako-templates
+  - - ruff: S702
+    - bandit: B702
