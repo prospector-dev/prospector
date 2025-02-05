@@ -16,6 +16,7 @@ from prospector.finder import FileFinder
 from prospector.formatters import FORMATTERS, Formatter
 from prospector.message import Location, Message
 from prospector.tools import DEPRECATED_TOOL_NAMES
+from prospector.tools.base import ToolBase
 from prospector.tools.utils import CaptureOutput
 
 
@@ -25,7 +26,9 @@ class Prospector:
         self.summary: Optional[dict[str, Any]] = None
         self.messages = config.messages
 
-    def process_messages(self, found_files: FileFinder, messages: list[Message]) -> list[Message]:
+    def process_messages(
+        self, found_files: FileFinder, messages: list[Message], tools: dict[str, tools.ToolBase]
+    ) -> list[Message]:
         if self.config.blending:
             messages = blender.blend(messages)
 
@@ -37,7 +40,7 @@ class Prospector:
                 updated.append(msg)
             messages = updated
 
-        return postfilter.filter_messages(found_files.python_modules, messages)
+        return postfilter.filter_messages(found_files.python_modules, messages, tools, self.config.blending)
 
     def execute(self) -> None:
         deprecated_names = self.config.replace_deprecated_tool_names()
@@ -70,6 +73,8 @@ class Prospector:
             messages.append(message)
             warnings.warn(msg, category=DeprecationWarning, stacklevel=0)
 
+        running_tools: dict[str, ToolBase] = {}
+
         # Run the tools
         for tool in self.config.get_tools(found_files):
             for name, cls in tools.TOOLS.items():
@@ -78,6 +83,8 @@ class Prospector:
                     break
             else:
                 toolname = "Unknown"
+
+            running_tools[toolname] = tool
 
             try:
                 # Tools can output to stdout/stderr in unexpected places, for example,
@@ -116,7 +123,7 @@ class Prospector:
                 )
                 messages.append(message)
 
-        messages = self.process_messages(found_files, messages)
+        messages = self.process_messages(found_files, messages, running_tools)
 
         summary["message_count"] = len(messages)
         summary["completed"] = datetime.now()

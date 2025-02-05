@@ -1,3 +1,4 @@
+import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from pathlib import Path
@@ -8,6 +9,8 @@ from prospector.message import Message
 
 if TYPE_CHECKING:
     from prospector.config import ProspectorConfig
+
+PEP8_IGNORE_LINE_CODE = re.compile(r"#\s*noqa:([^#]*[^# ])(\s*#.*)?$", re.IGNORECASE)
 
 
 class ToolBase(ABC):
@@ -40,3 +43,10 @@ class ToolBase(ABC):
         standard prospector Message and Location objects.
         """
         raise NotImplementedError
+
+    def get_ignored_codes(self, line: str) -> list[str]:
+        """
+        Return a list of error codes that the tool will ignore from a line of code.
+        """
+        del line  # unused
+        return []

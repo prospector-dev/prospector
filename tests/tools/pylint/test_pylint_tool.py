@@ -111,3 +111,17 @@ class TestPylintTool(TestCase):
 
         messages = pylint_tool.run(found_files)
         assert "line-too-long" in [msg.code for msg in messages if msg.source == "pylint"]
+
+    def test_ignore_code(self):
+        pylint_tool, _ = _get_pylint_tool_and_prospector_config()
+        assert pylint_tool.get_ignored_codes("toto # pylint: disable=missing-docstring") == ["missing-docstring"]
+        assert pylint_tool.get_ignored_codes("toto # pylint: disable=missing-docstring # titi") == ["missing-docstring"]
+        assert pylint_tool.get_ignored_codes("toto # Pylint: Disable=missing-docstring") == ["missing-docstring"]
+        assert pylint_tool.get_ignored_codes("toto # pylint: disable=missing-docstring,invalid-name") == [
+            "missing-docstring",
+            "invalid-name",
+        ]
+        assert pylint_tool.get_ignored_codes("toto # pylint: disable=missing-docstring, invalid-name") == [
+            "missing-docstring",
+            "invalid-name",
+        ]

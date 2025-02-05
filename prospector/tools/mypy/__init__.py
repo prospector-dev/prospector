@@ -1,3 +1,4 @@
+import re
 from multiprocessing import Process, Queue
 from typing import TYPE_CHECKING, Any, Callable, Optional
 
@@ -13,6 +14,8 @@ from prospector.tools.exceptions import BadToolConfig
 
 if TYPE_CHECKING:
     from prospector.config import ProspectorConfig
+
+_IGNORE_RE = re.compile(r"#\s*type:\s*ignore\[([^#]*[^# ])\](\s*#.*)?$", re.IGNORECASE)
 
 
 def format_message(message: str) -> Message:
@@ -105,3 +108,9 @@ class MypyTool(ToolBase):
         report, _ = result[0], result[1:]  # noqa
 
         return [format_message(message) for message in report.splitlines()]
+
+    def get_ignored_codes(self, line: str) -> list[str]:
+        match = _IGNORE_RE.search(line)
+        if match:
+            return [e.strip() for e in match.group(1).split(",")]
+        return []

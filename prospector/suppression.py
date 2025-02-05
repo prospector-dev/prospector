@@ -27,12 +27,13 @@ from pathlib import Path
 from typing import Optional
 
 from prospector import encoding
+from prospector.blender import BLEND_COMBOS
 from prospector.exceptions import FatalProspectorException
 from prospector.message import Message
+from prospector.tools.base import PEP8_IGNORE_LINE_CODE, ToolBase
 
 _FLAKE8_IGNORE_FILE = re.compile(r"flake8[:=]\s*noqa", re.IGNORECASE)
 _PEP8_IGNORE_LINE = re.compile(r"#\s*noqa(\s*#.*)?$", re.IGNORECASE)
-_PEP8_IGNORE_LINE_CODE = re.compile(r"#\s*noqa:([^#]*[^# ])(\s*#.*)?$", re.IGNORECASE)
 _PYLINT_SUPPRESSED_MESSAGE = re.compile(r"^Suppressed \'([a-z0-9-]+)\' \(from line \d+\)$")
 
 
@@ -50,6 +51,17 @@ class Ignore:
 
     def __str__(self) -> str:
         return self.code if self.source is None else f"{self.source}.{self.code}"
+
+    def __repr__(self) -> str:
+        return f"<{type(self).__name__} {self}>"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, Ignore):
+            return False
+        return self.code == value.code and self.source == value.source
+
+    def __hash__(self) -> int:
+        return hash((self.source, self.code))
 
 
 def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int], dict[int, set[Ignore]]]:
@@ -71,7 +83,7 @@ def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int], dic
         if _PEP8_IGNORE_LINE.search(line):
             ignore_lines.add(line_number + 1)
         else:
-            noqa_match = _PEP8_IGNORE_LINE_CODE.search(line)
+            noqa_match = PEP8_IGNORE_LINE_CODE.search(line)
             if noqa_match:
                 prospector_ignore = noqa_match.group(1).strip().split(",")
                 prospector_ignore = [elem.strip() for elem in prospector_ignore]
@@ -79,15 +91,6 @@ def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int], dic
                     messages_to_ignore[line_number + 1].add(Ignore(None, code))
 
     return ignore_whole_file, ignore_lines, messages_to_ignore
-
-
-_PYLINT_EQUIVALENTS = {
-    # TODO: blending has this info already?
-    "unused-import": (
-        ("pyflakes", "FL0001"),
-        ("frosted", "E101"),
-    )
-}
 
 
 def _parse_pylint_informational(
@@ -113,17 +116,43 @@ def _parse_pylint_informational(
     return ignore_files, ignore_messages
 
 
+def _process_tool_ignores(
+    tools_ignore: dict[Path, dict[int, set[Ignore]]],
+    blend_combos_dict: dict[Ignore, set[Ignore]],
+    messages_to_ignore: dict[Optional[Path], dict[int, set[Ignore]]],
+) -> None:
+    for path, lines_ignore in tools_ignore.items():
+        for line, ignores in lines_ignore.items():
+            for ignore in ignores:
+                if ignore in blend_combos_dict:
+                    messages_to_ignore[path][line].update(blend_combos_dict[ignore])
+
+
 def get_suppressions(
-    filepaths: list[Path], messages: list[Message]
+    filepaths: list[Path],
+    messages: list[Message],
+    tools: Optional[dict[str, ToolBase]] = None,
+    blending: bool = False,
+    blend_combos: Optional[list[list[tuple[str, str]]]] = None,
 ) -> tuple[set[Optional[Path]], dict[Path, set[int]], dict[Optional[Path], dict[int, set[Ignore]]]]:
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
     and a map of filepath -> line-number -> codes to ignore
     """
+    tools = tools or {}
+    blend_combos = blend_combos or BLEND_COMBOS
+    blend_combos_dict: dict[Ignore, set[Ignore]] = defaultdict(set)
+    if blending:
+        for combo in blend_combos:
+            ignore_combos = {Ignore(tool, code) for tool, code in combo}
+            for ignore in ignore_combos:
+                blend_combos_dict[ignore] |= ignore_combos
+
     paths_to_ignore: set[Optional[Path]] = set()
     lines_to_ignore: dict[Path, set[int]] = defaultdict(set)
     messages_to_ignore: dict[Optional[Path], dict[int, set[Ignore]]] = defaultdict(lambda: defaultdict(set))
+    tools_ignore: dict[Path, dict[int, set[Ignore]]] = defaultdict(lambda: defaultdict(set))
 
     # First deal with 'noqa' style messages
     for filepath in filepaths:
@@ -141,6 +170,17 @@ def get_suppressions(
         for line, codes_ignore in file_messages_to_ignore.items():
             messages_to_ignore[filepath][line] |= codes_ignore
 
+        if blending:
+            for line_number, line_content in enumerate(file_contents):
+                for tool_name, tool in tools.items():
+                    tool_ignores = tool.get_ignored_codes(line_content)
+                    for tool_ignore in tool_ignores:
+                        tools_ignore[filepath][line_number + 1].add(Ignore(tool_name, tool_ignore))
+
+    # Ignore the blending messages
+    if blending:
+        _process_tool_ignores(tools_ignore, blend_combos_dict, messages_to_ignore)
+
     # Now figure out which messages were suppressed by pylint
     pylint_ignore_files, pylint_ignore_messages = _parse_pylint_informational(messages)
     paths_to_ignore |= pylint_ignore_files
@@ -149,9 +189,5 @@ def get_suppressions(
             for code in codes:
                 ignore = Ignore("pylint", code)
                 messages_to_ignore[pylint_filepath][line_number].add(ignore)
-                if code in _PYLINT_EQUIVALENTS:
-                    for ignore_source, ignore_code in _PYLINT_EQUIVALENTS[code]:
-                        ignore = Ignore(ignore_source, ignore_code)
-                        messages_to_ignore[pylint_filepath][line_number].add(ignore)
 
     return paths_to_ignore, lines_to_ignore, messages_to_ignore
