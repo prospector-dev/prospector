@@ -17,6 +17,9 @@ combinations:
     - pylint: syntax-error
     - pyflakes: F999
     - pep8: E901
+    # expected an indented block
+    - pycodestyle: E112
+    # IndentationError: unindent does not match any outer indentation level
     - pycodestyle: E901
     - mccabe: MC0000
     - frosted: E402
@@ -27,6 +30,7 @@ combinations:
     - pyflakes: F821
     - frosted: E303
     - ruff: F821
+    - mypy: name-defined
 
   - # Unused variable
     - pylint: unused-variable
@@ -208,6 +212,10 @@ combinations:
     - frosted: E306
     - ruff: F810
 
+  - # Redefinition of unused variable
+    - pylint: redefined-outer-name
+    - pyflakes: F811
+
   - # Wildcard import
     - pylint: wildcard-import
     - pyflakes: F403
@@ -294,6 +302,21 @@ combinations:
     - pep8: N801
     - pycodestyle: N801
     - pylint: invalid-name
+
+  # function name should be lowercase
+  - - pylint: invalid-name
+    - pep8: N802
+    - pycodestyle: N802
+
+  # argument name should be lowercase
+  - - pylint: invalid-name
+    - pep8: N803
+    - pycodestyle: N803
+
+  # Variable in function should be lowercase
+  - - pylint: invalid-name
+    - pep8: N806
+    - pycodestyle: N806
 
   - # too complex
     - mccabe: MC0001
@@ -462,3 +485,18 @@ combinations:
   # mako-templates
   - - ruff: S702
     - bandit: B702
+
+  # Undefined name
+  - - mypy: name-defined
+    - ruff: F481
+
+  # Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  # See: https://docs.astral.sh/ruff/rules/raise-without-from-inside-except
+  - - pylint: raise-missing-from
+    - ruff: B904
+
+  # Use of possibly insecure function - consider using safer ast.literal_eval
+  # See: https://docs.astral.sh/ruff/rules/suspicious-eval-usage
+  - - pylint: eval-used
+    - bandit: B307
+    - ruff: S307
