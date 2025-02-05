@@ -10,6 +10,7 @@ combinations:
     - pylint: unused-import
     - pyflakes: F401
     - frosted: E101
+    - ruff: F401
 
   - # Syntax Error
     - dodgy: diff
@@ -19,17 +20,20 @@ combinations:
     - pycodestyle: E901
     - mccabe: MC0000
     - frosted: E402
+    - ruff: F999
 
   - # Undefined local variable
     - pylint: undefined-variable
     - pyflakes: F821
     - frosted: E303
+    - ruff: F821
 
   - # Unused variable
     - pylint: unused-variable
     - vulture: unused-variable
     - pyflakes: F841
     - frosted: E307
+    - ruff: F841
 
   - # Mixed tabs and spaces
     - pep257: D206
@@ -42,6 +46,7 @@ combinations:
     - pylint: misplaced-future
     - pyflakes: F404
     - frosted: E207
+    - ruff: F404
 
   - # Line too long
     - pep8: E501
@@ -114,59 +119,73 @@ combinations:
     - pylint: undefined-all-variable
     - pyflakes: F822
     - frosted: E304
+    - ruff: F822
 
   - # duplicate argument in function definition
     - pylint: duplicate-argument-name
     - pyflakes: F831
     - frosted: E206
+    - ruff: F831
 
   - # redefinition of unused function
     - pyflakes: F811
     - pylint: function-redefined
+    - ruff: F811
 
   - # f-string is missing placeholders
     - pylint: f-string-without-interpolation
     - pyflakes: F541
+    - ruff: F541
 
   - # Duplicate key in dictionary
     - pylint: duplicate-key
     - pyflakes: F601
+    - ruff: F601
 
   - # More than one starred expression in assignment
     - pylint: too-many-star-expressions
     - pyflakes: F622
+    - ruff: F622
 
   - # Assert called on a tuple
     - pylint: assert-on-tuple
     - pyflakes: F631
+    - ruff: F631
 
   - # 'break' outside loop
     - pylint: not-in-loop
     - pyflakes: F701
+    - ruff: F701
 
   - # 'continue' not properly in loop
     - pylint: not-in-loop
     - pyflakes: F702
+    - ruff: F702
 
   - # 'continue' not supported inside 'finally' clause
     - pylint: continue-in-finally
     - pyflakes: F703
+    - ruff: F703
 
   - # Yield outside function
     - pylint: yield-outside-function
     - pyflakes: F704
+    - ruff: F704
 
   - # Return outside function
     - pylint: return-outside-function
     - pyflakes: F706
+    - ruff: F706
 
   - # default 'except:' must be last
     - pylint: bad-except-order
     - pyflakes: F707
+    - ruff: F707
 
   - # NotImplemented raised - should raise NotImplementedError
     - pylint: notimplemented-raised
     - pyflakes: F901
+    - ruff: F901
 
   - # first argument of a classmethod should be named 'cls'
     - pep8: N804
@@ -187,11 +206,13 @@ combinations:
     - pylint: redefined-outer-name
     - pyflakes: F810
     - frosted: E306
+    - ruff: F810
 
   - # Wildcard import
     - pylint: wildcard-import
     - pyflakes: F403
     - frosted: E103
+    - ruff: F403
 
   - # Return with argument inside generator
     - pylint: return-arg-in-generator
@@ -228,22 +249,27 @@ combinations:
   - # redefinition of unused %r from line %r
     - pyflakes: F811
     - frosted: E301
+    - ruff: F811
 
   - # list comprehension redefines %r from line %r
     - pyflakes: F812
     - frosted: E302
+    - ruff: F812
 
   - # import %r from line %r shadowed by loop variable
     - pyflakes: F402
     - frosted: E102
+    - ruff: F402
 
   - # syntax error in doctest
     - pyflakes: FL0007
     - frosted: E401
+    - ruff: FL0007
 
   - # local variable %r referenced before assignment
     - pyflakes: F823
     - frosted: E305
+    - ruff: F823
 
   - # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
     - pylint: bad-mcs-classmethod-argument
