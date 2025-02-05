@@ -235,6 +235,20 @@ combinations:
     - frosted: W101
     - pep8: E722
     - pycodestyle: E722
+    - ruff: E722
+    # try_except_pass
+    - ruff: S110
+    - bandit: B110
+
+  - # No exception type(s) specified
+    - pylint: bare-except
+    - frosted: W101
+    - pep8: E722
+    - pycodestyle: E722
+    - ruff: E722
+    # try_except_continue
+    - ruff: S112
+    - bandit: B112
 
   - # Spaces around keyword/parameter equals
     - pep8: E251
@@ -344,16 +358,9 @@ combinations:
   - - ruff: S108
     - bandit: B108
 
-  # try_except_pass
-  - - ruff: S110
-    - bandit: B110
-
-  # try_except_continue
-  - - ruff: S112
-    - bandit: B112
-
   # request_without_timeout
-  - - ruff: S113
+  - - pylint: missing-timeout
+    - ruff: S113
     - bandit: B113
 
   # flask_debug_true
@@ -411,10 +418,6 @@ combinations:
   # subprocess-popen-with-shell-equals-true
   - - ruff: S602
     - bandit: B602
-
-  # subprocess-without-shell-equals-true
-  - - ruff: S603
-    - bandit: B603
 
   # call-with-shell-equals-true
   - - ruff: S604
