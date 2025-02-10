@@ -260,6 +260,14 @@ combinations:
     - ruff: S112
     - bandit: B112
 
+  - # Do not catch blind exception: `Exception`
+    - pylint: broad-exception-caught
+    - ruff: BLE001
+
+  - # Create your own exception
+    - pylint: broad-exception-raised
+    - ruff: TRY002
+
   - # Spaces around keyword/parameter equals
     - pep8: E251
     - pycodestyle: E251
@@ -357,6 +365,7 @@ combinations:
   - - pylint: subprocess-run-check
     - bandit: B603
     - ruff: S603
+    - ruff: PLW1510
 
   # assert_used
   - - ruff: S101
