@@ -45,6 +45,7 @@ combinations:
     - pep8: E101
     - pycodestyle: E101
     - pylint: indentation-mixture
+    - ruff: D206
 
   - # Import from __future__ not first import
     - pylint: misplaced-future
@@ -93,6 +94,7 @@ combinations:
     - pep8: E111
     - pycodestyle: E111
     - pylint: bad-indentation
+    - ruff: D207
 
   - # incorrect indentation
     - pep257: D208
@@ -100,6 +102,7 @@ combinations:
     - pep8: E111
     - pycodestyle: E111
     - pylint: bad-indentation
+    - ruff: D208
 
   - # comma not followed by a space
     - pep8: E231
@@ -345,18 +348,25 @@ combinations:
     - pep257: D100
     - pydocstyle: D100
     - pylint: missing-docstring
+    - ruff: D100
 
-  - - pep257: D101
+  - # Missing docstring in public class
+    - pep257: D101
     - pydocstyle: D101
     - pylint: missing-docstring
+    - ruff: D101
 
-  - - pep257: D102
+  - # Missing docstring in public method
+    - pep257: D102
     - pydocstyle: D102
     - pylint: missing-docstring
+    - ruff: D102
 
-  - - pep257: D103
+  - # Missing docstring in public function
+    - pep257: D103
     - pydocstyle: D103
     - pylint: missing-docstring
+    - ruff: D103
 
   - - pylint: singleton-comparison
     - pep8: E711
@@ -1064,231 +1074,197 @@ combinations:
     - pylint: W3301
     - ruff: PLW3301
 
-  - # Missing docstring in public module
-    - ruff: D100
-      pycodestyle: D100
-      pep257: D100
-  - # Missing docstring in public class
-    - ruff: D101
-      pycodestyle: D101
-      pep257: D101
-
-  - # Missing docstring in public method
-    - ruff: D102
-      pycodestyle: D102
-      pep257: D102
-
-  - # Missing docstring in public function
-    - ruff: D103
-      pycodestyle: D103
-      pep257: D103
-
   - # Missing docstring in public package
     - ruff: D104
-      pycodestyle: D104
-      pep257: D104
+    - pycodestyle: D104
+    - pep257: D104
 
   - # Missing docstring in magic method
     - ruff: D105
-      pycodestyle: D105
-      pep257: D105
+    - pycodestyle: D105
+    - pep257: D105
 
   - # Missing docstring in public nested class
     - ruff: D106
-      pycodestyle: D106
-      pep257: D106
+    - pycodestyle: D106
+    - pep257: D106
 
   - # Missing docstring in __init__
     - ruff: D107
-      pycodestyle: D107
-      pep257: D107
+    - pycodestyle: D107
+    - pep257: D107
 
   - # One-line docstring should fit on one line
     - ruff: D200
-      pycodestyle: D200
-      pep257: D200
+    - pycodestyle: D200
+    - pep257: D200
 
   - # No blank lines allowed before function docstring (found {num_lines})
     - ruff: D201
-      pycodestyle: D201
-      pep257: D201
+    - pycodestyle: D201
+    - pep257: D201
 
   - # No blank lines allowed after function docstring (found {num_lines})
     - ruff: D202
-      pycodestyle: D202
-      pep257: D202
+    - pycodestyle: D202
+    - pep257: D202
 
   - # 1 blank line required before class docstring
     - ruff: D203
-      pycodestyle: D203
-      pep257: D203
+    - pycodestyle: D203
+    - pep257: D203
 
   - # 1 blank line required after class docstring
     - ruff: D204
-      pycodestyle: D204
-      pep257: D204
+    - pycodestyle: D204
+    - pep257: D204
 
   - # 1 blank line required between summary line and description
     - ruff: D205
-      pycodestyle: D205
-      pep257: D205
-
-  - # Docstring should be indented with spaces, not tabs
-    - ruff: D206
-      pycodestyle: D206
-      pep257: D206
-
-  - # Docstring is under-indented
-    - ruff: D207
-      pycodestyle: D207
-      pep257: D207
-
-  - # Docstring is over-indented
-    - ruff: D208
-      pycodestyle: D208
-      pep257: D208
+    - pycodestyle: D205
+    - pep257: D205
 
   - # Multi-line docstring closing quotes should be on a separate line
     - ruff: D209
-      pycodestyle: D209
-      pep257: D209
+    - pycodestyle: D209
+    - pep257: D209
 
   - # No whitespaces allowed surrounding docstring text
     - ruff: D210
-      pycodestyle: D210
-      pep257: D210
+    - pycodestyle: D210
+    - pep257: D210
 
   - # No blank lines allowed before class docstring
     - ruff: D211
-      pycodestyle: D211
-      pep257: D211
+    - pycodestyle: D211
+    - pep257: D211
 
   - # Multi-line docstring summary should start at the first line
     - ruff: D212
-      pycodestyle: D212
-      pep257: D212
+    - pycodestyle: D212
+    - pep257: D212
 
   - # Multi-line docstring summary should start at the second line
     - ruff: D213
-      pycodestyle: D213
-      pep257: D213
+    - pycodestyle: D213
+    - pep257: D213
 
   - # Section is over-indented ("{name}")
     - ruff: D214
-      pycodestyle: D214
-      pep257: D214
+    - pycodestyle: D214
+    - pep257: D214
 
   - # Section underline is over-indented ("{name}")
     - ruff: D215
-      pycodestyle: D215
-      pep257: D215
+    - pycodestyle: D215
+    - pep257: D215
 
   - # Use triple double quotes """
     - ruff: D300
-      pycodestyle: D300
-      pep257: D300
+    - pycodestyle: D300
+    - pep257: D300
 
   - # Use r""" if any backslashes in a docstring
     - ruff: D301
-      pycodestyle: D301
-      pep257: D301
+    - pycodestyle: D301
+    - pep257: D301
 
   - # First line should end with a period
     - ruff: D400
-      pycodestyle: D400
-      pep257: D400
+    - pycodestyle: D400
+    - pep257: D400
 
   - # First line of docstring should be in imperative mood: "{first_line}"
     - ruff: D401
-      pycodestyle: D401
-      pep257: D401
+    - pycodestyle: D401
+    - pep257: D401
 
   - # First line should not be the function's signature
     - ruff: D402
-      pycodestyle: D402
-      pep257: D402
+    - pycodestyle: D402
+    - pep257: D402
 
   - # First word of the docstring should be capitalized: {} -> {}
     - ruff: D403
-      pycodestyle: D403
-      pep257: D403
+    - pycodestyle: D403
+    - pep257: D403
 
   - # First word of the docstring should not be "This"
     - ruff: D404
-      pycodestyle: D404
-      pep257: D404
+    - pycodestyle: D404
+    - pep257: D404
 
   - # Section name should be properly capitalized ("{name}")
     - ruff: D405
-      pycodestyle: D405
-      pep257: D405
+    - pycodestyle: D405
+    - pep257: D405
 
   - # Section name should end with a newline ("{name}")
     - ruff: D406
-      pycodestyle: D406
-      pep257: D406
+    - pycodestyle: D406
+    - pep257: D406
 
   - # Missing argument description in the docstring for {definition}: {name}
     - ruff: D407
-      pycodestyle: D407
-      pep257: D407
+    - pycodestyle: D407
+    - pep257: D407
 
   - # Section underline should be in the line following the section's name ("{name}")
     - ruff: D408
-      pycodestyle: D408
-      pep257: D408
+    - pycodestyle: D408
+    - pep257: D408
 
   - # Section underline should match the length of its name ("{name}")
     - ruff: D409
-      pycodestyle: D409
-      pep257: D409
+    - pycodestyle: D409
+    - pep257: D409
 
   - # Missing blank line after section ("{name}")
     - ruff: D410
-      pycodestyle: D410
-      pep257: D410
+    - pycodestyle: D410
+    - pep257: D410
 
   - # Missing blank line before section ("{name}")
     - ruff: D411
-      pycodestyle: D411
-      pep257: D411
+    - pycodestyle: D411
+    - pep257: D411
 
   - # No blank lines allowed between a section header and its content ("{name}")
     - ruff: D412
-      pycodestyle: D412
-      pep257: D412
+    - pycodestyle: D412
+    - pep257: D412
 
   - # Missing blank line after last section ("{name}")
     - ruff: D413
-      pycodestyle: D413
-      pep257: D413
+    - pycodestyle: D413
+    - pep257: D413
 
   - # Section has no content ("{name}")
     - ruff: D414
-      pycodestyle: D414
-      pep257: D414
+    - pycodestyle: D414
+    - pep257: D414
 
   - # First line should end with a period, question mark, or exclamation point
     - ruff: D415
-      pycodestyle: D415
-      pep257: D415
+    - pycodestyle: D415
+    - pep257: D415
 
   - # Section name should end with a colon ("{name}")
     - ruff: D416
-      pycodestyle: D416
-      pep257: D416
+    - pycodestyle: D416
+    - pep257: D416
 
   - # Missing argument(s) in the docstring for {definition}: {name}
     - ruff: D417
-      pycodestyle: D417
-      pep257: D417
+    - pycodestyle: D417
+    - pep257: D417
 
   - # Function decorated with @overload shouldn't contain a docstring
     - ruff: D418
-      pycodestyle: D418
-      pep257: D418
+    - pycodestyle: D418
+    - pep257: D418
 
   - # Docstring is empty
     - ruff: D419
-      pycodestyle: D419
-      pep257: D419
+    - pycodestyle: D419
+    - pep257: D419
