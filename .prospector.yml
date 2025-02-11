@@ -25,9 +25,8 @@ mypy:
     extra-checks: true
 
 pylint:
-  options:
-    extension-pkg-allow-list: mypy
   disable:
+    - c-extension-no-member # Needed for mypy
     - too-few-public-methods
     - missing-docstring
     - star-args
