@@ -23,7 +23,6 @@ combinations:
     - pycodestyle: E901
     - mccabe: MC0000
     - frosted: E402
-    - ruff: F999
 
   - # Undefined local variable
     - pylint: undefined-variable
