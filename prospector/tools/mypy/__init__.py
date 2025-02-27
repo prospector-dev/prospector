@@ -102,6 +102,11 @@ class MypyTool(ToolBase):
 
             raise BadToolConfig("mypy", f"The option {name} has an unsupported value type: {type(value)}")
 
+        for code in prospector_config.get_disabled_messages("mypy"):
+            self.options.append(f"--disable-error-code={code}")
+        for code in prospector_config.get_enabled_messages("mypy"):
+            self.options.append(f"--enable-error-code={code}")
+
     def run(self, found_files: FileFinder) -> list[Message]:
         args = [str(path) for path in found_files.python_modules]
         args.extend(self.options)
