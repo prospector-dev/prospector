@@ -129,7 +129,7 @@ class MypyTool(ToolBase):
             mypy_message = json.loads(mypy_json)
             message = f"{mypy_message['message']}."
             if mypy_message.get("hint", ""):
-                message = f"{message}, Hint: {mypy_message['hint']}."
+                message = f"{message} {mypy_message['hint']}."
             code = mypy_message["code"]
             messages.append(
                 Message(
