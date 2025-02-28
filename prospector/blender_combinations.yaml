@@ -199,6 +199,7 @@ combinations:
     - pep8: N804
     - pycodestyle: N804
     - pylint: bad-classmethod-argument
+    - ruff: N804
 
   - # '<>' is deprecated, use '!='
     - pep8: W603
@@ -319,16 +320,19 @@ combinations:
   - - pylint: invalid-name
     - pep8: N802
     - pycodestyle: N802
+    - ruff: N802
 
   # argument name should be lowercase
   - - pylint: invalid-name
     - pep8: N803
     - pycodestyle: N803
+    - ruff: N803
 
   # Variable in function should be lowercase
   - - pylint: invalid-name
     - pep8: N806
     - pycodestyle: N806
+    - ruff: N806
 
   # too complex
   - #	Too many branches ({branches} > {max_branches})
@@ -375,6 +379,10 @@ combinations:
     - bandit: B603
     - ruff: S603
     - ruff: PLW1510
+
+  - # Private member accessed:
+    - pylint: protected-access
+    - ruff: SLF001
 
   # assert_used
   - - ruff: S101
