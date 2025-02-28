@@ -1,3 +1,4 @@
+import mimetypes
 import os
 from pathlib import Path
 
@@ -8,7 +9,8 @@ def is_python_package(path: Path) -> bool:
 
 def is_python_module(path: Path) -> bool:
     # TODO: is this too simple?
-    return path.suffix == ".py"
+    mime_type, _ = mimetypes.guess_type(path.as_uri(), strict=False)
+    return mime_type == "text/x-python"
 
 
 def is_virtualenv(path: Path) -> bool:
