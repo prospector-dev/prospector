@@ -8,6 +8,7 @@
 combinations:
   - # Unused Import
     - pylint: unused-import
+    - pylint: W0611
     - pyflakes: F401
     - frosted: E101
     - ruff: F401
@@ -15,6 +16,7 @@ combinations:
   - # Syntax Error
     - dodgy: diff
     - pylint: syntax-error
+    - pylint: E0001
     - pyflakes: F999
     - pep8: E901
     # expected an indented block
@@ -26,6 +28,7 @@ combinations:
 
   - # Undefined local variable
     - pylint: undefined-variable
+    - pylint: E0602
     - pyflakes: F821
     - frosted: E303
     - ruff: F821
@@ -33,6 +36,7 @@ combinations:
 
   - # Unused variable
     - pylint: unused-variable
+    - pylint: W0612
     - vulture: unused-variable
     - pyflakes: F841
     - frosted: E307
@@ -48,6 +52,7 @@ combinations:
 
   - # Import from __future__ not first import
     - pylint: misplaced-future
+    - pylint: W0410
     - pyflakes: F404
     - frosted: E207
     - ruff: F404
@@ -56,36 +61,43 @@ combinations:
     - pep8: E501
     - pycodestyle: E501
     - pylint: line-too-long
+    - pylint: C0301
 
   - # Trailing whitespace
     - pep8: W291
     - pycodestyle: W291
     - pylint: trailing-whitespace
+    - pylint: C0303
 
   - # Blank line contains whitespace
     - pep8: W293
     - pycodestyle: W293
     - pylint: trailing-whitespace
+    - pylint: C0303
 
   - # No newline at end of file
     - pep8: W292
     - pycodestyle: W292
     - pylint: missing-final-newline
+    - pylint: C0304
 
   - # line ends with semi-colon
     - pep8: E703
     - pycodestyle: E703
     - pylint: unnecessary-semicolon
+    - pylint: W0301
 
   - # multiple statements on one line (colon)
     - pep8: E701
     - pycodestyle: E701
     - pylint: multiple-statements
+    - pylint: C0321
 
   - # multiple statements on one line (semicolon)
     - pep8: E702
     - pycodestyle: E702
     - pylint: multiple-statements
+    - pylint: C0321
 
   - # incorrect indentation
     - pep257: D207
@@ -93,6 +105,7 @@ combinations:
     - pep8: E111
     - pycodestyle: E111
     - pylint: bad-indentation
+    - pylint: W0311
     - ruff: D207
 
   - # incorrect indentation
@@ -101,6 +114,7 @@ combinations:
     - pep8: E111
     - pycodestyle: E111
     - pylint: bad-indentation
+    - pylint: W0311
     - ruff: D208
 
   - # comma not followed by a space
@@ -123,12 +137,14 @@ combinations:
 
   - # undefined name in __all__
     - pylint: undefined-all-variable
+    - pylint: E0603
     - pyflakes: F822
     - frosted: E304
     - ruff: F822
 
   - # duplicate argument in function definition
     - pylint: duplicate-argument-name
+    - pylint: E0108
     - pyflakes: F831
     - frosted: E206
     - ruff: F831
@@ -136,35 +152,42 @@ combinations:
   - # redefinition of unused function
     - pyflakes: F811
     - pylint: function-redefined
+    - pylint: E0102
     - ruff: F811
 
   - # f-string is missing placeholders
     - pylint: f-string-without-interpolation
+    - pylint: W1309
     - pyflakes: F541
     - ruff: F541
 
   - # Duplicate key in dictionary
     - pylint: duplicate-key
+    - pylint: W0109
     - pyflakes: F601
     - ruff: F601
 
   - # More than one starred expression in assignment
     - pylint: too-many-star-expressions
+    - pylint: E0112
     - pyflakes: F622
     - ruff: F622
 
   - # Assert called on a tuple
     - pylint: assert-on-tuple
+    - pylint: W0199
     - pyflakes: F631
     - ruff: F631
 
   - # 'break' outside loop
     - pylint: not-in-loop
+    - pylint: E0103
     - pyflakes: F701
     - ruff: F701
 
   - # 'continue' not properly in loop
     - pylint: not-in-loop
+    - pylint: E0103
     - pyflakes: F702
     - ruff: F702
 
@@ -177,21 +200,25 @@ combinations:
 
   - # Yield outside function
     - pylint: yield-outside-function
+    - pylint: E0105
     - pyflakes: F704
     - ruff: F704
 
   - # Return outside function
     - pylint: return-outside-function
+    - pylint: E0104
     - pyflakes: F706
     - ruff: F706
 
   - # default 'except:' must be last
     - pylint: bad-except-order
+    - pylint: E0701
     - pyflakes: F707
     - ruff: F707
 
   - # NotImplemented raised - should raise NotImplementedError
     - pylint: notimplemented-raised
+    - pylint: E0711
     - pyflakes: F901
     - ruff: F901
 
@@ -199,6 +226,7 @@ combinations:
     - pep8: N804
     - pycodestyle: N804
     - pylint: bad-classmethod-argument
+    - pylint: C0202
     - ruff: N804
 
   - # '<>' is deprecated, use '!='
@@ -213,38 +241,46 @@ combinations:
 
   - # Redefining name from outer scope
     - pylint: redefined-outer-name
+    - pylint: W0621
     - pyflakes: F810
     - frosted: E306
     - ruff: F810
 
   - # Redefinition of unused variable
     - pylint: redefined-outer-name
+    - pylint: W0621
     - pyflakes: F811
 
   - # Wildcard import
     - pylint: wildcard-import
+    - pylint: W0614
     - pyflakes: F403
     - frosted: E103
     - ruff: F403
 
   - # Return with argument inside generator
     - pylint: return-arg-in-generator
+    - pylint: E0110
     - frosted: E208
 
   - # Too many positional arguments for function call
     - pylint: too-many-function-args
+    - pylint: E1121
     - frosted: E203
 
   - # Passing unexpected keyword argument
     - pylint: unexpected-keyword-arg
+    - pylint: E1123
     - frosted: E204
 
   - # Missing mandatory keyword argument
     - pylint: missing-kwoa
+    - pylint: E1125
     - frosted: E205
 
   - # No exception type(s) specified
     - pylint: bare-except
+    - pylint: W0702
     - frosted: W101
     - pep8: E722
     - pycodestyle: E722
@@ -255,6 +291,7 @@ combinations:
 
   - # No exception type(s) specified
     - pylint: bare-except
+    - pylint: W0702
     - frosted: W101
     - pep8: E722
     - pycodestyle: E722
@@ -265,10 +302,17 @@ combinations:
 
   - # Do not catch blind exception: `Exception`
     - pylint: broad-exception-caught
+    - pylint: W0718
     - ruff: BLE001
+
+  - # Do not catch blind exception: `BaseException`
+    - pylint: broad-except
+    - pylint: W0703
+    - ruff: BLE002
 
   - # Create your own exception
     - pylint: broad-exception-raised
+    - pylint: W0719
     - ruff: TRY002
 
   - # Spaces around keyword/parameter equals
@@ -308,6 +352,7 @@ combinations:
 
   - # pep8-naming incorrectly suggests that the first argument of a metaclass __new__ method should be 'cls'
     - pylint: bad-mcs-classmethod-argument
+    - pylint: C0204
     - pep8: N804
     - pycodestyle: N804
 
@@ -315,21 +360,25 @@ combinations:
     - pep8: N801
     - pycodestyle: N801
     - pylint: invalid-name
+    - pylint: C0103
 
-  # function name should be lowercase
-  - - pylint: invalid-name
+  - # function name should be lowercase
+    - pylint: invalid-name
+    - pylint: C0103
     - pep8: N802
     - pycodestyle: N802
     - ruff: N802
 
-  # argument name should be lowercase
-  - - pylint: invalid-name
+  - # argument name should be lowercase
+    - pylint: invalid-name
+    - pylint: C0103
     - pep8: N803
     - pycodestyle: N803
     - ruff: N803
 
-  # Variable in function should be lowercase
-  - - pylint: invalid-name
+  - # Variable in function should be lowercase
+    - pylint: invalid-name
+    - pylint: C0103
     - pep8: N806
     - pycodestyle: N806
     - ruff: N806
@@ -344,44 +393,50 @@ combinations:
     - pylint: too-many-statements
     - pylint: R0915
     - mccabe: MC0001
-    - pylint: too-many-statements
     - ruff: PLR0915
 
   - # pep257 takes preference over pylint documentation warnings
     - pep257: D100
     - pydocstyle: D100
     - pylint: missing-docstring
+    - pylint: C0111
     - ruff: D100
 
   - # Missing docstring in public class
     - pep257: D101
     - pydocstyle: D101
     - pylint: missing-docstring
+    - pylint: C0111
     - ruff: D101
 
   - # Missing docstring in public method
     - pep257: D102
     - pydocstyle: D102
     - pylint: missing-docstring
+    - pylint: C0111
     - ruff: D102
 
   - # Missing docstring in public function
     - pep257: D103
     - pydocstyle: D103
     - pylint: missing-docstring
+    - pylint: C0111
     - ruff: D103
 
   - - pylint: singleton-comparison
+    - pylint: C0221
     - pep8: E711
     - pycodestyle: E711
 
   - - pylint: subprocess-run-check
+    - pylint: W1510
     - bandit: B603
     - ruff: S603
     - ruff: PLW1510
 
   - # Private member accessed:
     - pylint: protected-access
+    - pylint: W0212
     - ruff: SLF001
 
   # assert_used
@@ -418,6 +473,7 @@ combinations:
 
   # request_without_timeout
   - - pylint: missing-timeout
+    - pylint: W3101
     - ruff: S113
     - bandit: B113
 
@@ -528,11 +584,13 @@ combinations:
   # Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
   # See: https://docs.astral.sh/ruff/rules/raise-without-from-inside-except
   - - pylint: raise-missing-from
+    - pylint: W0707
     - ruff: B904
 
   # Use of possibly insecure function - consider using safer ast.literal_eval
   # See: https://docs.astral.sh/ruff/rules/suspicious-eval-usage
   - - pylint: eval-used
+    - pylint: W0123
     - bandit: B307
     - ruff: S307
 
@@ -1080,6 +1138,11 @@ combinations:
     - pylint: nested-min-max
     - pylint: W3301
     - ruff: PLW3301
+
+  - # Consider using 'with' for resource-allocating operations
+    - pylint: consider-using-with
+    - pylint: R1732
+    - ruff: SIM115
 
   - # Missing docstring in public package
     - ruff: D104
