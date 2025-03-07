@@ -41,7 +41,7 @@ repos:
               pyproject.toml|
           )$
   - repo: https://github.com/PyCQA/prospector
-    rev: v1.13.3
+    rev: v1.15.3
     hooks:
       - id: prospector
         additional_dependencies:
@@ -52,3 +52,8 @@ repos:
         args:
           - --summary-only
           - --zero-exit
+        exclude: |-
+          (?x)^(
+            tests/suppression/testdata/.*
+            |tests/tools/vulture/testpath/testfile\.py
+          )$
