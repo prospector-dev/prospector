@@ -1,5 +1,11 @@
+import mimetypes
 import os
+import re
 from pathlib import Path
+
+from prospector import identify
+
+_PYTHON_COMMAND_RE = re.compile(r"^python[0-9]?$")
 
 
 def is_python_package(path: Path) -> bool:
@@ -7,8 +13,16 @@ def is_python_package(path: Path) -> bool:
 
 
 def is_python_module(path: Path) -> bool:
-    # TODO: is this too simple?
-    return path.suffix == ".py"
+    mimetype, encoding = mimetypes.guess_type(path)
+    del encoding
+    if mimetype == "text/x-python":
+        return True
+
+    executor = identify.parse_shebang_from_file(path)
+    if executor is not None and len(executor) > 0:
+        return _PYTHON_COMMAND_RE.match(Path(executor[0]).name) is not None
+
+    return False
 
 
 def is_virtualenv(path: Path) -> bool:
