@@ -133,7 +133,10 @@ def _load_content_package(name: str) -> Optional[dict[str, Any]]:
     used_name = None
     for file_name in file_names:
         used_name = f"{module_name}:{file_name}"
-        data = pkgutil.get_data(module_name, file_name)
+        try:
+            data = pkgutil.get_data(module_name, file_name)
+        except (ModuleNotFoundError, FileNotFoundError):
+            continue
         if data is not None:
             break
 
