@@ -24,6 +24,9 @@ class TextFormatter(SummaryFormatter):
         )
 
         output.append(f"    {message.message}")
+        ci_annotation = self.get_ci_annotation(message)
+        if ci_annotation:
+            output.append(ci_annotation)
 
         return "\n".join(output)
 

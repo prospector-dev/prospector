@@ -16,6 +16,7 @@ repos:
       - id: ruff
         args:
         - --fix
+        - --ignore=E501
         exclude: |
           (?x)^(
             |tests/.*
