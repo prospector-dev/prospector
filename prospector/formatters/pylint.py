@@ -66,6 +66,9 @@ class PylintFormatter(SummaryFormatter):
                 template_args["message"] = ""
                 indent = len(template % template_args)
                 output.append(f"{' ' * indent}See: {message.doc_url}")
+            ci_annotation = self.get_ci_annotation(message)
+            if ci_annotation:
+                output.append(ci_annotation)
         return output
 
     def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:

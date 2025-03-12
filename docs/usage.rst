@@ -44,6 +44,9 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 |                      | | ``{path}:{line}:{character}: [{msg_id}({symbol}), {obj}] {msg}``.        |
 |                      | | The output includes the name of the tool which generated the error as    |
 |                      | | as well as the error code.                                               |
+|                      | | On GitHub workflows an annotation is automatically created,              |
+|                      | | if Prospector ir run from a subpath of the repository you can use the    |
+|                      | | PROSPECTOR_FILE_PREFIX environment variable to set the prefix.           |
 +----------------------+----------------------------------------------------------------------------+
 | ``pylint_parseable`` | | Produces output in the same style as ``pylint --parseable``. The         |
 |                      | | format is ``{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}``.          |
@@ -61,6 +64,9 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 | ``xunit``            | | Same as JSON except produces xunit compatible XML output.                |
 +----------------------+----------------------------------------------------------------------------+
 | ``text``             | | The default output format, a simple human readable format.               |
+|                      | | On GitHub workflows an annotation is automatically created,              |
+|                      | | if Prospector ir run from a subpath of the repository you can use the    |
+|                      | | PROSPECTOR_FILE_PREFIX environment variable to set the prefix.           |
 +----------------------+----------------------------------------------------------------------------+
 
 
