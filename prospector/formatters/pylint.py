@@ -52,18 +52,20 @@ class PylintFormatter(SummaryFormatter):
             message_str = message.message.strip()
             if message.doc_url:
                 message_str += f" (See: {message.doc_url})"
-            output.append(
-                template
-                % {
-                    "path": self._make_path(message.location),
-                    "line": message.location.line,
-                    "character": message.location.character,
-                    "source": message.source,
-                    "code": message.code,
-                    "function": message.location.function,
-                    "message": message.message.strip(),
-                }
-            )
+            template_args = {
+                "path": self._make_path(message.location),
+                "line": message.location.line,
+                "character": message.location.character,
+                "source": message.source,
+                "code": message.code,
+                "function": message.location.function,
+                "message": message.message.strip(),
+            }
+            output.append(template % template_args)
+            if message.doc_url:
+                template_args["message"] = ""
+                indent = len(template % template_args)
+                output.append(f"{' ' * indent}See: {message.doc_url}")
         return output
 
     def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
