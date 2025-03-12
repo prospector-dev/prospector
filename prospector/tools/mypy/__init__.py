@@ -109,6 +109,8 @@ class MypyTool(ToolBase):
 
     def run(self, found_files: FileFinder) -> list[Message]:
         args = [str(path) for path in found_files.python_modules]
+        if not args:
+            return []
         args.extend(self.options)
         if self.use_dmypy:
             # Due to dmypy messing with stdout/stderr we call it in a separate
