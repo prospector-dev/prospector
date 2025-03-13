@@ -44,9 +44,9 @@ class ToolBase(ABC):
         """
         raise NotImplementedError
 
-    def get_ignored_codes(self, line: str) -> list[str]:
+    def get_ignored_codes(self, line: str) -> list[tuple[str, int]]:
         """
-        Return a list of error codes that the tool will ignore from a line of code.
+        Return a list of error codes and line offset that the tool will ignore from a line of code.
         """
         del line  # unused
         return []

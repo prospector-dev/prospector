@@ -22,6 +22,7 @@ if TYPE_CHECKING:
 _UNUSED_WILDCARD_IMPORT_RE = re.compile(r"^Unused import(\(s\))? (.*) from wildcard import")
 
 _IGNORE_RE = re.compile(r"#\s*pylint:\s*disable=([^#]*[^#\s])(\s*#.*)?$", re.IGNORECASE)
+_IGNORE_NEXT_RE = re.compile(r"#\s*pylint:\s*disable-next=([^#]*[^#\s])(\s*#.*)?$", re.IGNORECASE)
 
 
 def _is_in_dir(subpath: Path, path: Path) -> bool:
@@ -269,8 +270,11 @@ class PylintTool(ToolBase):
         messages = self._collector.get_messages()
         return self.combine(messages)
 
-    def get_ignored_codes(self, line: str) -> list[str]:
+    def get_ignored_codes(self, line: str) -> list[tuple[str, int]]:
         match = _IGNORE_RE.search(line)
         if match:
-            return [e.strip() for e in match.group(1).split(",")]
+            return [(e.strip(), 0) for e in match.group(1).split(",")]
+        match = _IGNORE_NEXT_RE.search(line)
+        if match:
+            return [(e.strip(), 1) for e in match.group(1).split(",")]
         return []
