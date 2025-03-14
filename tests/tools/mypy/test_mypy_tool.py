@@ -30,11 +30,11 @@ class TestMypyTool(TestCase):
 
     def test_ignore_code(self):
         mypy_tool = MypyTool()
-        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc]") == ["misc"]
-        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc] # toto") == ["misc"]
-        assert mypy_tool.get_ignored_codes("toto # Type: Ignore[misc] # toto") == ["misc"]
-        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc,misc2]") == ["misc", "misc2"]
-        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc, misc2]") == ["misc", "misc2"]
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc]") == [("misc", 0)]
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc] # toto") == [("misc", 0)]
+        assert mypy_tool.get_ignored_codes("toto # Type: Ignore[misc] # toto") == [("misc", 0)]
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc,misc2]") == [("misc", 0), ("misc2", 0)]
+        assert mypy_tool.get_ignored_codes("toto # type: ignore[misc, misc2]") == [("misc", 0), ("misc2", 0)]
 
 
 class TestMypyMessageFormat(TestCase):

@@ -174,8 +174,8 @@ def get_suppressions(
             for line_number, line_content in enumerate(file_contents):
                 for tool_name, tool in tools.items():
                     tool_ignores = tool.get_ignored_codes(line_content)
-                    for tool_ignore in tool_ignores:
-                        tools_ignore[filepath][line_number + 1].add(Ignore(tool_name, tool_ignore))
+                    for tool_ignore, offset in tool_ignores:
+                        tools_ignore[filepath][line_number + 1 + offset].add(Ignore(tool_name, tool_ignore))
 
     # Ignore the blending messages
     if blending:

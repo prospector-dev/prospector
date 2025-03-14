@@ -154,8 +154,8 @@ class MypyTool(ToolBase):
 
         return messages
 
-    def get_ignored_codes(self, line: str) -> list[str]:
+    def get_ignored_codes(self, line: str) -> list[tuple[str, int]]:
         match = _IGNORE_RE.search(line)
         if match:
-            return [e.strip() for e in match.group(1).split(",")]
+            return [(e.strip(), 0) for e in match.group(1).split(",")]
         return []
