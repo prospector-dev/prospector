@@ -41,20 +41,20 @@ repos:
               README.rst|
               pyproject.toml|
           )$
-#  - repo: https://github.com/PyCQA/prospector
-#    rev: master
-#    hooks:
-#      - id: prospector
-#        additional_dependencies:
-#          - "prospector[with_everything]"
-#          # the following are needed to run mypy successfully in the pre-commit virtualenv
-#          - types-setuptools
-#          - types-PyYAML
-#        args:
-#          - --summary-only
-#          - --zero-exit
-#        exclude: |-
-#          (?x)^(
-#            tests/suppression/testdata/.*
-#            |tests/tools/vulture/testpath/testfile\.py
-#          )$
+  - repo: https://github.com/PyCQA/prospector
+    rev: v1.16.0
+    hooks:
+      - id: prospector
+        additional_dependencies:
+          - "prospector[with_everything]"
+          # the following are needed to run mypy successfully in the pre-commit virtualenv
+          - types-setuptools
+          - types-PyYAML
+        args:
+          - --summary-only
+          - --zero-exit
+        exclude: |-
+          (?x)^(
+            tests/suppression/testdata/.*
+            |tests/tools/vulture/testpath/testfile\.py
+          )$
