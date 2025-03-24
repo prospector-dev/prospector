@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prospector"
-version = "1.15.3"
+version = "1.16.0"
 description = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
 authors = ["Carl Crowder <git@carlcrowder.com>"]
 maintainers = ["Carl Crowder <git@carlcrowder.com>",
@@ -42,7 +42,6 @@ python = ">=3.9,<4.0"
 pylint = ">=3.0"
 pylint-celery = "0.3"
 pylint-django = ">=2.6.1"
-pylint-flask = "0.6"
 requirements-detector = ">=1.3.2"
 PyYAML = "*"
 mccabe = "^0.7.0"

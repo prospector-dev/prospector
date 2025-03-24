@@ -11,7 +11,7 @@ from prospector import encoding
 from prospector.exceptions import PermissionMissing
 from prospector.pathutils import is_virtualenv
 
-POSSIBLE_LIBRARIES = ("django", "celery", "flask")
+POSSIBLE_LIBRARIES = ("django", "celery")
 
 
 # see http://docs.python.org/2/reference/lexical_analysis.html#identifiers

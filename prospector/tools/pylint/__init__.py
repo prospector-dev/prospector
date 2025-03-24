@@ -47,8 +47,6 @@ class PylintTool(ToolBase):
             linter.load_plugin_modules(["pylint_django"])
         if "celery" in prospector_config.libraries:
             linter.load_plugin_modules(["pylint_celery"])
-        if "flask" in prospector_config.libraries:
-            linter.load_plugin_modules(["pylint_flask"])
 
         profile_path = os.path.join(prospector_config.workdir, prospector_config.profile.name)
         for plugin in prospector_config.profile.pylint.get("load-plugins", []):  # type: ignore[attr-defined]

@@ -123,7 +123,7 @@ class ProfileValidationTool(ToolBase):
                 )
 
         if "uses" in parsed:
-            possible_libs = ("django", "celery", "flask")
+            possible_libs = ("django", "celery")
             parsed_list = parsed["uses"] if isinstance(parsed["uses"], list) else [parsed["uses"]]
             for uses in parsed_list:
                 if uses not in possible_libs:
