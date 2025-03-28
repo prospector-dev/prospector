@@ -311,7 +311,7 @@ combinations:
   - # Do not catch blind exception: `BaseException`
     - pylint: broad-except
     - pylint: W0703
-    - ruff: BLE002
+    - ruff: BLE001
 
   - # Create your own exception
     - pylint: broad-exception-raised
@@ -437,6 +437,11 @@ combinations:
     - ruff: S603
     - ruff: PLW1510
     - bandit: B603
+
+  - # Unused argument
+    - pylint: unused-argument
+    - pylint: W0613
+    - ruff: ARG001
 
   - # Private member accessed:
     - pylint: protected-access
