@@ -147,22 +147,22 @@ repository, you can install `pre-commit <https://pre-commit.com/>`_ and add the 
 text to your repositories' ``.pre-commit-config.yaml``::
 
     repos:
-    -   repo: https://github.com/PyCQA/prospector
-        rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest
-        hooks:
-        -   id: prospector
+    - repo: https://github.com/PyCQA/prospector
+      rev: v1.16.1 # The version of Prospector to use, if not 'master' for latest
+      hooks:
+        - id: prospector
 
 This only installs base prospector - if you also use optional tools, for example bandit and/or mypy, then you can add
 them to the hook configuration like so::
 
     repos:
-    -   repo: https://github.com/PyCQA/prospector
-        rev: 1.10.0
-        hooks:
-        -   id: prospector
-            additional_dependencies:
+    - repo: https://github.com/PyCQA/prospector
+      rev: v1.16.1
+      hooks:
+        - id: prospector
+          additional_dependencies:
             - ".[with_mypy,with_bandit]"
-          - args: [
+          args: [
             '--with-tool=mypy',
             '--with-tool=bandit',
             ]
@@ -188,17 +188,17 @@ For prospector options which affect display only - those which are not configura
 added as command line arguments to the hook. For example::
 
     repos:
-    -   repo: https://github.com/PyCQA/prospector
-        rev: 1.10.0
-        hooks:
-        -   id: prospector
-            additional_dependencies:
-            -   ".[with_mypy,with_bandit]"
-            args:
-            -   --with-tool=mypy
-            -   --with-tool=bandit
-            -   --summary-only
-            -   --zero-exit
+    - repo: https://github.com/PyCQA/prospector
+      rev: v1.16.1
+      hooks:
+        - id: prospector
+          additional_dependencies:
+            - ".[with_mypy,with_bandit]"
+          args:
+            - --with-tool=mypy
+            - --with-tool=bandit
+            - --summary-only
+            - --zero-exit
 
 
 
