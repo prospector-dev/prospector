@@ -25,9 +25,7 @@ class ProspectorProfile:
         self.output_format = profile_dict.get("output-format")
         self.output_target = profile_dict.get("output-target")
         self.autodetect = profile_dict.get("autodetect", True)
-        self.uses = [
-            uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery")
-        ]
+        self.uses = [uses for uses in _ensure_list(profile_dict.get("uses", [])) if uses in ("django", "celery")]
         self.max_line_length = profile_dict.get("max-line-length")
 
         # informational shorthands

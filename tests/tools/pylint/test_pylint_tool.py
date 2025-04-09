@@ -94,9 +94,9 @@ class TestPylintTool(TestCase):
         # useless-suppression is now disable by default in pylint
         pylint_tool._linter.enable("useless-suppression")
         messages = pylint_tool.run(found_files)
-        assert any(
-            m.code == "useless-suppression" for m in messages
-        ), "There should be at least one useless suppression"
+        assert any(m.code == "useless-suppression" for m in messages), (
+            "There should be at least one useless suppression"
+        )
 
     def test_parallel_execution(self):
         root = THIS_DIR / "parallel"
