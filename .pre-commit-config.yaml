@@ -50,8 +50,8 @@ repos:
           - types-setuptools
           - types-PyYAML
         args:
-          - --summary-only
           - --zero-exit
+          - --output-format=text
         exclude: |-
           (?x)^(
             tests/suppression/testdata/.*
