@@ -127,9 +127,26 @@ class MypyTool(ToolBase):
     def _run_std(self, args: list[str]) -> list[Message]:
         sources, options = mypy.main.process_options(args, fscache=self.fscache)
         options.output = "json"
-        res = mypy.build.build(sources, options, fscache=self.fscache)
-
         messages = []
+        try:
+            res = mypy.build.build(sources, options, fscache=self.fscache)
+        except Exception as e:
+            messages.append(
+                Message(
+                    "mypy",
+                    code="fatal-build-error",
+                    message=str(e),
+                    location=Location(
+                        path="",
+                        module=None,
+                        function=None,
+                        line=0,
+                        character=0,
+                    ),
+                )
+            )
+            return messages
+
         for mypy_json in res.errors:
             mypy_message = json.loads(mypy_json)
             message = f"{mypy_message['message']}."
