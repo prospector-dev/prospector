@@ -182,7 +182,7 @@ def build_command_line_source(
         },
         "summary_only": {
             "flags": ["-S", "--summary-only"],
-            "help": "Only output summary information about the checks (don'toutput message information)",
+            "help": "Only output summary information about the checks (don't output message information)",
         },
         "output_format": {
             "flags": ["-o", "--output-format"],
