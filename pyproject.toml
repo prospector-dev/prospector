@@ -1,15 +1,20 @@
-[tool.poetry]
+[project]
 name = "prospector"
 version = "1.16.1"
 description = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
-authors = ["Carl Crowder <git@carlcrowder.com>"]
-maintainers = ["Carl Crowder <git@carlcrowder.com>",
-               "Carlos Coelho <carlospecter@gmail.com>",
-               "Pierre Sassoulas <pierre.sassoulas@gmail.com>",
-               "Stéphane Brunner <stephane.brunner@gmail.com>"]
+authors = [
+    {name = "Carl Crowder", email = "git@carlcrowder.com"}
+]
+maintainers = [
+    {name = "Carl Crowder", email = "git@carlcrowder.com"},
+    {name = "Carlos Coelho", email = "carlospecter@gmail.com"},
+    {name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com"},
+    {name = "Stéphane Brunner", email = "stephane.brunner@gmail.com"}
+]
 readme = "README.rst"
-homepage = "http://prospector.readthedocs.io"
-repository = "https://github.com/PyCQA/prospector"
+urls."Bug Tracker" = "https://github.com/prospector-dev/prospector/issues"
+urls."homepage" = "http://prospector.readthedocs.io"
+urls."repository" = "https://github.com/prospector-dev/prospector"
 keywords = ["pylint", "prospector", "static code analysis"]
 license = "GPLv2+"
 classifiers = [
@@ -25,6 +30,11 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
 ]
+
+[project.scripts]
+prospector = "prospector.run:main"
+
+[tool.poetry]
 # The format is a workaround aganst https://github.com/python-poetry/poetry/issues/9961
 packages = [
   { include = "prospector/", format = ["sdist"] }
@@ -33,9 +43,6 @@ include = [
   "prospector/blender_combinations.yaml",
   "prospector/profiles/profiles/*.yaml",
 ]
-
-[tool.poetry.scripts]
-prospector = 'prospector.run:main'
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
