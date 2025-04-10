@@ -63,7 +63,7 @@ class PyrightTool(ToolBase):
             if option_key not in VALID_OPTIONS:
                 url = "https://github.com/PyCQA/prospector/blob/master/prospector/tools/pyright/__init__.py"
                 raise BadToolConfig(
-                    "pyright", f"Option {option_key} is not valid. " f"See the list of possible options: {url}"
+                    "pyright", f"Option {option_key} is not valid. See the list of possible options: {url}"
                 )
 
         level = options.get("level", None)

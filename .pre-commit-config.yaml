@@ -1,4 +1,6 @@
-fail_fast: true
+ci:
+  skip:
+    - prospector
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
@@ -41,18 +43,23 @@ repos:
               README.rst|
               pyproject.toml|
           )$
-  - repo: https://github.com/PyCQA/prospector
-    rev: v1.16.0
+  - repo: local
     hooks:
       - id: prospector
+        name: prospector
+        description: Analyze Python code using Prospector
+        entry: prospector
+        language: python
+        types: [python]
+        require_serial: true
+        verbose: true
         additional_dependencies:
-          - "prospector[with_everything]"
           # the following are needed to run mypy successfully in the pre-commit virtualenv
           - types-setuptools
           - types-PyYAML
         args:
-          - --summary-only
           - --zero-exit
+          - --output-format=text
         exclude: |-
           (?x)^(
             tests/suppression/testdata/.*
