@@ -1,5 +1,5 @@
 ignore-paths:
-    - boing
+  - boing
 
 mypy:
-    run: false
+  run: false
