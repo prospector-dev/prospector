@@ -63,7 +63,7 @@ pydocstyle:
 bandit:
   run: true
   disable:
-  - B101 # Use of assert detected.
+    - B101 # Use of assert detected.
 
 ruff:
   run: true

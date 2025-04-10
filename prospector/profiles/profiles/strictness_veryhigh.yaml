@@ -40,5 +40,5 @@ pydocstyle:
     - D000
 
 mypy:
- options:
+  options:
     strict: true

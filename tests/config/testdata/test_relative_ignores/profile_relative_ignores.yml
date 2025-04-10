@@ -2,6 +2,5 @@ inherits:
   - strictness_medium
   - no_test_warnings
 
-
 ignore-paths:
   - something.py
