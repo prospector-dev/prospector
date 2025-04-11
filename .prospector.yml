@@ -2,7 +2,8 @@ output-format: grouped
 
 # strictness: veryhigh
 # doc-warnings: no
-# test-warnings: no
+test-warnings: yes
+
 max-line-length: 120
 # pep8: full
 
