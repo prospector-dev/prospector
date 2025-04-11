@@ -8,12 +8,12 @@ from prospector.tools.vulture import VultureTool
 
 
 class TestVultureTool(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         with patch("sys.argv", [""]):
             self.config = ProspectorConfig()
         self.vulture_tool = VultureTool()
 
-    def test_vulture_find_dead_code(self):
+    def test_vulture_find_dead_code(self) -> None:
         found_files = FileFinder(Path(__file__).parent / "testpath/testfile.py")
         self.vulture_tool.configure(self.config, found_files)
         messages = self.vulture_tool.run(found_files)

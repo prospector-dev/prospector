@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import contextlib
 import sys
+from collections.abc import Generator
 from pathlib import Path
+from typing import Any, Optional
 from unittest.mock import patch
 
 from prospector.config import ProspectorConfig
@@ -10,13 +12,13 @@ from prospector.run import Prospector
 
 
 @contextlib.contextmanager
-def patch_cli(*args: list[str], target: str = "sys.argv"):
+def patch_cli(*args: Any, target: str = "sys.argv") -> Generator[None, None]:
     with patch(target, args):
         yield
 
 
 @contextlib.contextmanager
-def patch_cwd(set_cwd: Path):
+def patch_cwd(set_cwd: Path) -> Generator[None, None]:
     # oddness here : Path.cwd() uses os.getcwd() under the hood in python<=3.9 but
     # for python 3.10+, they return different things if only one is patched; therefore,
     # for this test to work in all python versions prospector supports, both need to
@@ -38,7 +40,7 @@ def patch_cwd(set_cwd: Path):
 
 
 @contextlib.contextmanager
-def patch_execution(*args: list[str], set_cwd: Path = None):
+def patch_execution(*args: str, set_cwd: Optional[Path] = None) -> Generator[None, None]:
     """
     Utility to patch builtins to simulate running prospector in a particular directory
     with particular commandline args
@@ -46,7 +48,7 @@ def patch_execution(*args: list[str], set_cwd: Path = None):
     :param set_cwd:  Simulate changing directory into the given directory
     :param args:  Any additional command-line arguments to pass to prospector
     """
-    args = ("prospector",) + args
+    args = ("prospector", *args)
     with patch_cli(*args):
         if set_cwd:
             with patch_cwd(set_cwd):
@@ -56,10 +58,13 @@ def patch_execution(*args: list[str], set_cwd: Path = None):
 
 
 @contextlib.contextmanager
-def patch_workdir_argv(target: str = "sys.argv", args: list[str] | None = None, workdir: Path | None = None):
+def patch_workdir_argv(
+    target: str = "sys.argv", args: list[str] | None = None, workdir: Path | None = None
+) -> Generator[Prospector, None]:
     if args is None:
         args = ["prospector"]
     with patch_cli(*args, target=target):
+        assert workdir is not None
         config = ProspectorConfig(workdir=workdir)
         config.paths = [workdir]
         pros = Prospector(config)

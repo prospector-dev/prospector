@@ -7,7 +7,7 @@ from prospector.finder import FileFinder
 from ..utils import patch_execution
 
 
-def test_relative_ignores():
+def test_relative_ignores() -> None:
     """
     Tests that if 'ignore-paths: something' is set, then it is ignored; that
     is, paths relative to the working directory should be ignored too
@@ -19,7 +19,7 @@ def test_relative_ignores():
         assert len(files.python_modules) == 2
 
 
-def test_determine_ignores_all_str():
+def test_determine_ignores_all_str() -> None:
     with patch_execution("-P", "prospector-str-ignores", set_cwd=Path(__file__).parent):
         config = ProspectorConfig()
     assert len(config.ignores) > 0
@@ -30,7 +30,7 @@ def test_determine_ignores_all_str():
         assert compiled_ignored_path in config.ignores
 
 
-def test_determine_ignores_containing_int_values_wont_throw_attr_exc():
+def test_determine_ignores_containing_int_values_wont_throw_attr_exc() -> None:
     with patch_execution("-P", "prospector-int-ignores", set_cwd=Path(__file__).parent):
         config = ProspectorConfig()
     assert len(config.ignores) > 0

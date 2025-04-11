@@ -8,12 +8,12 @@ from prospector.tools.bandit import BanditTool
 
 
 class TestBanditTool(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         with patch("sys.argv", [""]):
             self.config = ProspectorConfig()
         self.bandit_tool = BanditTool()
 
-    def test_hardcoded_password_string(self):
+    def test_hardcoded_password_string(self) -> None:
         found_files = FileFinder(Path(__file__).parent / "testpath/testfile.py")
         self.bandit_tool.configure(self.config, found_files)
         messages = self.bandit_tool.run(found_files)

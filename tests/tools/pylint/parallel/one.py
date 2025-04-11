@@ -1,2 +1,2 @@
-def this_is_a_line_that_is_longer_than_40_characters():
+def this_is_a_line_that_is_longer_than_40_characters() -> str:
     return "hi"

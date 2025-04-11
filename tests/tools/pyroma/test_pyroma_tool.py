@@ -7,7 +7,7 @@ from prospector.tools.pyroma import PyromaTool
 from ...utils import patch_cli, patch_cwd
 
 
-def test_forced_include():
+def test_forced_include() -> None:
     """
     The built-in default profiles for prospector will ignore `setup.py` by default, but this needs
     to be explicitly overridden for pyroma *only*

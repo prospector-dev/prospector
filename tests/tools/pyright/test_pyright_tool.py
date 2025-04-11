@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any
 from unittest import SkipTest, TestCase
 from unittest.mock import patch
 
@@ -11,7 +12,7 @@ from prospector.tools.exceptions import BadToolConfig
 try:
     from prospector.tools.pyright import format_messages
 except ImportError:
-    raise SkipTest  # noqa: B904
+    raise SkipTest  # type: ignore[call-arg] # noqa: B904
 
 
 class TestPyrightTool(TestCase):
@@ -21,20 +22,20 @@ class TestPyrightTool(TestCase):
         with patch("sys.argv", ["prospector", "--profile", str(profile_path.absolute())]):
             return ProspectorConfig()
 
-    def test_unrecognised_options(self):
+    def test_unrecognised_options(self) -> None:
         finder = FileFinder(Path(__file__).parent)
         self.assertRaises(BadToolConfig, self._get_config("pyright_bad_options").get_tools, finder)
 
-    def test_good_options(self):
+    def test_good_options(self) -> None:
         finder = FileFinder(Path(__file__).parent)
         self._get_config("pyright_good_options").get_tools(finder)
 
 
 class TestPyrightMessageFormat(TestCase):
-    def _encode_messages(self, messages):
+    def _encode_messages(self, messages: list[dict[str, Any]]) -> str:
         return json.dumps({"generalDiagnostics": messages})
 
-    def test_format_message_with_character(self):
+    def test_format_message_with_character(self) -> None:
         location = Location(path="file.py", module=None, function=None, line=17, character=2)
         expected = Message(source="pyright", code="error", location=location, message="Important error")
         self.assertEqual(
@@ -53,7 +54,7 @@ class TestPyrightMessageFormat(TestCase):
             [expected],
         )
 
-    def test_format_message_without_character(self):
+    def test_format_message_without_character(self) -> None:
         location = Location(path="file.py", module=None, function=None, line=17, character=-1)
         expected = Message(source="pyright", code="note", location=location, message="Important error")
         self.assertEqual(
@@ -72,7 +73,7 @@ class TestPyrightMessageFormat(TestCase):
             [expected],
         )
 
-    def test_format_message_without_line(self):
+    def test_format_message_without_line(self) -> None:
         location = Location(path="file.py", module=None, function=None, line=-1, character=-1)
         expected = Message(
             source="pyright",
