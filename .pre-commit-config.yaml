@@ -62,10 +62,12 @@ repos:
         additional_dependencies:
           # the following are needed to run mypy.
           - types-PyYAML
-        args:
-          - --output-format=text
         exclude: |-
           (?x)^(
-            tests/.*
+            tests/.*/testdata/.*
+            |tests/tools/.*/testpath/.*
+            |tests/tools/pylint/pylint_configs/.*
+            |tests/tools/pylint/test_no_init_found/.*
+            |tests/is_python/scrypt.*
             |docs/conf\.py
           )$

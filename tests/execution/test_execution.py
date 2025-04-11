@@ -18,7 +18,7 @@ from ..utils import patch_cli, patch_cwd, patch_execution
 TEST_DATA = Path(__file__).parent / "testdata"
 
 
-def test_non_subpath():
+def test_non_subpath() -> None:
     """
     Create a temporary directory faaar away from the CWD when running, ensure prospector can run
     """
@@ -32,7 +32,7 @@ def test_non_subpath():
         shutil.rmtree(tempdir)
 
 
-def test_ignored():
+def test_ignored() -> None:
     workdir = TEST_DATA / "ignore_test"
     with patch_execution("--profile", "profile.yml", str(workdir), set_cwd=workdir):
         config = ProspectorConfig()
@@ -44,7 +44,7 @@ def test_ignored():
         assert msgs[0].location.module == "pkg1.pkg2.pkg3.broken"
 
 
-def test_total_errors():
+def test_total_errors() -> None:
     # There are 5 python files, all with the same error
     # Some are in sub-packages, one in a directory without an __init__
     # All should be found and exactly 1 error per file found
@@ -65,7 +65,7 @@ def test_total_errors():
     assert len(message_locs) == 0
 
 
-def test_relative_path_specified():
+def test_relative_path_specified() -> None:
     """
     This test was to fix `prospector .` returning different results to `prospector ../prospector`
     (when running inside the prospector checkout

@@ -5,7 +5,7 @@ import pytest
 from prospector.pathutils import is_python_module
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # type: ignore[misc]
     "filename,expected",
     [
         ("file.py", True),
@@ -19,6 +19,6 @@ from prospector.pathutils import is_python_module
         ("no_exec", False),
     ],
 )
-def test_is_python_module(filename: str, expected: bool):
+def test_is_python_module(filename: str, expected: bool) -> None:
     path = Path(__file__).parent / filename
     assert is_python_module(path) == expected

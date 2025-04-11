@@ -1,5 +1,6 @@
 import datetime
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -8,13 +9,13 @@ from prospector.message import Location, Message
 from prospector.profiles.profile import ProspectorProfile
 
 
-@pytest.fixture
+@pytest.fixture  # type: ignore[misc]
 def _simple_profile() -> ProspectorProfile:
     return ProspectorProfile(name="horse", profile_dict={}, inherit_order=["horse"])
 
 
-@pytest.fixture
-def _simple_summary() -> dict:
+@pytest.fixture  # type: ignore[misc]
+def _simple_summary() -> dict[str, Any]:
     return {
         "started": datetime.datetime(2014, 1, 1),
         "completed": datetime.datetime(2014, 1, 1),
@@ -27,17 +28,17 @@ def _simple_summary() -> dict:
     }
 
 
-def test_formatter_types(_simple_summary, _simple_profile):
-    for _formatter_name, formatter in FORMATTERS.items():
+def test_formatter_types(_simple_summary: Any, _simple_profile: Any) -> None:
+    for formatter in FORMATTERS.values():
         formatter_instance = formatter(_simple_summary, [], _simple_profile)
         assert isinstance(formatter_instance.render(True, True, False), str)
 
 
-def test_formatters_render(_simple_summary, _simple_profile):
+def test_formatters_render(_simple_summary: Any, _simple_profile: Any) -> None:
     """
     Basic test to ensure that formatters can at least render messages without erroring
     """
-    for _formatter_name, formatter in FORMATTERS.items():
+    for formatter in FORMATTERS.values():
         messages = [
             Message(
                 "testtool",
