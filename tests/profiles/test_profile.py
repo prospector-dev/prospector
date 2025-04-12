@@ -1,6 +1,8 @@
 from pathlib import Path
 from unittest import TestCase
 
+import pytest
+
 from prospector.profiles.exceptions import ProfileNotFound
 from prospector.profiles.profile import ProspectorProfile
 
@@ -18,17 +20,18 @@ class TestOptionalProfiles(TestCase):
         self._profile_path = [THIS_DIR / "profiles/test_optional", BUILTIN_PROFILES]
 
     def test_nonoptional_missing(self) -> None:
-        self.assertRaises(ProfileNotFound, ProspectorProfile.load, "nonoptional_missing", self._profile_path)
+        with pytest.raises(ProfileNotFound):
+            ProspectorProfile.load("nonoptional_missing", self._profile_path)
 
     def test_optional_missing(self) -> None:
         # ensure loads without an exception to verify that a missing inherits works fine
         profile = ProspectorProfile.load("optional_missing", self._profile_path)
-        self.assertTrue(profile.is_tool_enabled("dodgy"))
+        assert profile.is_tool_enabled("dodgy")
 
     def test_optional_present(self) -> None:
         # optional does not mean ignore so verify that values are inherited if present
         profile = ProspectorProfile.load("optional_present", self._profile_path)
-        self.assertFalse(profile.is_tool_enabled("dodgy"))
+        assert not profile.is_tool_enabled("dodgy")
 
 
 class TestToolRenaming(TestCase):
@@ -80,15 +83,15 @@ class TestToolRenaming(TestCase):
         for tool in ("pycodestyle", "pydocstyle"):
             old_dict = profile_old.as_dict()[tool]
             new_dict = profile_new.as_dict()[tool]
-            self.assertListEqual(sorted(old_dict["disable"]), sorted(new_dict["disable"]))
-            self.assertListEqual(sorted(old_dict["enable"]), sorted(new_dict["enable"]))
-        self.assertDictEqual(profile_old.as_dict(), profile_new.as_dict())
+            assert sorted(old_dict["disable"]) == sorted(new_dict["disable"])
+            assert sorted(old_dict["enable"]) == sorted(new_dict["enable"])
+        assert profile_old.as_dict() == profile_new.as_dict()
 
         # do they have the same settings for everything?
         for prof in (profile_old, profile_new):
-            self.assertTrue(prof.is_tool_enabled("pycodestyle"))
-            self.assertTrue(prof.is_tool_enabled("pydocstyle"))
-            self.assertEqual(prof.pycodestyle["options"]["max-line-length"], 120)  # type: ignore[attr-defined]
+            assert prof.is_tool_enabled("pycodestyle")
+            assert prof.is_tool_enabled("pydocstyle")
+            assert prof.pycodestyle["options"]["max-line-length"] == 120  # type: ignore[attr-defined]
 
     def test_pep8_shorthand_with_newname(self) -> None:
         """
@@ -96,9 +99,9 @@ class TestToolRenaming(TestCase):
         however for now, it also has to be able to configure pycodestyle
         """
         profile = ProspectorProfile.load("pep8_shorthand_pycodestyle", self._profile_path, allow_shorthand=True)
-        self.assertTrue("full_pep8" in profile.inherit_order)
-        self.assertTrue(profile.is_tool_enabled("pycodestyle"))
-        self.assertEqual(profile.pycodestyle["options"]["max-line-length"], 120)  # type: ignore[attr-defined]
+        assert "full_pep8" in profile.inherit_order
+        assert profile.is_tool_enabled("pycodestyle")
+        assert profile.pycodestyle["options"]["max-line-length"] == 120  # type: ignore[attr-defined]
 
 
 class TestProfileParsing(ProfileTestBase):
@@ -108,7 +111,7 @@ class TestProfileParsing(ProfileTestBase):
         an empty 'pylint.disable' list
         """
         profile = ProspectorProfile.load("empty_disable_list", self._profile_path, allow_shorthand=False)
-        self.assertEqual([], profile.pylint["disable"])  # type: ignore[attr-defined]
+        assert profile.pylint["disable"] == []  # type: ignore[attr-defined]
 
     def test_empty_profile(self) -> None:
         """
@@ -116,11 +119,11 @@ class TestProfileParsing(ProfileTestBase):
         default values
         """
         profile = ProspectorProfile.load("empty_profile", self._profile_path, allow_shorthand=False)
-        self.assertEqual([], profile.pylint["disable"])  # type: ignore[attr-defined]
+        assert profile.pylint["disable"] == []  # type: ignore[attr-defined]
 
     def test_ignores(self) -> None:
         profile = ProspectorProfile.load("ignores", self._profile_path)
-        self.assertEqual(["^tests/", "/migrations/"].sort(), profile.ignore_patterns.sort())
+        assert sorted(["^tests/", "/migrations/"]) == sorted(profile.ignore_patterns)
 
     def test_enabled_in_disabled(self) -> None:
         """
@@ -130,12 +133,12 @@ class TestProfileParsing(ProfileTestBase):
 
     def test_disable_tool(self) -> None:
         profile = ProspectorProfile.load("pylint_disabled", self._profile_path)
-        self.assertFalse(profile.is_tool_enabled("pylint"))
-        self.assertTrue(profile.is_tool_enabled("pycodestyle"))
+        assert not profile.is_tool_enabled("pylint")
+        assert profile.is_tool_enabled("pycodestyle")
 
     def test_load_plugins(self) -> None:
         profile = ProspectorProfile.load("pylint_load_plugins", self._profile_path)
-        self.assertEqual(["first_plugin", "second_plugin"], profile.pylint["load-plugins"])  # type: ignore[attr-defined]
+        assert profile.pylint["load-plugins"] == ["first_plugin", "second_plugin"]  # type: ignore[attr-defined]
 
 
 class TestProfileInheritance(ProfileTestBase):
@@ -150,17 +153,17 @@ class TestProfileInheritance(ProfileTestBase):
         profile = ProspectorProfile.load("inherittest3", self._profile_path, allow_shorthand=False)
         disable = profile.pylint["disable"]  # type: ignore[attr-defined]
         disable.sort()
-        self.assertEqual(["I0002", "I0003", "raw-checker-failed"], disable)
+        assert disable == ["I0002", "I0003", "raw-checker-failed"]
 
     def test_disable_tool_inheritance(self) -> None:
         profile = ProspectorProfile.load("pydocstyle_and_pylint_disabled", self._profile_path)
-        self.assertFalse(profile.is_tool_enabled("pylint"))
-        self.assertFalse(profile.is_tool_enabled("pydocstyle"))
+        assert not profile.is_tool_enabled("pylint")
+        assert not profile.is_tool_enabled("pydocstyle")
 
     def test_precedence(self) -> None:
         profile = self._load("precedence")
-        self.assertTrue(profile.is_tool_enabled("pylint"))
-        self.assertTrue("expression-not-assigned" in profile.get_disabled_messages("pylint"))
+        assert profile.is_tool_enabled("pylint")
+        assert "expression-not-assigned" in profile.get_disabled_messages("pylint")
 
         # TODO: this doesn't work entirely as expected, but changing would be a backwards incompatible
         #       change - so this is parked until version 2.0
@@ -170,9 +173,9 @@ class TestProfileInheritance(ProfileTestBase):
     def test_strictness_equivalence(self) -> None:
         profile = self._load("strictness_equivalence")
         medium_strictness = ProspectorProfile.load("strictness_medium", self._profile_path)
-        self.assertListEqual(
-            sorted(profile.pylint["disable"]),  # type: ignore[attr-defined]
-            sorted(medium_strictness.pylint["disable"]),  # type: ignore[attr-defined]
+        assert (
+            sorted(profile.pylint["disable"])  # type: ignore[attr-defined]
+            == sorted(medium_strictness.pylint["disable"])  # type: ignore[attr-defined]
         )
 
     def test_shorthand_inheritance(self) -> None:
@@ -185,23 +188,23 @@ class TestProfileInheritance(ProfileTestBase):
             # but do include the profiles that the start.yaml will
             forced_inherits=["doc_warnings", "no_member_warnings"],
         )
-        self.assertDictEqual(profile.pylint, high_strictness.pylint)  # type: ignore[attr-defined]
-        self.assertDictEqual(profile.pycodestyle, high_strictness.pycodestyle)  # type: ignore[attr-defined]
-        self.assertDictEqual(profile.pyflakes, high_strictness.pyflakes)  # type: ignore[attr-defined]
+        assert profile.pylint == high_strictness.pylint  # type: ignore[attr-defined]
+        assert profile.pycodestyle == high_strictness.pycodestyle  # type: ignore[attr-defined]
+        assert profile.pyflakes == high_strictness.pyflakes  # type: ignore[attr-defined]
 
     def test_tool_enabled(self) -> None:
         profile = self._load("tool_enabled")
-        self.assertTrue(profile.is_tool_enabled("pydocstyle"))
-        self.assertFalse(profile.is_tool_enabled("pylint"))
+        assert profile.is_tool_enabled("pydocstyle")
+        assert not profile.is_tool_enabled("pylint")
 
     def test_pycodestyle_inheritance(self) -> None:
         profile = self._load("pep8")
-        self.assertTrue("full_pep8" in profile.inherit_order)
+        assert "full_pep8" in profile.inherit_order
 
     def test_module_inheritance(self) -> None:
         profile = ProspectorProfile.load("inherittest-module", self._profile_path, allow_shorthand=False)
-        self.assertEqual(["test-from-module"], profile.pylint["disable"])  # type: ignore[attr-defined]
+        assert profile.pylint["disable"] == ["test-from-module"]  # type: ignore[attr-defined]
 
     def test_module_file_inheritance(self) -> None:
         profile = ProspectorProfile.load("inherittest-module-file", self._profile_path, allow_shorthand=False)
-        self.assertEqual(["alternate-test-from-module"], profile.pylint["disable"])  # type: ignore[attr-defined]
+        assert profile.pylint["disable"] == ["alternate-test-from-module"]  # type: ignore[attr-defined]

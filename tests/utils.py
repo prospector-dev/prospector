@@ -4,7 +4,7 @@ import contextlib
 import sys
 from collections.abc import Generator
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 from unittest.mock import patch
 
 from prospector.config import ProspectorConfig
@@ -40,7 +40,7 @@ def patch_cwd(set_cwd: Path) -> Generator[None, None]:
 
 
 @contextlib.contextmanager
-def patch_execution(*args: str, set_cwd: Optional[Path] = None) -> Generator[None, None]:
+def patch_execution(*args: str, set_cwd: Path | None = None) -> Generator[None, None]:
     """
     Utility to patch builtins to simulate running prospector in a particular directory
     with particular commandline args

@@ -17,4 +17,4 @@ class TestBanditTool(TestCase):
         found_files = FileFinder(Path(__file__).parent / "testpath/testfile.py")
         self.bandit_tool.configure(self.config, found_files)
         messages = self.bandit_tool.run(found_files)
-        self.assertTrue(any(message.code in ["B107", "B105", "B106"] for message in messages))
+        assert any(message.code in ["B107", "B105", "B106"] for message in messages)

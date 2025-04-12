@@ -1,3 +1,7 @@
 ignore:
   - /migrations/
   - ^tests/
+
+test-warnings: true
+doc-warnings: true
+strictness: none

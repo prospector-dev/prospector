@@ -17,4 +17,4 @@ class TestVultureTool(TestCase):
         found_files = FileFinder(Path(__file__).parent / "testpath/testfile.py")
         self.vulture_tool.configure(self.config, found_files)
         messages = self.vulture_tool.run(found_files)
-        self.assertTrue(any(message.code in ["unused-variable", "unused-import"] for message in messages))
+        assert any(message.code in ["unused-variable", "unused-import"] for message in messages)
