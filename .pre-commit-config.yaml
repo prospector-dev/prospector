@@ -58,16 +58,8 @@ repos:
         language: python
         types: [python]
         require_serial: true
+        pass_filenames: false
         verbose: true
         additional_dependencies:
           # the following are needed to run mypy.
           - types-PyYAML
-        exclude: |-
-          (?x)^(
-            tests/.*/testdata/.*
-            |tests/tools/.*/testpath/.*
-            |tests/tools/pylint/pylint_configs/.*
-            |tests/tools/pylint/test_no_init_found/.*
-            |tests/is_python/scrypt.*
-            |docs/conf\.py
-          )$
