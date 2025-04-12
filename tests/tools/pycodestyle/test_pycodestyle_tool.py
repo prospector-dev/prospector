@@ -32,25 +32,25 @@ class TestPycodestyleTool(TestCase):
         root_os_split = os.path.split(root)
         self._configure("testpath/testfile.py")
         assert self._tool.checker is not None
-        self.assertNotEqual(self._tool.checker.paths, [os.path.join(*root_sep_split)])
-        self.assertEqual(self._tool.checker.paths, [os.path.join(*root_os_split)])
+        assert self._tool.checker.paths != [os.path.join(*root_sep_split)]
+        assert self._tool.checker.paths == [os.path.join(*root_os_split)]
 
     def test_pycodestyle_space_and_tabs(self) -> None:
         workdir = Path(__file__).parent / "testpath"
         self._configure("testpath/test_space_tab.py", "--full-pep8", workdir=workdir)
         messages = self._tool.run([])
-        self.assertTrue(all(message.source == "pycodestyle" for message in messages))
-        self.assertTrue({"E101", "E111", "W191"} <= {m.code for m in messages})
+        assert all(message.source == "pycodestyle" for message in messages)
+        assert {"E101", "E111", "W191"} <= {m.code for m in messages}
 
     # TODO: legacy config handling here:
     def test_find_pep8_section_in_config(self) -> None:
         workdir = Path(__file__).parent / "testsettings/pep8"
         configured_by, _ = self._configure("testsettings/pep8/testfile.py", workdir=workdir)
         expected_config_path = str(workdir / "setup.cfg")
-        self.assertEqual(configured_by, f"Configuration found at {expected_config_path}")
+        assert configured_by == f"Configuration found at {expected_config_path}"
 
     def test_find_pycodestyle_section_in_config(self) -> None:
         workdir = Path(__file__).parent / "testsettings/pycodestyle"
         configured_by, _ = self._configure("testsettings/pycodestyle/testfile.py", workdir=workdir)
         expected_config_path = str(workdir / "setup.cfg")
-        self.assertEqual(configured_by, f"Configuration found at {expected_config_path}")
+        assert configured_by == f"Configuration found at {expected_config_path}"

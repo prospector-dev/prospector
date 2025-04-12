@@ -12,7 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-      - run: pip install pre-commit .[with_everything] types-PyYAML
+      - run: pip install poetry
+      - run: poetry install --all-extras --all-groups
+      - run: poetry run pip install pre-commit
 
       - uses: actions/cache@v4
         with:
@@ -22,4 +24,4 @@ jobs:
             pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
             pre-commit-
       - name: Check pre-commit
-        run: pre-commit run prospector --all-files
+        run: poetry run pre-commit run prospector --all-files

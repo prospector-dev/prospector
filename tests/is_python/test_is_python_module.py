@@ -6,7 +6,7 @@ from prospector.pathutils import is_python_module
 
 
 @pytest.mark.parametrize(  # type: ignore[misc]
-    "filename,expected",
+    ("filename", "expected"),
     [
         ("file.py", True),
         ("file.txt", False),

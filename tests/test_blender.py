@@ -21,7 +21,7 @@ class TestBlendLine(TestCase):
         blended = blender.blend_line(messages_list, TestBlendLine.BLEND)
         result = {(msg.source, msg.code) for msg in blended}
 
-        self.assertEqual(expected_set, result)
+        assert expected_set == result
 
     def test_blend_line(self) -> None:
         messages = (("s2", "s2c12"), ("s2", "s2c11"), ("s1", "s1c01"))

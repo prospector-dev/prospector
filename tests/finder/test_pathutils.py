@@ -9,23 +9,23 @@ from .utils import TEST_DATA
 class TestFinderUtils(TestCase):
     def test_is_python_package(self) -> None:
         this_dir = Path(__file__).parent
-        self.assertTrue(is_python_package(this_dir))
-        self.assertFalse(is_python_package(TEST_DATA / "not_a_package"))
-        self.assertFalse(is_python_package(TEST_DATA / "not_a_package" / "placeholder.txt"))
+        assert is_python_package(this_dir)
+        assert not is_python_package(TEST_DATA / "not_a_package")
+        assert not is_python_package(TEST_DATA / "not_a_package" / "placeholder.txt")
 
     def test_is_python(self) -> None:
-        self.assertFalse(is_python_module(TEST_DATA / "not_a_package" / "placeholder.txt"))
-        self.assertTrue(is_python_module(Path(__file__)))
+        assert not is_python_module(TEST_DATA / "not_a_package" / "placeholder.txt")
+        assert is_python_module(Path(__file__))
 
 
 class TestVirtualenvDetection(TestCase):
     def test_is_a_venv(self) -> None:
         path = TEST_DATA / "venvs" / "is_a_venv"
-        self.assertTrue(is_virtualenv(path))
+        assert is_virtualenv(path)
 
     def test_not_a_venv(self) -> None:
         path = TEST_DATA / "venvs" / "not_a_venv"
-        self.assertFalse(is_virtualenv(path))
+        assert not is_virtualenv(path)
 
     def test_long_path_not_a_venv(self) -> None:
         """
@@ -37,4 +37,4 @@ class TestVirtualenvDetection(TestCase):
         for _ in range(14):
             path /= "long_path_not_a_venv"
         path /= "long_path_not_a_venv_long_path_not_a_v"
-        self.assertFalse(is_virtualenv(path))
+        assert not is_virtualenv(path)

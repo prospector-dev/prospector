@@ -7,8 +7,14 @@ test-warnings: yes
 max-line-length: 120
 # pep8: full
 
-ignore-paths:
-  - docs/
+ignore-patterns:
+  - tests/.*/testdata/.*
+  - tests/tools/.*/testpath/.*
+  - tests/tools/pylint/pylint_configs/.*
+  - tests/tools/pylint/test_no_init_found/.*
+  - tests/is_python/scrypt.*
+  - docs/conf\.py
+  - tests/prospector-profile-test/build/.*
 
 mypy:
   run: true
