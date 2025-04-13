@@ -88,7 +88,6 @@ tzlocal = "^4.2"
 coverage = "^6.5"
 pre-commit = "^2.20.0"
 tox = "^3.27.1"
-twine = "^5.1.1"
 types-PyYAML = "^6.0.4"
 
 [build-system]
