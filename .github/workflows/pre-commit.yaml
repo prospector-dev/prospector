@@ -14,7 +14,6 @@ jobs:
       - uses: actions/setup-python@v4
       - run: pip install poetry
       - run: poetry install --all-extras --all-groups
-      - run: poetry run pip install pre-commit
 
       - uses: actions/cache@v4
         with:
