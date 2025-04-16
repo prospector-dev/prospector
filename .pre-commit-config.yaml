@@ -23,6 +23,10 @@ repos:
           (?x)^(
             |tests/.*
           )$
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: "v2.5.1"
+    hooks:
+      - id: pyproject-fmt
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
     hooks:

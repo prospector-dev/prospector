@@ -1,54 +1,57 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+
+requires = [ "poetry-core>=1" ]
+
 [project]
 name = "prospector"
 version = "1.16.1"
 description = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
-authors = [
-    {name = "Carl Crowder", email = "git@carlcrowder.com"}
-]
-maintainers = [
-    {name = "Carl Crowder", email = "git@carlcrowder.com"},
-    {name = "Carlos Coelho", email = "carlospecter@gmail.com"},
-    {name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com"},
-    {name = "Stéphane Brunner", email = "stephane.brunner@gmail.com"}
-]
 readme = "README.rst"
+keywords = [ "prospector", "pylint", "static code analysis" ]
+license = "GPLv2+"
+maintainers = [
+  { name = "Carl Crowder", email = "git@carlcrowder.com" },
+  { name = "Carlos Coelho", email = "carlospecter@gmail.com" },
+  { name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com" },
+  { name = "Stéphane Brunner", email = "stephane.brunner@gmail.com" },
+]
+authors = [
+  { name = "Carl Crowder", email = "git@carlcrowder.com" },
+]
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+  "Operating System :: Unix",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dynamic = [ "dependencies" ]
+
+optional-dependencies.with_bandit = [ "bandit" ]
+optional-dependencies.with_everything = [ "bandit", "mypy", "pyright", "pyroma", "ruff", "vulture" ]
+optional-dependencies.with_mypy = [ "mypy" ]
+optional-dependencies.with_pyright = [ "pyright" ]
+optional-dependencies.with_pyroma = [ "pyroma" ]
+optional-dependencies.with_ruff = [ "ruff" ]
+optional-dependencies.with_vulture = [ "vulture" ]
 urls."Bug Tracker" = "https://github.com/prospector-dev/prospector/issues"
 urls."homepage" = "http://prospector.readthedocs.io"
 urls."repository" = "https://github.com/prospector-dev/prospector"
-keywords = ["pylint", "prospector", "static code analysis"]
-license = "GPLv2+"
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Console",
-    "Intended Audience :: Developers",
-    "Operating System :: Unix",
-    "Topic :: Software Development :: Quality Assurance",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
-]
-requires-python = ">=3.9"
-dynamic = ["dependencies"]
-
-[project.optional-dependencies]
-with_bandit = ["bandit"]
-with_mypy = ["mypy"]
-with_pyright = ["pyright"]
-with_pyroma = ["pyroma"]
-with_vulture = ["vulture"]
-with_ruff = ["ruff"]
-with_everything = ["bandit", "mypy", "pyright", "pyroma", "vulture", "ruff"]
-
-[project.scripts]
-prospector = "prospector.run:main"
+scripts.prospector = "prospector.run:main"
 
 [tool.poetry]
 # The format is a workaround aganst https://github.com/python-poetry/poetry/issues/9961
 packages = [
-  { include = "prospector/", format = ["sdist"] }
+  { include = "prospector/", format = [ "sdist" ] },
 ]
 include = [
   "prospector/blender_combinations.yaml",
@@ -72,12 +75,12 @@ toml = "^0.10.2"
 setoptconf-tmp = "^0.3.1"
 GitPython = "^3.1.27"
 packaging = "*"
-bandit = {version = ">=1.5.1", optional = true}
-vulture = {version = ">=1.5", optional = true}
-mypy = {version = ">=0.600", optional = true}
-pyright = {version = ">=1.1.3", optional = true}
-pyroma = {version = ">=2.4", optional = true}
-ruff = {version = "*", optional = true}
+bandit = { version = ">=1.5.1", optional = true }
+vulture = { version = ">=1.5", optional = true }
+mypy = { version = ">=0.600", optional = true }
+pyright = { version = ">=1.1.3", optional = true }
+pyroma = { version = ">=2.4", optional = true }
+ruff = { version = "*", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 coveralls = "^3.3.1"
@@ -91,29 +94,37 @@ tox = "^3.27.1"
 twine = "^5.1.1"
 types-PyYAML = "^6.0.4"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.ruff]
-line-length = 120
 target-version = "py39"
 
-[tool.ruff.lint]
-fixable = ["ALL"]
-extend-select = [
-  "UP", # pyupgrade
-  "F", # Pyflakes
-  "E", "W", # Pycodestyle
-  "I", # isort
-  "S", # flake8-bandit
-  "SIM", # flake8-simplify
+line-length = 120
+lint.extend-select = [
   "B", # flake8-bugbear
-  "PT", # flake8-pytest-style
   # pydocstyle
-  "D213", "D214", "D215", "D405", "D406", "D407", "D408", "D409", "D410", "D411", "D413", "D416", "D417",
+  "D213",
+  "D214",
+  "D215",
+  "D405",
+  "D406",
+  "D407",
+  "D408",
+  "D409",
+  "D410",
+  "D411",
+  "D413",
+  "D416",
+  "D417",
+  "E",
+  "F",    # Pyflakes
+  "I",    # isort
+  "PT",   # flake8-pytest-style
+  "S",    # flake8-bandit
+  "SIM",  # flake8-simplify
+  "UP",   # pyupgrade
+  "W",    # Pycodestyle
 ]
-ignore= [
-  "S101", # Use of assert detected
+lint.ignore = [
+  "S101",   # Use of assert detected
   "SIM105", # suppressible-exception (slow code)
 ]
+lint.fixable = [ "ALL" ]
