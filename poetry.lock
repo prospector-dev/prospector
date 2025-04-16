@@ -2045,4 +2045,4 @@ with-vulture = ["vulture"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "ead67fd3764ce96417d51086d141c8a64a30f5b799845a3dff2ec2c16787c38a"
+content-hash = "fbf00389984ad4dd0a729a08213bd62706074b9aed3a8d83ded3eeef53dfd69d"
