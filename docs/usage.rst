@@ -37,7 +37,7 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 +----------------------+----------------------------------------------------------------------------+
 | ``vscode``           | | Support for `vscode_python_plugin`_                                      |
 +----------------------+----------------------------------------------------------------------------+
-| ``gitlab``           | | Support for `gitlab_code_climate_report_format`_                                      |
+| ``gitlab``           | | Support for `gitlab_code_climate_report_format`_                         |
 +----------------------+----------------------------------------------------------------------------+
 | ``grouped``          | | Similar to ``text``, but groups all message on the same line together    |
 |                      | | rather than having a separate entry per message.                         |
