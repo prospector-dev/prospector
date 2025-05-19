@@ -23,9 +23,14 @@ class GitlabFormatter(Formatter):
                 # by adding in the previously generated one.
                 message_hash = ":".join([str(message.location.path), str(message.location.line), message.code])
                 sha256_hash = hashlib.sha256(message_hash.encode())
+                MAX_ITERATIONS = 1000
+                iteration_count = 0
                 while sha256_hash.hexdigest() in fingerprints:
                     # In cases of hash collisions, new hashes will be generated.
                     sha256_hash.update(sha256_hash.hexdigest().encode())
+                    iteration_count += 1
+                    if iteration_count > MAX_ITERATIONS:
+                        raise RuntimeError("Maximum iteration limit reached while resolving hash collisions.")
 
                 fingerprint = sha256_hash.hexdigest()
                 fingerprints.add(fingerprint)
