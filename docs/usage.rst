@@ -3,6 +3,7 @@ Command Line Usage
 
 .. _issue_16: https://github.com/PyCQA/prospector/issues/16
 .. _vscode_python_plugin: https://marketplace.visualstudio.com/items?itemName=donjayamanne.python
+.. _gitlab_code_climate_report_format: https://docs.gitlab.com/ci/testing/code_quality/#code-quality-report-format
 
 The simplest way to run prospector is from the project root with no arguments. It will try to figure everything else out itself and provide sensible defaults::
 
@@ -35,6 +36,8 @@ The default output format of ``prospector`` is designed to be human readable. Yo
 | ``emacs``            | | Support for emacs compilation output mode, see `issue_16`_.              |
 +----------------------+----------------------------------------------------------------------------+
 | ``vscode``           | | Support for `vscode_python_plugin`_                                      |
++----------------------+----------------------------------------------------------------------------+
+| ``gitlab``           | | Support for `gitlab_code_climate_report_format`_                         |
 +----------------------+----------------------------------------------------------------------------+
 | ``grouped``          | | Similar to ``text``, but groups all message on the same line together    |
 |                      | | rather than having a separate entry per message.                         |
