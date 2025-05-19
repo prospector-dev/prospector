@@ -1347,3 +1347,7 @@ combinations:
     - ruff: D419
     - pycodestyle: D419
     - pep257: D419
+
+  - # Use lazy % formatting in logging functions
+    - pylint: logging-fstring-interpolation
+    - ruff: G004
