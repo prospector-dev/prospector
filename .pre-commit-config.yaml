@@ -12,7 +12,7 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.10
+    rev: v0.11.11
     hooks:
       - id: ruff-format
       - id: ruff
@@ -24,7 +24,7 @@ repos:
             |tests/.*
           )$
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "v2.5.1"
+    rev: "v2.6.0"
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/codespell-project/codespell
