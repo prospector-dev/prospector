@@ -1351,3 +1351,15 @@ combinations:
   - # Use lazy % formatting in logging functions
     - pylint: logging-fstring-interpolation
     - ruff: G004
+
+  - # No name '{}' in module '{}'
+    - pylint: no-name-in-module
+    - mypy: attr-defined
+
+  - # Module '{}' has no '{}' member
+    - pylint: no-member
+    - mypy: attr-defined
+
+  - # Missing return type annotation for public function `{}` [Fix applicability: unsafe]
+    - ruff: ANN201
+    - mypy: no-untyped-def
