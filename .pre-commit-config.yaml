@@ -12,7 +12,7 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.1
+    rev: v0.12.2
     hooks:
       - id: ruff-format
       - id: ruff
@@ -35,7 +35,7 @@ repos:
           - --ignore-words-list=nin,astroid
           - --skip=poetry.lock
   - repo: https://github.com/regebro/pyroma
-    rev: "4.2"
+    rev: "4.3.3"
     hooks:
       - id: pyroma
         # Must be specified because of the default value in pyroma
