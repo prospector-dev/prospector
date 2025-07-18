@@ -73,7 +73,6 @@ pydocstyle = ">=2.0.0"
 dodgy = "^0.2.1"
 toml = "^0.10.2"
 setoptconf-tmp = "^0.3.1"
-GitPython = "^3.1.27"
 packaging = "*"
 bandit = { version = ">=1.5.1", optional = true }
 vulture = { version = ">=1.5", optional = true }
