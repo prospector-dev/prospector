@@ -144,7 +144,9 @@ pre-commit
 
 If you'd like Prospector to be run automatically when making changes to files in your Git
 repository, you can install `pre-commit <https://pre-commit.com/>`_ and add the following
-text to your repositories' ``.pre-commit-config.yaml``::
+text to your repositories' ``.pre-commit-config.yaml``:
+
+.. code-block:: yaml
 
     repos:
     - repo: https://github.com/PyCQA/prospector
@@ -153,7 +155,9 @@ text to your repositories' ``.pre-commit-config.yaml``::
         - id: prospector
 
 This only installs base prospector - if you also use optional tools, for example bandit and/or mypy, then you can add
-them to the hook configuration like so::
+them to the hook configuration like so:
+
+.. code-block:: yaml
 
     repos:
     - repo: https://github.com/PyCQA/prospector
@@ -167,7 +171,9 @@ them to the hook configuration like so::
             '--with-tool=bandit',
             ]
 
-Additional dependencies can be `individually configured <https://prospector.landscape.io/en/master/profiles.html#individual-configuration-options>`_ in your `prospector.yml` file ::
+Additional dependencies can be `individually configured <https://prospector.landscape.io/en/master/profiles.html#individual-configuration-options>`_ in your `prospector.yml` file :
+
+.. code-block:: yaml
 
     # https://bandit.readthedocs.io/en/latest/config.html
     bandit:
@@ -185,7 +191,9 @@ Additional dependencies can be `individually configured <https://prospector.land
         ignore-missing-imports: true
 
 For prospector options which affect display only - those which are not configurable using a profile - these can be
-added as command line arguments to the hook. For example::
+added as command line arguments to the hook. For example:
+
+.. code-block:: yaml
 
     repos:
     - repo: https://github.com/PyCQA/prospector
