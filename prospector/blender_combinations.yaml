@@ -448,6 +448,10 @@ combinations:
     - pylint: W0212
     - ruff: SLF001
 
+  - # `import` should be at the top-level of a file
+    - ruff: PLC0415
+    - pylint: import-outside-toplevel
+
   # assert_used
   - - ruff: S101
     - bandit: B101
