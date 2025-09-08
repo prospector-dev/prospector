@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5.6.0
+      - uses: actions/setup-python@v6.0.0
       - run: pip install poetry
       - run: poetry install --all-extras --all-groups
 
