@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code from Github
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v6.0.0
+        uses: actions/setup-python@v6.1.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: Install requirements
