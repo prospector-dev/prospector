@@ -32,17 +32,18 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Software Development :: Quality Assurance",
 ]
 dynamic = [ "dependencies" ]
 
-optional-dependencies.with_bandit = [ "bandit" ]
-optional-dependencies.with_everything = [ "bandit", "mypy", "pyright", "pyroma", "ruff", "vulture" ]
-optional-dependencies.with_mypy = [ "mypy" ]
-optional-dependencies.with_pyright = [ "pyright" ]
-optional-dependencies.with_pyroma = [ "pyroma" ]
-optional-dependencies.with_ruff = [ "ruff" ]
-optional-dependencies.with_vulture = [ "vulture" ]
+optional-dependencies.with-bandit = [ "bandit" ]
+optional-dependencies.with-everything = [ "bandit", "mypy", "pyright", "pyroma", "ruff", "vulture" ]
+optional-dependencies.with-mypy = [ "mypy" ]
+optional-dependencies.with-pyright = [ "pyright" ]
+optional-dependencies.with-pyroma = [ "pyroma" ]
+optional-dependencies.with-ruff = [ "ruff" ]
+optional-dependencies.with-vulture = [ "vulture" ]
 urls."Bug Tracker" = "https://github.com/prospector-dev/prospector/issues"
 urls."homepage" = "http://prospector.readthedocs.io"
 urls."repository" = "https://github.com/prospector-dev/prospector"
