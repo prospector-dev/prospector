@@ -12,7 +12,7 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.4
+    rev: v0.14.14
     hooks:
       - id: ruff-format
       - id: ruff
@@ -24,7 +24,7 @@ repos:
             |tests/.*
           )$
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "v2.11.1"
+    rev: "v2.12.1"
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/codespell-project/codespell
@@ -35,7 +35,7 @@ repos:
           - --ignore-words-list=nin,astroid
           - --skip=poetry.lock
   - repo: https://github.com/regebro/pyroma
-    rev: "5.0"
+    rev: "5.0.1"
     hooks:
       - id: pyroma
         # Must be specified because of the default value in pyroma
@@ -48,7 +48,7 @@ repos:
               pyproject.toml|
           )$
   - repo: https://github.com/rbubley/mirrors-prettier
-    rev: v3.6.2
+    rev: v3.8.1
     hooks:
       - id: prettier
         args: [--prose-wrap=always, --print-width=88]
