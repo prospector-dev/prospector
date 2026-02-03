@@ -4,7 +4,7 @@ requires = [ "poetry-core>=2" ]
 
 [project]
 name = "prospector"
-version = "1.17.3"
+version = "1.18.0"
 description = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
 readme = "README.rst"
 keywords = [ "prospector", "pylint", "static code analysis" ]
