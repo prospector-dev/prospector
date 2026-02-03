@@ -90,7 +90,7 @@ tzlocal = "^4.2"
 coverage = "^6.5"
 pre-commit = "^4.2.0"
 tox = "^3.27.1"
-twine = "^5.1.1"
+twine = "^6.2.0"
 types-PyYAML = "^6.0.4"
 
 [tool.ruff]
