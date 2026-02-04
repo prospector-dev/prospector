@@ -9,12 +9,12 @@ from prospector.message import Location, Message
 from prospector.profiles.profile import ProspectorProfile
 
 
-@pytest.fixture  # type: ignore[misc]
+@pytest.fixture  # type: ignore[untyped-decorator]
 def _simple_profile() -> ProspectorProfile:
     return ProspectorProfile(name="horse", profile_dict={}, inherit_order=["horse"])
 
 
-@pytest.fixture  # type: ignore[misc]
+@pytest.fixture  # type: ignore[untyped-decorator]
 def _simple_summary() -> dict[str, Any]:
     return {
         "started": datetime.datetime(2014, 1, 1),
@@ -28,14 +28,14 @@ def _simple_summary() -> dict[str, Any]:
     }
 
 
-@pytest.mark.usefixtures("_simple_summary", "_simple_profile")  # type: ignore[misc]
+@pytest.mark.usefixtures("_simple_summary", "_simple_profile")  # type: ignore[untyped-decorator]
 def test_formatter_types(_simple_summary: dict[str, Any], _simple_profile: ProspectorProfile) -> None:  # noqa: PT019
     for formatter in FORMATTERS.values():
         formatter_instance = formatter(_simple_summary, [], _simple_profile)
         assert isinstance(formatter_instance.render(True, True, False), str)
 
 
-@pytest.mark.usefixtures("_simple_summary", "_simple_profile")  # type: ignore[misc]
+@pytest.mark.usefixtures("_simple_summary", "_simple_profile")  # type: ignore[untyped-decorator]
 def test_formatters_render(_simple_summary: dict[str, Any], _simple_profile: ProspectorProfile) -> None:  # noqa: PT019
     """
     Basic test to ensure that formatters can at least render messages without erroring

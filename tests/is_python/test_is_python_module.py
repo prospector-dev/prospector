@@ -5,7 +5,7 @@ import pytest
 from prospector.pathutils import is_python_module
 
 
-@pytest.mark.parametrize(  # type: ignore[misc]
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
     ("filename", "expected"),
     [
         ("file.py", True),
