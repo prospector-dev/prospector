@@ -1,2 +1,2 @@
-[tool.pylint.'FORMAT']
-max-line-length = 40
+[tool.pylint]
+"FORMAT".max-line-length = 40

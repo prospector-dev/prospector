@@ -35,7 +35,6 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
 ]
 dynamic = [ "dependencies" ]
-
 optional-dependencies.with-bandit = [ "bandit" ]
 optional-dependencies.with-everything = [ "bandit", "mypy", "pyright", "pyroma", "ruff", "vulture" ]
 optional-dependencies.with-mypy = [ "mypy" ]
@@ -57,48 +56,43 @@ include = [
   "prospector/blender_combinations.yaml",
   "prospector/profiles/profiles/*.yaml",
 ]
-
-[tool.poetry.dependencies]
-python = ">=3.10,<4.0"
-pylint = ">=4.0"
-pylint-celery = "0.3"
-pylint-django = ">=2.6.1"
-requirements-detector = ">=1.5.0"
-PyYAML = "*"
-mccabe = "^0.7.0"
-pyflakes = ">=2.2.0"
-pycodestyle = ">=2.9.0"
-pep8-naming = ">=0.3.3,<=0.10.0"
-pydocstyle = ">=2.0.0"
-dodgy = "^0.2.1"
-toml = "^0.10.2"
-setoptconf-tmp = "^0.3.1"
-packaging = "*"
-bandit = { version = ">=1.5.1", optional = true }
-vulture = { version = ">=1.5", optional = true }
-mypy = { version = ">=0.600", optional = true }
-pyright = { version = ">=1.1.3", optional = true }
-pyroma = { version = ">=2.4", optional = true }
-ruff = { version = "*", optional = true }
-
-[tool.poetry.group.dev.dependencies]
-coveralls = "^3.3.1"
-pytest = "^7.2.0"
-pytest-benchmark = "^4.0.0"
-pytest-cov = "^4.0.0"
-tzlocal = "^4.2"
-coverage = "^6.5"
-pre-commit = "^4.2.0"
-tox = "^3.27.1"
-twine = "^6.2.0"
-types-PyYAML = "^6.0.4"
+dependencies.python = ">=3.10,<4.0"
+dependencies.pylint = ">=4.0"
+dependencies.pylint-celery = "0.3"
+dependencies.pylint-django = ">=2.6.1"
+dependencies.requirements-detector = ">=1.5.0"
+dependencies.PyYAML = "*"
+dependencies.mccabe = "^0.7.0"
+dependencies.pyflakes = ">=2.2.0"
+dependencies.pycodestyle = ">=2.9.0"
+dependencies.pep8-naming = ">=0.3.3,<=0.10.0"
+dependencies.pydocstyle = ">=2.0.0"
+dependencies.dodgy = "^0.2.1"
+dependencies.toml = "^0.10.2"
+dependencies.setoptconf-tmp = "^0.3.1"
+dependencies.packaging = "*"
+dependencies.bandit = { version = ">=1.5.1", optional = true }
+dependencies.vulture = { version = ">=1.5", optional = true }
+dependencies.mypy = { version = ">=0.600", optional = true }
+dependencies.pyright = { version = ">=1.1.3", optional = true }
+dependencies.pyroma = { version = ">=2.4", optional = true }
+dependencies.ruff = { version = "*", optional = true }
+group.dev.dependencies.coveralls = "^3.3.1"
+group.dev.dependencies.pytest = "^7.2.0"
+group.dev.dependencies.pytest-benchmark = "^4.0.0"
+group.dev.dependencies.pytest-cov = "^4.0.0"
+group.dev.dependencies.tzlocal = "^4.2"
+group.dev.dependencies.coverage = "^6.5"
+group.dev.dependencies.pre-commit = "^4.2.0"
+group.dev.dependencies.tox = "^3.27.1"
+group.dev.dependencies.twine = "^6.2.0"
+group.dev.dependencies.types-PyYAML = "^6.0.4"
 
 [tool.ruff]
 target-version = "py39"
-
 line-length = 120
 lint.extend-select = [
-  "B", # flake8-bugbear
+  "B",    # flake8-bugbear
   # pydocstyle
   "D213",
   "D214",
