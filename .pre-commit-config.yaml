@@ -24,7 +24,7 @@ repos:
             |tests/.*
           )$
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "v2.12.1"
+    rev: "v2.14.2"
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/codespell-project/codespell
