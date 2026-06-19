@@ -14,6 +14,7 @@ class SarifFormatter(Formatter):
     This formatter outputs messages in the SARIF format.
     https://www.oasis-open.org/committees/sarif/charter.php
     """
+
     def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
         output: list[dict[str, Any]] = []
 
@@ -23,24 +24,20 @@ class SarifFormatter(Formatter):
                     {
                         "ruleId": message.code,
                         "level": "warning",
-                        "message": {
-                            "text": f"{message.source}[{message.code}]: {message.message.strip()}"
-                        },
+                        "message": {"text": f"{message.source}[{message.code}]: {message.message.strip()}"},
                         "locations": [
                             {
                                 "physicalLocation": {
-                                    "artifactLocation": {
-                                        "uri": str(self._make_path(message.location))
-                                    }
+                                    "artifactLocation": {"uri": str(self._make_path(message.location))}
                                 },
                                 "region": {
                                     "startLine": message.location.line,
                                     "endLine": message.location.line_end,
                                     "startColumn": message.location.character,
-                                    "endColumn": message.location.character_end
-                                }
+                                    "endColumn": message.location.character_end,
+                                },
                             }
-                        ]
+                        ],
                     }
                 )
 
@@ -53,11 +50,11 @@ class SarifFormatter(Formatter):
                         "driver": {
                             "name": "Prospector",
                             "informationUri": "https://github.com/prospector-dev/prospector",
-                            "version": _VERSION
+                            "version": _VERSION,
                         }
                     }
                 }
-            ]
+            ],
         }
 
         return json.dumps(sarif_skeleton, indent=2)
