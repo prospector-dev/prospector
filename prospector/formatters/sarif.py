@@ -16,11 +16,21 @@ class SarifFormatter(Formatter):
     """
 
     def render(self, summary: bool = True, messages: bool = True, profile: bool = False) -> str:
-        output: list[dict[str, Any]] = []
+        results: list[dict[str, Any]] = []
 
         if messages:
             for message in sorted(self.messages):
-                output.append(
+                region: dict[str, int] = {}
+                if message.location.line:
+                    region["startLine"] = message.location.line
+                if message.location.line_end:
+                    region["endLine"] = message.location.line_end
+                if message.location.character:
+                    region["startColumn"] = message.location.character
+                if message.location.character_end:
+                    region["endColumn"] = message.location.character_end
+
+                results.append(
                     {
                         "ruleId": message.code,
                         "level": "warning",
@@ -28,22 +38,17 @@ class SarifFormatter(Formatter):
                         "locations": [
                             {
                                 "physicalLocation": {
-                                    "artifactLocation": {"uri": str(self._make_path(message.location))}
-                                },
-                                "region": {
-                                    "startLine": message.location.line,
-                                    "endLine": message.location.line_end,
-                                    "startColumn": message.location.character,
-                                    "endColumn": message.location.character_end,
-                                },
+                                    "artifactLocation": {"uri": str(self._make_path(message.location))},
+                                    "region": region,
+                                }
                             }
                         ],
                     }
                 )
 
-        sarif_skeleton = {
+        output = {
             "version": "2.1.0",
-            "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0.json",
+            "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
             "runs": [
                 {
                     "tool": {
@@ -53,9 +58,9 @@ class SarifFormatter(Formatter):
                             "version": _VERSION,
                         }
                     },
-                    "results": output,
+                    "results": results,
                 }
             ],
         }
 
-        return json.dumps(sarif_skeleton, indent=2)
+        return json.dumps(output, indent=2)
