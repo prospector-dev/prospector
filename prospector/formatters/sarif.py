@@ -52,7 +52,8 @@ class SarifFormatter(Formatter):
                             "informationUri": "https://github.com/prospector-dev/prospector",
                             "version": _VERSION,
                         }
-                    }
+                    },
+                    "results": output,
                 }
             ],
         }
