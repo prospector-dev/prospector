@@ -18,14 +18,13 @@ maintainers = [
 authors = [
   { name = "Carl Crowder", email = "git@carlcrowder.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Console",
   "Intended Audience :: Developers",
   "Operating System :: Unix",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -82,7 +81,7 @@ ruff = { version = "*", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 coveralls = "^3.3.1"
-pytest = "^7.2.0"
+pytest = "^9.1.1"
 pytest-benchmark = "^4.0.0"
 pytest-cov = "^4.0.0"
 tzlocal = "^4.2"
