@@ -1,5 +1,7 @@
+import io
 import json
 import re
+import sys
 from multiprocessing import Process, Queue
 from typing import (
     TYPE_CHECKING,
@@ -126,68 +128,77 @@ class MypyTool(ToolBase):
 
     def _run_std(self, args: list[str]) -> list[Message]:
         messages = []
+        original_stderr = sys.stderr
+        captured_stderr = io.StringIO()
+        sys.stderr = captured_stderr
         try:
-            sources, options = mypy.main.process_options(args, fscache=self.fscache)
-        except (SystemExit, Exception) as e:
-            message = "The error(s) will be displayed before the messages" if isinstance(e, SystemExit) else str(e)
-            messages.append(
-                Message(
-                    "mypy",
-                    code="fatal-options-error",
-                    message=message,
-                    location=Location(
-                        path="",
-                        module=None,
-                        function=None,
-                        line=0,
-                        character=0,
-                    ),
+            try:
+                sources, options = mypy.main.process_options(args, fscache=self.fscache)
+            except (SystemExit, Exception) as e:
+                stderr_output = captured_stderr.getvalue()
+                message = stderr_output or (
+                    "The error(s) will be displayed before the messages" if isinstance(e, SystemExit) else str(e)
                 )
-            )
-            return messages
-        options.output = "json"
-        try:
-            res = mypy.build.build(sources, options, fscache=self.fscache)
-        except Exception as e:
-            messages.append(
-                Message(
-                    "mypy",
-                    code="fatal-build-error",
-                    message=str(e),
-                    location=Location(
-                        path="",
-                        module=None,
-                        function=None,
-                        line=0,
-                        character=0,
-                    ),
+                messages.append(
+                    Message(
+                        "mypy",
+                        code="fatal-options-error",
+                        message=message,
+                        location=Location(
+                            path="",
+                            module=None,
+                            function=None,
+                            line=0,
+                            character=0,
+                        ),
+                    )
                 )
-            )
-            return messages
+                return messages
+            options.output = "json"
+            try:
+                res = mypy.build.build(sources, options, fscache=self.fscache)
+            except Exception as e:
+                messages.append(
+                    Message(
+                        "mypy",
+                        code="fatal-build-error",
+                        message=str(e),
+                        location=Location(
+                            path="",
+                            module=None,
+                            function=None,
+                            line=0,
+                            character=0,
+                        ),
+                    )
+                )
+                return messages
 
-        for mypy_json in res.errors:
-            mypy_message = json.loads(mypy_json)
-            message = f"{mypy_message['message']}."
-            if mypy_message.get("hint", ""):
-                message = f"{message} {mypy_message['hint']}."
-            code = mypy_message["code"]
-            messages.append(
-                Message(
-                    "mypy",
-                    code=code,
-                    location=Location(
-                        path=mypy_message["file"],
-                        module=None,
-                        function=None,
-                        line=mypy_message["line"],
-                        character=mypy_message["column"],
-                    ),
-                    message=message,
-                    doc_url=f"{mypy.errors.BASE_RTD_URL}-{code}",
+            for mypy_json in res.errors:
+                mypy_message = json.loads(mypy_json)
+                message = f"{mypy_message['message']}."
+                if mypy_message.get("hint", ""):
+                    message = f"{message} {mypy_message['hint']}."
+                code = mypy_message["code"]
+                messages.append(
+                    Message(
+                        "mypy",
+                        code=code,
+                        location=Location(
+                            path=mypy_message["file"],
+                            module=None,
+                            function=None,
+                            line=mypy_message["line"],
+                            character=mypy_message["column"],
+                        ),
+                        message=message,
+                        doc_url=f"{mypy.errors.BASE_RTD_URL}-{code}",
+                    )
                 )
-            )
 
-        return messages
+            return messages
+        finally:
+            sys.stderr = original_stderr
 
     def get_ignored_codes(self, line: str) -> list[tuple[str, int]]:
         match = _IGNORE_RE.search(line)
