@@ -46,7 +46,7 @@ PYROMA_ALL_CODES = {
     "BusFactor": "PYR19",
 }
 
-PYROMA_CODES = {}
+PYROMA_CODES: dict[str, str] = {}
 
 
 def _copy_codes() -> None:
