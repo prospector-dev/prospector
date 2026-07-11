@@ -12,7 +12,7 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.20
+    rev: v0.15.21
     hooks:
       - id: ruff-format
       - id: ruff
@@ -43,12 +43,6 @@ repos:
               README.rst|
               pyproject.toml|
           )$
-  - repo: https://github.com/rbubley/mirrors-prettier
-    rev: v3.9.4
-    hooks:
-      - id: prettier
-        args: [--prose-wrap=always, --print-width=88]
-        exclude: "docs/"
   - repo: local
     hooks:
       - id: prospector
