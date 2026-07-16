@@ -113,7 +113,8 @@ class Prospector:
                 loc = Location(self.config.workdir, None, None, None, None)
                 msg = (
                     f"Tool {toolname} failed to run "
-                    f"(exception was raised, re-run prospector with -X to see the stacktrace)"
+                    "(exception was raised, re-run prospector with --direct-tool-stdout to better see the tool error "
+                    "or --die-on-tool-error to see the stacktrace)"
                 )
                 message = Message(
                     toolname,

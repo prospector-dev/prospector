@@ -126,25 +126,7 @@ class MypyTool(ToolBase):
 
     def _run_std(self, args: list[str]) -> list[Message]:
         messages = []
-        try:
-            sources, options = mypy.main.process_options(args, fscache=self.fscache)
-        except (SystemExit, Exception) as e:
-            message = "The error(s) will be displayed before the messages" if isinstance(e, SystemExit) else str(e)
-            messages.append(
-                Message(
-                    "mypy",
-                    code="fatal-options-error",
-                    message=message,
-                    location=Location(
-                        path="",
-                        module=None,
-                        function=None,
-                        line=0,
-                        character=0,
-                    ),
-                )
-            )
-            return messages
+        sources, options = mypy.main.process_options(args, fscache=self.fscache)
         options.output = "json"
         try:
             res = mypy.build.build(sources, options, fscache=self.fscache)
