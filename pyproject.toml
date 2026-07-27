@@ -95,8 +95,7 @@ types-PyYAML = "^6.0.4"
 target-version = "py39"
 
 line-length = 120
-# explicit select: ruff 0.16 greatly expanded the default rule set
-lint.select = [
+lint.extend-select = [
   "B", # flake8-bugbear
   # pydocstyle
   "D213",

@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable
 
 from prospector.exceptions import PermissionMissing
 from prospector.pathutils import is_python_module, is_python_package, is_virtualenv
@@ -18,7 +20,7 @@ class FileFinder:
     is basically to know which files to pass to which tools to be inspected.
     """
 
-    def __init__(self, *provided_paths: Path, exclusion_filters: Optional[Iterable[Callable[[Path], bool]]] = None):
+    def __init__(self, *provided_paths: Path, exclusion_filters: Iterable[Callable[[Path], bool]] | None = None):
         """
         :param provided_paths:
             A list of Path objects to search for files and modules - can be either directories or files

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import re
 from multiprocessing import Process, Queue
@@ -5,7 +7,6 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    Optional,
 )
 
 import mypy.api
@@ -28,7 +29,7 @@ __all__ = ("MypyTool",)
 
 
 def format_message(message: str) -> Message:
-    character: Optional[int]
+    character: int | None
     try:
         (path, line_str, char_str, err_type, err_msg) = message.split(":", 4)
         line = int(line_str)
@@ -58,7 +59,10 @@ def format_message(message: str) -> Message:
 
 
 def _run_in_subprocess(
-    q: "Queue[tuple[str, str]]", cmd: Callable[[list[str]], tuple[str, str]], paths: list[str]
+    # multiprocessing.Queue is a factory function at runtime, only subscriptable for type checkers
+    q: Queue[tuple[str, str]],  # pylint: disable=unsubscriptable-object
+    cmd: Callable[[list[str]], tuple[str, str]],
+    paths: list[str],
 ) -> None:
     """
     This function exists only to be called by multiprocessing.Process as using
@@ -75,7 +79,7 @@ class MypyTool(ToolBase):
         self.use_dmypy = False
         self.fscache = mypy.fscache.FileSystemCache()
 
-    def configure(self, prospector_config: "ProspectorConfig", _: Any) -> None:
+    def configure(self, prospector_config: ProspectorConfig, _: Any) -> None:
         options = prospector_config.tool_options("mypy")
 
         self.use_dmypy = options.pop("use-dmypy", False)
@@ -130,7 +134,7 @@ class MypyTool(ToolBase):
         options.output = "json"
         try:
             res = mypy.build.build(sources, options, fscache=self.fscache)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - any mypy crash must become a fatal-build-error message
             messages.append(
                 Message(
                     "mypy",

@@ -4,10 +4,11 @@
 # the same line. For example, both pyflakes and pylint will generate an
 # "Unused Import" warning on the same line. This is obviously redundant, so we
 # remove duplicates.
+from __future__ import annotations
+
 import pkgutil
 from collections import defaultdict
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -19,7 +20,7 @@ __all__ = (
 )
 
 
-def blend_line(messages: list[Message], blend_combos: Optional[list[list[tuple[str, str]]]] = None) -> list[Message]:
+def blend_line(messages: list[Message], blend_combos: list[list[tuple[str, str]]] | None = None) -> list[Message]:
     """
     Given a list of messages on the same line, blend them together so that we
     end up with one message per actual problem. Note that we can still return
@@ -81,11 +82,11 @@ def blend_line(messages: list[Message], blend_combos: Optional[list[list[tuple[s
     return [m for m in blended if not getattr(m, "used", False)]
 
 
-def blend(messages: list[Message], blend_combos: Optional[list[list[tuple[str, str]]]] = None) -> list[Message]:
+def blend(messages: list[Message], blend_combos: list[list[tuple[str, str]]] | None = None) -> list[Message]:
     blend_combos = blend_combos or BLEND_COMBOS
 
     # group messages by file and then line number
-    msgs_grouped: dict[Optional[Path], dict[Optional[int], list[Message]]] = defaultdict(lambda: defaultdict(list))
+    msgs_grouped: dict[Path | None, dict[int | None, list[Message]]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
         msgs_grouped[message.location.path][message.location.line].append(

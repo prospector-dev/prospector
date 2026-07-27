@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
-from typing import Optional
 
 from prospector.formatters.base import Formatter
 from prospector.message import Location, Message
@@ -47,7 +48,7 @@ class SummaryFormatter(Formatter):
 
         return "\n".join(output)
 
-    def get_ci_annotation(self, message: Message) -> Optional[str]:
+    def get_ci_annotation(self, message: Message) -> str | None:
         intro = (
             f"({message.source})"
             if message.code is None
@@ -63,7 +64,7 @@ class SummaryFormatter(Formatter):
             return github_message
         return None
 
-    def _get_ci_prefix(self, location: Location, title: str) -> Optional[str]:
+    def _get_ci_prefix(self, location: Location, title: str) -> str | None:
         if location.path is None:
             return None
         if os.environ.get("GITHUB_ACTIONS") == "true":

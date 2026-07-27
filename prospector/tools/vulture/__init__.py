@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from collections.abc import Iterable
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from vulture import Vulture
 
@@ -18,8 +20,8 @@ class ProspectorVulture(Vulture):
         Vulture.__init__(self, verbose=False)
         self._files = found_files
         self._internal_messages: list[Message] = []
-        self.file: Optional[Path] = None
-        self.filename: Optional[Path] = None
+        self.file: Path | None = None
+        self.filename: Path | None = None
 
     def scavenge(self, _: Any = None, __: Any = None) -> None:
         # The argument is a list of paths, but we don't care
@@ -79,8 +81,8 @@ class VultureTool(ToolBase):
         self.ignore_codes: list[str] = []
 
     def configure(  # pylint: disable=useless-return
-        self, prospector_config: "ProspectorConfig", found_files: FileFinder
-    ) -> Optional[tuple[Optional[str], Optional[Iterable[Message]]]]:
+        self, prospector_config: ProspectorConfig, found_files: FileFinder
+    ) -> tuple[str | None, Iterable[Message] | None] | None:
         self.ignore_codes = prospector_config.get_disabled_messages("vulture")
         return None
 

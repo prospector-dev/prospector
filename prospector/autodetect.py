@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import os
 import re
 import warnings
 from pathlib import Path
-from typing import Union
 
 from requirements_detector import find_requirements
 from requirements_detector.detect import RequirementsNotFound
@@ -69,7 +70,7 @@ def find_from_path(path: Path) -> set[str]:
     return names
 
 
-def find_from_requirements(path: Union[str, Path]) -> set[str]:
+def find_from_requirements(path: str | Path) -> set[str]:
     reqs = find_requirements(path)
     names: set[str] = set()
     for requirement in reqs:
@@ -78,7 +79,7 @@ def find_from_requirements(path: Union[str, Path]) -> set[str]:
     return names
 
 
-def autodetect_libraries(path: Union[str, Path]) -> set[str]:
+def autodetect_libraries(path: str | Path) -> set[str]:
     if os.path.isfile(path):
         path = os.path.dirname(path)
         if path == "":

@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import json
 import subprocess  # nosec
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 import pyright
 
@@ -55,8 +57,8 @@ class PyrightTool(ToolBase):
         self.options = ["--outputjson"]
 
     def configure(  # pylint: disable=useless-return
-        self, prospector_config: "ProspectorConfig", _: Any
-    ) -> Optional[tuple[str, Optional[Iterable[Message]]]]:
+        self, prospector_config: ProspectorConfig, _: Any
+    ) -> tuple[str, Iterable[Message] | None] | None:
         options = prospector_config.tool_options("pyright")
 
         for option_key in options:

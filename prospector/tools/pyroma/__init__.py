@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from prospector.finder import FileFinder
 from prospector.message import Location, Message
@@ -66,8 +68,8 @@ class PyromaTool(ToolBase):
         self.ignore_codes: list[str] = []
 
     def configure(  # pylint: disable=useless-return
-        self, prospector_config: "ProspectorConfig", found_files: FileFinder
-    ) -> Optional[tuple[str, Optional[Iterable[Message]]]]:
+        self, prospector_config: ProspectorConfig, found_files: FileFinder
+    ) -> tuple[str, Iterable[Message] | None] | None:
         self.ignore_codes = prospector_config.get_disabled_messages("pyroma")
         return None
 

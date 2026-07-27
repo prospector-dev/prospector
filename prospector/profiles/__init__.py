@@ -1,6 +1,6 @@
 from pathlib import Path
 
-AUTO_LOADED_PROFILES = list(
+AUTO_LOADED_PROFILES = [
     Path(*parts)
     for parts in (
         (".landscape.yml",),
@@ -20,4 +20,4 @@ AUTO_LOADED_PROFILES = list(
         (".prospector", "prospector.yaml"),
         (".prospector", "prospector.yml"),
     )
-)
+]

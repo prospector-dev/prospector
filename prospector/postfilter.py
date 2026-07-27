@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Optional
 
 from prospector.message import Message
 from prospector.suppression import get_suppressions
@@ -9,9 +10,9 @@ from prospector.tools.base import ToolBase
 def filter_messages(
     filepaths: list[Path],
     messages: list[Message],
-    tools: Optional[dict[str, ToolBase]] = None,
+    tools: dict[str, ToolBase] | None = None,
     blending: bool = False,
-    blend_combos: Optional[list[list[tuple[str, str]]]] = None,
+    blend_combos: list[list[tuple[str, str]]] | None = None,
 ) -> list[Message]:
     """
     This method post-processes all messages output by all tools, in order to filter

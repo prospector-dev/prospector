@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import codecs
 import json
 import os
 import pkgutil
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 import yaml
 
@@ -61,7 +63,7 @@ class ProspectorProfile:
         return list(set(enable) - set(disable))
 
     def is_tool_enabled(self, name: str) -> bool:
-        enabled: Optional[bool] = getattr(self, name).get("run")
+        enabled: bool | None = getattr(self, name).get("run")
         if enabled is not None:
             return enabled
         # this is not explicitly enabled or disabled, so use the default
@@ -98,11 +100,11 @@ class ProspectorProfile:
 
     @staticmethod
     def load(
-        name_or_path: Union[str, Path],
+        name_or_path: str | Path,
         profile_path: list[Path],
         allow_shorthand: bool = True,
-        forced_inherits: Optional[list[str]] = None,
-    ) -> "ProspectorProfile":
+        forced_inherits: list[str] | None = None,
+    ) -> ProspectorProfile:
         # First simply load all of the profiles and those that it explicitly inherits from
         data, inherits = _load_and_merge(
             name_or_path,
@@ -113,12 +115,12 @@ class ProspectorProfile:
         return ProspectorProfile(str(name_or_path), data, inherits)
 
 
-def _is_valid_extension(filename: Union[str, Path]) -> bool:
+def _is_valid_extension(filename: str | Path) -> bool:
     ext = os.path.splitext(filename)[1]
     return ext in (".yml", ".yaml")
 
 
-def _load_content_package(name: str) -> Optional[dict[str, Any]]:
+def _load_content_package(name: str) -> dict[str, Any] | None:
     name_split = name.split(":", 1)
     module_name = f"prospector_profile_{name_split[0]}"
     file_names = (
@@ -148,7 +150,7 @@ def _load_content_package(name: str) -> Optional[dict[str, Any]]:
         raise CannotParseProfile(used_name, parse_error) from parse_error
 
 
-def _load_content(name_or_path: Union[str, Path], profile_path: list[Path]) -> dict[str, Any]:
+def _load_content(name_or_path: str | Path, profile_path: list[Path]) -> dict[str, Any]:
     filename = None
     optional = False
 
@@ -258,7 +260,7 @@ def _merge_profile_dict(priority: dict[str, Any], base: dict[str, Any]) -> dict[
     return out
 
 
-def _determine_strictness(profile_dict: dict[str, Any], inherits: list[str]) -> tuple[Optional[str], bool]:
+def _determine_strictness(profile_dict: dict[str, Any], inherits: list[str]) -> tuple[str | None, bool]:
     for profile in inherits:
         if profile.startswith("strictness_"):
             return None, False
@@ -269,7 +271,7 @@ def _determine_strictness(profile_dict: dict[str, Any], inherits: list[str]) -> 
     return (f"strictness_{strictness}"), True
 
 
-def _determine_pep8(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
+def _determine_pep8(profile_dict: dict[str, Any]) -> tuple[str | None, bool]:
     pep8 = profile_dict.get("pep8")
     if pep8 == "full":
         return "full_pep8", True
@@ -280,21 +282,21 @@ def _determine_pep8(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
     return None, False
 
 
-def _determine_doc_warnings(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
+def _determine_doc_warnings(profile_dict: dict[str, Any]) -> tuple[str | None, bool]:
     doc_warnings = profile_dict.get("doc-warnings")
     if doc_warnings is None:
         return None, False
     return ("doc_warnings" if doc_warnings else "no_doc_warnings"), True
 
 
-def _determine_test_warnings(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
+def _determine_test_warnings(profile_dict: dict[str, Any]) -> tuple[str | None, bool]:
     test_warnings = profile_dict.get("test-warnings")
     if test_warnings is None:
         return None, False
     return (None if test_warnings else "no_test_warnings"), True
 
 
-def _determine_member_warnings(profile_dict: dict[str, Any]) -> tuple[Optional[str], bool]:
+def _determine_member_warnings(profile_dict: dict[str, Any]) -> tuple[str | None, bool]:
     member_warnings = profile_dict.get("member-warnings")
     if member_warnings is None:
         return None, False
@@ -333,10 +335,10 @@ def _determine_implicit_inherits(
 def _append_profiles(
     name: str,
     profile_path: list[Path],
-    data: dict[Union[str, Path], Any],
+    data: dict[str | Path, Any],
     inherit_list: list[str],
     allow_shorthand: bool = False,
-) -> tuple[dict[Union[str, Path], Any], list[str]]:
+) -> tuple[dict[str | Path, Any], list[str]]:
     new_data, new_il, _ = _load_profile(name, profile_path, allow_shorthand=allow_shorthand)
     data.update(new_data)
     inherit_list += new_il
@@ -344,10 +346,10 @@ def _append_profiles(
 
 
 def _load_and_merge(
-    name_or_path: Union[str, Path],
+    name_or_path: str | Path,
     profile_path: list[Path],
     allow_shorthand: bool = True,
-    forced_inherits: Optional[list[str]] = None,
+    forced_inherits: list[str] | None = None,
 ) -> tuple[dict[str, Any], list[str]]:
     # First simply load all of the profiles and those that it explicitly inherits from
     data, inherit_list, shorthands_found = _load_profile(
@@ -431,13 +433,13 @@ def _transform_legacy(profile_dict: dict[str, Any]) -> dict[str, Any]:
 
 
 def _load_profile(
-    name_or_path: Union[str, Path],
+    name_or_path: str | Path,
     profile_path: list[Path],
-    shorthands_found: Optional[set[str]] = None,
-    already_loaded: Optional[list[Union[str, Path]]] = None,
+    shorthands_found: set[str] | None = None,
+    already_loaded: list[str | Path] | None = None,
     allow_shorthand: bool = True,
-    forced_inherits: Optional[list[str]] = None,
-) -> tuple[dict[Union[str, Path], Any], list[str], set[str]]:
+    forced_inherits: list[str] | None = None,
+) -> tuple[dict[str | Path, Any], list[str], set[str]]:
     # recursively get the contents of the basic profile and those it inherits from
     base_contents = _load_content(name_or_path, profile_path)
 
@@ -460,7 +462,7 @@ def _load_profile(
         inherits += extra_inherits
         shorthands_found |= extra_shorthands
 
-    contents_dict: dict[Union[str, Path], Any] = {name_or_path: base_contents}
+    contents_dict: dict[str | Path, Any] = {name_or_path: base_contents}
 
     for inherit_profile in inherits:
         if inherit_profile in already_loaded:

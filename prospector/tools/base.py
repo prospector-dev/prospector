@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING
 
 from prospector.finder import FileFinder
 from prospector.message import Message
@@ -16,8 +18,8 @@ PEP8_IGNORE_LINE_CODE = re.compile(r"#\s*noqa:([^#]*[^# ])(\s*#.*)?$", re.IGNORE
 class ToolBase(ABC):
     @abstractmethod
     def configure(
-        self, prospector_config: "ProspectorConfig", found_files: FileFinder
-    ) -> Optional[tuple[Optional[Union[str, Path]], Optional[Iterable[Message]]]]:
+        self, prospector_config: ProspectorConfig, found_files: FileFinder
+    ) -> tuple[str | Path | None, Iterable[Message] | None] | None:
         """
         Tools have their own way of being configured from configuration files
         on the current path - for example, a .pep8rc file. Prospector will use

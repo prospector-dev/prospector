@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from prospector.exceptions import FatalProspectorException
 from prospector.finder import FileFinder
@@ -24,7 +26,7 @@ def _tool_not_available(name: str, install_option_name: str) -> type[ToolBase]:
         if the user tries to run prospector and specifies using the tool at which point an error is raised.
         """
 
-        def configure(self, prospector_config: "ProspectorConfig", found_files: FileFinder) -> None:
+        def configure(self, prospector_config: ProspectorConfig, found_files: FileFinder) -> None:
             pass
 
         def run(self, _: Any) -> list[Message]:
@@ -38,9 +40,9 @@ def _tool_not_available(name: str, install_option_name: str) -> type[ToolBase]:
 
 def _optional_tool(
     name: str,
-    package_name: Optional[str] = None,
-    tool_class_name: Optional[str] = None,
-    install_option_name: Optional[str] = None,
+    package_name: str | None = None,
+    tool_class_name: str | None = None,
+    install_option_name: str | None = None,
 ) -> type[ToolBase]:
     package_name = "prospector.tools.%s" % (package_name or name)
     tool_class_name = tool_class_name or f"{name.title()}Tool"

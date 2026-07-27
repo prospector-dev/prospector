@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import importlib.metadata
-from typing import Optional
 
 import setoptconf as soc
 
@@ -100,7 +101,7 @@ def build_default_sources() -> list[soc.Source]:
 
 
 def build_command_line_source(
-    prog: Optional[str] = None, description: Optional[str] = "Performs static analysis of Python code"
+    prog: str | None = None, description: str | None = "Performs static analysis of Python code"
 ) -> soc.CommandLineSource:
     parser_options = {}
     if prog is not None:

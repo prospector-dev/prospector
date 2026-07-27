@@ -1,19 +1,20 @@
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Optional, Union
 
 
 class Location:
-    _path: Optional[Path]
+    _path: Path | None
 
     def __init__(
         self,
-        path: Optional[Union[Path, str]],
-        module: Optional[str],
-        function: Optional[str],
-        line: Optional[int],
-        character: Optional[int],
-        line_end: Optional[int] = None,
-        character_end: Optional[int] = None,
+        path: Path | str | None,
+        module: str | None,
+        function: str | None,
+        line: int | None,
+        character: int | None,
+        line_end: int | None = None,
+        character_end: int | None = None,
     ):
         if isinstance(path, Path):
             self._path = path.absolute()
@@ -31,13 +32,13 @@ class Location:
         self.character_end = character_end
 
     @property
-    def path(self) -> Optional[Path]:
+    def path(self) -> Path | None:
         return self._path
 
-    def absolute_path(self) -> Optional[Path]:
+    def absolute_path(self) -> Path | None:
         return self._path
 
-    def relative_path(self, root: Optional[Path]) -> Optional[Path]:
+    def relative_path(self, root: Path | None) -> Path | None:
         if self._path is None:
             return None
         if root is None:
@@ -55,9 +56,9 @@ class Location:
             return False
         return self._path == other._path and self.line == other.line and self.character == other.character
 
-    def __lt__(self, other: "Location") -> bool:
+    def __lt__(self, other: Location) -> bool:
         if not isinstance(other, Location):
-            raise ValueError
+            raise TypeError
 
         if self._path is None and other._path is None:
             return False
@@ -79,7 +80,7 @@ class Message:
         code: str,
         location: Location,
         message: str,
-        doc_url: Optional[str] = None,
+        doc_url: str | None = None,
         is_fixable: bool = False,
     ):
         self.source = source
@@ -99,21 +100,21 @@ class Message:
             return self.code == other.code
         return False
 
-    def __lt__(self, other: "Message") -> bool:
+    def __lt__(self, other: Message) -> bool:
         if self.location == other.location:
             return self.code < other.code
         return self.location < other.location
 
 
 def make_tool_error_message(
-    filepath: Union[Path, str],
+    filepath: Path | str,
     source: str,
     code: str,
     message: str,
-    line: Optional[int] = None,
-    character: Optional[int] = None,
-    module: Optional[str] = None,
-    function: Optional[str] = None,
+    line: int | None = None,
+    character: int | None = None,
+    module: str | None = None,
+    function: str | None = None,
 ) -> Message:
     location = Location(path=filepath, module=module, function=function, line=line, character=character)
     return Message(source=source, code=code, location=location, message=message)
