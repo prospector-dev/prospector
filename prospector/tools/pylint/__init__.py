@@ -56,7 +56,7 @@ class PylintTool(ToolBase):
                 errors.append(self._error_message(profile_path, f"Could not load plugin {plugin}"))
 
         for msg_id in prospector_config.get_disabled_messages("pylint"):
-            try:  # noqa: SIM105
+            try:
                 linter.disable(msg_id)
             except UnknownMessageError:
                 # If the msg_id doesn't exist in PyLint any more,

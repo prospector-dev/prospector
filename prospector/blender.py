@@ -14,8 +14,8 @@ import yaml
 from prospector.message import Message
 
 __all__ = (
-    "blend",
     "BLEND_COMBOS",
+    "blend",
 )
 
 

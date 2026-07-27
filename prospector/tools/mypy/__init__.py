@@ -119,7 +119,7 @@ class MypyTool(ToolBase):
             result = q.get()
             p.join()
 
-            report, _ = result[0], result[1:]  # noqa
+            report, _ = result[0], result[1:]
             return [format_message(message) for message in report.splitlines()]
         else:
             return self._run_std(args)
