@@ -224,7 +224,7 @@ Search path: {search_path}, or in module 'prospector_profile_{module_name}'
             return profile, strictness
 
     def _find_used_libraries(self, config: setoptconf.config.Configuration, profile: ProspectorProfile) -> list[str]:
-        libraries = []
+        libraries: list[str] = []
 
         # Bring in adaptors that we automatically detect are needed
         if config.autodetect and profile.autodetect is True:
