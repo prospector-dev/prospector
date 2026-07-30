@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import codecs
 import os.path
@@ -5,7 +7,7 @@ import sys
 import warnings
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, TextIO
+from typing import Any, TextIO
 
 from prospector import blender, postfilter, tools
 from prospector.compat import is_relative_to
@@ -23,7 +25,7 @@ from prospector.tools.utils import CaptureOutput
 class Prospector:
     def __init__(self, config: ProspectorConfig) -> None:
         self.config = config
-        self.summary: Optional[dict[str, Any]] = None
+        self.summary: dict[str, Any] | None = None
         self.messages = config.messages
 
     def process_messages(
@@ -46,7 +48,8 @@ class Prospector:
         deprecated_names = self.config.replace_deprecated_tool_names()
 
         summary: dict[str, Any] = {
-            "started": datetime.now(),
+            # local wall-clock time, kept naive so the summary output format is stable
+            "started": datetime.now(),  # noqa: DTZ005
         }
         summary.update(self.config.get_summary_information())
 
@@ -104,7 +107,7 @@ class Prospector:
                             messages.append(Message(toolname, "hidden-output", loc, message=msg))
 
             except FatalProspectorException as fatal:
-                sys.stderr.write(f"FatalProspectorException: {str(fatal)}")
+                sys.stderr.write(f"FatalProspectorException: {fatal!s}")
                 sys.exit(2)
 
             except (SystemExit, Exception) as ex:  # pylint:disable=broad-except
@@ -127,7 +130,7 @@ class Prospector:
         messages = self.process_messages(found_files, messages, running_tools)
 
         summary["message_count"] = len(messages)
-        summary["completed"] = datetime.now()
+        summary["completed"] = datetime.now()  # noqa: DTZ005
 
         delta = summary["completed"] - summary["started"]
         summary["time_taken"] = f"{delta.total_seconds():0.2f}"
@@ -142,7 +145,7 @@ class Prospector:
         self.summary = summary
         self.messages = self.messages + messages
 
-    def get_summary(self) -> Optional[dict[str, Any]]:
+    def get_summary(self) -> dict[str, Any] | None:
         return self.summary
 
     def get_messages(self) -> list[Message]:

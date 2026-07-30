@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import sys
 from io import TextIOWrapper
-from typing import Optional
+from types import TracebackType
+
+from typing_extensions import Self
 
 
 class CaptureStream(TextIOWrapper):
@@ -24,13 +28,13 @@ class CaptureStream(TextIOWrapper):
 
 class CaptureOutput:
     _prev_streams = None
-    stdout: Optional[CaptureStream] = None
-    stderr: Optional[CaptureStream] = None
+    stdout: CaptureStream | None = None
+    stderr: CaptureStream | None = None
 
     def __init__(self, hide: bool) -> None:
         self.hide = hide
 
-    def __enter__(self) -> "CaptureOutput":
+    def __enter__(self) -> Self:
         if self.hide:
             is_a_tty = hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
 
@@ -52,7 +56,12 @@ class CaptureOutput:
     def get_hidden_stderr(self) -> str:
         return "" if self.stderr is None else self.stderr.contents
 
-    def __exit__(self, exc_type: type, exc_val: Exception, exc_tb: type) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         if self.hide:
             assert self._prev_streams is not None
             sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__ = self._prev_streams  # type: ignore[misc]

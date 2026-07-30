@@ -20,11 +20,12 @@ This module's job is to attempt to collect all of these methods into
 a single coherent list of error suppression locations.
 """
 
+from __future__ import annotations
+
 import re
 import warnings
 from collections import defaultdict
 from pathlib import Path
-from typing import Optional
 
 from prospector import encoding
 from prospector.blender import BLEND_COMBOS
@@ -38,12 +39,12 @@ _PYLINT_SUPPRESSED_MESSAGE = re.compile(r"^Suppressed \'([a-z0-9-]+)\' \(from li
 
 
 class Ignore:
-    source: Optional[str]
+    source: str | None
     code: str
 
     def __init__(
         self,
-        source: Optional[str],
+        source: str | None,
         code: str,
     ) -> None:
         self.source = source
@@ -95,9 +96,9 @@ def get_noqa_suppressions(file_contents: list[str]) -> tuple[bool, set[int], dic
 
 def _parse_pylint_informational(
     messages: list[Message],
-) -> tuple[set[Optional[Path]], dict[Optional[Path], dict[int, list[str]]]]:
-    ignore_files: set[Optional[Path]] = set()
-    ignore_messages: dict[Optional[Path], dict[int, list[str]]] = defaultdict(lambda: defaultdict(list))
+) -> tuple[set[Path | None], dict[Path | None, dict[int, list[str]]]]:
+    ignore_files: set[Path | None] = set()
+    ignore_messages: dict[Path | None, dict[int, list[str]]] = defaultdict(lambda: defaultdict(list))
 
     for message in messages:
         if message.source == "pylint":
@@ -119,7 +120,7 @@ def _parse_pylint_informational(
 def _process_tool_ignores(
     tools_ignore: dict[Path, dict[int, set[Ignore]]],
     blend_combos_dict: dict[Ignore, set[Ignore]],
-    messages_to_ignore: dict[Optional[Path], dict[int, set[Ignore]]],
+    messages_to_ignore: dict[Path | None, dict[int, set[Ignore]]],
 ) -> None:
     for path, lines_ignore in tools_ignore.items():
         for line, ignores in lines_ignore.items():
@@ -131,10 +132,10 @@ def _process_tool_ignores(
 def get_suppressions(
     filepaths: list[Path],
     messages: list[Message],
-    tools: Optional[dict[str, ToolBase]] = None,
+    tools: dict[str, ToolBase] | None = None,
     blending: bool = False,
-    blend_combos: Optional[list[list[tuple[str, str]]]] = None,
-) -> tuple[set[Optional[Path]], dict[Path, set[int]], dict[Optional[Path], dict[int, set[Ignore]]]]:
+    blend_combos: list[list[tuple[str, str]]] | None = None,
+) -> tuple[set[Path | None], dict[Path, set[int]], dict[Path | None, dict[int, set[Ignore]]]]:
     """
     Given every message which was emitted by the tools, and the
     list of files to inspect, create a list of files to ignore,
@@ -149,9 +150,9 @@ def get_suppressions(
             for ignore in ignore_combos:
                 blend_combos_dict[ignore] |= ignore_combos
 
-    paths_to_ignore: set[Optional[Path]] = set()
+    paths_to_ignore: set[Path | None] = set()
     lines_to_ignore: dict[Path, set[int]] = defaultdict(set)
-    messages_to_ignore: dict[Optional[Path], dict[int, set[Ignore]]] = defaultdict(lambda: defaultdict(set))
+    messages_to_ignore: dict[Path | None, dict[int, set[Ignore]]] = defaultdict(lambda: defaultdict(set))
     tools_ignore: dict[Path, dict[int, set[Ignore]]] = defaultdict(lambda: defaultdict(set))
 
     # First deal with 'noqa' style messages

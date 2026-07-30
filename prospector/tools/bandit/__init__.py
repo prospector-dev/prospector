@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from bandit.cli.main import _get_profile, _init_extensions
 from bandit.core import docs_utils
@@ -15,14 +17,14 @@ if TYPE_CHECKING:
 
 
 class BanditTool(ToolBase):
-    manager: Optional[BanditManager] = None
-    profile: Optional[str] = None
-    config_file: Optional[str] = None
+    manager: BanditManager | None = None
+    profile: str | None = None
+    config_file: str | None = None
     agg_type = "file"
     severity = 0
     confidence = 0
 
-    def configure(self, prospector_config: "ProspectorConfig", _: Any) -> None:
+    def configure(self, prospector_config: ProspectorConfig, _: Any) -> None:
         options = prospector_config.tool_options("bandit")
 
         if "profile" in options:

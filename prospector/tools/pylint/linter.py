@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 from packaging import version as packaging_version
 from pylint import version as pylint_version
@@ -21,12 +23,12 @@ class ProspectorLinter(PyLinter):
         PyLinter.__init__(self, *args, **kwargs)
 
     # Largely inspired by https://github.com/pylint-dev/pylint/blob/main/pylint/config/config_initialization.py#L26
-    def config_from_file(self, config_file: Optional[Union[str, Path]] = None) -> bool:
+    def config_from_file(self, config_file: str | Path | None = None) -> bool:
         """Initialize the configuration from a file."""
         _config_initialization(self, [], config_file=config_file)
         return True
 
-    def _expand_files(self, files_or_modules: list[str]) -> Union[Iterable[Any], dict[str, Any]]:
+    def _expand_files(self, files_or_modules: list[str]) -> Iterable[Any] | dict[str, Any]:
         expanded = super()._expand_files(files_or_modules)
         filtered: dict[str, Any] = {}
         # PyLinter._expand_files returns dict since 2.15.7.

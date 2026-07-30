@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import codecs
 import os
 import re
 from collections.abc import Iterable
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 from pep8ext_naming import NamingChecker
 from pycodestyle import PROJECT_CONFIG, USER_CONFIG, BaseReport, StyleGuide, register_check
@@ -23,7 +25,7 @@ class ProspectorReport(BaseReport):
         super().__init__(*args, **kwargs)
         self._prospector_messages: list[Message] = []
 
-    def error(self, line_number: Optional[int], offset: int, text: str, check: str) -> None:
+    def error(self, line_number: int | None, offset: int, text: str, check: str) -> None:
         code = super().error(
             line_number,
             offset,
@@ -64,7 +66,7 @@ class ProspectorReport(BaseReport):
 
 
 class ProspectorStyleGuide(StyleGuide):
-    def __init__(self, config: "ProspectorConfig", found_files: FileFinder, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, config: ProspectorConfig, found_files: FileFinder, *args: Any, **kwargs: Any) -> None:
         self._config = config
         self._files = found_files
         self._module_paths = found_files.python_modules
@@ -74,7 +76,7 @@ class ProspectorStyleGuide(StyleGuide):
 
         super().__init__(*args, **kwargs)
 
-    def excluded(self, filename: str, parent: Optional[str] = None) -> bool:
+    def excluded(self, filename: str, parent: str | None = None) -> bool:
         if super().excluded(filename, parent):
             return True
 
@@ -88,11 +90,11 @@ class ProspectorStyleGuide(StyleGuide):
 
 
 class PycodestyleTool(ToolBase):
-    checker: Optional[ProspectorStyleGuide] = None
+    checker: ProspectorStyleGuide | None = None
 
     def configure(
-        self, prospector_config: "ProspectorConfig", found_files: FileFinder
-    ) -> Optional[tuple[Optional[str], Optional[Iterable[Message]]]]:
+        self, prospector_config: ProspectorConfig, found_files: FileFinder
+    ) -> tuple[str | None, Iterable[Message] | None] | None:
         # figure out if we should use a pre-existing config file
         # such as setup.cfg or tox.ini
         external_config = None
@@ -103,7 +105,7 @@ class PycodestyleTool(ToolBase):
         if prospector_config.use_external_config("pycodestyle"):
             use_config = True
 
-            paths: list[Union[str, Path]] = [os.path.join(prospector_config.workdir, name) for name in PROJECT_CONFIG]
+            paths: list[str | Path] = [os.path.join(prospector_config.workdir, name) for name in PROJECT_CONFIG]
             paths.append(USER_CONFIG)
             ext_loc = prospector_config.external_config_location("pycodestyle")
             if ext_loc is not None:

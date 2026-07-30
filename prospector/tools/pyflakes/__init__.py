@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from pyflakes.api import checkPath
 from pyflakes.messages import Message as FlakeMessage
@@ -87,7 +89,7 @@ LEGACY_CODE_MAP = {
 
 
 class ProspectorReporter(Reporter):
-    def __init__(self, ignore: Optional[list[str]] = None) -> None:
+    def __init__(self, ignore: list[str] | None = None) -> None:
         super().__init__(None, None)
         self._messages: list[Message] = []
         self.ignore = ignore or ()
@@ -95,10 +97,10 @@ class ProspectorReporter(Reporter):
     def record_message(  # pylint: disable=too-many-arguments
         self,
         filename: str,
-        line: Optional[int] = None,
-        character: Optional[int] = None,
-        code: Optional[str] = None,
-        message: Optional[str] = None,
+        line: int | None = None,
+        character: int | None = None,
+        code: str | None = None,
+        message: str | None = None,
     ) -> None:
         assert message is not None
         assert code is not None
@@ -160,7 +162,7 @@ class PyFlakesTool(ToolBase):
         super().__init__(*args, **kwargs)
         self.ignore_codes: list[str] = []
 
-    def configure(self, prospector_config: "ProspectorConfig", _: Any) -> None:
+    def configure(self, prospector_config: ProspectorConfig, _: Any) -> None:
         ignores = prospector_config.get_disabled_messages("pyflakes")
         # convert old style to new
         self.ignore_codes = [LEGACY_CODE_MAP.get(code, code) for code in ignores]

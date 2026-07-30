@@ -12,10 +12,10 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.22
+    rev: v0.16.0
     hooks:
       - id: ruff-format
-      - id: ruff
+      - id: ruff-check
         args:
           - --fix
           - --ignore=E501

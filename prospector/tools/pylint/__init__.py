@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import os
 import re
 import sys
 from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 from pylint.config import find_default_config_files
 from pylint.exceptions import UnknownMessageError
@@ -36,11 +38,11 @@ class PylintTool(ToolBase):
 
     def __init__(self) -> None:
         self._args: Any = None
-        self._collector: Optional[Collector] = None
-        self._linter: Optional[ProspectorLinter] = None
+        self._collector: Collector | None = None
+        self._linter: ProspectorLinter | None = None
         self._orig_sys_path: list[str] = []
 
-    def _prospector_configure(self, prospector_config: "ProspectorConfig", linter: ProspectorLinter) -> list[Message]:
+    def _prospector_configure(self, prospector_config: ProspectorConfig, linter: ProspectorLinter) -> list[Message]:
         errors = []
 
         if "django" in prospector_config.libraries:
@@ -56,7 +58,7 @@ class PylintTool(ToolBase):
                 errors.append(self._error_message(profile_path, f"Could not load plugin {plugin}"))
 
         for msg_id in prospector_config.get_disabled_messages("pylint"):
-            try:  # noqa: SIM105
+            try:
                 linter.disable(msg_id)
             except UnknownMessageError:
                 # If the msg_id doesn't exist in PyLint any more,
@@ -96,11 +98,11 @@ class PylintTool(ToolBase):
                     )
         return errors
 
-    def _error_message(self, filepath: Union[str, Path], message: str) -> Message:
+    def _error_message(self, filepath: str | Path, message: str) -> Message:
         location = Location(filepath, None, None, 0, 0)
         return Message("prospector", "config-problem", location, message)
 
-    def _pylintrc_configure(self, pylintrc: Union[str, Path], linter: ProspectorLinter) -> list[Message]:
+    def _pylintrc_configure(self, pylintrc: str | Path, linter: ProspectorLinter) -> list[Message]:
         errors = []
         are_plugins_loaded = linter.config_from_file(pylintrc)
         if not are_plugins_loaded and hasattr(linter.config, "load_plugins"):
@@ -112,8 +114,8 @@ class PylintTool(ToolBase):
         return errors
 
     def configure(
-        self, prospector_config: "ProspectorConfig", found_files: FileFinder
-    ) -> Optional[tuple[Optional[Union[str, Path]], Optional[Iterable[Message]]]]:
+        self, prospector_config: ProspectorConfig, found_files: FileFinder
+    ) -> tuple[str | Path | None, Iterable[Message] | None] | None:
         extra_sys_path = found_files.make_syspath()
         check_paths = self._get_pylint_check_paths(found_files)
 
@@ -179,18 +181,18 @@ class PylintTool(ToolBase):
         self,
         check_paths: list[Path],
         linter: ProspectorLinter,
-        prospector_config: "ProspectorConfig",
+        prospector_config: ProspectorConfig,
         pylint_options: dict[str, Any],
-    ) -> tuple[list[Message], Optional[Union[Path, str]]]:
+    ) -> tuple[list[Message], Path | str | None]:
         self._args = check_paths
         linter.load_default_plugins()
 
         config_messages: list[Message] = self._prospector_configure(prospector_config, linter)
-        configured_by: Optional[Union[str, Path]] = None
+        configured_by: str | Path | None = None
 
         if prospector_config.use_external_config("pylint"):
             # Try to find a .pylintrc
-            pylintrc: Optional[Union[str, Path]] = pylint_options.get("config_file")
+            pylintrc: str | Path | None = pylint_options.get("config_file")
             external_config = prospector_config.external_config_location("pylint")
 
             pylintrc = pylintrc or external_config

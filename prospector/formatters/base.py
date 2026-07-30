@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 
 from prospector.profiles.profile import ProspectorProfile
@@ -5,7 +7,7 @@ from prospector.profiles.profile import ProspectorProfile
 __all__ = ("Formatter",)
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from prospector.message import Location, Message
 
@@ -16,7 +18,7 @@ class Formatter(ABC):
         summary: dict[str, Any],
         messages: list[Message],
         profile: ProspectorProfile,
-        paths_relative_to: Optional[Path] = None,
+        paths_relative_to: Path | None = None,
     ) -> None:
         self.summary = summary
         self.messages = messages
