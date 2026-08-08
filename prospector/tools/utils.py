@@ -1,14 +1,24 @@
 from __future__ import annotations
 
 import sys
-from io import TextIOWrapper
+from io import BytesIO, TextIOWrapper
 from types import TracebackType
 
 from typing_extensions import Self
 
 
 class CaptureStream(TextIOWrapper):
-    def __init__(self, tty: bool) -> None:
+    def __init__(self, tty: bool, encoding: str | None = None, errors: str | None = None) -> None:
+        # TextIOWrapper is implemented in C: unless its __init__ runs, every inherited
+        # method and property raises "ValueError: I/O operation on uninitialized object".
+        # Since this object stands in for sys.stdout while the tools run, it has to be a
+        # usable text stream - wrap a throwaway in-memory buffer to get one.
+        super().__init__(
+            BytesIO(),
+            encoding=encoding or "utf-8",
+            errors=errors or "replace",
+            write_through=True,
+        )
         self.contents = ""
         self._tty = tty
 
@@ -24,6 +34,13 @@ class CaptureStream(TextIOWrapper):
 
     def isatty(self) -> bool:
         return self._tty
+
+    def readable(self) -> bool:
+        # this stream stands in for stdout/stderr, the in-memory buffer is write-only
+        return False
+
+    def seekable(self) -> bool:
+        return False
 
 
 class CaptureOutput:
@@ -44,8 +61,10 @@ class CaptureOutput:
                 sys.__stdout__,
                 sys.__stderr__,
             )
-            self.stdout = CaptureStream(is_a_tty)
-            self.stderr = CaptureStream(is_a_tty)
+            encoding = getattr(sys.stdout, "encoding", None)
+            errors = getattr(sys.stdout, "errors", None)
+            self.stdout = CaptureStream(is_a_tty, encoding, errors)
+            self.stderr = CaptureStream(is_a_tty, encoding, errors)
             sys.stdout, sys.__stdout__ = self.stdout, self.stdout  # type: ignore[misc]
             sys.stderr, sys.__stderr__ = self.stderr, self.stderr  # type: ignore[misc]
         return self
