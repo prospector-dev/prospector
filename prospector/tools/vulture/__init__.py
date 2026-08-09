@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from vulture import Vulture
+from vulture.config import InputError, make_config
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.finder import FileFinder
@@ -15,9 +16,39 @@ if TYPE_CHECKING:
     from prospector.config import ProspectorConfig
 
 
+def _pyproject_settings(workdir: Path) -> dict[str, Any]:
+    """
+    Read the `[tool.vulture]` section of the project's pyproject.toml.
+
+    Vulture reads this section itself when it is run from the command line, so
+    without it a project that configures `ignore_decorators` gets different
+    results depending on whether it ran vulture or prospector. See #505.
+
+    A missing or unreadable file means no settings, not an error: prospector
+    runs in plenty of projects that have neither.
+    """
+    pyproject = workdir / "pyproject.toml"
+    if not pyproject.is_file():
+        return {}
+
+    try:
+        with pyproject.open("rb") as handle:
+            # `argv` is only there to satisfy vulture's own argument parser,
+            # which insists on a path; the paths it produces are unused, as
+            # prospector has already found the files itself.
+            return make_config(argv=[str(workdir)], tomlfile=handle)
+    except (InputError, OSError, ValueError):
+        return {}
+
+
 class ProspectorVulture(Vulture):
-    def __init__(self, found_files: FileFinder) -> None:
-        Vulture.__init__(self, verbose=False)
+    def __init__(
+        self,
+        found_files: FileFinder,
+        ignore_names: list[str] | None = None,
+        ignore_decorators: list[str] | None = None,
+    ) -> None:
+        Vulture.__init__(self, verbose=False, ignore_names=ignore_names, ignore_decorators=ignore_decorators)
         self._files = found_files
         self._internal_messages: list[Message] = []
         self.file: Path | None = None
@@ -79,14 +110,24 @@ class VultureTool(ToolBase):
         ToolBase.__init__(self)
         self._vulture = None
         self.ignore_codes: list[str] = []
+        self.ignore_names: list[str] = []
+        self.ignore_decorators: list[str] = []
 
     def configure(  # pylint: disable=useless-return
         self, prospector_config: ProspectorConfig, found_files: FileFinder
     ) -> tuple[str | None, Iterable[Message] | None] | None:
         self.ignore_codes = prospector_config.get_disabled_messages("vulture")
+
+        settings = _pyproject_settings(prospector_config.workdir)
+        self.ignore_names = settings.get("ignore_names", [])
+        self.ignore_decorators = settings.get("ignore_decorators", [])
         return None
 
     def run(self, found_files: FileFinder) -> list[Message]:
-        vulture = ProspectorVulture(found_files)
+        vulture = ProspectorVulture(
+            found_files,
+            ignore_names=self.ignore_names,
+            ignore_decorators=self.ignore_decorators,
+        )
         vulture.scavenge()
         return [message for message in vulture.get_messages() if message.code not in self.ignore_codes]
