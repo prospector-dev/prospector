@@ -10,6 +10,7 @@ max-line-length: 120
 ignore-patterns:
   - tests/.*/testdata/.*
   - tests/tools/.*/testpath/.*
+  - tests/tools/vulture/pyproject_config/.*
   - tests/tools/pylint/pylint_configs/.*
   - tests/tools/pylint/test_no_init_found/.*
   - tests/is_python/scrypt.*
