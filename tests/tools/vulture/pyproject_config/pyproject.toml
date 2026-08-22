@@ -1,0 +1,3 @@
+[tool.vulture]
+ignore_decorators = ["@app.get", "@app.post"]
+ignore_names = ["keep_me"]

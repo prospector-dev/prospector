@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from vulture import Vulture
+from vulture.config import DEFAULTS, InputError, make_config
 
 from prospector.encoding import CouldNotHandleEncoding, read_py_file
 from prospector.finder import FileFinder
@@ -16,8 +17,18 @@ if TYPE_CHECKING:
 
 
 class ProspectorVulture(Vulture):
-    def __init__(self, found_files: FileFinder) -> None:
-        Vulture.__init__(self, verbose=False)
+    def __init__(
+        self,
+        found_files: FileFinder,
+        config: dict[str, Any],
+    ) -> None:
+        Vulture.__init__(
+            self,
+            verbose=config["verbose"],
+            ignore_names=config["ignore_names"],
+            ignore_decorators=config["ignore_decorators"],
+        )
+        self._min_confidence = config["min_confidence"]
         self._files = found_files
         self._internal_messages: list[Message] = []
         self.file: Path | None = None
@@ -61,6 +72,8 @@ class ProspectorVulture(Vulture):
         vulture_messages = []
         for code, template, items in all_items:
             for item in items:
+                if item.confidence < self._min_confidence:
+                    continue
                 try:
                     filename = item.file
                 except AttributeError:
@@ -79,14 +92,32 @@ class VultureTool(ToolBase):
         ToolBase.__init__(self)
         self._vulture = None
         self.ignore_codes: list[str] = []
+        self.vulture_config: dict[str, Any] | None = None
 
-    def configure(  # pylint: disable=useless-return
+    def configure(
         self, prospector_config: ProspectorConfig, found_files: FileFinder
-    ) -> tuple[str | None, Iterable[Message] | None] | None:
+    ) -> tuple[str | Path | None, Iterable[Message] | None] | None:
         self.ignore_codes = prospector_config.get_disabled_messages("vulture")
-        return None
+
+        if not prospector_config.use_external_config("vulture"):
+            return None
+
+        pyproject = Path(prospector_config.workdir) / "pyproject.toml"
+        if not pyproject.exists():
+            return None
+
+        try:
+            with pyproject.open("rb") as toml_file:
+                config = make_config(argv=[str(prospector_config.workdir)], tomlfile=toml_file)
+        except InputError as err:
+            return pyproject, [
+                make_tool_error_message(pyproject, "vulture", "V001", message=f"Invalid configuration: {err}")
+            ]
+
+        self.vulture_config = config
+        return pyproject, None
 
     def run(self, found_files: FileFinder) -> list[Message]:
-        vulture = ProspectorVulture(found_files)
+        vulture = ProspectorVulture(found_files, self.vulture_config or DEFAULTS)
         vulture.scavenge()
         return [message for message in vulture.get_messages() if message.code not in self.ignore_codes]
