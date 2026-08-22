@@ -55,16 +55,19 @@ class ProspectorConfig:
         ignores, workdir = self.ignores, self.workdir
 
         def _filter(path: Path) -> bool:
-            for ignore in ignores:
-                # first figure out where the path is, relative to the workdir
-                # ignore-paths/patterns will usually be relative to a repository
-                # root or the CWD, but the path passed to prospector may not be
-                path = path.resolve().absolute()
-                if is_relative_to(path, workdir):
-                    path = path.relative_to(workdir)
-                if ignore.match(str(path)):
-                    return True
-            return False
+            # first figure out where the path is, relative to the workdir
+            # ignore-paths/patterns will usually be relative to a repository
+            # root or the CWD, but the path passed to prospector may not be.
+            # A symlink is matched under its own name as well as its target,
+            # since users expect to be able to ignore the link they can see.
+            candidates = []
+            for candidate in (path.absolute(), path.resolve().absolute()):
+                if is_relative_to(candidate, workdir):
+                    candidate = candidate.relative_to(workdir)
+                if candidate not in candidates:
+                    candidates.append(candidate)
+
+            return any(ignore.match(str(candidate)) for ignore in ignores for candidate in candidates)
 
         return _filter
 
