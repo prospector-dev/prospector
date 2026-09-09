@@ -19,6 +19,25 @@ def test_relative_ignores() -> None:
         assert len(files.python_modules) == 2
 
 
+def test_symlinked_ignore_path(tmp_path: Path) -> None:
+    """
+    Tests that 'ignore-paths: <symlink name>' ignores the symlink itself,
+    not only the path its target resolves to.
+    """
+    target = tmp_path / "realdir"
+    target.mkdir()
+    (target / "module.py").write_text("x = 1\n")
+    (tmp_path / "link").symlink_to(target, target_is_directory=True)
+    (tmp_path / "profile_symlink_ignores.yml").write_text("ignore-paths:\n  - link\n")
+
+    with patch_execution("-P", "profile_symlink_ignores.yml", set_cwd=tmp_path):
+        config = ProspectorConfig()
+        exclusion_filter = config.make_exclusion_filter()
+
+    assert exclusion_filter(tmp_path / "link")
+    assert exclusion_filter(tmp_path / "link" / "module.py")
+
+
 def test_determine_ignores_all_str() -> None:
     with patch_execution("-P", "prospector-str-ignores", set_cwd=Path(__file__).parent):
         config = ProspectorConfig()
