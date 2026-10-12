@@ -49,7 +49,7 @@ class Prospector:
 
         summary: dict[str, Any] = {
             # local wall-clock time, kept naive so the summary output format is stable
-            "started": datetime.now(),  # noqa: DTZ005
+            "started": datetime.now(),
         }
         summary.update(self.config.get_summary_information())
 
@@ -130,7 +130,7 @@ class Prospector:
         messages = self.process_messages(found_files, messages, running_tools)
 
         summary["message_count"] = len(messages)
-        summary["completed"] = datetime.now()  # noqa: DTZ005
+        summary["completed"] = datetime.now()
 
         delta = summary["completed"] - summary["started"]
         summary["time_taken"] = f"{delta.total_seconds():0.2f}"
