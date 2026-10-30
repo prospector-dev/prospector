@@ -58,7 +58,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-pylint = ">=4.0"
+pylint = ">=4.0.9"
 pylint-celery = "0.3"
 pylint-django = ">=2.6.1"
 requirements-detector = ">=1.5.0"
