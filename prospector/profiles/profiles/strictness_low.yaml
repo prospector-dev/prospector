@@ -43,12 +43,6 @@ pyflakes:
     - F401
     - F841
 
-frosted:
-  disable:
-    - E101
-    - E307
-    - W101
-
 pycodestyle:
   disable:
     - E501

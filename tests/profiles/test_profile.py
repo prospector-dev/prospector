@@ -121,6 +121,15 @@ class TestProfileParsing(ProfileTestBase):
         profile = ProspectorProfile.load("empty_profile", self._profile_path, allow_shorthand=False)
         assert profile.pylint["disable"] == []  # type: ignore[attr-defined]
 
+    def test_removed_tool_section_ignored(self) -> None:
+        """
+        Profiles written when 'frosted' was supported must still load: sections
+        for tools that no longer exist are ignored.
+        """
+        profile = ProspectorProfile.load("removed_tool_frosted", self._profile_path, allow_shorthand=False)
+        assert profile.pylint["disable"] == ["foo"]  # type: ignore[attr-defined]
+        assert not hasattr(profile, "frosted")
+
     def test_ignores(self) -> None:
         profile = ProspectorProfile.load("ignores", self._profile_path)
         assert sorted(["^tests/", "/migrations/"]) == sorted(profile.ignore_patterns)

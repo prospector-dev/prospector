@@ -1,0 +1,7 @@
+frosted:
+  disable:
+    - E101
+
+pylint:
+  disable:
+    - foo
