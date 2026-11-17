@@ -3,8 +3,10 @@ from __future__ import annotations
 import sys
 from io import BytesIO, TextIOWrapper
 from types import TracebackType
+from typing import TYPE_CHECKING
 
-from typing_extensions import Self
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 
 class CaptureStream(TextIOWrapper):
