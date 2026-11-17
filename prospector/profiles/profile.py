@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import codecs
 import json
 import os
 import pkgutil
@@ -183,7 +182,7 @@ def _load_content(name_or_path: str | Path, profile_path: list[Path]) -> dict[st
 
         raise ProfileNotFound(str(name_or_path), profile_path)
 
-    with codecs.open(filename) as fct:
+    with open(filename, encoding="utf-8") as fct:
         try:
             return yaml.safe_load(fct) or {}
         except yaml.parser.ParserError as parse_error:
