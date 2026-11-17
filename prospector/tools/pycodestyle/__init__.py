@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import codecs
 import os
 import re
 from collections.abc import Iterable
@@ -116,8 +115,8 @@ class PycodestyleTool(ToolBase):
                     # this file exists - but does it have pep8 or pycodestyle config in it?
                     # TODO: Remove this
                     header = re.compile(r"\[(pep8|pycodestyle)\]")
-                    with codecs.open(str(conf_path)) as conf_file:
-                        if any(header.search(line) for line in conf_file.readlines()):
+                    with open(str(conf_path), encoding="utf-8") as conf_file:
+                        if any(header.search(line) for line in conf_file):
                             external_config = conf_path
                             break
 

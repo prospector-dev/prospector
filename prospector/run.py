@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import codecs
 import os.path
 import sys
 import warnings
@@ -171,7 +170,7 @@ class Prospector:
             if not output_files and not self.config.quiet:
                 self.write_to(formatter, sys.stdout)
             for output_file in output_files:
-                with codecs.open(output_file, "w+") as target:
+                with open(output_file, "w+", encoding="utf-8") as target:
                     self.write_to(formatter, target)
 
     def write_to(self, formatter: Formatter, target: TextIO) -> None:
