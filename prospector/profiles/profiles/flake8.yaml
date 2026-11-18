@@ -6,9 +6,6 @@ pylint:
 pyroma:
   run: false
 
-frosted:
-  run: false
-
 vulture:
   run: false
 

@@ -11,9 +11,5 @@ pylint:
     - missing-function-docstring
     - missing-class-docstring
 
-frosted:
-  disable:
-    - E401
-
 pydocstyle:
   run: false

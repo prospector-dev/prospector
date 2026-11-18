@@ -55,11 +55,6 @@ pyflakes:
     - F403
     - F810
 
-frosted:
-  disable:
-    - E103
-    - E306
-
 pycodestyle:
   disable:
     - E111

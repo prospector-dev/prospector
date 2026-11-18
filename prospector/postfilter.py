@@ -30,7 +30,7 @@ def filter_messages(
     inline configuration to disable the warning. Pyflakes will still raise that
     error, however, because it does not understand pylint disabling messages.
     This method uses the information about suppressed messages from pylint to
-    squash the unwanted redundant error from pyflakes and frosted.
+    squash the unwanted redundant error from pyflakes.
     """
     paths_to_ignore, lines_to_ignore, messages_to_ignore = get_suppressions(
         filepaths, messages, tools, blending, blend_combos

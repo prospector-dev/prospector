@@ -280,7 +280,7 @@ Individual Configuration Options
 --------------------------------
 
 Each tool can be individually configured with a section beginning with the tool name
-(in lowercase). Valid values are ``bandit``, ``dodgy``, ``frosted``, ``mccabe``, ``mypy``, ``pydocstyle``, ``pycodestyle``,
+(in lowercase). Valid values are ``bandit``, ``dodgy``, ``mccabe``, ``mypy``, ``pydocstyle``, ``pycodestyle``,
 ``pyflakes``, ``pylint``, ``pyright``, ``pyroma``,  ``vulture`` and ``ruff``.
 
 Enabling and Disabling Tools
@@ -465,11 +465,6 @@ Next is another example using most options::
 
     dodgy:
       run: true
-
-    frosted:
-      disable:
-        - E103
-        - E306
 
     mccabe:
       run: false
