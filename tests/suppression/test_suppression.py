@@ -65,8 +65,7 @@ class SuppressionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             sample = Path(tmpdir) / "sample.py"
             sample.write_text(
-                "import missing_mod  # noqa: unused-import\n"
-                "return 1  # noqa: no-else-return\n",
+                "import missing_mod  # noqa: unused-import\nreturn 1  # noqa: no-else-return\n",
                 encoding="utf-8",
             )
             loc1 = Location(sample, None, None, 1, 0)
