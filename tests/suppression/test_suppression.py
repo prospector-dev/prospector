@@ -1,7 +1,10 @@
 import os
+import tempfile
 import unittest
 from pathlib import Path
 
+from prospector.message import Location, Message
+from prospector.postfilter import filter_messages
 from prospector.suppression import get_noqa_suppressions
 from tests.utils import patch_workdir_argv
 
@@ -57,3 +60,22 @@ class SuppressionTest(unittest.TestCase):
         ) as pros:
             assert pros.summary is not None
             assert pros.summary["message_count"] == 5
+
+    def test_filter_messages_does_not_match_code_substrings(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            sample = Path(tmpdir) / "sample.py"
+            sample.write_text(
+                "import missing_mod  # noqa: unused-import\n"
+                "return 1  # noqa: no-else-return\n",
+                encoding="utf-8",
+            )
+            loc1 = Location(sample, None, None, 1, 0)
+            loc2 = Location(sample, None, None, 2, 0)
+            msgs = [
+                Message("pylint", "unused-import", loc1, "Unused import"),
+                Message("mypy", "import", loc1, "Cannot find implementation or library stub"),
+                Message("pylint", "no-else-return", loc2, "Unnecessary else after return"),
+                Message("mypy", "return", loc2, "Missing return statement"),
+            ]
+            kept = filter_messages([sample], msgs)
+            assert [(m.source, m.code) for m in kept] == [("mypy", "import"), ("mypy", "return")]

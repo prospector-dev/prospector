@@ -62,9 +62,9 @@ def filter_messages(
         ):
             matched = False
             for ignore in messages_to_ignore[relative_message_path][message.location.line]:
-                if (ignore.source is None or message.source == ignore.source) and message.code in ignore.code:
+                if (ignore.source is None or message.source == ignore.source) and message.code == ignore.code:
                     matched = True
-                    continue
+                    break
             if matched:
                 continue
 
