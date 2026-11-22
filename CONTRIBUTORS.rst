@@ -6,6 +6,7 @@ Contributors
 * Amir Rachum (`@Nurdok <https://github.com/Nurdok>`_)
 * Angel Blasco (`@alblasco <https://github.com/alblasco>`_)
 * Anthony Ricaud (`@rik <https://github.com/rik>`_)
+* Bharat Kaurav (`@TheNetherWatcher <https://github.com/TheNetherWatcher>`_)
 * Bram (`@Psycojoker <https://github.com/Psycojoker>`_)
 * Bryce Guinta (`@brycepg <https://github.com/brycepg>`_)
 * Carl Crowder (`@carlio <https://github.com/carlio>`_)
