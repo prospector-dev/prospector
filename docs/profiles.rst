@@ -4,7 +4,8 @@ Profiles / Configuration
 The behavior of prospector can be configured by creating a profile. A profile is
 a YAML file containing several sections as described below.
 
-Prospector will search for a ``.prospector.yaml`` file (and `several others`_) in the path that it is checking.
+Prospector will search for a ``.prospector.yaml`` file (and `several others`_) in the path that it is checking,
+falling back to the ``[tool.prospector]`` table of ``pyproject.toml`` (see pyproject_).
 If found, it will automatically be loaded. Otherwise, you
 can pass in the profile as an argument::
 
@@ -72,6 +73,37 @@ Here is an example profile::
 
     mccabe:
       run: false
+
+
+.. _pyproject:
+
+pyproject.toml
+--------------
+
+The profile can also live in the ``[tool.prospector]`` table of your project's ``pyproject.toml``.
+It accepts the same keys as the YAML file, with tool sections as sub-tables. The example above
+becomes::
+
+    [tool.prospector]
+    output-format = "json"
+    strictness = "medium"
+    test-warnings = true
+    doc-warnings = false
+    inherits = ["my/other/profile.yml"]
+    ignore-paths = ["docs"]
+    ignore-patterns = ["(^|/)skip(this)?(/|$)"]
+
+    [tool.prospector.pycodestyle]
+    disable = ["W602", "W603"]
+    enable = ["W601"]
+    options = { max-line-length = 79 }
+
+    [tool.prospector.mccabe]
+    run = false
+
+``pyproject.toml`` is only loaded automatically if it contains a ``[tool.prospector]`` table and
+none of the YAML profile files listed above exist. It can also be passed explicitly with
+``--profile pyproject.toml`` or listed in ``inherits``.
 
 
 Builtin Profiles
