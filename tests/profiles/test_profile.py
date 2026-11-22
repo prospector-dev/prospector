@@ -3,8 +3,8 @@ from unittest import TestCase
 
 import pytest
 
-from prospector.profiles.exceptions import ProfileNotFound
-from prospector.profiles.profile import ProspectorProfile
+from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
+from prospector.profiles.profile import ProspectorProfile, has_toml_profile
 
 THIS_DIR = Path(__file__).parent
 BUILTIN_PROFILES = THIS_DIR / "../../prospector/profiles/profiles"
@@ -148,6 +148,45 @@ class TestProfileParsing(ProfileTestBase):
     def test_load_plugins(self) -> None:
         profile = ProspectorProfile.load("pylint_load_plugins", self._profile_path)
         assert profile.pylint["load-plugins"] == ["first_plugin", "second_plugin"]  # type: ignore[attr-defined]
+
+
+class TestPyprojectProfile(ProfileTestBase):
+    def _pyproject_dir(self, testname: str) -> Path:
+        return THIS_DIR / "profiles" / "pyproject" / testname
+
+    def _load(self, testname: str) -> ProspectorProfile:
+        profile_path = [self._pyproject_dir(testname), *self._profile_path]
+        return ProspectorProfile.load("pyproject.toml", profile_path)
+
+    def test_tool_prospector_table(self) -> None:
+        profile = self._load("with_section")
+        assert profile.ignore_paths == ["docs"]
+        assert "strictness_high" in profile.inherit_order
+        assert "too-many-locals" in profile.get_disabled_messages("pylint")
+        assert profile.pycodestyle["options"]["max-line-length"] == 100  # type: ignore[attr-defined]
+        assert profile.is_tool_enabled("mypy")
+
+    def test_inherits_yaml_profile(self) -> None:
+        profile = self._load("with_section")
+        assert "inherittest1" in profile.inherit_order
+        assert "raw-checker-failed" in profile.get_disabled_messages("pylint")
+
+    def test_without_tool_prospector_table(self) -> None:
+        profile = self._load("without_section")
+        default = ProspectorProfile.load("empty_profile", self._profile_path)
+        assert profile.as_dict() == default.as_dict()
+
+    def test_invalid_toml(self) -> None:
+        with pytest.raises(CannotParseProfile) as excinfo:
+            self._load("invalid")
+        assert excinfo.value.file_format == "TOML"
+        assert "line 2" in excinfo.value.get_parse_message()
+
+    def test_has_toml_profile(self) -> None:
+        assert has_toml_profile(self._pyproject_dir("with_section") / "pyproject.toml")
+        assert not has_toml_profile(self._pyproject_dir("without_section") / "pyproject.toml")
+        assert not has_toml_profile(self._pyproject_dir("invalid") / "pyproject.toml")
+        assert not has_toml_profile(self._pyproject_dir("missing") / "pyproject.toml")
 
 
 class TestProfileInheritance(ProfileTestBase):

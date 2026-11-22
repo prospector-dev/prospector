@@ -6,6 +6,7 @@ import pkgutil
 from pathlib import Path
 from typing import Any
 
+import toml
 import yaml
 
 from prospector.profiles.exceptions import CannotParseProfile, ProfileNotFound
@@ -116,7 +117,32 @@ class ProspectorProfile:
 
 def _is_valid_extension(filename: str | Path) -> bool:
     ext = os.path.splitext(filename)[1]
-    return ext in (".yml", ".yaml")
+    return ext in (".yml", ".yaml", ".toml")
+
+
+def load_toml_profile(filepath: str | Path) -> dict[str, Any] | None:
+    """Return the ``[tool.prospector]`` table of a TOML file, or None if it has none."""
+    with open(filepath, encoding="utf-8") as fct:
+        try:
+            data = toml.load(fct)
+        except toml.TomlDecodeError as parse_error:
+            raise CannotParseProfile(str(filepath), parse_error) from parse_error
+
+    profile = data.get("tool", {}).get("prospector")
+    if profile is not None and not isinstance(profile, dict):
+        raise CannotParseProfile(str(filepath), ValueError("[tool.prospector] must be a table"))
+    return profile
+
+
+def has_toml_profile(filepath: str | Path) -> bool:
+    # Only a pyproject.toml with a [tool.prospector] table counts as a profile; an
+    # unreadable one is ignored so that projects not using this are unaffected.
+    if not os.path.isfile(filepath):
+        return False
+    try:
+        return load_toml_profile(filepath) is not None
+    except CannotParseProfile:
+        return False
 
 
 def _load_content_package(name: str) -> dict[str, Any] | None:
@@ -181,6 +207,9 @@ def _load_content(name_or_path: str | Path, profile_path: list[Path]) -> dict[st
             return {}
 
         raise ProfileNotFound(str(name_or_path), profile_path)
+
+    if os.path.splitext(filename)[1] == ".toml":
+        return load_toml_profile(filename) or {}
 
     with open(filename, encoding="utf-8") as fct:
         try:

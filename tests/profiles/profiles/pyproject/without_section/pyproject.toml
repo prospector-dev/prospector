@@ -1,0 +1,5 @@
+[project]
+name = "example"
+
+[tool.black]
+line-length = 100
