@@ -58,3 +58,44 @@ def test_determine_ignores_containing_int_values_wont_throw_attr_exc() -> None:
     for path in paths:
         compiled_ignored_path = re.compile(boundary % re.escape(path))
         assert compiled_ignored_path in config.ignores
+
+
+def test_pyproject_profile_autoloaded(tmp_path: Path) -> None:
+    (tmp_path / "pyproject.toml").write_text('[tool.prospector]\nignore-paths = ["build"]\n')
+
+    with patch_execution(set_cwd=tmp_path):
+        config = ProspectorConfig()
+
+    assert config.profile.name == "pyproject.toml"
+    assert config.profile.ignore_paths == ["build"]
+    assert config.strictness == "from profile"
+
+
+def test_pyproject_without_tool_prospector_ignored(tmp_path: Path) -> None:
+    (tmp_path / "pyproject.toml").write_text("[tool.black]\nline-length = 100\n")
+
+    with patch_execution(set_cwd=tmp_path):
+        config = ProspectorConfig()
+
+    assert config.profile.name == "default"
+
+
+def test_prospector_yaml_takes_precedence_over_pyproject(tmp_path: Path) -> None:
+    (tmp_path / "pyproject.toml").write_text('[tool.prospector]\nignore-paths = ["build"]\n')
+    (tmp_path / ".prospector.yaml").write_text("ignore-paths:\n  - docs\n")
+
+    with patch_execution(set_cwd=tmp_path):
+        config = ProspectorConfig()
+
+    assert config.profile.name == ".prospector.yaml"
+    assert config.profile.ignore_paths == ["docs"]
+
+
+def test_explicit_profile_overrides_pyproject(tmp_path: Path) -> None:
+    (tmp_path / "pyproject.toml").write_text('[tool.prospector]\nignore-paths = ["build"]\n')
+
+    with patch_execution("--profile", "strictness_high", set_cwd=tmp_path):
+        config = ProspectorConfig()
+
+    assert config.profile.name == "strictness_high"
+    assert "build" not in config.profile.ignore_paths

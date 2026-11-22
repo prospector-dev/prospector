@@ -22,8 +22,14 @@ from prospector.autodetect import autodetect_libraries
 from prospector.compat import is_relative_to
 from prospector.config import configuration as cfg
 from prospector.message import Message
-from prospector.profiles import AUTO_LOADED_PROFILES
-from prospector.profiles.profile import BUILTIN_PROFILE_PATH, CannotParseProfile, ProfileNotFound, ProspectorProfile
+from prospector.profiles import AUTO_LOADED_PROFILES, PYPROJECT_PROFILE
+from prospector.profiles.profile import (
+    BUILTIN_PROFILE_PATH,
+    CannotParseProfile,
+    ProfileNotFound,
+    ProspectorProfile,
+    has_toml_profile,
+)
 from prospector.tools import DEFAULT_TOOLS, DEPRECATED_TOOL_NAMES
 
 
@@ -152,6 +158,11 @@ class ProspectorConfig:
                     profile_provided = True
                     profile_name = possible_profile
                     break
+            else:
+                # a dedicated prospector file takes precedence over pyproject.toml
+                if has_toml_profile(workdir / PYPROJECT_PROFILE):
+                    profile_provided = True
+                    profile_name = PYPROJECT_PROFILE
 
         strictness = None
 
@@ -206,7 +217,7 @@ class ProspectorConfig:
                 "\n".join(
                     [
                         "Failed to run:",
-                        f"Could not parse profile {cpe.filepath} as it is not valid YAML",
+                        f"Could not parse profile {cpe.filepath} as it is not valid {cpe.file_format}",
                         f"{cpe.get_parse_message()}",
                         "",
                     ]
