@@ -20,12 +20,19 @@ class CannotParseProfile(Exception):
         self.filepath = filepath
         self.parse_error = parse_error
 
+    @property
+    def file_format(self) -> str:
+        return "TOML" if str(self.filepath).endswith(".toml") else "YAML"
+
     def get_parse_message(self) -> str:
+        if not hasattr(self.parse_error, "problem_mark"):
+            # TOML errors already carry their position in the message
+            return str(self.parse_error)
         return (
             f"{self.parse_error.problem}\n"  # type: ignore[attr-defined]
-            f"  on line {self.parse_error.problem_mark.line}: "  # type: ignore[attr-defined]
-            f"char {self.parse_error.problem_mark.column}"  # type: ignore[attr-defined]
+            f"  on line {self.parse_error.problem_mark.line}: "
+            f"char {self.parse_error.problem_mark.column}"
         )
 
     def __repr__(self) -> str:
-        return f"Could not parse profile found at {self.filepath} - it is not valid YAML"
+        return f"Could not parse profile found at {self.filepath} - it is not valid {self.file_format}"

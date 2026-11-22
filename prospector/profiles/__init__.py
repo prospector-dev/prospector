@@ -21,3 +21,6 @@ AUTO_LOADED_PROFILES = [
         (".prospector", "prospector.yml"),
     )
 ]
+
+# Only used when it contains a [tool.prospector] table, and after all of the above
+PYPROJECT_PROFILE = Path("pyproject.toml")

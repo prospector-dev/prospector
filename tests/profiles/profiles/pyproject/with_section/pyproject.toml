@@ -1,0 +1,16 @@
+[project]
+name = "example"
+
+[tool.prospector]
+strictness = "high"
+ignore-paths = ["docs"]
+inherits = ["inherittest1"]
+
+[tool.prospector.pylint]
+disable = ["too-many-locals"]
+
+[tool.prospector.pycodestyle.options]
+max-line-length = 100
+
+[tool.prospector.mypy]
+run = true
